@@ -3,7 +3,7 @@
 
 generic-service:
   ingress:
-    host: subject-access-request-ui.hmpps.service.justice.gov.uk
+    host: subject-access-request-prod.hmpps.service.justice.gov.uk
 
   env:
     INGRESS_URL: "https://subject-access-request-ui.hmpps.service.justice.gov.uk"
