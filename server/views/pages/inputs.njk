@@ -1,0 +1,55 @@
+{% extends "../partials/layout.njk" %}
+
+{% set mainClasses = "app-container govuk-body" %}
+
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+
+
+{% block content %}
+<p>Creating SAR report for [prisoner name]</p>
+<h1>Enter details</h1>
+{{ govukDateInput({
+  id: "start-date",
+  namePrefix: "start-date",
+  fieldset: {
+    legend: {
+      text: "Start date",
+      classes: "govuk-!-font-weight-bold"
+    }
+  },
+  hint: {
+    text: "For example, 27 3 2007"
+  }
+}) }}
+{{ govukDateInput({
+  id: "end-date",
+  namePrefix: "end-date",
+  fieldset: {
+    legend: {
+      text: "End date",
+      classes: "govuk-!-font-weight-bold"
+    }
+  },
+  hint: {
+    text: "For example, 27 3 2007"
+  }
+}) }}
+
+{{ govukInput({
+  label: {
+    text: "Case Reference Number",
+    classes: "govuk-!-font-weight-bold"
+  },
+  id: "case-ref",
+  name: "caseReference",
+  classes: "govuk-input--width-20"
+}) }}
+
+{{ govukButton({
+  text: "Confirm"
+}) }}
+
+{% endblock %}
