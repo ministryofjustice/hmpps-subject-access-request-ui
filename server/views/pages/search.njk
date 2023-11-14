@@ -1,0 +1,32 @@
+{% extends "../partials/layout.njk" %}
+
+
+{#
+{% set pageTitle = applicationName + " - Search" %} #}
+{% set mainClasses = "app-container govuk-body" %}
+
+{%- from "moj/components/search/macro.njk" import mojSearch -%}
+
+{% block content %}
+  <h1>Search for an offender of ex-offender</h1>
+
+{{ mojSearch({
+  action: '#',
+  method: 'post',
+  input: {
+    id: 'search',
+    name: 'search'
+  },
+  label: {
+    text: '',
+    classes: 'govuk-!-font-weight-bold'
+  },
+  hint: {
+    text: 'Enter prisoner name or ID'
+  },
+  button: {
+    text: 'Search'
+  }
+}) }}
+
+{% endblock %}

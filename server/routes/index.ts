@@ -12,5 +12,9 @@ export default function routes(service: Services): Router {
     res.render('pages/index')
   })
 
+  get('/search', (req, res, next) => {
+    res.render('pages/search')
+  })
+
   return router
 }
