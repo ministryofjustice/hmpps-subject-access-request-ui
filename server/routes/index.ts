@@ -17,7 +17,6 @@ export default function routes(service: Services): Router {
   get('/inputs', (req, res, next) => {
     res.render('pages/inputs', {
       today: formatDate(now.toISOString(), 'short'),
-      now: now.getHours().toString(),
     })
   })
 
