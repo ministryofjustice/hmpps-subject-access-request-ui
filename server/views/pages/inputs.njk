@@ -55,7 +55,6 @@
       text: "For example, 31/3/2022"
     },
     errorMessage: errors | findError('from'),
-    value: listMetadata.filtering.from,
     classes: 'hmpps-datepicker--fixed-width',
     maxDate: today
 }) }}
@@ -82,7 +81,7 @@
   },
   id: "case-ref",
   name: "caseReference",
-  classes: "govuk-input--width-20"
+  classes: "govuk-input--width-20 govuk-input--extra-letter-spacing"
 }) }}
 
 {{ govukButton({
