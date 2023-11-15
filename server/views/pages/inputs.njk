@@ -56,7 +56,8 @@
     },
     errorMessage: errors | findError('from'),
     value: listMetadata.filtering.from,
-    classes: 'hmpps-datepicker--fixed-width'
+    classes: 'hmpps-datepicker--fixed-width',
+    maxDate: today
 }) }}
 {{ hmppsDatepicker({
     id: "to",
@@ -77,7 +78,7 @@
 {{ govukInput({
   label: {
     text: "Case Reference Number",
-    classes: "govuk-!-font-weight-bold"
+    classes: "govuk-label--m"
   },
   id: "case-ref",
   name: "caseReference",
