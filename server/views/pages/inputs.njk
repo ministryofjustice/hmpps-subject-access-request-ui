@@ -1,15 +1,19 @@
 {% extends "../partials/layout.njk" %}
 
 {% set mainClasses = "app-container govuk-body" %}
-
+{% set options = {
+    title: 'Filter',
+    id: 'alertsFilter',
+    currentUrlPath: currentUrlPath,
+    queryParams: listMetadata.filtering.queryParams
+} %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-
+{% from "../components/datepicker/macro.njk" import hmppsDatepicker %}
 
 
 {% block content %}
-<p>Creating SAR report for [prisoner name]</p>
 <h1>Enter details</h1>
 {{ govukDateInput({
   id: "start-date",
@@ -36,6 +40,33 @@
   hint: {
     text: "For example, 27 3 2007"
   }
+}) }}
+
+{{ hmppsDatepicker({
+    id: "from",
+    name: "from",
+    label: {
+        text: "Date from (earliest)",
+        classes: "govuk-label--m"
+    },
+    hint: {
+      text: "For example, 31/3/2022"
+    },
+    errorMessage: errors,
+    value: listMetadata.filtering.from
+}) }}
+{{ hmppsDatepicker({
+    id: "to",
+    name: "to",
+    label: {
+        text: "Date to (latest)",
+        classes: "govuk-label--m"
+    },
+    hint: {
+        text: "For example, 31/3/2023"
+    },
+    errorMessage: errors,
+    value: listMetadata.filtering.to
 }) }}
 
 {{ govukInput({
