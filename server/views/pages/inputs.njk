@@ -15,6 +15,7 @@
 
 {% block content %}
 <h1>Enter details</h1>
+{#
 {{ govukDateInput({
   id: "start-date",
   namePrefix: "start-date",
@@ -41,32 +42,36 @@
     text: "For example, 27 3 2007"
   }
 }) }}
+#}
 
 {{ hmppsDatepicker({
     id: "from",
     name: "from",
     label: {
-        text: "Date from (earliest)",
+        text: "Date from",
         classes: "govuk-label--m"
     },
     hint: {
       text: "For example, 31/3/2022"
     },
-    errorMessage: errors,
-    value: listMetadata.filtering.from
+    errorMessage: errors | findError('from'),
+    value: listMetadata.filtering.from,
+    classes: 'hmpps-datepicker--fixed-width'
 }) }}
 {{ hmppsDatepicker({
     id: "to",
     name: "to",
     label: {
-        text: "Date to (latest)",
+        text: "Date to",
         classes: "govuk-label--m"
     },
     hint: {
         text: "For example, 31/3/2023"
     },
-    errorMessage: errors,
-    value: listMetadata.filtering.to
+    errorMessage: errors | findError('to'),
+    value: listMetadata.filtering.to,
+    classes: 'hmpps-datepicker--fixed-width',
+    maxDate: today
 }) }}
 
 {{ govukInput({

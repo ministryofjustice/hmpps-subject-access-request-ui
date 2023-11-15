@@ -1,3 +1,5 @@
+import { HmppsError } from '../interfaces/hmppsError'
+
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
@@ -20,4 +22,15 @@ export const initialiseName = (fullName?: string): string | null => {
 
   const array = fullName.split(' ')
   return `${array[0][0]}. ${array.reverse()[0]}`
+}
+
+export const findError = (errors: HmppsError[], formFieldId: string) => {
+  if (!errors) return null
+  const item = errors.find((error: HmppsError) => error.href === `#${formFieldId}`)
+  if (item) {
+    return {
+      text: item.text,
+    }
+  }
+  return null
 }
