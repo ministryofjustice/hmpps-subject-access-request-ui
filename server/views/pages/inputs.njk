@@ -15,77 +15,50 @@
 
 {% block content %}
 <h1>Enter details</h1>
-{#
-{{ govukDateInput({
-  id: "start-date",
-  namePrefix: "start-date",
-  fieldset: {
-    legend: {
-      text: "Start date",
-      classes: "govuk-!-font-weight-bold"
-    }
-  },
-  hint: {
-    text: "For example, 27 3 2007"
-  }
-}) }}
-{{ govukDateInput({
-  id: "end-date",
-  namePrefix: "end-date",
-  fieldset: {
-    legend: {
-      text: "End date",
-      classes: "govuk-!-font-weight-bold"
-    }
-  },
-  hint: {
-    text: "For example, 27 3 2007"
-  }
-}) }}
-#}
+<form action="/get-input" method="post">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+  {{ hmppsDatepicker({
+      id: "dateFrom",
+      name: "dateFrom",
+      label: {
+          text: "Date from",
+          classes: "govuk-label--m"
+      },
+      hint: {
+        text: "For example, 31/3/2022"
+      },
+      errorMessage: errors | findError('from'),
+      classes: 'hmpps-datepicker--fixed-width',
+      maxDate: today
+  }) }}
+  {{ hmppsDatepicker({
+      id: "dateTo",
+      name: "dateTo",
+      label: {
+          text: "Date to",
+          classes: "govuk-label--m"
+      },
+      hint: {
+          text: "For example, 31/3/2023"
+      },
+      errorMessage: errors | findError('to'),
+      value: today,
+      classes: 'hmpps-datepicker--fixed-width',
+      maxDate: today
+  }) }}
 
-{{ hmppsDatepicker({
-    id: "from",
-    name: "from",
+  {{ govukInput({
     label: {
-        text: "Date from",
-        classes: "govuk-label--m"
+      text: "Case Reference Number",
+      classes: "govuk-label--m"
     },
-    hint: {
-      text: "For example, 31/3/2022"
-    },
-    errorMessage: errors | findError('from'),
-    classes: 'hmpps-datepicker--fixed-width',
-    maxDate: today
-}) }}
-{{ hmppsDatepicker({
-    id: "to",
-    name: "to",
-    label: {
-        text: "Date to",
-        classes: "govuk-label--m"
-    },
-    hint: {
-        text: "For example, 31/3/2023"
-    },
-    errorMessage: errors | findError('to'),
-    value: today,
-    classes: 'hmpps-datepicker--fixed-width',
-    maxDate: today
-}) }}
+    id: "case-ref",
+    name: "caseReference",
+    classes: "govuk-input--width-20 govuk-input--extra-letter-spacing"
+  }) }}
 
-{{ govukInput({
-  label: {
-    text: "Case Reference Number",
-    classes: "govuk-label--m"
-  },
-  id: "case-ref",
-  name: "caseReference",
-  classes: "govuk-input--width-20 govuk-input--extra-letter-spacing"
-}) }}
-
-{{ govukButton({
-  text: "Confirm"
-}) }}
-
+  {{ govukButton({
+    text: "Continue"
+  }) }}
+</form>
 {% endblock %}

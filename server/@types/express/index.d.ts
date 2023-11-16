@@ -7,6 +7,11 @@ declare module 'express-session' {
   interface SessionData {
     returnTo: string
     nowInMinutes: number
+    userData: {
+      dateFrom: string
+      dateTo: string
+      caseReference: string
+    }
   }
 }
 
