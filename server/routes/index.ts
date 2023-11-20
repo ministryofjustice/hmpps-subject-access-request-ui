@@ -10,7 +10,6 @@ export default function routes(service: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
-
   get('/', (req, res, next) => {
     res.render('pages/index')
   })
@@ -19,10 +18,11 @@ export default function routes(service: Services): Router {
 
   get('/inputs', (req, res, next) => {
     const userData: UserData = req.session.userData ?? {}
+    const today = formatDate(new Date().toISOString(), 'short')
     res.render('pages/inputs', {
-      today: formatDate(new Date().toISOString(), 'short'),
+      today,
       dateFrom: userData.dateFrom,
-      dateTo: userData.dateTo,
+      dateTo: userData.dateTo || today,
       caseReference: userData.caseReference,
     })
   })

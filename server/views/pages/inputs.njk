@@ -27,7 +27,6 @@
       hint: {
         text: "For example, 31/3/2022"
       },
-      errorMessage: errors | findError('from'),
       classes: 'hmpps-datepicker--fixed-width',
       maxDate: today,
       value: dateFrom
@@ -43,11 +42,9 @@
       hint: {
           text: "For example, 31/3/2023"
       },
-      errorMessage: errors | findError('to'),
-      value: today,
+      value: dateTo,
       classes: 'hmpps-datepicker--fixed-width',
-      maxDate: today,
-      value: dateTo
+      maxDate: today
   }) }}
 
   {{ govukInput({
