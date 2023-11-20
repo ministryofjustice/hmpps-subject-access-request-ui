@@ -3,6 +3,7 @@ import { type RequestHandler, Router } from 'express'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 import { formatDate } from '../utils/dateHelpers'
+import type { UserData } from '../@types/userdata'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes(service: Services): Router {
@@ -17,8 +18,12 @@ export default function routes(service: Services): Router {
   // --- option 1 ---
 
   get('/inputs', (req, res, next) => {
+    const userData: UserData = req.session.userData ?? {}
     res.render('pages/inputs', {
       today: formatDate(new Date().toISOString(), 'short'),
+      dateFrom: userData.dateFrom,
+      dateTo: userData.dateTo,
+      caseReference: userData.caseReference,
     })
   })
 
