@@ -2,7 +2,7 @@ import { type RequestHandler, Router } from 'express'
 
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
-import { formatDate } from '../utils/dateHelpers'
+import formatDate from '../utils/dateHelpers'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes(service: Services): Router {
