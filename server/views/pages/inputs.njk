@@ -15,7 +15,7 @@
 
 {% block content %}
 <h1>Enter details</h1>
-<form action="/get-input" method="post">
+<form action="/save-inputs" method="post">
   <input type="hidden" name="_csrf" value="{{ csrfToken }}">
   {{ hmppsDatepicker({
       id: "dateFrom",

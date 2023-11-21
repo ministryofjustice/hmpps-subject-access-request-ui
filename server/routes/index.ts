@@ -16,14 +16,7 @@ export default function routes(service: Services): Router {
 
   get('/inputs', InputsController.getInputs)
 
-  post('/get-input', (req, res, next) => {
-    req.session.userData = {
-      dateFrom: req.body.dateFrom,
-      dateTo: req.body.dateTo,
-      caseReference: req.body.caseReference,
-    }
-    res.redirect('/services')
-  })
+  post('/save-inputs', InputsController.saveInputs)
 
   get('/services', (req, res, next) => {
     res.render('pages/inputs', {

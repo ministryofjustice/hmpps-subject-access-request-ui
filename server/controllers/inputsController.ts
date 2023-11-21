@@ -14,4 +14,13 @@ export default class InputsController {
       caseReference: userData.caseReference,
     })
   }
+
+  static saveInputs(req: Request, res: Response) {
+    req.session.userData = {
+      dateFrom: req.body.dateFrom,
+      dateTo: req.body.dateTo,
+      caseReference: req.body.caseReference,
+    }
+    res.redirect('/services')
+  }
 }

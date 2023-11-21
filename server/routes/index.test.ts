@@ -33,3 +33,14 @@ describe('GET /inputs', () => {
       })
   })
 })
+
+describe('POST /save-inputs', () => {
+  it('should redirect to services services page', () => {
+    return request(app)
+      .post('/save-inputs')
+      .expect(res => {
+        expect(res.statusCode).toBe(302)
+        expect(res.header.location).toBe('/services')
+      })
+  })
+})

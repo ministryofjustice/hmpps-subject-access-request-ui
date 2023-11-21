@@ -20,7 +20,7 @@ afterEach(() => {
   global.Date = originalDate
 })
 
-describe('inputsController', () => {
+describe('getInputs', () => {
   // @ts-expect-error stubbing res.render
   const res: Response = {
     render: jest.fn(),
@@ -65,5 +65,49 @@ describe('inputsController', () => {
         caseReference: req.session.userData.caseReference,
       }),
     )
+  })
+})
+
+describe('saveInputs', () => {
+  const baseReq: Request = {
+    // @ts-expect-error stubbing session
+    session: {},
+    body: {
+      dateFrom: '01/01/2001',
+      dateTo: '20/12/2020',
+      caseReference: 'mockedCaseReference',
+    },
+  }
+  // @ts-expect-error stubbing res
+  const res: Response = {
+    redirect: jest.fn(),
+  }
+  test('persists values to the session and redirects', () => {
+    InputsController.saveInputs(baseReq, res)
+    expect(baseReq.session.userData.dateFrom).toBe('01/01/2001')
+    expect(baseReq.session.userData.dateTo).toBe('20/12/2020')
+    expect(baseReq.session.userData.caseReference).toBe('mockedCaseReference')
+    expect(res.redirect).toHaveBeenCalled()
+    expect(res.redirect).toBeCalledWith('/services')
+  })
+
+  test('overwrites previous session data if present', () => {
+    const req: Request = {
+      ...baseReq,
+      // @ts-expect-error stubbing session
+      session: {
+        userData: {
+          dateFrom: '11/11/2011',
+          dateTo: '12/12/2012',
+          caseReference: 'caseReferenceToBeOverwritten',
+        },
+      },
+    }
+    InputsController.saveInputs(req, res)
+    expect(req.session.userData.dateFrom).toBe('01/01/2001')
+    expect(req.session.userData.dateTo).toBe('20/12/2020')
+    expect(req.session.userData.caseReference).toBe('mockedCaseReference')
+    expect(res.redirect).toHaveBeenCalled()
+    expect(res.redirect).toBeCalledWith('/services')
   })
 })
