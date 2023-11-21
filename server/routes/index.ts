@@ -1,6 +1,5 @@
 import { type RequestHandler, Router } from 'express'
-
-import axios from 'axios'
+import superagent from 'superagent'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 
@@ -14,11 +13,15 @@ export default function routes(service: Services): Router {
   })
 
   /* call function callApi, return services list */
-  const url = ''
-  const servicelist = getServices(url)
+  const url = 'http://localhost:1337/products'
+  /* const servicelist = getServices(url) */
 
   get('/serviceselection', (req, res, next) => {
-    res.render('pages/serviceselection', servicelist)
+    const list = getServices(url)
+    res.render('pages/serviceselection', {
+      servicelist: list,
+      responseJson: JSON.stringify(list),
+    })
     /* pass services list */
   })
 
@@ -29,11 +32,8 @@ export default function routes(service: Services): Router {
 make get request to API
 return list of services */
 
-async function getServices(apiurl: string) {
-  try {
-    const response = await axios.get(apiurl)
-    // Handle the response
-  } catch (error) {
-    // Handle the error
-  }
+function getServices(apiurl: string): Promise<superagent.Response> {
+  return superagent.get(apiurl).set('Authorization', 'randomApiToken')
+  // Handle the response
 }
+// Handle the error
