@@ -31,8 +31,5 @@ describe('GET /inputs', () => {
       .expect(res => {
         expect(res.text).toContain('Enter details')
       })
-    /* .expect(res => {
-        expect(res.body.should.have.property("name", "hmppsDatepicker"))
-      }) */
   })
 })

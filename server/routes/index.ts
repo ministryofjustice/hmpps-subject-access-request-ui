@@ -2,8 +2,8 @@ import { type RequestHandler, Router } from 'express'
 
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
+import InputsController from '../controllers/inputsController'
 import formatDate from '../utils/dateHelpers'
-import type { UserData } from '../@types/userdata'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes(service: Services): Router {
@@ -14,18 +14,7 @@ export default function routes(service: Services): Router {
     res.render('pages/index')
   })
 
-  // --- option 1 ---
-
-  get('/inputs', (req, res, next) => {
-    const userData: UserData = req.session.userData ?? {}
-    const today = formatDate(new Date().toISOString(), 'short')
-    res.render('pages/inputs', {
-      today,
-      dateFrom: userData.dateFrom,
-      dateTo: userData.dateTo || today,
-      caseReference: userData.caseReference,
-    })
-  })
+  get('/inputs', InputsController.getInputs)
 
   post('/get-input', (req, res, next) => {
     req.session.userData = {
