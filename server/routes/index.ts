@@ -21,7 +21,6 @@ export default function routes(service: Services): Router {
       const list = result.text
       res.render('pages/serviceselection', {
         servicelist: list,
-        responseJson: JSON.stringify(list),
       })
     })
   })

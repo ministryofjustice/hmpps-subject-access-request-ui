@@ -7,8 +7,7 @@
 
 {% block content %}
 <p>Creating SAR report for [prisoner name]</p>
-<p>JSON {{ responseJson }}</p>
-<p>BODY {{ servicelist }}</p>
+<p>API RESPONSE: {{ servicelist }}</p>
 
 {{ govukCheckboxes({
   name: "services",
