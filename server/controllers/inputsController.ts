@@ -12,6 +12,9 @@ export default class InputsController {
       dateFrom: userData.dateFrom,
       dateTo: userData.dateTo || today,
       caseReference: userData.caseReference,
+      dateFromError: {
+        text: 'error',
+      },
     })
   }
 

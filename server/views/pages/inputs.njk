@@ -29,7 +29,8 @@
       },
       classes: 'hmpps-datepicker--fixed-width',
       maxDate: today,
-      value: dateFrom
+      value: dateFrom,
+      errorMessage: dateFromError
   }) }}
 
   {{ hmppsDatepicker({
@@ -44,7 +45,8 @@
       },
       value: dateTo,
       classes: 'hmpps-datepicker--fixed-width',
-      maxDate: today
+      maxDate: today,
+      errorMessage: dateToError
   }) }}
 
   {{ govukInput({
@@ -55,7 +57,8 @@
     id: "input-caseReference",
     name: "caseReference",
     classes: "govuk-input--width-20 govuk-input--extra-letter-spacing",
-    value: caseReference
+    value: caseReference,
+    errorMessage: caseReferenceError
   }) }}
 
   {{ govukButton({
