@@ -17,23 +17,18 @@ export default function routes(service: Services): Router {
   /* const servicelist = getServices(url) */
 
   get('/serviceselection', (req, res, next) => {
-    const list = getServices(url)
-    res.render('pages/serviceselection', {
-      servicelist: list,
-      responseJson: JSON.stringify(list),
+    getServices(url).end((error, result) => {
+      const list = result.text
+      res.render('pages/serviceselection', {
+        servicelist: list,
+        responseJson: JSON.stringify(list),
+      })
     })
-    /* pass services list */
   })
 
   return router
 }
 
-/* function callApi:
-make get request to API
-return list of services */
-
-function getServices(apiurl: string): Promise<superagent.Response> {
-  return superagent.get(apiurl).set('Authorization', 'randomApiToken')
-  // Handle the response
+function getServices(apiurl: string) {
+  return superagent.get(apiurl).set('Authorization', 'OAuth randomApiToken')
 }
-// Handle the error
