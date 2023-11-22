@@ -18,7 +18,7 @@
 <form action="/save-inputs" method="post">
   <input type="hidden" name="_csrf" value="{{ csrfToken }}">
   {{ hmppsDatepicker({
-      id: "dateFrom",
+      id: "input-dateFrom",
       name: "dateFrom",
       label: {
           text: "Date from",
@@ -33,7 +33,7 @@
   }) }}
 
   {{ hmppsDatepicker({
-      id: "dateTo",
+      id: "input-dateTo",
       name: "dateTo",
       label: {
           text: "Date to",
@@ -52,14 +52,15 @@
       text: "Case Reference Number",
       classes: "govuk-label--m"
     },
-    id: "case-ref",
+    id: "input-caseReference",
     name: "caseReference",
     classes: "govuk-input--width-20 govuk-input--extra-letter-spacing",
-      value: caseReference
+    value: caseReference
   }) }}
 
   {{ govukButton({
-    text: "Continue"
+    text: "Continue",
+    id: "input-continue"
   }) }}
 </form>
 {% endblock %}
