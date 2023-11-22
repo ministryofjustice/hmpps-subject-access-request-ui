@@ -18,10 +18,25 @@ export default function routes(service: Services): Router {
 
   get('/serviceselection', (req, res, next) => {
     getServices(url).end((error, result) => {
-      const list = result.text
-      res.render('pages/serviceselection', {
-        servicelist: list,
-      })
+      if (error) {
+        const list = [
+          {
+            value: 'Select All',
+            text: 'Select All',
+          },
+          {
+            divider: 'or',
+          },
+          { text: 'Data from TestService1', value: 'https://foo.boo.com' },
+          { text: 'Data from TestService2', value: 'https://foo.boo.com' },
+          { text: 'Data from TestService3', value: 'https://foo.boo.com' },
+        ]
+        res.render('pages/serviceselection', {
+          servicelist: list,
+        })
+      } else {
+        // TODO: implement logic to get list of service from Service Catalogue response
+      }
     })
   })
 
