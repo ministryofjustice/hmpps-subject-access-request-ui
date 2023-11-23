@@ -6,7 +6,7 @@ export default class ServiceCatalogueClient {
   getServices(token: string): Promise<any[]> {
     return new Promise(resolve => {
       superagent
-        .get(`${config.apis.serviceCatalogue.url}/products`)
+        .get(`${config.apis.serviceCatalogue.url}/v1/products`)
         .set('Authorization', `OAuth ${token}`)
         .end((error, res) => {
           if (error) {
