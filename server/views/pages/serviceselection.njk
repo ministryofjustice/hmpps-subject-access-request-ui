@@ -6,6 +6,9 @@
 
 
 {% block content %}
+{{ govukButton({
+  text: "Select All"
+}) }}
 
 {{ govukCheckboxes({
   name: "services",
