@@ -7,6 +7,10 @@ context('Inputs', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubManageUser')
+    cy.intercept({
+      method: 'POST',
+      url: '/inputs',
+    }).as('saveInputs')
   })
 
   it('Unauthenticated user navigating to inputs page directed to auth', () => {
@@ -32,10 +36,6 @@ context('Inputs', () => {
   })
 
   it('Submits user inputs and redirects to /services', () => {
-    cy.intercept({
-      method: 'POST',
-      url: '/save-inputs',
-    }).as('saveInputs')
     cy.signIn()
     cy.visit('/inputs')
     const inputsPage = Page.verifyOnPage(InputsPage)
@@ -65,5 +65,111 @@ context('Inputs', () => {
     inputsPage.datePickerFrom().should('have.value', '01/01/2001')
     inputsPage.datePickerTo().should('have.value', '01/01/2021')
     inputsPage.caseReferenceTextbox().should('have.value', 'exampleCaseReference')
+  })
+
+  it('Does not allow any invalid dateFrom input', () => {
+    const invalidInputs = [
+      '01/01/2150', // Future date (Greater than current year)
+      '01/13/2022', // Invalid month (Greater than 12)
+      '32/01/2022', // Invalid day (Greater than 31)
+      '30/02/2023', // Invalid day (30 in February)
+      'a/01/2022', // Invalid day (not numeric)
+      '01/a/2022', // Invalid month (not numeric)
+      '01/01/a', // Invalid year (not numeric)
+      'test', // Invalid date
+    ]
+    cy.signIn()
+    invalidInputs.forEach(invalidInput => {
+      cy.visit('/inputs')
+      let inputsPage = Page.verifyOnPage(InputsPage)
+      inputsPage.datePickerFrom().clear().type(invalidInput)
+      inputsPage.datePickerTo().clear().type('01/01/2021')
+      inputsPage.caseReferenceTextbox().clear().type('exampleCaseReference')
+      inputsPage.continueButton().click()
+      cy.wait('@saveInputs')
+      cy.url().should('to.match', /inputs$/)
+      inputsPage = Page.verifyOnPage(InputsPage)
+      inputsPage.datePickerFrom().should('have.value', invalidInput)
+      inputsPage.datePickerTo().should('have.value', '01/01/2021')
+      inputsPage.caseReferenceTextbox().should('have.value', 'exampleCaseReference')
+      // TODO: also test for visibility of error message
+    })
+  })
+
+  it('Does not allow any invalid dateTo input', () => {
+    const invalidInputs = [
+      '01/01/2150', // Future date (Greater than current year)
+      '01/13/2022', // Invalid month (Greater than 12)
+      '32/01/2022', // Invalid day (Greater than 31)
+      '30/02/2023', // Invalid day (30 in February)
+      'a/01/2022', // Invalid day (not numeric)
+      '01/a/2022', // Invalid month (not numeric)
+      '01/01/a', // Invalid year (not numeric)
+      'test', // Invalid date
+    ]
+    cy.signIn()
+    invalidInputs.forEach(invalidInput => {
+      cy.visit('/inputs')
+      let inputsPage = Page.verifyOnPage(InputsPage)
+      inputsPage.datePickerFrom().clear().type('01/01/2001')
+      inputsPage.datePickerTo().clear().type(invalidInput)
+      inputsPage.caseReferenceTextbox().clear().type('exampleCaseReference')
+      inputsPage.continueButton().click()
+      cy.wait('@saveInputs')
+      cy.url().should('to.match', /inputs$/)
+      inputsPage = Page.verifyOnPage(InputsPage)
+      inputsPage.datePickerFrom().should('have.value', '01/01/2001')
+      inputsPage.datePickerTo().should('have.value', invalidInput)
+      inputsPage.caseReferenceTextbox().should('have.value', 'exampleCaseReference')
+      // TODO: also test for visibility of error message
+    })
+  })
+
+  it('Does not allow caseReference to be empty', () => {
+    cy.signIn()
+    cy.visit('/inputs')
+    let inputsPage = Page.verifyOnPage(InputsPage)
+    inputsPage.datePickerFrom().clear().type('01/01/2001')
+    inputsPage.datePickerTo().clear().type('01/01/2021')
+    inputsPage.continueButton().click()
+    cy.wait('@saveInputs')
+    cy.url().should('to.match', /inputs$/)
+    inputsPage = Page.verifyOnPage(InputsPage)
+    inputsPage.datePickerFrom().should('have.value', '01/01/2001')
+    inputsPage.datePickerTo().should('have.value', '01/01/2021')
+  })
+
+  it('Does not allow any invalid caseReference input', () => {
+    const invalidInputs = [
+      'abcdefghijklmnopqrstuvwxyz', // Invalid string (Longer than 20 chars)
+    ]
+    cy.signIn()
+    invalidInputs.forEach(invalidInput => {
+      cy.visit('/inputs')
+      let inputsPage = Page.verifyOnPage(InputsPage)
+      inputsPage.datePickerFrom().clear().type('01/01/2001')
+      inputsPage.datePickerTo().clear().type('01/01/2021')
+      inputsPage.caseReferenceTextbox().clear().type(invalidInput)
+      inputsPage.continueButton().click()
+      cy.wait('@saveInputs')
+      cy.url().should('to.match', /inputs$/)
+      inputsPage = Page.verifyOnPage(InputsPage)
+      inputsPage.datePickerFrom().should('have.value', '01/01/2001')
+      inputsPage.datePickerTo().should('have.value', '01/01/2021')
+      inputsPage.caseReferenceTextbox().should('have.value', invalidInput)
+      // TODO: also test for visibility of error message
+    })
+  })
+
+  it('Does not allow DateFrom to be after DateTo', () => {
+    cy.signIn()
+    cy.visit('/inputs')
+    const inputsPage = Page.verifyOnPage(InputsPage)
+    inputsPage.datePickerFrom().clear().type('01/01/2021')
+    inputsPage.datePickerTo().clear().type('01/01/2001')
+    inputsPage.caseReferenceTextbox().clear().type('exampleCaseReference')
+    inputsPage.continueButton().click()
+    cy.wait('@saveInputs')
+    cy.url().should('to.match', /inputs$/)
   })
 })

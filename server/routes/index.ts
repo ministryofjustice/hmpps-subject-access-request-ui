@@ -16,7 +16,7 @@ export default function routes(service: Services): Router {
 
   get('/inputs', InputsController.getInputs)
 
-  post('/save-inputs', InputsController.saveInputs)
+  post('/inputs', InputsController.saveInputs)
 
   get('/services', (req, res, next) => {
     res.render('pages/inputs', {

@@ -10,12 +10,50 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "../components/datepicker/macro.njk" import hmppsDatepicker %}
 
 
+
 {% block content %}
+
+{% if dateFromError %}
+  {% set dateFromErrorMessage = { text: dateFromError } %}
+  {% set showErrors = true %}
+{% endif %}
+
+{% if dateToError %}
+  {% set dateToErrorMessage = { text: dateToError } %}
+  {% set showErrors = true %}
+{% endif %}
+
+{% if caseReferenceError %}
+  {% set caseReferenceErrorMessage = { text: caseReferenceError } %}
+  {% set showErrors = true %}
+{% endif %}
+
+{% if showErrors %}
+  {{ govukErrorSummary({
+    titleText: "There is a problem",
+    errorList: [
+      {
+        text: dateFromError,
+        href: "#input-dateFrom"
+      },
+      {
+        text: dateToError,
+        href: "#input-dateTo"
+      },
+      {
+        text: caseReferenceError,
+        href: "#input-caseReference"
+      }
+    ]
+  }) }}
+{% endif %}
+
 <h1>Enter details</h1>
-<form action="/save-inputs" method="post">
+<form action="/inputs" method="post">
   <input type="hidden" name="_csrf" value="{{ csrfToken }}">
   {{ hmppsDatepicker({
       id: "input-dateFrom",
@@ -30,7 +68,7 @@
       classes: 'hmpps-datepicker--fixed-width',
       maxDate: today,
       value: dateFrom,
-      errorMessage: dateFromError
+      errorMessage: dateFromErrorMessage
   }) }}
 
   {{ hmppsDatepicker({
@@ -46,7 +84,7 @@
       value: dateTo,
       classes: 'hmpps-datepicker--fixed-width',
       maxDate: today,
-      errorMessage: dateToError
+      errorMessage: dateToErrorMessage
   }) }}
 
   {{ govukInput({
@@ -58,7 +96,7 @@
     name: "caseReference",
     classes: "govuk-input--width-20 govuk-input--extra-letter-spacing",
     value: caseReference,
-    errorMessage: caseReferenceError
+    errorMessage: caseReferenceErrorMessage
   }) }}
 
   {{ govukButton({
