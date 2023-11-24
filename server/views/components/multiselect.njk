@@ -1,0 +1,17 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% macro multiSelect(params) %}
+    {% for row in params.rows %}
+        {
+            html: '
+                    <div class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox">
+                        <input type="checkbox" name="' + row.name + '" value="' + row.value + '" class="govuk-checkboxes__input" id="' + (params.idPrefix or 'row') + '-' + loop.index + '"' + (('data-forbidden-action="' + row.forbiddenActionId + '"') if row.forbiddenActionId) + '>
+                        <label class="govuk-label govuk-checkboxes__label" for="' + (params.idPrefix or 'row') + '-' + loop.index + '">
+                            <span class="govuk-visually-hidden">' + row.visuallyHiddenText + '</span>
+                        </label>
+                    </div>
+                    '
+        }
+    {% endfor %}
+{% endmacro %}

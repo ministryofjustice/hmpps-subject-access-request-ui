@@ -2,7 +2,7 @@
 {% set mainClasses = "app-container govuk-body" %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-
+{% from "../components/multiselect.njk" import multiSelect %}
 
 
 {% block content %}
@@ -25,6 +25,14 @@
   items: servicelist
 }) }}
 
+
+{{ multiSelect({
+  rows: [{name: anna, value: 14},
+         {name: cai, value: 24},
+         {name: april, value: 38}],
+  name: 'Test checkbox',
+  caption: 'testing123'
+}) }}
 
 {{ govukButton({
   text: "Confirm"
