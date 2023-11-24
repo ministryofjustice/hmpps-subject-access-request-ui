@@ -92,6 +92,7 @@
   },
   "dependencies": {
     "@ministryofjustice/frontend": "^1.8.0",
+    "@ons/design-system": "^67.0.0",
     "agentkeepalive": "^4.5.0",
     "applicationinsights": "^2.9.0",
     "axios": "^1.6.2",
@@ -111,6 +112,7 @@
     "jquery": "^3.7.1",
     "jwt-decode": "^4.0.0",
     "nocache": "^4.0.0",
+    "normalize.css": "^8.0.1",
     "nunjucks": "^3.2.4",
     "passport": "^0.6.0",
     "passport-oauth2": "^1.7.0",

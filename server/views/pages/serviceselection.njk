@@ -2,8 +2,8 @@
 {% set mainClasses = "app-container govuk-body" %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "../components/multiselect.njk" import multiSelect %}
-
+{% from "components/checkboxes/_macro.njk" import onsCheckboxes %}
+{% from "components/question/_macro.njk" import onsQuestion %}
 
 {% block content %}
 {{ govukButton({
@@ -25,14 +25,55 @@
   items: servicelist
 }) }}
 
+{% call onsQuestion({
+    "title": "What devices do you own?",
+    "legendIsQuestionTitle": true,
+    "classes": "ons-u-mt-no"
+}) %}
+    {{
+        onsCheckboxes({
+            "checkboxesLabel": "Select all that apply",
+            "dontWrap": true,
+            "name": "devices",
+            "autoSelect": {
+                "selectAllText": "Select all",
+                "unselectAllText": "Unselect all",
+                "context": "following checkboxes"
+            },
+            "checkboxes": [
+                {
+                    "id": "mobile-phone-example-checkbox-with-select-all-button",
+                    "label": {
+                        "text": "Mobile phone"
+                    },
+                    "value": "mobile-phone"
+                },
+                {
+                    "id": "tablet-example-checkbox-with-select-all-button",
+                    "label": {
+                        "text": "Tablet"
+                    },
+                    "value": "tablet"
+                },
+                {
+                    "id": "laptop-example-checkbox-with-select-all-button",
+                    "label": {
+                        "text": "Laptop"
+                    },
+                    "value": "laptop"
+                },
+                {
+                    "id": "desktop-example-checkbox-with-select-all-button",
+                    "label": {
+                        "text": "Desktop computer"
+                    },
+                    "value": "desktop"
+                }
+            ]
+        })
+    }}
+{% endcall %}
 
-{{ multiSelect({
-  rows: [{name: anna, value: 14},
-         {name: cai, value: 24},
-         {name: april, value: 38}],
-  name: 'Test checkbox',
-  caption: 'testing123'
-}) }}
 
 {{ govukButton({
   text: "Confirm"
