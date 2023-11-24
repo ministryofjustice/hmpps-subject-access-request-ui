@@ -5,6 +5,8 @@ export default class InputsPage extends Page {
     super('Enter details')
   }
 
+  errorSummaryBox = (): PageElement => cy.get('.govuk-error-summary')
+
   datePickerFrom = (): PageElement => cy.get('#input-dateFrom')
 
   datePickerTo = (): PageElement => cy.get('#input-dateTo')

@@ -92,7 +92,7 @@ context('Inputs', () => {
       inputsPage.datePickerFrom().should('have.value', invalidInput)
       inputsPage.datePickerTo().should('have.value', '01/01/2021')
       inputsPage.caseReferenceTextbox().should('have.value', 'exampleCaseReference')
-      // TODO: also test for visibility of error message
+      inputsPage.errorSummaryBox().should('exist')
     })
   })
 
@@ -121,7 +121,7 @@ context('Inputs', () => {
       inputsPage.datePickerFrom().should('have.value', '01/01/2001')
       inputsPage.datePickerTo().should('have.value', invalidInput)
       inputsPage.caseReferenceTextbox().should('have.value', 'exampleCaseReference')
-      // TODO: also test for visibility of error message
+      inputsPage.errorSummaryBox().should('exist')
     })
   })
 
@@ -137,6 +137,7 @@ context('Inputs', () => {
     inputsPage = Page.verifyOnPage(InputsPage)
     inputsPage.datePickerFrom().should('have.value', '01/01/2001')
     inputsPage.datePickerTo().should('have.value', '01/01/2021')
+    inputsPage.errorSummaryBox().should('exist')
   })
 
   it('Does not allow any invalid caseReference input', () => {
@@ -157,7 +158,7 @@ context('Inputs', () => {
       inputsPage.datePickerFrom().should('have.value', '01/01/2001')
       inputsPage.datePickerTo().should('have.value', '01/01/2021')
       inputsPage.caseReferenceTextbox().should('have.value', invalidInput)
-      // TODO: also test for visibility of error message
+      inputsPage.errorSummaryBox().should('exist')
     })
   })
 
