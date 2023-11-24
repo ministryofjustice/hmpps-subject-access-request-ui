@@ -70,7 +70,7 @@ services:
       - TOKEN_VERIFICATION_API_URL=http://hmpps-auth:8080/auth
       - TOKEN_VERIFICATION_ENABLED=false
       - INGRESS_URL=http://localhost:3000
-      - SERVICE_CATALOGUE_URL=http://localhost:1337
+      - SERVICE_CATALOGUE_URL=http://localhost:1337/v1
 
 
 
