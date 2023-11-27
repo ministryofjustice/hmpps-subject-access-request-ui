@@ -1,0 +1,33 @@
+{% extends "../partials/layout.njk" %}
+{% set mainClasses = "app-container govuk-body" %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+
+
+{% block content %}
+{{ govukButton({
+  text: "Select All"
+}) }}
+
+{{ govukCheckboxes({
+  name: "services",
+  fieldset: {
+    legend: {
+      text: "Select services",
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  },
+  hint: {
+    text: "Select all services to collect data from, or click 'Select All'"
+  },
+  items: servicelist
+}) }}
+
+
+{{ govukButton({
+  text: "Confirm"
+}) }}
+
+{% endblock %}
