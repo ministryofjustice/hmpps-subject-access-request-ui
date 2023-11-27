@@ -6,7 +6,7 @@ const originalDate = global.Date
 
 class MockDate extends Date {
   constructor() {
-    super('2022-12-30T01:01:01.001Z')
+    super('2022-12-30T12:01:01.001Z')
   }
 }
 
