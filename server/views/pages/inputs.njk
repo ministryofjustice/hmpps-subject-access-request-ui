@@ -1,0 +1,107 @@
+{% extends "../partials/layout.njk" %}
+
+{% set mainClasses = "app-container govuk-body" %}
+{% set options = {
+    title: 'Filter',
+    id: 'alertsFilter',
+    currentUrlPath: currentUrlPath,
+    queryParams: listMetadata.filtering.queryParams
+} %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "../components/datepicker/macro.njk" import hmppsDatepicker %}
+
+
+
+{% block content %}
+
+{% if dateFromError %}
+  {% set dateFromErrorMessage = { text: dateFromError } %}
+  {% set showErrors = true %}
+{% endif %}
+
+{% if dateToError %}
+  {% set dateToErrorMessage = { text: dateToError } %}
+  {% set showErrors = true %}
+{% endif %}
+
+{% if caseReferenceError %}
+  {% set caseReferenceErrorMessage = { text: caseReferenceError } %}
+  {% set showErrors = true %}
+{% endif %}
+
+{% if showErrors %}
+  {{ govukErrorSummary({
+    titleText: "There is a problem!",
+    errorList: [
+      {
+        text: dateFromError,
+        href: "#input-dateFrom"
+      },
+      {
+        text: dateToError,
+        href: "#input-dateTo"
+      },
+      {
+        text: caseReferenceError,
+        href: "#input-caseReference"
+      }
+    ]
+  }) }}
+{% endif %}
+
+<h1>Enter details</h1>
+<form action="/inputs" method="post">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+  {{ hmppsDatepicker({
+      id: "input-dateFrom",
+      name: "dateFrom",
+      label: {
+          text: "Date from",
+          classes: "govuk-label--m"
+      },
+      hint: {
+        text: "For example, 31/03/2022"
+      },
+      classes: 'hmpps-datepicker--fixed-width',
+      maxDate: today,
+      value: dateFrom,
+      errorMessage: dateFromErrorMessage
+  }) }}
+
+  {{ hmppsDatepicker({
+      id: "input-dateTo",
+      name: "dateTo",
+      label: {
+          text: "Date to",
+          classes: "govuk-label--m"
+      },
+      hint: {
+          text: "For example, 31/03/2023"
+      },
+      value: dateTo,
+      classes: 'hmpps-datepicker--fixed-width',
+      maxDate: today,
+      errorMessage: dateToErrorMessage
+  }) }}
+
+  {{ govukInput({
+    label: {
+      text: "Case Reference Number",
+      classes: "govuk-label--m"
+    },
+    id: "input-caseReference",
+    name: "caseReference",
+    classes: "govuk-input--width-20 govuk-input--extra-letter-spacing",
+    value: caseReference,
+    errorMessage: caseReferenceErrorMessage
+  }) }}
+
+  {{ govukButton({
+    text: "Continue",
+    id: "input-continue"
+  }) }}
+</form>
+{% endblock %}
