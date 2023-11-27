@@ -7,12 +7,8 @@ $govuk-page-width: $moj-page-width;
 @import 'govuk/all';
 @import 'moj/all';
 
-@import 'node_modules/@ons/design-system/scss/vars/index';
-@import 'node_modules/@ons/design-system/scss/helpers/index';
-@import 'node_modules/@ons/design-system/scss/utilities/index';
-@import 'node_modules/@ons/design-system/scss/base/index';
-@import 'node_modules/@ons/design-system/scss/objects/index';
-@import 'node_modules/@ons/design-system/components/checkboxes/checkboxes';
+
+@import "node_modules/@ministryofjustice/frontend/moj/all";
 
 @import './components/header-bar';
 @import 'assets/scss/local';
