@@ -10,6 +10,7 @@ declare module 'express-session' {
     userData: UserData
     serviceList: ApiService[]
     selectedList: ApiService[]
+    // apiData: ApiService
   }
 }
 

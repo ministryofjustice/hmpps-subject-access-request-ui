@@ -8,6 +8,7 @@ export default class ServiceSelectionController {
     catalogueclient.getServices().then(list => {
       // 'mockToken'
       req.session.serviceList = list
+      // req.session.apiData.serviceList = list
       res.render('pages/serviceselection', {
         servicelist: list,
       })
@@ -16,8 +17,10 @@ export default class ServiceSelectionController {
 
   static selectServices(req: Request, res: Response) {
     const list = req.session.serviceList
+    // req.session.apiData.serviceList = list
     const selectedServices = list.filter(x => req.body.selectedServices.includes(x.id))
     req.session.selectedList = selectedServices
+    // req.session.apiData.selectedList = selectedServices
     res.redirect('/serviceselection')
   }
 }
