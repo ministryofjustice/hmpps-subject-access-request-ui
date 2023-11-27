@@ -2,8 +2,6 @@
 {% set mainClasses = "app-container govuk-body" %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "components/checkboxes/_macro.njk" import onsCheckboxes %}
-{% from "components/question/_macro.njk" import onsQuestion %}
 {% from "../components/multiselect.njk" import multiSelect %}
 {% block content %}
 
@@ -14,7 +12,7 @@
       </h1>
     </legend>
     <div id="waste-hint" class="govuk-hint">
-      Select all services to collect data from.
+      Select services to collect data from.
     </div>
     {{ multiSelect({
         headers: ["Service Name"],
