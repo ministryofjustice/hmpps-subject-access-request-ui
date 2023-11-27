@@ -16,7 +16,7 @@
     <tr class="govuk-table__row govuk-table__row--selected">        
       <td class="govuk-table__cell">
         <div class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox">
-          <input type="checkbox" class="govuk-checkboxes__input" id="{{item.text}}">     
+          <input type="checkbox" class="govuk-checkboxes__input" id="{{item.text}}" name="{{params.itemGroupName}}" value="{{item.id}}">     
           <label class="govuk-label govuk-checkboxes__label" for="{{item.text}}">
             <span class="govuk-visually-hidden">Select {{item.text}}</span>
           </label>     

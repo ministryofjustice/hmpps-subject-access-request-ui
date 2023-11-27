@@ -5,23 +5,30 @@
 {% from "../components/multiselect.njk" import multiSelect %}
 {% block content %}
 
-<div class="govuk-form-group">
-   <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-      <h1 class="govuk-fieldset__heading">
-       Select Services
-      </h1>
-    </legend>
-    <div id="waste-hint" class="govuk-hint">
-      Select services to collect data from.
-    </div>
-    {{ multiSelect({
-        headers: ["Service Name"],
-        items:servicelist
-    }) }}
-</div>
+<form action="/serviceselection" method="post">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
-{{ govukButton({
-  text: "Confirm"
-}) }}
+  <div class="govuk-form-group">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">
+        Select Services
+        </h1>
+      </legend>
+      <div id="waste-hint" class="govuk-hint">
+        Select services to collect data from.
+      </div>
+      {{ multiSelect({
+          headers: ["Service Name"],
+          itemGroupName:"selectedServices",
+          items:servicelist
+      }) }}
+  </div>
 
+  {{ govukButton({
+    text: "Confirm",
+    
+    type: "submit"
+  }) }}
+
+</form>
 {% endblock %}

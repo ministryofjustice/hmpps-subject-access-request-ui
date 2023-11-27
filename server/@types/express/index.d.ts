@@ -8,6 +8,8 @@ declare module 'express-session' {
     returnTo: string
     nowInMinutes: number
     userData: UserData
+    serviceList: ApiService[]
+    selectedList: ApiService[]
   }
 }
 

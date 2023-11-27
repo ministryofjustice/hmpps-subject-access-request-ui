@@ -7,9 +7,9 @@ export default class ServiceCatalogueClient {
     // token: string
     return new Promise(resolve => {
       const list = [
-        { text: 'Data from TestService1', value: 'https://foo.boo.com' },
-        { text: 'Data from TestService2', value: 'https://foo.boo.com' },
-        { text: 'Data from TestService3', value: 'https://foo.boo.com' },
+        { id: '1', text: 'Data from TestService1', value: 'https://foo.boo.com' },
+        { id: '2', text: 'Data from TestService2', value: 'https://foo.boo.com' },
+        { id: '3', text: 'Data from TestService3', value: 'https://foo.boo.com' },
       ]
       resolve(list)
       // superagent
