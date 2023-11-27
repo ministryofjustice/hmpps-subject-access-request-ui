@@ -20,7 +20,8 @@ export default function routes(service: Services): Router {
 
   get('/serviceselection', (req, res, next) => {
     // TODO: GetServiceToken
-    catalogueclient.getServices('mockToken').then(list => {
+    catalogueclient.getServices().then(list => {
+      // 'mockToken'
       res.render('pages/serviceselection', {
         servicelist: list,
       })
