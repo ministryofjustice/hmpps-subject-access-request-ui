@@ -18,8 +18,7 @@ export default class InputsController {
 
   static saveInputs(req: Request, res: Response): void {
     const { dateFrom, dateTo, caseReference } = req.body
-    const dateFromError = InputsValidation.validateDateFrom(dateFrom)
-    const dateToError = InputsValidation.validateDateTo(dateTo, dateFromError ? '' : dateFrom)
+    const { dateFromError, dateToError } = InputsValidation.validateDateRange(dateFrom, dateTo)
     const caseReferenceError = InputsValidation.validateCaseReference(caseReference)
     if ([dateFromError, dateToError, caseReferenceError].some(item => !!item)) {
       const today = formatDate(new Date().toISOString(), 'short')

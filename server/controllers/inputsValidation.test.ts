@@ -20,8 +20,8 @@ describe('validateDateFrom', () => {
       { input: '01/01/2150', expected: errors.future },
     ]
     testCases.forEach(testCase => {
-      const actual = InputsValidation.validateDateFrom(testCase.input)
-      expect(actual).toEqual(testCase.expected)
+      const actual = InputsValidation.validateDateRange(testCase.input, '')
+      expect(actual.dateFromError).toEqual(testCase.expected)
     })
   })
 })
@@ -48,8 +48,8 @@ describe('validateDateTo', () => {
       { inputTo: '01/01/2021', inputFrom: '01/01/2022', expected: errors.after },
     ]
     testCases.forEach(testCase => {
-      const actual = InputsValidation.validateDateTo(testCase.inputTo, testCase.inputFrom)
-      expect(actual).toEqual(testCase.expected)
+      const actual = InputsValidation.validateDateRange(testCase.inputFrom, testCase.inputTo)
+      expect(actual.dateToError).toEqual(testCase.expected)
     })
   })
 })
