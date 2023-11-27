@@ -1,9 +1,10 @@
-import superagent from 'superagent'
-import config from '../config'
+// import superagent from 'superagent'
+// import config from '../config'
 
 export default class ServiceCatalogueClient {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  getServices(token: string): Promise<any[]> {
+  getServices(): Promise<any[]> {
+    // token: string
     return new Promise(resolve => {
       const list = [
         { text: 'Data from TestService1', value: 'https://foo.boo.com' },
