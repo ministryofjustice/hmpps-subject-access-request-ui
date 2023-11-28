@@ -44,3 +44,25 @@ describe('POST /inputs', () => {
       })
   })
 })
+
+describe('GET /serviceselection', () => {
+  it('should render inputs page', () => {
+    return request(app)
+      .get('/serviceselection')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Select services')
+      })
+  })
+})
+
+describe('POST /serviceselection', () => {
+  it.skip('should redirect to itself given no data', () => {
+    return request(app)
+      .post('/serviceselection')
+      .expect(res => {
+        expect(res.statusCode).toBe(200)
+        expect(res.text).toContain('Select services')
+      })
+  })
+})

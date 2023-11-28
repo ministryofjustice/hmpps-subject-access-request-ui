@@ -3,7 +3,7 @@
 
 export default class ServiceCatalogueClient {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  getServices(): Promise<any[]> {
+  async getServiceList(): Promise<any[]> {
     // token: string
     return new Promise(resolve => {
       const list = [
