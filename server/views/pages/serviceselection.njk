@@ -2,8 +2,25 @@
 {% set mainClasses = "app-container govuk-body" %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "../components/multiselect.njk" import multiSelect %}
 {% block content %}
+
+{% if selectedServicesError %}
+  {% set selectedServicesErrorMessage = { text: selectedServicesError } %}
+  {% set showErrors = true %}
+{% endif %}
+
+{% if showErrors %}
+  {{ govukErrorSummary({
+    titleText: "There is a problem!",
+    errorList: [
+      {
+        text: selectedServicesError
+      }
+    ]
+  }) }}
+{% endif %}
 
 <form action="/serviceselection" method="post">
   <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -20,7 +37,8 @@
       {{ multiSelect({
           headers: ["Service Name"],
           itemGroupName:"selectedServices",
-          items:servicelist
+          items:servicelist,
+          errorMessage: selectedServicesErrorMessage
       }) }}
   </div>
 

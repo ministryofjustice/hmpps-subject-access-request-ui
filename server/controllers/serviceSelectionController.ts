@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import ServiceCatalogueClient from '../data/serviceCatalogueClient'
+import ServiceSelectionValidation from './serviceSelectionValidation'
 
 export default class ServiceSelectionController {
   static async getServices(req: Request, res: Response) {
@@ -8,7 +9,6 @@ export default class ServiceSelectionController {
     await catalogueclient.getServiceList().then(list => {
       // 'mockToken'
       req.session.serviceList = list
-      // req.session.apiData.serviceList = list
       res.render('pages/serviceselection', {
         servicelist: list,
       })
@@ -17,11 +17,17 @@ export default class ServiceSelectionController {
 
   static selectServices(req: Request, res: Response) {
     const list = req.session.serviceList
-    // req.session.apiData.serviceList = list
     if (list) {
+      const selectedServicesError = ServiceSelectionValidation.validateSelection(req.body.selectedServices)
+      if (selectedServicesError) {
+        res.render('pages/serviceselection', {
+          selectedServicesError,
+          servicelist: list,
+        })
+        return
+      }
       const selectedServices = list.filter(x => req.body.selectedServices.includes(x.id))
       req.session.selectedList = selectedServices
-      // req.session.apiData.selectedList = selectedServices
       res.redirect('/serviceselection')
     }
   }
