@@ -18,7 +18,7 @@
       <td class="govuk-table__cell">
         <div class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox">
          {% set isChecked = (params.selectedItems or []).indexOf(item.id) > -1%}
-          <input type="checkbox" class="govuk-checkboxes__input" id="{{item.text}}" 
+          <input type="checkbox" class="govuk-checkboxes__input govuk-moj-multi-select__checkbox__input" id="{{item.text}}" 
               name="{{params.itemGroupName}}" value="{{item.id}}" 
               {{-" checked" if isChecked }} >   
          
