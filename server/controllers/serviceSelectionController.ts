@@ -9,8 +9,10 @@ export default class ServiceSelectionController {
     await catalogueclient.getServiceList().then(list => {
       // 'mockToken'
       req.session.serviceList = list
+      const selectedList = req.session.selectedList ?? []
       res.render('pages/serviceselection', {
         servicelist: list,
+        selectedList: selectedList.map(x => x.id),
       })
     })
   }

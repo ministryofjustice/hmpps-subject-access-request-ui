@@ -28,16 +28,18 @@
   <div class="govuk-form-group">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
         <h1 class="govuk-fieldset__heading">
-        Select Services
+        Select Services 
         </h1>
       </legend>
       <div id="waste-hint" class="govuk-hint">
         Select services to collect data from.
       </div>
+
       {{ multiSelect({
           headers: ["Service Name"],
           itemGroupName:"selectedServices",
           items:servicelist,
+          selectedItems: selectedList,
           errorMessage: selectedServicesErrorMessage
       }) }}
   </div>
