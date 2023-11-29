@@ -46,7 +46,7 @@ describe('POST /inputs', () => {
 })
 
 describe('GET /serviceselection', () => {
-  it('should render inputs page', () => {
+  it('should render serviceselection page', () => {
     return request(app)
       .get('/serviceselection')
       .expect('Content-Type', /html/)

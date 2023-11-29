@@ -13,7 +13,7 @@ context('ServiceSelection', () => {
     }).as('selectServices')
   })
 
-  it('Unauthenticated user navigating to inputs page directed to auth', () => {
+  it('Unauthenticated user navigating to serviceselection page directed to auth', () => {
     cy.visit('/serviceselection')
     Page.verifyOnPage(AuthSignInPage)
   })
@@ -57,7 +57,7 @@ context('ServiceSelection', () => {
     cy.get('.govuk-moj-multi-select__checkbox__input').should('not.be.checked')
   })
 
-  it('Presist selected service when user returning to ServiceSelect page', () => {
+  it('Persists selected service when user returning to ServiceSelect page', () => {
     cy.signIn()
     cy.visit('/serviceselection')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
