@@ -19,8 +19,12 @@ export default class ServiceSelectionController {
 
   static selectServices(req: Request, res: Response) {
     const list = req.session.serviceList
+    const selectedList: string[] = []
     if (list) {
-      const selectedServicesError = ServiceSelectionValidation.validateSelection(req.body.selectedServices)
+      if (Array.isArray(req.body.selectedServices)) selectedList.push(...req.body.selectedServices)
+      else if (req.body.selectedServices) selectedList.push(req.body.selectedServices)
+
+      const selectedServicesError = ServiceSelectionValidation.validateSelection(selectedList, list)
       if (selectedServicesError) {
         res.render('pages/serviceselection', {
           selectedServicesError,
@@ -28,7 +32,7 @@ export default class ServiceSelectionController {
         })
         return
       }
-      const selectedServices = list.filter(x => req.body.selectedServices.includes(x.id))
+      const selectedServices = list.filter(x => selectedList.includes(x.id))
       req.session.selectedList = selectedServices
       res.redirect('/serviceselection')
     }
