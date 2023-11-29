@@ -27,27 +27,22 @@ describe('getServices', () => {
       }),
     )
   })
-  // test('renders a response with persisted values from previous session', async () => {
-  //   const req: Request = {
-  //     // @ts-expect-error stubbing session
-  //     session: {
-  //       serviceList: [
-  //         {
-  //           id: '30/12/2021',
-  //           text: '30/12/2021',
-  //           value: 'caseReferenceToBeOverwritten',
-  //         },
-  //       ],
-  //     },
-  //   }
-  //   await ServiceSelectionController.getServices(req, res)
-  //   expect(res.render).toBeCalledWith(
-  //     'pages/serviceselection',
-  //     expect.objectContaining({
-  //       servicelist: expect.anything()
-  //     }),
-  //   )
-  // })
+  test('renders a response with default inputs', async () => {
+    const req: Request = {
+      // @ts-expect-error stubbing session
+      session: { serviceList: [], selectedList: [{ id: '1' }] },
+      body: { selectedservices: [] },
+    }
+    await ServiceSelectionController.getServices(req, res)
+    expect(res.render).toHaveBeenCalled()
+    expect(res.render).toBeCalledWith(
+      'pages/serviceselection',
+      expect.objectContaining({
+        servicelist: expect.anything(),
+        selectedList: expect.arrayContaining(['1']),
+      }),
+    )
+  })
 })
 
 describe('selectServices', () => {
