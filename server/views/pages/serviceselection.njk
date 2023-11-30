@@ -2,32 +2,53 @@
 {% set mainClasses = "app-container govuk-body" %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-
-
-
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "../components/multiselect.njk" import multiSelect %}
 {% block content %}
-{{ govukButton({
-  text: "Select All"
-}) }}
 
-{{ govukCheckboxes({
-  name: "services",
-  fieldset: {
-    legend: {
-      text: "Select services",
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l"
-    }
-  },
-  hint: {
-    text: "Select all services to collect data from, or click 'Select All'"
-  },
-  items: servicelist
-}) }}
+{% if selectedServicesError %}
+  {% set selectedServicesErrorMessage = { text: selectedServicesError } %}
+  {% set showErrors = true %}
+{% endif %}
 
+{% if showErrors %}
+  {{ govukErrorSummary({
+    titleText: "There is a problem!",
+    errorList: [
+      {
+        text: selectedServicesError
+      }
+    ]
+  }) }}
+{% endif %}
 
-{{ govukButton({
-  text: "Confirm"
-}) }}
+<form action="/serviceselection" method="post">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
+  <div class="govuk-form-group">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">
+        Select Services 
+        </h1>
+      </legend>
+      <div id="waste-hint" class="govuk-hint">
+        Select services to collect data from.
+      </div>
+
+      {{ multiSelect({
+          headers: ["Service Name"],
+          itemGroupName:"selectedServices",
+          items:servicelist,
+          selectedItems: selectedList,
+          errorMessage: selectedServicesErrorMessage
+      }) }}
+  </div>
+
+  {{ govukButton({
+    text: "Confirm",
+    id: "input-submit",
+    type: "submit"
+  }) }}
+
+</form>
 {% endblock %}

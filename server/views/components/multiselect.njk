@@ -1,0 +1,35 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% macro multiSelect(params) %}
+
+<table class="govuk-table" data-module="moj-multi-select" data-multi-select-checkbox="#select-all">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th class="govuk-table__header" scope="col" id="select-all"></th>
+      {% for item in params.headers %}
+      <th class="govuk-table__header" scope="col">{{item}}</th>
+       {% endfor %}
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+     {% for item in params.items %}
+    <tr class="govuk-table__row govuk-table__row--selected">        
+      <td class="govuk-table__cell">
+        <div class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox">
+         {% set isChecked = (params.selectedItems or []).indexOf(item.id) > -1%}
+          <input type="checkbox" class="govuk-checkboxes__input govuk-moj-multi-select__checkbox__input" id="{{item.text}}" 
+              name="{{params.itemGroupName}}" value="{{item.id}}" 
+              {{-" checked" if isChecked }} >   
+         
+          <label class="govuk-label govuk-checkboxes__label" for="{{item.text}}">
+            <span class="govuk-visually-hidden">Select {{item.text}}</span>
+          </label>     
+        </div>
+      </td>
+      <td class="govuk-table__cell">{{item.text}} </td>     
+    </tr>   
+     {% endfor %}
+  </tbody>
+</table>
+{% endmacro %}
