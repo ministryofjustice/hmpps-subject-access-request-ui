@@ -1,5 +1,6 @@
+
 | Field | Data type | Description | Default value | Possible values
-| --- | --- |
+| --- | --- | --- | --- | --- |
 | status | varchar, not null | | Pending | Pending, Completed |
 | id (primary key) | integer, not null | report ID | | |
 | dateFrom | date | | | |
