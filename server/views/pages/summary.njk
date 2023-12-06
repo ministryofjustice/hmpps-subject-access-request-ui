@@ -1,0 +1,136 @@
+{% extends "../partials/layout.njk" %}
+<title>Confirm Report Details</title>
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+
+{% block content %}
+<h1>Confirm Report Details</h1>
+{{ govukSummaryList({
+  attributes: {
+    "id": "report-summary"
+  },
+  
+  rows: [
+    {
+      key: {
+        text: "Name"
+      },
+      value: {
+        text: "Sarah Philips"
+      },
+      actions: {
+        items: [
+          {
+            href: "#",
+            text: "Change",
+            visuallyHiddenText: "name"
+          }
+        ]
+      }
+    },
+    {
+      key: {
+        text: "Prisoner number"
+      },
+      value: {
+        text: "5 January 1978"
+      },
+      actions: {
+        items: [
+          {
+            href: "#",
+            text: "Change",
+            visuallyHiddenText: "date of birth"
+          }
+        ]
+      }
+    },
+    {
+      key: {
+        text: "Date of Birth"
+      },
+      value: {
+        html: "72 Guild Street<br>London<br>SE23 6FH"
+      },
+      actions: {
+        items: [
+          {
+            href: "#",
+            text: "Change",
+            visuallyHiddenText: "address"
+          }
+        ]
+      }
+    },
+    {
+      key: {
+        text: "Case ID"
+      },
+      value: {
+        html: ''
+      },
+      actions: {
+        items: [
+          {
+              attributes: {
+            "id": "change-case-id"
+            },
+            href: "/inputs",
+            text: "Change",
+            visuallyHiddenText: "contact details"
+          }
+        ]
+      }
+    },
+    {
+      key: {
+        text: "Query date range"
+      },
+      value: {
+        html: "72 Guild Street<br>London<br>SE23 6FH"
+      },
+      actions: {
+        items: [
+          {
+            attributes: {
+            "id": "change-date-range"
+            },
+            href: "/inputs",
+            text: "Change",
+            visuallyHiddenText: "address"
+          }
+        ]
+      }
+    },
+    {
+      key: {
+        text: "Services selected"
+      },
+      value: {
+        html: "72 Guild Street<br>London<br>SE23 6FH"
+      },
+      actions: {
+        items: [
+          {
+            attributes: {
+            "id": "change-services"
+            },
+            href: "/serviceselection",
+            text: "Change",
+            visuallyHiddenText: "address"
+          }
+        ]
+      }
+    }
+  ]
+}) }}
+
+  {{ govukButton({
+    text: "Accept and create report",
+    id: "accept-confirm",
+    type: "submit"
+  }) }}
+
+  {% endblock %}
