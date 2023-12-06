@@ -10,7 +10,7 @@ context('Summary', () => {
   })
 
   // All pages direct users to auth
-  it('Unauthenticated user navigating to serviceselection page directed to auth', () => {
+  it('Unauthenticated user navigating to summary page directed to auth', () => {
     cy.visit('/summary')
     Page.verifyOnPage(AuthSignInPage)
   })

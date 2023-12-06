@@ -1,12 +1,15 @@
 {% extends "../partials/layout.njk" %}
-<title>Confirm Report Details</title>
 
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 
 {% block content %}
-<h1>Confirm Report Details</h1>
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">
+        Confirm Report Details 
+        </h1>
+      </legend>
 {{ govukSummaryList({
   attributes: {
     "id": "report-summary"
@@ -18,16 +21,7 @@
         text: "Name"
       },
       value: {
-        text: "Sarah Philips"
-      },
-      actions: {
-        items: [
-          {
-            href: "#",
-            text: "Change",
-            visuallyHiddenText: "name"
-          }
-        ]
+        text: ""
       }
     },
     {
@@ -35,16 +29,7 @@
         text: "Prisoner number"
       },
       value: {
-        text: "5 January 1978"
-      },
-      actions: {
-        items: [
-          {
-            href: "#",
-            text: "Change",
-            visuallyHiddenText: "date of birth"
-          }
-        ]
+        text: ""
       }
     },
     {
@@ -52,16 +37,7 @@
         text: "Date of Birth"
       },
       value: {
-        html: "72 Guild Street<br>London<br>SE23 6FH"
-      },
-      actions: {
-        items: [
-          {
-            href: "#",
-            text: "Change",
-            visuallyHiddenText: "address"
-          }
-        ]
+        html: ""
       }
     },
     {
@@ -79,7 +55,7 @@
             },
             href: "/inputs",
             text: "Change",
-            visuallyHiddenText: "contact details"
+            visuallyHiddenText: "case ID"
           }
         ]
       }
@@ -89,7 +65,7 @@
         text: "Query date range"
       },
       value: {
-        html: "72 Guild Street<br>London<br>SE23 6FH"
+        html: ""
       },
       actions: {
         items: [
@@ -99,7 +75,7 @@
             },
             href: "/inputs",
             text: "Change",
-            visuallyHiddenText: "address"
+            visuallyHiddenText: "date range"
           }
         ]
       }
@@ -109,7 +85,7 @@
         text: "Services selected"
       },
       value: {
-        html: "72 Guild Street<br>London<br>SE23 6FH"
+        html: ""
       },
       actions: {
         items: [
@@ -119,7 +95,7 @@
             },
             href: "/serviceselection",
             text: "Change",
-            visuallyHiddenText: "address"
+            visuallyHiddenText: "services"
           }
         ]
       }
