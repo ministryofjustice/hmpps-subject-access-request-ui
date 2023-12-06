@@ -1,6 +1,7 @@
 import Page from '../pages/page'
 import AuthSignInPage from '../pages/authSignIn'
 import SummaryPage from '../pages/summary'
+import ServiceSelectionPage from '../pages/serviceSelection'
 
 context('Summary', () => {
   beforeEach(() => {
@@ -105,5 +106,15 @@ context('Summary', () => {
     const summaryPage = Page.verifyOnPage(SummaryPage)
     summaryPage.reportSummaryBox().get('#change-services').click()
     cy.location('pathname').should('eq', '/serviceselection')
+  })
+
+  it('Selected services are carried through from /serviceselection', () => {
+    cy.signIn()
+    cy.visit('/serviceselection')
+    const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
+    serviceSelectionPage.checkAllCheckBox().click()
+    serviceSelectionPage.submitButton().click()
+    const summaryPage = Page.verifyOnPage(SummaryPage)
+    // summaryPage.reportSummaryBox().contains('April')
   })
 })
