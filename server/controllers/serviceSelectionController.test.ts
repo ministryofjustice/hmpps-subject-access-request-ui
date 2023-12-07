@@ -63,7 +63,7 @@ describe('selectServices', () => {
     expect(baseReq.session.selectedList[0].text).toBe('service')
     expect(baseReq.session.selectedList[0].value).toBe('service.com')
     expect(res.redirect).toHaveBeenCalled()
-    expect(res.redirect).toBeCalledWith('/serviceselection')
+    expect(res.redirect).toBeCalledWith('/summary')
   })
 
   test('overwrites previous session data if present', () => {
@@ -85,6 +85,6 @@ describe('selectServices', () => {
     expect(req.session.selectedList[0].text).toBe('service2')
     expect(req.session.selectedList[0].value).toBe('service2.com')
     expect(res.redirect).toHaveBeenCalled()
-    expect(res.redirect).toBeCalledWith('/serviceselection')
+    expect(res.redirect).toBeCalledWith('/summary')
   })
 })

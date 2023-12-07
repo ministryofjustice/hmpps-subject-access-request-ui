@@ -38,6 +38,6 @@ export default class InputsController {
       dateTo: req.body.dateTo,
       caseReference: req.body.caseReference,
     }
-    res.redirect('/services')
+    res.redirect('/serviceselection')
   }
 }

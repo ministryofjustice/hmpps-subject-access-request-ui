@@ -34,7 +34,7 @@ export default class ServiceSelectionController {
       }
       const selectedServices = list.filter(x => selectedList.includes(x.id))
       req.session.selectedList = selectedServices
-      res.redirect('/serviceselection')
+      res.redirect('/summary')
     }
   }
 }

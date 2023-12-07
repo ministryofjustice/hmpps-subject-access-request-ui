@@ -45,7 +45,7 @@
         text: "Case ID"
       },
       value: {
-        html: ''
+        text: caseReference
       },
       actions: {
         items: [
@@ -65,7 +65,7 @@
         text: "Query date range"
       },
       value: {
-        html: ""
+        text: dateRange
       },
       actions: {
         items: [
@@ -85,7 +85,7 @@
         text: "Services selected"
       },
       value: {
-        html: ""
+        text: selectedList
       },
       actions: {
         items: [
@@ -102,7 +102,7 @@
     }
   ]
 }) }}
-
+<p>By accepting these details you are confirming that, to the best of your knowledge, these details are correct.</p>
   {{ govukButton({
     text: "Accept and create report",
     id: "accept-confirm",

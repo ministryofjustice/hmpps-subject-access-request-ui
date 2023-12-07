@@ -2,6 +2,7 @@ import Page from '../pages/page'
 import AuthSignInPage from '../pages/authSignIn'
 import SummaryPage from '../pages/summary'
 import ServiceSelectionPage from '../pages/serviceSelection'
+import InputsPage from '../pages/inputs'
 
 context('Summary', () => {
   beforeEach(() => {
@@ -115,6 +116,31 @@ context('Summary', () => {
     serviceSelectionPage.checkAllCheckBox().click()
     serviceSelectionPage.submitButton().click()
     const summaryPage = Page.verifyOnPage(SummaryPage)
-    // summaryPage.reportSummaryBox().contains('April')
+    summaryPage.reportSummaryBox().contains('TestService1')
+  })
+
+  it('Details are carried through from /inputs', () => {
+    cy.signIn()
+    cy.visit('/inputs')
+    const inputsPage = Page.verifyOnPage(InputsPage)
+    inputsPage.datePickerFrom().clear().type('01/01/2001')
+    inputsPage.datePickerTo().clear().type('01/01/2021')
+    inputsPage.caseReferenceTextbox().clear().type('exampleCaseReference')
+    inputsPage.continueButton().click()
+    const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
+    serviceSelectionPage.checkAllCheckBox().click()
+    serviceSelectionPage.submitButton().click()
+    const summaryPage = Page.verifyOnPage(SummaryPage)
+    summaryPage.reportSummaryBox().contains('exampleCaseReference')
+    summaryPage.reportSummaryBox().contains('01/01/2001')
+  })
+
+  it('Disclaimer text on page', () => {
+    cy.signIn()
+    cy.visit('/summary')
+    const summaryPage = Page.verifyOnPage(SummaryPage)
+    cy.contains(
+      'By accepting these details you are confirming that, to the best of your knowledge, these details are correct.',
+    )
   })
 })
