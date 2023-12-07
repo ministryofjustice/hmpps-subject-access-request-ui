@@ -138,7 +138,7 @@ context('Summary', () => {
   it('Disclaimer text on page', () => {
     cy.signIn()
     cy.visit('/summary')
-    const summaryPage = Page.verifyOnPage(SummaryPage)
+    Page.verifyOnPage(SummaryPage)
     cy.contains(
       'By accepting these details you are confirming that, to the best of your knowledge, these details are correct.',
     )
