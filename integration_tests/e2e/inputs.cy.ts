@@ -35,7 +35,7 @@ context('Inputs', () => {
     inputsPage.continueButton().should('exist')
   })
 
-  it('Submits user inputs and redirects to /services', () => {
+  it('Submits user inputs and redirects to /serviceselection', () => {
     cy.signIn()
     cy.visit('/inputs')
     const inputsPage = Page.verifyOnPage(InputsPage)
@@ -49,7 +49,7 @@ context('Inputs', () => {
         .and('include', 'dateTo=')
         .and('include', 'caseReference=')
     })
-    cy.url().should('to.match', /services$/)
+    cy.url().should('to.match', /serviceselection$/)
   })
 
   it('Persists user inputs when returning to inputs page', () => {

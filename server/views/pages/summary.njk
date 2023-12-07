@@ -1,0 +1,112 @@
+{% extends "../partials/layout.njk" %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+
+{% block content %}
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">
+        Confirm Report Details 
+        </h1>
+      </legend>
+{{ govukSummaryList({
+  attributes: {
+    "id": "report-summary"
+  },
+  
+  rows: [
+    {
+      key: {
+        text: "Name"
+      },
+      value: {
+        text: ""
+      }
+    },
+    {
+      key: {
+        text: "Prisoner number"
+      },
+      value: {
+        text: ""
+      }
+    },
+    {
+      key: {
+        text: "Date of Birth"
+      },
+      value: {
+        html: ""
+      }
+    },
+    {
+      key: {
+        text: "Case ID"
+      },
+      value: {
+        text: caseReference
+      },
+      actions: {
+        items: [
+          {
+              attributes: {
+            "id": "change-case-id"
+            },
+            href: "/inputs",
+            text: "Change",
+            visuallyHiddenText: "case ID"
+          }
+        ]
+      }
+    },
+    {
+      key: {
+        text: "Query date range"
+      },
+      value: {
+        text: dateRange
+      },
+      actions: {
+        items: [
+          {
+            attributes: {
+            "id": "change-date-range"
+            },
+            href: "/inputs",
+            text: "Change",
+            visuallyHiddenText: "date range"
+          }
+        ]
+      }
+    },
+    {
+      key: {
+        text: "Services selected"
+      },
+      value: {
+        text: selectedList
+      },
+      actions: {
+        items: [
+          {
+            attributes: {
+            "id": "change-services"
+            },
+            href: "/serviceselection",
+            text: "Change",
+            visuallyHiddenText: "services"
+          }
+        ]
+      }
+    }
+  ]
+}) }}
+<p>By accepting these details you are confirming that, to the best of your knowledge, these details are correct.</p>
+  {{ govukButton({
+    text: "Accept and create report",
+    id: "accept-confirm",
+    type: "submit"
+  }) }}
+
+  {% endblock %}
