@@ -17,12 +17,6 @@ context('Summary', () => {
     Page.verifyOnPage(AuthSignInPage)
   })
 
-  it('Summary page exists', () => {
-    cy.signIn()
-    cy.visit('/summary')
-    // Needed to add a link from index.njk for this to work
-  })
-
   it('Summary page title is HMPPS SAR UI', () => {
     cy.signIn()
     cy.visit('/summary')

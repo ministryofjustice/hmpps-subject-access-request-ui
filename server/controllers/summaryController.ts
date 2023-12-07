@@ -10,9 +10,9 @@ export default class SummaryController {
     const dateRange = [dateFrom, dateTo].join(' - ')
 
     res.render('pages/summary', {
-      selectedList: selectedList.map(x => x.text).toString() ?? 'No services found',
+      selectedList: selectedList.map(x => x.text).toString(),
       dateRange,
-      caseReference: userData.caseReference, // shouldn't need a default
+      caseReference: userData.caseReference,
     })
   }
 }
