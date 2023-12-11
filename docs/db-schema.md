@@ -11,8 +11,8 @@
 | ndeliusCaseReferenceId | varchar, not null if nomisId and hmmpsId are null | | | |
 | hmmpsId | varchar, not null if ndeliusCaseReferenceId and nomisId are null | | | |
 | subject | varchar, not null | Name of requestee/offender/person about whom the SAR report is requested| | |
-| requestor/requestedBy | varchar, not null | Member of SAR team who requested the SAR report | | |
-| requestDateByRequestor/requestDateBySar | timestamp, not null | | Today's date and time| |
+| requestedBy | varchar, not null | Member of SAR team who requested the SAR report | | |
+| requestDateTime | timestamp, not null | | Today's date and time| |
 | claimDateTime | timestamp | Time SAR report request is picked up by a worker | | |
 | objectURL | varchar | S3 URL to PDF object | | |
 | presignedURL | varchar |S3 pre-signed URL link to PDF | | |
