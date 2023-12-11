@@ -7,9 +7,9 @@
 | dateTo | date, not null | | Today's date | |
 | sarCaseReferenceNumber | varchar, not null | Reference number from SAR case management service to link the SAR report with the original SAR request | | |
 | services | array, not null | List of services from which data is collected to generate the SAR report| | |
-| nomisId | varchar, not null if ndeliusCaseReferenceId and hmmpsId are null | | | |
-| ndeliusCaseReferenceId | varchar, not null if nomisId and hmmpsId are null | | | |
-| hmmpsId | varchar, not null if ndeliusCaseReferenceId and nomisId are null | | | |
+| nomisId | varchar, not null if ndeliusCaseReferenceId and hmmpsId are null | Reference number for prison cases | | |
+| ndeliusCaseReferenceId | varchar, not null if nomisId and hmmpsId are null | Reference number for probation cases | | |
+| hmmpsId | varchar, not null if ndeliusCaseReferenceId and nomisId are null | Soon-to-be-delivered single reference number covering both prison and probation cases | | |
 | subject | varchar, not null | Name of requestee/offender/person about whom the SAR report is requested| | |
 | requestedBy | varchar, not null | Member of SAR team who requested the SAR report | | |
 | requestDateTime | timestamp, not null | | Today's date and time| |
