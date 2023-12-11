@@ -55,7 +55,7 @@ export default class InputsValidation {
     if (parsedDate > new Date()) {
       throw new ValidationError(`${fieldName} must not be in the future`)
     }
-    return new Date(dateDay, dateMonth - 1, dateYear)
+    return parsedDate
   }
 
   static validateCaseReference(caseReference: string): string {

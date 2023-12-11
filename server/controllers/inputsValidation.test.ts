@@ -46,6 +46,7 @@ describe('validateDateTo', () => {
       { inputTo: '01/01/a', inputFrom: '', expected: errors.valid },
       { inputTo: '01/01/2150', inputFrom: '', expected: errors.future },
       { inputTo: '01/01/2021', inputFrom: '01/01/2022', expected: errors.after },
+      { inputTo: '30/01/2021', inputFrom: '01/01/2022', expected: errors.after },
     ]
     testCases.forEach(testCase => {
       const actual = InputsValidation.validateDateRange(testCase.inputFrom, testCase.inputTo)
