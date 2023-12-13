@@ -1,10 +1,22 @@
 {% extends "../partials/layout.njk" %}
 
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
 {% block content %}
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-        <h1 class="govuk-fieldset__heading">
-          Your report has been submitted 
-        </h1>
-    </legend>
+
+    {{ govukPanel({
+      titleText: "Your report has been submitted",
+      attributes: {
+        "id": "confirmation-panel"
+      }
+    }) }}
+
+    <section id="next-steps">
+      <h2 class="govuk-heading-m">What happens next</h2>
+      <p class="govuk-body">Lorem ipsum sit dolor et amet - content to be confirmed.</p>
+      <p class="govuk-body">You will not get an email notification about this report. But you can check its progress on the completed reports page.</p>
+    </section>
+
+    <a href="/reports" class="govuk-body govuk-link" id="view-reports">View completed reports.</a>
 
   {% endblock %}
