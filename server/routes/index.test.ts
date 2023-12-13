@@ -66,3 +66,14 @@ describe('POST /serviceselection', () => {
       })
   })
 })
+
+describe('GET /confirmation', () => {
+  it('should render confirmation page', () => {
+    return request(app)
+      .get('/confirmation')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('has been submitted')
+      })
+  })
+})

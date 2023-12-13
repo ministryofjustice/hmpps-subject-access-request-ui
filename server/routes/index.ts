@@ -24,5 +24,9 @@ export default function routes(service: Services): Router {
 
   router.post('/serviceselection', ServiceSelectionController.selectServices)
 
+  get('/confirmation', (req, res, next) => {
+    res.render('pages/confirmation')
+  })
+
   return router
 }
