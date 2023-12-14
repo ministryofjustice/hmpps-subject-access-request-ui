@@ -4,12 +4,11 @@
 
 {% block content %}
 
-    {{ govukPanel({
-      titleText: "Your report has been submitted",
-      attributes: {
-        "id": "confirmation-panel"
-      }
-    }) }}
+    <div class="govuk-panel govuk-panel--confirmation" id="confirmation-panel">
+      <h1 class="govuk-panel__title">
+        Your report request for {{ caseReference }} has been submitted
+      </h1>
+    </div>
 
     <section id="next-steps">
       <h2 class="govuk-heading-m">What happens next</h2>

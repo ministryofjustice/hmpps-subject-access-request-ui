@@ -4,6 +4,7 @@ import type { Services } from '../services'
 import InputsController from '../controllers/inputsController'
 import ServiceSelectionController from '../controllers/serviceSelectionController'
 import SummaryController from '../controllers/summaryController'
+import ConfirmationController from '../controllers/confirmationController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes(service: Services): Router {
@@ -24,9 +25,7 @@ export default function routes(service: Services): Router {
 
   router.post('/serviceselection', ServiceSelectionController.selectServices)
 
-  get('/confirmation', (req, res, next) => {
-    res.render('pages/confirmation')
-  })
+  get('/confirmation', ConfirmationController.getConfirmation)
 
   return router
 }
