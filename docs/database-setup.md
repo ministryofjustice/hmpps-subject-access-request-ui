@@ -25,7 +25,7 @@ Then run kubectl port-forward port-forward-pod 5432:5432 -n < namespace >.
 You can then connect to the database using the variables you extracted earlier.
 An example for connecting using the IntelliJ IDE can be seen below
 
-<img src="intellijdbconnect.png" alt="intellijdbconnect" width="200"/>
+<img src="intellijdbconnect.png" alt="intellijdbconnect" width="500"/>
 
 The 'Name' field at the top is for your own convenience; you can call it anything you like.
 The 'Host' field should be localhost, and the 'Port' will be 5432 if you used the same ports as the previous commands. This is what the port forwarding does for you.
