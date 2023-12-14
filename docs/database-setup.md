@@ -12,13 +12,13 @@ To connect to the database you will need to find out the key environment variabl
 
 The variables you will need are DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD and DATABASE_ENDPOINT.
 To connect to the database we use a port-forward pod. These have already been set up in each namespace, but being ephemeral they will not live permanently. The command to create them is:
-```
+```Shell
 kubectl \
   -n < namespace > \
   run port-forward-pod \
   --image=ministryofjustice/port-forward \
   --port=5432 \
-  --env="REMOTE_HOST=<mark> DATABASE_ENDPOINT with the port removed from the end </mark>" \
+  --env="REMOTE_HOST=< DATABASE_ENDPOINT with the port removed from the end >" \
   --env="LOCAL_PORT=5432" \
   --env="REMOTE_PORT=5432"
   ```
