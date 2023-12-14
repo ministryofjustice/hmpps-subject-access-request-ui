@@ -1,29 +1,29 @@
 # Database setup explained
 
-There is an RDS instance in each of the namespaces (dev, preprod and prod).
-To find out the key environment variables for each instance, you first run kubectl get pod -n < namespace > to see the pods, and then run the following command:
-
-kubectl exec -it < api pod name > -n < namespace > -- env
-
-The variables you will need are DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD and DATABASE_ENDPOINT.
+There is an RDS instance in each of the namespaces (dev, preprod and prod). Table migrations have been applied to each of them. This page describes how to interact with the databases and update the tables.
 
 ## AWS console
 They can be viewed via the console at https://eu-west-2.console.aws.amazon.com/console/home?region=eu-west-2#. You can search for the DATABASE_NAME, removing the leading 'db' (eg. to find database db5fc1068b6c87ba53, search for 5fc1068b6c87ba53)
 
 ## Connecting to the database
+To find out the key environment variables for each instance, you first run `kubectl get pod -n < namespace >` to see the pods, and then run the following command:
+
+`kubectl exec -it < api pod name > -n < namespace > -- env`
+
+The variables you will need are DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD and DATABASE_ENDPOINT.
 To connect to the database we use a port-forward pod. These have already been set up in each namespace, but being ephemeral they will not live permanently. The command to create them is:
-kubectl \
+```kubectl \
   -n < namespace > \
   run port-forward-pod \
   --image=ministryofjustice/port-forward \
   --port=5432 \
   --env="REMOTE_HOST=< DATABASE_ENDPOINT with the port removed from the end >" \
   --env="LOCAL_PORT=5432" \
-  --env="REMOTE_PORT=5432"
+  --env="REMOTE_PORT=5432"```
 
-Then run kubectl port-forward port-forward-pod 5432:5432 -n < namespace >.
+Then run `kubectl port-forward port-forward-pod 5432:5432 -n < namespace >`.
 You can then connect to the database using the variables you extracted earlier.
-An example for connecting using the IntelliJ IDE can be seen below
+An example for connecting using the IntelliJ IDE can be seen below:
 
 <img src="intellijdbconnect.png" alt="intellijdbconnect" width="500"/>
 
