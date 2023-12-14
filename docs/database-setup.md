@@ -18,7 +18,7 @@ kubectl \
   run port-forward-pod \
   --image=ministryofjustice/port-forward \
   --port=5432 \
-  --env="REMOTE_HOST=< DATABASE_ENDPOINT with the port removed from the end >" \
+  --env="REMOTE_HOST=<mark> DATABASE_ENDPOINT with the port removed from the end </mark>" \
   --env="LOCAL_PORT=5432" \
   --env="REMOTE_PORT=5432"
   ```
