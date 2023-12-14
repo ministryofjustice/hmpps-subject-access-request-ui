@@ -38,14 +38,14 @@ An example configuration for connecting via the IntelliJ IDE can be seen below:
 The 'Name' field at the top is for your own convenience; you can call it anything you like.
 The 'Host' field should be localhost, and 'Port' will be 5432 if you used the same ports as the previous commands. This is what the port-forwarding does for you.
 
-The Authentication should use 'User & Password'. 'User' is **DATABASE_USER**, 'Password' is **DATABASE_PASSWORD** and 'Database' is **DATABASE_NAME**. The 'URL' field autocompletes based on the fields above.
+The Authentication should use 'User & Password'. 'User' is DATABASE_USER, 'Password' is DATABASE_PASSWORD and 'Database' is DATABASE_NAME. The 'URL' field autocompletes based on the fields above.
 
 Hit 'Test Connection' to confirm your connection. You should see a green tick if everything is working.
 
 ## AWS console
 The databases can be viewed via the console at https://eu-west-2.console.aws.amazon.com/console/home?region=eu-west-2#, as long as you are in the MOJ GitHub organisation and a member of the hmpps-subject-access-request GitHub team. 
 
-You can search for the **DATABASE_NAME**, removing the leading 'db' (eg. to find database db5fc1068b6c87ba53, search for 5fc1068b6c87ba53). If you don't see anything, double-check that you have the 'eu-west-2' region selected.
+You can search for the DATABASE_NAME, removing the leading 'db' (eg. to find database db5fc1068b6c87ba53, search for 5fc1068b6c87ba53). If you don't see anything, double-check that you have the 'eu-west-2' region selected.
 
 
 ## Migrations
