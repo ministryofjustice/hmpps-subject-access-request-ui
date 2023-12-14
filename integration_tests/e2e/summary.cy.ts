@@ -137,4 +137,12 @@ context('Summary', () => {
       'By accepting these details you are confirming that, to the best of your knowledge, these details are correct.',
     )
   })
+
+  it('Redirects to /confirmation on clicking submit button', () => {
+    cy.signIn()
+    cy.visit('/summary')
+    const summaryPage = Page.verifyOnPage(SummaryPage)
+    summaryPage.acceptConfirmButton().click()
+    cy.url().should('to.match', /confirmation$/)
+  })
 })
