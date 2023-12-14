@@ -37,12 +37,18 @@ An example configuration for connecting via the IntelliJ IDE can be seen below:
 
 The 'Name' field at the top is for your own convenience; you can call it anything you like.
 The 'Host' field should be localhost, and 'Port' will be 5432 if you used the same ports as the previous commands. This is what the port-forwarding does for you.
+
 The Authentication should use 'User & Password'. 'User' is DATABASE_USER, 'Password' is DATABASE_PASSWORD and 'Database' is DATABASE_NAME. The 'URL' field autocompletes based on the fields above.
+
 Hit 'Test Connection' to confirm your connection. You should see a green tick if everything is working.
 
 ## AWS console
-The databases can be viewed via the console at https://eu-west-2.console.aws.amazon.com/console/home?region=eu-west-2#, as long as you are in the MOJ GitHub organisation and a member of the hmpps-subject-access-request GitHub team. You can search for the DATABASE_NAME, removing the leading 'db' (eg. to find database db5fc1068b6c87ba53, search for 5fc1068b6c87ba53). If you don't see anything, double-check that you have the 'eu-west-2' region selected.
+The databases can be viewed via the console at https://eu-west-2.console.aws.amazon.com/console/home?region=eu-west-2#, as long as you are in the MOJ GitHub organisation and a member of the hmpps-subject-access-request GitHub team. 
+
+You can search for the DATABASE_NAME, removing the leading 'db' (eg. to find database db5fc1068b6c87ba53, search for 5fc1068b6c87ba53). If you don't see anything, double-check that you have the 'eu-west-2' region selected.
 
 
 ## Migrations
-Migrations are run using Flyway, a higher-level database migration tool. The migrations happen upon application startup and run according to the contents of hmpps-subject-access-request-api/src/main/resources/db/migration. Flyway keeps a record of each file which has been used in a migration, so each file will only be used once. When connected to the database you should be able to see two tables - subject_access_request and flyway_schema_history. In the latter you should see an entry for each migration. To make changes to the schema a new SQL file must be made in the db/migration directory. 
+Migrations are run using Flyway, a higher-level database migration tool. The migrations happen upon application startup and run according to the contents of hmpps-subject-access-request-api/src/main/resources/db/migration. 
+
+Flyway keeps a record of each file which has been used in a migration, so each file will only be used once. When connected to the database you should be able to see two tables - subject_access_request and flyway_schema_history. In the latter you should see an entry for each migration. To make changes to the schema a new SQL file must be made in the db/migration directory. 
