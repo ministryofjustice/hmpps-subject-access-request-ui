@@ -8,14 +8,14 @@ There is an RDS instance in each of the namespaces (dev, preprod and prod). Tabl
 `kubectl get pod -n < namespace >`
 
 to see all of the pods in the namespace. You will need to look inside the API pods (as opposed to the UI pods), because those are where the database interaction happens within the application. 
-
+<br/><br/>
 **2.** Run the following command to see all the environment variables set in the pod:
 
 `kubectl exec -it < api pod name > -n < namespace > -- env`
 
 The variables you will need are **DATABASE_NAME**, **DATABASE_USERNAME**, **DATABASE_PASSWORD** and **DATABASE_ENDPOINT**.
 
-
+<br/><br/>
 **3a.** To connect to the database we use a port-forward pod. These have already been set up in each namespace, but being ephemeral and not managed by a Kubernetes Deployment they will not live permanently. The command to create them is:
 ```Shell
 kubectl \
@@ -28,14 +28,14 @@ kubectl \
   --env="REMOTE_PORT=5432"
   ```
 
-
+<br/><br/>
 **3b.** Then run
 
 `kubectl port-forward port-forward-pod 5432:5432 -n < namespace >`
 
 This sets up the redirection of traffic.
 
-
+<br/><br/>
 **4.** You can then connect to the database using the variables you extracted earlier.
 
 An example configuration for connecting via the IntelliJ IDE can be seen below:
