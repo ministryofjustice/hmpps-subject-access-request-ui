@@ -16,6 +16,10 @@ export default function routes(service: Services): Router {
     res.render('pages/index')
   })
 
+  get('/identify-subject', (req, res, next) => {
+    res.render('pages/identifysubject')
+  })
+
   get('/inputs', InputsController.getInputs)
   post('/inputs', InputsController.saveInputs)
 

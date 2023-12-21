@@ -23,6 +23,17 @@ describe('GET /', () => {
   })
 })
 
+describe('GET /identify-subject', () => {
+  it('should render identify subject page', () => {
+    return request(app)
+      .get('/identify-subject')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('ID for the person')
+      })
+  })
+})
+
 describe('GET /inputs', () => {
   it('should render inputs page', () => {
     return request(app)
