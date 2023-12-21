@@ -29,7 +29,7 @@ describe('GET /identify-subject', () => {
       .get('/identify-subject')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('ID for the person')
+        expect(res.text).toContain('ID for the subject')
       })
   })
 })
