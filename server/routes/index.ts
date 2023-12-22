@@ -16,8 +16,8 @@ export default function routes(service: Services): Router {
     res.render('pages/index')
   })
 
-  get('/identify-subject', (req, res, next) => {
-    res.render('pages/identifysubject')
+  get('/subject-id', (req, res, next) => {
+    res.render('pages/subjectid')
   })
 
   get('/inputs', InputsController.getInputs)

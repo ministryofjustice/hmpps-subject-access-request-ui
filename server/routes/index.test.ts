@@ -23,10 +23,10 @@ describe('GET /', () => {
   })
 })
 
-describe('GET /identify-subject', () => {
-  it('should render identify subject page', () => {
+describe('GET /subject-id', () => {
+  it('should render subject id page', () => {
     return request(app)
-      .get('/identify-subject')
+      .get('/subject-id')
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('ID for the subject')
