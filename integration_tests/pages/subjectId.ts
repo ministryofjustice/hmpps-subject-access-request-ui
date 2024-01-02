@@ -5,9 +5,9 @@ export default class SubjectIdPage extends Page {
     super('ID for the subject')
   }
 
-  idTextBox = (): PageElement => cy.get('#input-id')
+  idTextBox = (): PageElement => cy.get('#subject-id')
 
-  idHint = (): PageElement => cy.get('#input-id-hint')
+  idHint = (): PageElement => cy.get('#subject-id-hint')
 
   additionalInformation = (): PageElement => cy.get('#additional-information')
 

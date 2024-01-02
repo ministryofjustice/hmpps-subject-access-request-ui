@@ -9,16 +9,18 @@
   <div class="govuk-width-container">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-          
+      <form action="/subject-id" method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         {{ govukInput({
             label: {
               text: "Enter a HMPPS ID for the subject", 
               classes: "govuk-label--l",
               isPageHeading: true
             },
-            id: "input-id",
-            name: "idInput",
+            id: "subject-id",
+            name: "subjectId",
             classes: "govuk-input--width-10",
+            value: subjectId,
             hint: {
               text: "Provide a NOMIS Prisoner Number or a nDelius Case Reference Number for the subject of the Subject Access Request."
             }
@@ -34,7 +36,7 @@
             text: "Continue",
             id: "subject-id-continue"
           }) }}
-
+      </form>
       </div>
     </div>
   </div>

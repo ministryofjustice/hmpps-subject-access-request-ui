@@ -5,6 +5,7 @@ import InputsController from '../controllers/inputsController'
 import ServiceSelectionController from '../controllers/serviceSelectionController'
 import SummaryController from '../controllers/summaryController'
 import ConfirmationController from '../controllers/confirmationController'
+import SubjectIdController from '../controllers/subjectIdController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes(service: Services): Router {
@@ -16,9 +17,8 @@ export default function routes(service: Services): Router {
     res.render('pages/index')
   })
 
-  get('/subject-id', (req, res, next) => {
-    res.render('pages/subjectid')
-  })
+  get('/subject-id', SubjectIdController.getSubjectId)
+  post('/subject-id', SubjectIdController.saveSubjectId)
 
   get('/inputs', InputsController.getInputs)
   post('/inputs', InputsController.saveInputs)
