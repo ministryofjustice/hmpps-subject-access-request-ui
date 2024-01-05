@@ -1,5 +1,4 @@
 import type { Request, Response } from 'express'
-import { UserData } from '../@types/userdata'
 
 export default class SubjectIdController {
   static getSubjectId(req: Request, res: Response) {
