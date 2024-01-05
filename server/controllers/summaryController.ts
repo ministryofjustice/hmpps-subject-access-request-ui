@@ -10,6 +10,7 @@ export default class SummaryController {
     const dateRange = [dateFrom, dateTo].join(' - ')
 
     res.render('pages/summary', {
+      subjectId: userData.subjectId,
       selectedList: selectedList.map(x => x.text).toString(),
       dateRange,
       caseReference: userData.caseReference,

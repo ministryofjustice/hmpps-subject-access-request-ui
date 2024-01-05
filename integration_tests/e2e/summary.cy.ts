@@ -3,6 +3,7 @@ import AuthSignInPage from '../pages/authSignIn'
 import SummaryPage from '../pages/summary'
 import ServiceSelectionPage from '../pages/serviceSelection'
 import InputsPage from '../pages/inputs'
+import SubjectIdPage from '../pages/subjectId'
 
 context('Summary', () => {
   beforeEach(() => {
@@ -37,25 +38,11 @@ context('Summary', () => {
     summaryPage.acceptConfirmButton().should('exist')
   })
 
-  it('Details summarised include prisoner name', () => {
+  it('Details summarised include subject ID', () => {
     cy.signIn()
     cy.visit('/summary')
     const summaryPage = Page.verifyOnPage(SummaryPage)
-    summaryPage.reportSummaryBox().contains('Name')
-  })
-
-  it('Details summarised include prisoner number', () => {
-    cy.signIn()
-    cy.visit('/summary')
-    const summaryPage = Page.verifyOnPage(SummaryPage)
-    summaryPage.reportSummaryBox().contains('Prisoner number')
-  })
-
-  it('Details summarised include prisoner DOB', () => {
-    cy.signIn()
-    cy.visit('/summary')
-    const summaryPage = Page.verifyOnPage(SummaryPage)
-    summaryPage.reportSummaryBox().contains('Date of Birth')
+    summaryPage.reportSummaryBox().contains('Subject ID')
   })
 
   it('Details summarised include case ID', () => {
@@ -77,6 +64,14 @@ context('Summary', () => {
     cy.visit('/summary')
     const summaryPage = Page.verifyOnPage(SummaryPage)
     summaryPage.reportSummaryBox().contains('Services selected')
+  })
+
+  it('Subject ID can be edited at /subject-id', () => {
+    cy.signIn()
+    cy.visit('/summary')
+    const summaryPage = Page.verifyOnPage(SummaryPage)
+    summaryPage.reportSummaryBox().get('#change-subject-id').click()
+    cy.location('pathname').should('eq', '/subject-id')
   })
 
   it('Case ID can be edited at /inputs', () => {
@@ -115,6 +110,10 @@ context('Summary', () => {
 
   it('Details are carried through from /inputs', () => {
     cy.signIn()
+    cy.visit('/subject-id')
+    const subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+    subjectIdPage.idTextBox().clear().type('A1111AA')
+    subjectIdPage.continueButton().click()
     cy.visit('/inputs')
     const inputsPage = Page.verifyOnPage(InputsPage)
     inputsPage.datePickerFrom().clear().type('01/01/2001')
@@ -127,6 +126,24 @@ context('Summary', () => {
     const summaryPage = Page.verifyOnPage(SummaryPage)
     summaryPage.reportSummaryBox().contains('exampleCaseReference')
     summaryPage.reportSummaryBox().contains('01/01/2001')
+  })
+
+  it('Subject ID is carried through from /subject-id', () => {
+    cy.signIn()
+    cy.visit('/subject-id')
+    const subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+    subjectIdPage.idTextBox().clear().type('A1111AA')
+    subjectIdPage.continueButton().click()
+    const inputsPage = Page.verifyOnPage(InputsPage)
+    inputsPage.datePickerFrom().clear().type('01/01/2001')
+    inputsPage.datePickerTo().clear().type('01/01/2021')
+    inputsPage.caseReferenceTextbox().clear().type('exampleCaseReference')
+    inputsPage.continueButton().click()
+    const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
+    serviceSelectionPage.checkAllCheckBox().click()
+    serviceSelectionPage.submitButton().click()
+    const summaryPage = Page.verifyOnPage(SummaryPage)
+    summaryPage.reportSummaryBox().contains('A1111AA')
   })
 
   it('Disclaimer text on page', () => {

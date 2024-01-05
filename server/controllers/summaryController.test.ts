@@ -17,6 +17,7 @@ describe('getReportDetails', () => {
       session: {
         serviceList: [],
         userData: {
+          subjectId: 'A1111AA',
           dateFrom: '01/01/2001',
           dateTo: '25/12/2022',
           caseReference: 'mockedCaseReference',
@@ -30,6 +31,7 @@ describe('getReportDetails', () => {
     expect(res.render).toBeCalledWith(
       'pages/summary',
       expect.objectContaining({
+        subjectId: 'A1111AA',
         selectedList: 'service1',
         dateRange: '01/01/2001 - 25/12/2022',
         caseReference: req.session.userData.caseReference,
