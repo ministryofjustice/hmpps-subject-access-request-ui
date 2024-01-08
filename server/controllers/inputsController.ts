@@ -33,11 +33,10 @@ export default class InputsController {
       })
       return
     }
-    req.session.userData = {
-      dateFrom: req.body.dateFrom,
-      dateTo: req.body.dateTo,
-      caseReference: req.body.caseReference,
-    }
+    req.session.userData.dateFrom = dateFrom
+    req.session.userData.dateTo = dateTo
+    req.session.userData.caseReference = caseReference
+
     res.redirect('/serviceselection')
   }
 }

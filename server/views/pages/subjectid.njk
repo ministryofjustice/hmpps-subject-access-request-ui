@@ -1,0 +1,43 @@
+{% extends "../partials/layout.njk" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+
+{% block content %}
+
+  <div class="govuk-width-container">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+      <form action="/subject-id" method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        {{ govukInput({
+            label: {
+              text: "Enter a HMPPS ID for the subject", 
+              classes: "govuk-label--l",
+              isPageHeading: true
+            },
+            id: "subject-id",
+            name: "subjectId",
+            classes: "govuk-input--width-10",
+            value: subjectId,
+            hint: {
+              text: "Provide a NOMIS Prisoner Number or a nDelius Case Reference Number for the subject of the Subject Access Request."
+            }
+          }) }}
+
+        <div class="govuk-inset-text" id="additional-information">
+            If a NOMIS Prisoner Number is provided, the report generated will contain only information held in prison systems. If a nDelius Case Reference Number is provided, the report generated will contain only information held in probation systems.<br><br>
+
+            To retrieve information held about the subject in both prison and probation systems, users of this service are required to generate two separate reports using the appropriate identifiers.
+        </div>
+
+        {{ govukButton({
+            text: "Continue",
+            id: "subject-id-continue"
+          }) }}
+      </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

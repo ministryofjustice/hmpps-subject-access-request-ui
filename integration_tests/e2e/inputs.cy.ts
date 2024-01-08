@@ -1,6 +1,7 @@
 import AuthSignInPage from '../pages/authSignIn'
 import InputsPage from '../pages/inputs'
 import Page from '../pages/page'
+import SubjectIdPage from '../pages/subjectId'
 
 context('Inputs', () => {
   beforeEach(() => {
@@ -37,6 +38,10 @@ context('Inputs', () => {
 
   it('Submits user inputs and redirects to /serviceselection', () => {
     cy.signIn()
+    cy.visit('/subject-id')
+    const subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+    subjectIdPage.idTextBox().clear().type('A1111AA')
+    subjectIdPage.continueButton().click()
     cy.visit('/inputs')
     const inputsPage = Page.verifyOnPage(InputsPage)
     inputsPage.datePickerFrom().clear().type('01/01/2001')
@@ -54,6 +59,10 @@ context('Inputs', () => {
 
   it('Persists user inputs when returning to inputs page', () => {
     cy.signIn()
+    cy.visit('/subject-id')
+    const subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+    subjectIdPage.idTextBox().clear().type('A1111AA')
+    subjectIdPage.continueButton().click()
     cy.visit('/inputs')
     let inputsPage = Page.verifyOnPage(InputsPage)
     inputsPage.datePickerFrom().clear().type('01/01/2001')
@@ -79,6 +88,10 @@ context('Inputs', () => {
       'test', // Invalid date
     ]
     cy.signIn()
+    cy.visit('/subject-id')
+    const subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+    subjectIdPage.idTextBox().clear().type('A1111AA')
+    subjectIdPage.continueButton().click()
     invalidInputs.forEach(invalidInput => {
       cy.visit('/inputs')
       let inputsPage = Page.verifyOnPage(InputsPage)
@@ -108,6 +121,10 @@ context('Inputs', () => {
       'test', // Invalid date
     ]
     cy.signIn()
+    cy.visit('/subject-id')
+    const subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+    subjectIdPage.idTextBox().clear().type('A1111AA')
+    subjectIdPage.continueButton().click()
     invalidInputs.forEach(invalidInput => {
       cy.visit('/inputs')
       let inputsPage = Page.verifyOnPage(InputsPage)
@@ -127,6 +144,10 @@ context('Inputs', () => {
 
   it('Does not allow caseReference to be empty', () => {
     cy.signIn()
+    cy.visit('/subject-id')
+    const subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+    subjectIdPage.idTextBox().clear().type('A1111AA')
+    subjectIdPage.continueButton().click()
     cy.visit('/inputs')
     let inputsPage = Page.verifyOnPage(InputsPage)
     inputsPage.datePickerFrom().clear().type('01/01/2001')
@@ -145,6 +166,10 @@ context('Inputs', () => {
       'abcdefghijklmnopqrstuvwxyz', // Invalid string (Longer than 20 chars)
     ]
     cy.signIn()
+    cy.visit('/subject-id')
+    const subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+    subjectIdPage.idTextBox().clear().type('A1111AA')
+    subjectIdPage.continueButton().click()
     invalidInputs.forEach(invalidInput => {
       cy.visit('/inputs')
       let inputsPage = Page.verifyOnPage(InputsPage)
@@ -164,6 +189,10 @@ context('Inputs', () => {
 
   it('Does not allow DateFrom to be after DateTo', () => {
     cy.signIn()
+    cy.visit('/subject-id')
+    const subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+    subjectIdPage.idTextBox().clear().type('A1111AA')
+    subjectIdPage.continueButton().click()
     cy.visit('/inputs')
     const inputsPage = Page.verifyOnPage(InputsPage)
     inputsPage.datePickerFrom().clear().type('01/01/2021')

@@ -71,7 +71,11 @@ describe('getInputs', () => {
 describe('saveInputs', () => {
   const baseReq: Request = {
     // @ts-expect-error stubbing session
-    session: {},
+    session: {
+      userData: {
+        subjectId: 'A1111AA',
+      },
+    },
     body: {
       dateFrom: '30/12/2022',
       dateTo: '30/12/2022',
@@ -97,6 +101,7 @@ describe('saveInputs', () => {
       // @ts-expect-error stubbing session
       session: {
         userData: {
+          subjectId: 'A1111AA',
           dateFrom: '30/12/2021',
           dateTo: '30/12/2021',
           caseReference: 'caseReferenceToBeOverwritten',

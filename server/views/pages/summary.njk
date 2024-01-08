@@ -18,26 +18,22 @@
   rows: [
     {
       key: {
-        text: "Name"
+        text: "Subject ID"
       },
       value: {
-        text: ""
-      }
-    },
-    {
-      key: {
-        text: "Prisoner number"
+        text: subjectId
       },
-      value: {
-        text: ""
-      }
-    },
-    {
-      key: {
-        text: "Date of Birth"
-      },
-      value: {
-        html: ""
+      actions: {
+        items: [
+          {
+            attributes: {
+              "id": "change-subject-id"
+              },
+            href: "/subject-id",
+            text: "Change",
+            visuallyHiddenText: "subject ID"
+          }
+        ]
       }
     },
     {
