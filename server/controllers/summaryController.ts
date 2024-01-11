@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import superagent from 'superagent'
 import { dataAccess } from '../data'
+import config from '../config'
 
 export default class SummaryController {
   static getReportDetails(req: Request, res: Response) {
@@ -29,7 +30,7 @@ export default class SummaryController {
     }
 
     const response = await superagent
-      .post(`http://localhost:8080/api/createSubjectAccessRequest`)
+      .post(`${config.apis.createSubjectAccessRequest.url}/api/createSubjectAccessRequest`)
       .set('Authorization', `Bearer ${token}`)
       .send({
         dateFrom: userData.dateFrom,
