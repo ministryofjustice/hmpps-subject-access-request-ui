@@ -28,19 +28,26 @@ export default class SummaryController {
     for (let i = 0; i < servicelist.length; i += 1) {
       list.push(`${servicelist[i].text}, ${servicelist[i].value}`)
     }
-
-    const response = await superagent
-      .post(`${config.apis.createSubjectAccessRequest.url}/api/createSubjectAccessRequest`)
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        dateFrom: userData.dateFrom,
-        dateTo: userData.dateTo,
-        sarCaseReferenceNumber: userData.caseReference,
-        services: list.toString(),
-        nomisId: userData.subjectId || '',
-        ndeliusCaseReferenceId: userData.ndeliusCaseReferenceId || '',
-      })
-    res.redirect('/confirmation')
-    return response
+    try {
+      const response = await superagent
+        .post(`${config.apis.createSubjectAccessRequest.url}/api/createSubjectAccessRequest`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          dateFrom: userData.dateFrom,
+          dateTo: userData.dateTo,
+          sarCaseReferenceNumber: userData.caseReference,
+          services: list.toString(),
+          nomisId: userData.subjectId || '',
+          ndeliusCaseReferenceId: userData.ndeliusCaseReferenceId || '',
+        })
+      res.redirect('/confirmation')
+      return response
+    } catch (error) {
+      if (error.status === 404) {
+        // error.status >= 400 && error.status < 500) {
+        return null
+      }
+      throw error
+    }
   }
 }

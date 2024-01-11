@@ -48,7 +48,7 @@ describe('postSARAPI', () => {
     redirect: jest.fn(),
   }
 
-  test('post request made to SAR endpoint on clicking confirm', async () => {
+  test('post request made to SAR endpoint renders confirmation page if successful', async () => {
     const req: Request = {
       // @ts-expect-error stubbing session
       session: {
@@ -76,5 +76,55 @@ describe('postSARAPI', () => {
     expect(response.status).toBe(200)
     expect(res.redirect).toHaveBeenCalled()
     expect(res.redirect).toBeCalledWith('/confirmation')
+  })
+
+  test('post request fails if neither nomisId nor ndeluisCaseReferenceId is provided', async () => {
+    const req: Request = {
+      // @ts-expect-error stubbing session
+      session: {
+        serviceList: [],
+        userData: {
+          dateFrom: '01/01/2001',
+          dateTo: '25/12/2022',
+          caseReference: 'mockedCaseReference',
+          subjectId: '',
+          ndeliusCaseReferenceId: '',
+        },
+        selectedList: [{ id: '1', text: 'service1', value: '.com' }],
+      },
+      body: { selectedservices: [] },
+    }
+    nock(config.apis.createSubjectAccessRequest.url)
+      .post(
+        '/api/createSubjectAccessRequest',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"","ndeliusCaseReferenceId":""}',
+      )
+      .reply(400)
+    await expect(SummaryController.postSARAPI(req, res)).rejects.toThrowError('Bad Request')
+  })
+
+  test('post request fails if both nomisId and ndeluisCaseReferenceId are provided', async () => {
+    const req: Request = {
+      // @ts-expect-error stubbing session
+      session: {
+        serviceList: [],
+        userData: {
+          dateFrom: '01/01/2001',
+          dateTo: '25/12/2022',
+          caseReference: 'mockedCaseReference',
+          subjectId: '1',
+          ndeliusCaseReferenceId: '16',
+        },
+        selectedList: [{ id: '1', text: 'service1', value: '.com' }],
+      },
+      body: { selectedservices: [] },
+    }
+    nock(config.apis.createSubjectAccessRequest.url)
+      .post(
+        '/api/createSubjectAccessRequest',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"1","ndeliusCaseReferenceId":"16"}',
+      )
+      .reply(400, 'Both nomisId and ndeliusCaseReferenceId are provided - exactly one is required')
+    await expect(SummaryController.postSARAPI(req, res)).rejects.toThrowError('Bad Request')
   })
 })
