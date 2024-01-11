@@ -27,18 +27,24 @@ export default class SummaryController {
 
   static async postSARAPI(req: Request, res: Response) {
     const token = await dataAccess().hmppsAuthClient.getSystemClientToken()
+    const date_from: String = '01/01/2001' 
+    const date_to: String = '25/12/2022' 
+    const sar_crn: String = '1'
+    const services: String = '1'
+    const nomis_id: String = '1'
+    const ndelius_cri: String = ''
     const response = await superagent
       .post(`http://localhost:8080/api/createSubjectAccessRequest`)
       .set('Authorization', `Bearer ${token}`)
       .send({
-        dateFrom: '01/12/2023',
-        dateTo: '03/01/2024',
-        sarCaseReferenceNumber: '1234abc',
-        services: '1,2,4',
-        nomisId: '',
-        ndeliusCaseReferenceId: '1',
+        dateFrom: date_from,
+        dateTo: date_to,
+        sarCaseReferenceNumber: sar_crn,
+        services: services,
+        nomisId: nomis_id,
+        ndeliusCaseReferenceId: ndelius_cri,
       })
-    res.render('pages/summary')
+    res.redirect('/confirmation')
     return response
   }
 }

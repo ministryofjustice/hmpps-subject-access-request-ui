@@ -58,7 +58,7 @@ export default {
       agent: new AgentConfig(Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000))),
       apiClientId: get('API_CLIENT_ID', 'clientid', requiredInProduction), // 'prisoner-offender-search-client'
       apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction),
-      systemClientId: get('SYSTEM_CLIENT_ID', 'clientid', requiredInProduction), // 'prisoner-offender-search-client'
+      systemClientId: get('SYSTEM_CLIENT_ID', 'prisoner-offender-search-client', requiredInProduction), // 'prisoner-offender-search-client'
       systemClientSecret: get('SYSTEM_CLIENT_SECRET', 'clientsecret', requiredInProduction),
     },
     manageUsersApi: {

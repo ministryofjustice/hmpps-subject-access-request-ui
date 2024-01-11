@@ -5,6 +5,8 @@
 
 
 {% block content %}
+  <form action="/summary" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
         <h1 class="govuk-fieldset__heading">
         Confirm Report Details 
@@ -101,9 +103,8 @@
 <p>By accepting these details you are confirming that, to the best of your knowledge, these details are correct.</p>
   {{ govukButton({
     text: "Accept and create report",
-    id: "accept-confirm",
-    type: "submit",
-    href: "/confirmation"
+    id: "accept-confirm"
   }) }}
+  </form>
 
   {% endblock %}
