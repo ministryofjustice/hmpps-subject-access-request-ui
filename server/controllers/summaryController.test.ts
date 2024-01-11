@@ -67,38 +67,32 @@ describe('postSARAPI', () => {
           subjectId: '16',
           ndeliusCaseReferenceId: '',
         },
-        selectedList: [{ id: '1', text: 'service1' }],
+        selectedList: [{ id: '1', text: 'service1', value: '.com' }],
       },
       body: { selectedservices: [] },
     }
 
-    // const test = fakeApi.post('/api/createSubjectAccessRequest', {body: '{"dateFrom": "01/01/2001", "dateTo": "25/12/2022", "sarCaseReferenceNumber": "mockedCaseReference", "services": "service1, undefined", "nomisId": "16", "ndeliusCaseReferenceId": ""}'}, {reqheaders: {
-    //   authorization: 'Bearer /.*/',
-    // }}).reply(400)
-    // console.log(test)
-
-    const test2 = nock(config.apis.createSubjectAccessRequest.url, {
+    const test2 = nock(config.apis.createSubjectAccessRequest.url,
+     {
       reqheaders: {
-        'accept-encoding': 'gzip, deflate',
-        'content-length': '170',
-        authorization:
-          'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImRwcy1jbGllbnQta2V5In0.eyJzdWIiOiJwcmlzb25lci1vZmZlbmRlci1zZWFyY2gtY2xpZW50IiwiZ3JhbnRfdHlwZSI6ImNsaWVudF9jcmVkZW50aWFscyIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJhdXRoX3NvdXJjZSI6Im5vbmUiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjkwOTAvYXV0aC9pc3N1ZXIiLCJleHAiOjE3MDQ5OTMzMTAsImF1dGhvcml0aWVzIjpbIlJPTEVfU1lTVEVNX1VTRVIiLCJST0xFX1BSSVNPTkVSX0lOREVYIiwiUk9MRV9HTE9CQUxfU0VBUkNIIl0sImp0aSI6IlNuVU1UMThZUEhMSjlzS0hZZURNMVk2YkQzYyIsImNsaWVudF9pZCI6InByaXNvbmVyLW9mZmVuZGVyLXNlYXJjaC1jbGllbnQifQ.Ae6W_sVhRiW-cjekBDq7Uz5fCYKzAnvTf_d-Fi8jfLPkJv7FHgrfwITp5BsbfWKQX_6t2Tr_dlP0s9q2_OmB4S9-DPx_2zKSrC94glduQJQKx0G16x2G3FhDWiCzPapscwJTo7Ncrqk0t3IiVDfwqDtx8yMHrR3ATNjXnlL7DjYF64tPO2V7YYGVp9PurUwn0n-0Yg0HDFga97-I_6vOwytemlTgiKNYpC32gd8OFJkGLBwYu8MOckCF3pq4LhYAm1mtGZH5QmaXqQWS6SHNlwA-qb87D_DhTaGWPJt4ELjX5gqn0_yhh3kCTDtfKSulRgtBQ7zJdqnhALOA-GjLwg',
-        'content-type': 'application/json',
+        "accept-encoding": 'gzip, deflate',
+        "authorization": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImRwcy1jbGllbnQta2V5In0.eyJzdWIiOiJwcmlzb25lci1vZmZlbmRlci1zZWFyY2gtY2xpZW50IiwiZ3JhbnRfdHlwZSI6ImNsaWVudF9jcmVkZW50aWFscyIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJhdXRoX3NvdXJjZSI6Im5vbmUiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjkwOTAvYXV0aC9pc3N1ZXIiLCJleHAiOjE3MDQ5OTg2MjQsImF1dGhvcml0aWVzIjpbIlJPTEVfU1lTVEVNX1VTRVIiLCJST0xFX1BSSVNPTkVSX0lOREVYIiwiUk9MRV9HTE9CQUxfU0VBUkNIIl0sImp0aSI6IjlzUTg5Z3Znb2FxUVRMNldhV2NKb3dRMks4TSIsImNsaWVudF9pZCI6InByaXNvbmVyLW9mZmVuZGVyLXNlYXJjaC1jbGllbnQifQ.JKI4icb5pmVHpdck4nQgeaqGWyMhcIxaqyN1HxhSL5A962FW03iCFgLZ5TLtEtVtmJ4UNDQquYlcghGvPGN2L7kUROyWcVpgpqTYNnqiEtPtJPk8P6e3oFC00BBoGNz8pQxsz-IgzOtJ7TRhcHnhgF6hnRHwLPzHrYCHnpz1zyKQVG2t32T8m0kitBwt-0YMMz8iA3GjhtfTHaiSVXpY8R5hEzZkbWIOMgIarUpDZwIYVbSE4uuNsQZ4hdcSuGVwGL7e8TxyRSyfYacP_KPVr9TdTQQbkDROxiaO8XSXnfYc4ubmu5fi3bzx6a1o8Owt_0DMYNDNmxGY5_ohhjLFZA",
+        "content-type": "application/json",
+        "content-length": '165'
       },
     })
       .persist()
       .post(
         '/api/createSubjectAccessRequest',
-        '{"dateFrom": "01/01/2001", "dateTo": "25/12/2022", "sarCaseReferenceNumber": "mockedCaseReference", "services": "service1, undefined", "nomisId": "16", "ndeliusCaseReferenceId": ""}',
+        '{"dateFrom": "01/01/2001", "dateTo": "25/12/2022", "sarCaseReferenceNumber": "mockedCaseReference", "services": "service1, .com", "nomisId": "16", "ndeliusCaseReferenceId": ""}',
       )
-      .reply(400)
-    // console.log(test2)
+      .reply(200)
+    console.log(test2)
 
     console.log(nock.activeMocks())
 
     const response = await SummaryController.postSARAPI(req, res)
     expect(response.status).toBe(400)
-    // expect(response.text).toBe('')
     expect(res.redirect).toHaveBeenCalled()
     expect(res.redirect).toBeCalledWith('/confirmation')
   })
