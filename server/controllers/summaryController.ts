@@ -1,14 +1,8 @@
 import { Request, Response } from 'express'
 import superagent from 'superagent'
-import RestClient from '../data/restClient'
-import config from '../config'
 import { dataAccess } from '../data'
 
 export default class SummaryController {
-  private static restClient(token: string): RestClient {
-    return new RestClient('HMPPS Auth Client', config.apis.hmppsAuth, token)
-  }
-
   static getReportDetails(req: Request, res: Response) {
     const selectedList = req.session.selectedList ?? []
     const userData = req.session.userData ?? {}
@@ -27,22 +21,23 @@ export default class SummaryController {
 
   static async postSARAPI(req: Request, res: Response) {
     const token = await dataAccess().hmppsAuthClient.getSystemClientToken()
-    const date_from: String = '01/01/2001' 
-    const date_to: String = '25/12/2022' 
-    const sar_crn: String = '1'
-    const services: String = '1'
-    const nomis_id: String = '1'
-    const ndelius_cri: String = ''
+    const userData = req.session.userData ?? {}
+    const list: string[] = []
+    const servicelist = req.session.selectedList
+    for (let i = 0; i < servicelist.length; i += 1) {
+      list.push(`${servicelist[i].text}, ${servicelist[i].value}`)
+    }
+
     const response = await superagent
       .post(`http://localhost:8080/api/createSubjectAccessRequest`)
       .set('Authorization', `Bearer ${token}`)
       .send({
-        dateFrom: date_from,
-        dateTo: date_to,
-        sarCaseReferenceNumber: sar_crn,
-        services: services,
-        nomisId: nomis_id,
-        ndeliusCaseReferenceId: ndelius_cri,
+        dateFrom: userData.dateFrom,
+        dateTo: userData.dateTo,
+        sarCaseReferenceNumber: userData.caseReference,
+        services: list.toString(),
+        nomisId: userData.subjectId || '',
+        ndeliusCaseReferenceId: userData.ndeliusCaseReferenceId || '',
       })
     res.redirect('/confirmation')
     return response

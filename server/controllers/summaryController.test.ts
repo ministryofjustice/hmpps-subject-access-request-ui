@@ -38,7 +38,12 @@ describe('getReportDetails', () => {
       }),
     )
   })
-
+})
+describe('postSARAPI', () => {
+  // @ts-expect-error stubbing res
+  const res: Response = {
+    redirect: jest.fn(),
+  }
   test('post request made to SAR endpoint on clicking confirm', async () => {
     const req: Request = {
       // @ts-expect-error stubbing session
@@ -48,6 +53,8 @@ describe('getReportDetails', () => {
           dateFrom: '01/01/2001',
           dateTo: '25/12/2022',
           caseReference: 'mockedCaseReference',
+          subjectId: '16',
+          ndeliusCaseReferenceId: '',
         },
         selectedList: [{ id: '1', text: 'service1' }],
       },
@@ -57,7 +64,7 @@ describe('getReportDetails', () => {
     const response = await SummaryController.postSARAPI(req, res)
     expect(response.status).toBe(200)
     expect(response.text).toBe('')
-    expect(res.render).toHaveBeenCalled()
-    expect(res.render).toBeCalledWith('pages/summary')
+    expect(res.redirect).toHaveBeenCalled()
+    expect(res.redirect).toBeCalledWith('/confirmation')
   })
 })
