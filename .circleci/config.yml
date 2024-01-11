@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@7
+  hmpps: ministryofjustice/hmpps@8
   slack: circleci/slack@4.12.5
 
 parameters:
@@ -9,16 +9,16 @@ parameters:
     type: string
     # Normally team specific alert channel e.g. hmpps_tech_alerts, syscon-alerts, dps_sed_alerts
     # This is to avoid a general alert dumping ground that no-one then monitors
-    default: hmpps_typescript_notifications
+    default: PIPELINE_SECURITY_SLACK_CHANNEL
 
   releases-slack-channel:
     type: string
     # Normally dps-releases for most teams / projects
-    default: hmpps_typescript_notifications
+    default: SLACK_RELEASES_CHANNEL
 
   node-version:
     type: string
-    default: 20.8-browsers
+    default: 20.10-browsers
 
 jobs:
   build:
@@ -72,9 +72,8 @@ jobs:
 
   integration_test:
     executor:
-      name: hmpps/node_redis
-      node_tag: << pipeline.parameters.node-version >>
-      redis_tag: "7.0"
+      name: hmpps/node
+      tag: << pipeline.parameters.node-version >>
     steps:
       - checkout
       - attach_workspace:
@@ -86,7 +85,7 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Get wiremock
-          command: curl -o wiremock.jar https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-standalone/2.27.1/wiremock-standalone-2.27.1.jar
+          command: curl -o wiremock.jar https://repo1.maven.org/maven2/org/wiremock/wiremock-standalone/3.3.1/wiremock-standalone-3.3.1.jar
       - run:
           name: Run wiremock
           command: java -jar wiremock.jar --port 9091
@@ -134,6 +133,8 @@ workflows:
           name: deploy_dev
           env: "dev"
           jira_update: true
+          pipeline_id: <<pipeline.id>>
+          pipeline_number: <<pipeline.number>>
           context: hmpps-common-vars
           filters:
             branches:
@@ -177,11 +178,47 @@ workflows:
           requires:
             - request-prod-approval
           helm_timeout: 5m
+#      - request-preprod-approval:
+#          type: approval
+#          requires:
+#            - deploy_dev
+#      - hmpps/deploy_env:
+#          name: deploy_preprod
+#          env: "preprod"
+#          jira_update: true
+#          jira_env_type: staging
+#          pipeline_id: <<pipeline.id>>
+#          pipeline_number: <<pipeline.number>>
+#          context:
+#            - hmpps-common-vars
+#            - hmpps-template-typescript-preprod
+#          requires:
+#            - request-preprod-approval
+#          helm_timeout: 5m
+#      - request-prod-approval:
+#          type: approval
+#          requires:
+#            - deploy_preprod
+#      - hmpps/deploy_env:
+#          name: deploy_prod
+#          env: "prod"
+#          jira_update: true
+#          jira_env_type: production
+#          pipeline_id: <<pipeline.id>>
+#          pipeline_number: <<pipeline.number>>
+#          slack_notification: true
+#          slack_channel_name: << pipeline.parameters.releases-slack-channel >>
+#          context:
+#            - hmpps-common-vars
+#            - hmpps-template-typescript-prod
+#          requires:
+#            - request-prod-approval
+#          helm_timeout: 5m
 
   security:
     triggers:
       - schedule:
-          cron: "45 6 * * 1-5"
+          cron: "30 5 * * 1-5"
           filters:
             branches:
               only:
@@ -207,7 +244,7 @@ workflows:
   security-weekly:
     triggers:
       - schedule:
-          cron: "40 6 * * 1"
+          cron: "0 5 * * 1"
           filters:
             branches:
               only:

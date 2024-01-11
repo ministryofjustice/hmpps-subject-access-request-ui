@@ -39,6 +39,7 @@ export default class SummaryController {
         ndeliusCaseReferenceId: '1',
       })
     res.render('pages/summary')
+    // res.redirect('pages/confirmation')
     return response
   }
 }

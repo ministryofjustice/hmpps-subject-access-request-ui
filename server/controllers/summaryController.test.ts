@@ -26,7 +26,7 @@ describe('getReportDetails', () => {
       },
       body: { selectedservices: [] },
     }
-    await SummaryController.getReportDetails(req, res)
+    SummaryController.getReportDetails(req, res)
     expect(res.render).toHaveBeenCalled()
     expect(res.render).toBeCalledWith(
       'pages/summary',
