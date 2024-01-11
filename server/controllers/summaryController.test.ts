@@ -8,13 +8,6 @@ afterEach(() => {
   nock.cleanAll()
 })
 
-let fakeApi: nock.Scope
-
-beforeEach(() => {
-  // config.apis.tokenVerification.url = 'http://localhost:8100'
-  fakeApi = nock(config.apis.createSubjectAccessRequest.url)
-})
-
 describe('getReportDetails', () => {
   // @ts-expect-error stubbing res.render
   const res: Response = {
