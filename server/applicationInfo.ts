@@ -15,7 +15,10 @@ export type ApplicationInfo = {
 
 export default (): ApplicationInfo => {
   const packageJson =
-  process.env.NODE_ENV !== 'test' ? path.join(__dirname, '../../package.json') : path.join(__dirname, '../package.json')
+    process.env.NODE_ENV !== 'test'
+      ? path.join(__dirname, '../../package.json')
+      : path.join(__dirname, '../package.json')
+
   const { name: applicationName } = JSON.parse(fs.readFileSync(packageJson).toString())
   return { applicationName, buildNumber, gitRef, gitShortHash: gitRef.substring(0, 7), productId, branchName }
 }
