@@ -24,7 +24,6 @@ export default function routes(service: Services): Router {
   post('/inputs', InputsController.saveInputs)
 
   get('/summary', SummaryController.getReportDetails)
-  post('/summary', SummaryController.postSARAPI)
 
   get('/serviceselection', ServiceSelectionController.getServices)
 

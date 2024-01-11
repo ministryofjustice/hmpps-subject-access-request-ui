@@ -1,4 +1,4 @@
-import { type Request, type Response } from 'express'
+import type { Request, Response } from 'express'
 import SummaryController from './summaryController'
 
 afterEach(() => {
@@ -26,7 +26,7 @@ describe('getReportDetails', () => {
       },
       body: { selectedservices: [] },
     }
-    SummaryController.getReportDetails(req, res)
+    await SummaryController.getReportDetails(req, res)
     expect(res.render).toHaveBeenCalled()
     expect(res.render).toBeCalledWith(
       'pages/summary',
@@ -37,27 +37,5 @@ describe('getReportDetails', () => {
         caseReference: req.session.userData.caseReference,
       }),
     )
-  })
-
-  test('post request made to SAR endpoint on clicking confirm', async () => {
-    const req: Request = {
-      // @ts-expect-error stubbing session
-      session: {
-        serviceList: [],
-        userData: {
-          dateFrom: '01/01/2001',
-          dateTo: '25/12/2022',
-          caseReference: 'mockedCaseReference',
-        },
-        selectedList: [{ id: '1', text: 'service1' }],
-      },
-      body: { selectedservices: [] },
-    }
-
-    const response = await SummaryController.postSARAPI(req, res)
-    expect(response.status).toBe(200)
-    expect(response.text).toBe('')
-    expect(res.render).toHaveBeenCalled()
-    expect(res.render).toBeCalledWith('pages/summary')
   })
 })
