@@ -1,5 +1,5 @@
 import { type Request, type Response } from 'express'
-import nock, { isDone } from 'nock'
+import nock from 'nock'
 import SummaryController from './summaryController'
 import config from '../config'
 
