@@ -20,8 +20,8 @@ export default class SummaryController {
     })
   }
 
-  static async postSARAPI(req: Request, res: Response) {
-    const token = await dataAccess().hmppsAuthClient.getSystemClientToken()
+  static async postSARAPI(req: Request, res: Response, dataaccess: any = dataAccess) {
+    const token = await dataaccess().hmppsAuthClient.getSystemClientToken()
     const userData = req.session.userData ?? {}
     const list: string[] = []
     const servicelist = req.session.selectedList

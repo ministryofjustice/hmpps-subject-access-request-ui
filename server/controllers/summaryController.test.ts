@@ -2,6 +2,9 @@ import { type Request, type Response } from 'express'
 import nock from 'nock'
 import SummaryController from './summaryController'
 import config from '../config'
+import { HmppsAuthClient, dataAccess } from '../data'
+
+//jest.mock('../data')
 
 let fakeApi: nock.Scope
 
@@ -56,6 +59,22 @@ describe('postSARAPI', () => {
   }
 
   test('post request made to SAR endpoint renders confirmation page if successful', async () => {
+    //jest.mock('../data/index', () => jest.fn(() => dataAccess))
+    //const dataaccess = jest.fn()
+
+    const dataaccess = jest.fn(() => ({
+      hmppsAuthClient: jest.mock,
+      getSystemClientToken: jest.fn()
+    }))
+
+    // const authMock = HmppsAuthClient as jest.Mock<HmppsAuthClient>
+    // authMock.mockImplementation(() => {
+    //   return {
+    //     getSystemClientToken: jest.fn()
+    //   }
+    // })
+
+
     const req: Request = {
       // @ts-expect-error stubbing session
       session: {
@@ -79,7 +98,7 @@ describe('postSARAPI', () => {
       )
       .reply(200)
 
-    const response = await SummaryController.postSARAPI(req, res)
+    const response = await SummaryController.postSARAPI(req, res, dataaccess)
     expect(response.status).toBe(200)
     expect(res.redirect).toHaveBeenCalled()
     expect(res.redirect).toBeCalledWith('/confirmation')
