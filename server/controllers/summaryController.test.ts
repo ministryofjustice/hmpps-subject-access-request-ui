@@ -2,9 +2,10 @@ import { type Request, type Response } from 'express'
 import nock from 'nock'
 import SummaryController from './summaryController'
 import config from '../config'
-import { HmppsAuthClient, dataAccess } from '../data'
+import { HmppsAuthClient } from '../data'
 
-//jest.mock('../data')
+jest.mock('../data')
+const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
 
 let fakeApi: nock.Scope
 
@@ -59,22 +60,6 @@ describe('postSARAPI', () => {
   }
 
   test('post request made to SAR endpoint renders confirmation page if successful', async () => {
-    //jest.mock('../data/index', () => jest.fn(() => dataAccess))
-    //const dataaccess = jest.fn()
-
-    const dataaccess = jest.fn(() => ({
-      hmppsAuthClient: jest.mock,
-      getSystemClientToken: jest.fn()
-    }))
-
-    // const authMock = HmppsAuthClient as jest.Mock<HmppsAuthClient>
-    // authMock.mockImplementation(() => {
-    //   return {
-    //     getSystemClientToken: jest.fn()
-    //   }
-    // })
-
-
     const req: Request = {
       // @ts-expect-error stubbing session
       session: {
@@ -98,7 +83,7 @@ describe('postSARAPI', () => {
       )
       .reply(200)
 
-    const response = await SummaryController.postSARAPI(req, res, dataaccess)
+    const response = await SummaryController.postSARAPI(req, res, hmppsAuthClient)
     expect(response.status).toBe(200)
     expect(res.redirect).toHaveBeenCalled()
     expect(res.redirect).toBeCalledWith('/confirmation')
@@ -126,7 +111,7 @@ describe('postSARAPI', () => {
         '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"","ndeliusCaseReferenceId":""}',
       )
       .reply(400)
-    await expect(SummaryController.postSARAPI(req, res)).rejects.toThrowError('Bad Request')
+    await expect(SummaryController.postSARAPI(req, res, hmppsAuthClient)).rejects.toThrowError('Bad Request')
   })
 
   test('post request fails if both nomisId and ndeluisCaseReferenceId are provided', async () => {
@@ -151,6 +136,6 @@ describe('postSARAPI', () => {
         '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"1","ndeliusCaseReferenceId":"16"}',
       )
       .reply(400, 'Both nomisId and ndeliusCaseReferenceId are provided - exactly one is required')
-    await expect(SummaryController.postSARAPI(req, res)).rejects.toThrowError('Bad Request')
+    await expect(SummaryController.postSARAPI(req, res, hmppsAuthClient)).rejects.toThrowError('Bad Request')
   })
 })

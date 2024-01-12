@@ -1,7 +1,9 @@
 import { Request, Response } from 'express'
 import superagent from 'superagent'
-import { dataAccess } from '../data/index'
 import config from '../config'
+import HmppsAuthClient from '../data/hmppsAuthClient'
+import TokenStore from '../data/tokenStore'
+import { createRedisClient } from '../data/redisClient'
 
 export default class SummaryController {
   static getReportDetails(req: Request, res: Response) {
@@ -20,8 +22,13 @@ export default class SummaryController {
     })
   }
 
-  static async postSARAPI(req: Request, res: Response, dataaccess: any = dataAccess) {
-    const token = await dataaccess().hmppsAuthClient.getSystemClientToken()
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  static async postSARAPI(req: Request, res: Response, hmppsAuthClient?: any) {
+    let authClient = hmppsAuthClient || null
+    if (authClient == null) {
+      authClient = new HmppsAuthClient(new TokenStore(createRedisClient()))
+    }
+    const token = await authClient.getSystemClientToken()
     const userData = req.session.userData ?? {}
     const list: string[] = []
     const servicelist = req.session.selectedList
