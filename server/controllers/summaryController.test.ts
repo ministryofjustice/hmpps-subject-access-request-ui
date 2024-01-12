@@ -2,7 +2,6 @@ import { type Request, type Response } from 'express'
 import nock from 'nock'
 import SummaryController from './summaryController'
 import config from '../config'
-import { HmppsAuthClient } from '../data'
 
 SummaryController.getUserToken = jest.fn().mockReturnValue('testtoken')
 
