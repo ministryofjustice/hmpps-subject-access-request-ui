@@ -4,8 +4,7 @@ import SummaryController from './summaryController'
 import config from '../config'
 import { HmppsAuthClient } from '../data'
 
-jest.mock('../data')
-const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
+SummaryController.getUserToken = jest.fn().mockReturnValue('testtoken')
 
 let fakeApi: nock.Scope
 
@@ -83,7 +82,7 @@ describe('postSARAPI', () => {
       )
       .reply(200)
 
-    const response = await SummaryController.postSARAPI(req, res, hmppsAuthClient)
+    const response = await SummaryController.postSARAPI(req, res)
     expect(response.status).toBe(200)
     expect(res.redirect).toHaveBeenCalled()
     expect(res.redirect).toBeCalledWith('/confirmation')
@@ -111,7 +110,7 @@ describe('postSARAPI', () => {
         '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"","ndeliusCaseReferenceId":""}',
       )
       .reply(400)
-    await expect(SummaryController.postSARAPI(req, res, hmppsAuthClient)).rejects.toThrowError('Bad Request')
+    await expect(SummaryController.postSARAPI(req, res)).rejects.toThrowError('Bad Request')
   })
 
   test('post request fails if both nomisId and ndeluisCaseReferenceId are provided', async () => {
@@ -136,6 +135,6 @@ describe('postSARAPI', () => {
         '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"1","ndeliusCaseReferenceId":"16"}',
       )
       .reply(400, 'Both nomisId and ndeliusCaseReferenceId are provided - exactly one is required')
-    await expect(SummaryController.postSARAPI(req, res, hmppsAuthClient)).rejects.toThrowError('Bad Request')
+    await expect(SummaryController.postSARAPI(req, res)).rejects.toThrowError('Bad Request')
   })
 })

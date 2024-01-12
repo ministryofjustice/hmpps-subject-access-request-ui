@@ -22,13 +22,13 @@ export default class SummaryController {
     })
   }
 
+  static async getUserToken() {
+    return new HmppsAuthClient(new TokenStore(createRedisClient())).getSystemClientToken()
+  }
+
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  static async postSARAPI(req: Request, res: Response, hmppsAuthClient?: any) {
-    let authClient = hmppsAuthClient || null
-    if (authClient == null) {
-      authClient = new HmppsAuthClient(new TokenStore(createRedisClient()))
-    }
-    const token = await authClient.getSystemClientToken()
+  static async postSARAPI(req: Request, res: Response) {
+    const token = await SummaryController.getUserToken()
     const userData = req.session.userData ?? {}
     const list: string[] = []
     const servicelist = req.session.selectedList
