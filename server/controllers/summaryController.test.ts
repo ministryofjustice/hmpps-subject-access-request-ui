@@ -1,7 +1,13 @@
 import { type Request, type Response } from 'express'
-import nock from 'nock'
+import nock, { isDone } from 'nock'
 import SummaryController from './summaryController'
 import config from '../config'
+
+let fakeApi: nock.Scope
+
+beforeEach(() => {
+  fakeApi = nock(config.apis.createSubjectAccessRequest.url)
+})
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -42,6 +48,7 @@ describe('getReportDetails', () => {
     )
   })
 })
+
 describe('postSARAPI', () => {
   // @ts-expect-error stubbing res
   const res: Response = {
@@ -65,7 +72,7 @@ describe('postSARAPI', () => {
       body: { selectedservices: [] },
     }
 
-    nock(config.apis.createSubjectAccessRequest.url)
+    fakeApi
       .post(
         '/api/createSubjectAccessRequest',
         '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"16","ndeliusCaseReferenceId":""}',
