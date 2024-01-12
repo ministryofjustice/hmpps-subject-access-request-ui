@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import superagent from 'superagent'
-import { dataAccess } from '../data'
+import { dataAccess } from '../data/index'
 import config from '../config'
 
 export default class SummaryController {
