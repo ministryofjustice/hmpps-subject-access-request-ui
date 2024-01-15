@@ -33,7 +33,7 @@ context('SubjectId', () => {
     subjectIdPage.continueButton().should('exist')
   })
 
-  it('Submits subject id user input and redirects to /inputs', () => {
+  it('Submits valid subject id user input and redirects to /inputs', () => {
     cy.signIn()
     cy.visit('/subject-id')
     const subjectIdPage = Page.verifyOnPage(SubjectIdPage)
@@ -48,11 +48,35 @@ context('SubjectId', () => {
   it('Persists user inputs when returning to page', () => {
     cy.signIn()
     cy.visit('/subject-id')
-    let inputsPage = Page.verifyOnPage(SubjectIdPage)
-    inputsPage.idTextBox().clear().type('A1111AA')
-    inputsPage.continueButton().click()
+    let subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+    subjectIdPage.idTextBox().clear().type('A1111AA')
+    subjectIdPage.continueButton().click()
     cy.visit('/subject-id')
-    inputsPage = Page.verifyOnPage(SubjectIdPage)
-    inputsPage.idTextBox().should('have.value', 'A1111AA')
+    subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+    subjectIdPage.idTextBox().should('have.value', 'A1111AA')
+  })
+
+  it('Does not allow subject ID to be empty', () => {
+    cy.signIn()
+    cy.visit('/subject-id')
+    let subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+    subjectIdPage.continueButton().click()
+    cy.wait('@saveSubjectId')
+    cy.url().should('to.match', /subject-id$/)
+    subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+    subjectIdPage.errorSummaryBox().should('exist')
+  })
+
+  it('Does not allow invalid input', () => {
+    const invalidSubjectId = 'not-a-nomis-or-ndelius-id'
+    cy.signIn()
+    cy.visit('/subject-id')
+    let subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+    subjectIdPage.idTextBox().clear().type(invalidSubjectId)
+    subjectIdPage.continueButton().click()
+    cy.wait('@saveSubjectId')
+    cy.url().should('to.match', /subject-id$/)
+    subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+    subjectIdPage.errorSummaryBox().should('exist')
   })
 })
