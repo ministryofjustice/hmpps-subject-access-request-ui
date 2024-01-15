@@ -29,7 +29,7 @@ describe('getSubjectId', () => {
   })
 
   describe('when a user returns within a session', () => {
-    test('renders a response with subject ID entered previously in session', () => {
+    test('renders a response with subject ID populated', () => {
       const req: Request = {
         // @ts-expect-error stubbing session
         session: {
@@ -51,45 +51,81 @@ describe('getSubjectId', () => {
 })
 
 describe('saveSubjectId', () => {
-  const baseReq: Request = {
-    // @ts-expect-error stubbing session
-    session: {
-      userData: {},
-    },
-    body: {
-      subjectId: 'A1111AA',
-    },
-  }
-
   // @ts-expect-error stubbing res.render
   const res: Response = {
     redirect: jest.fn(),
+    render: jest.fn(),
   }
 
-  test('persists values to the session', () => {
-    SubjectIdController.saveSubjectId(baseReq, res)
-    expect(baseReq.session.userData.subjectId).toBe('A1111AA')
-  })
-
-  test('redirects to the next page in the user journey', () => {
-    SubjectIdController.saveSubjectId(baseReq, res)
-    expect(res.redirect).toHaveBeenCalled()
-    expect(res.redirect).toBeCalledWith('/inputs')
-  })
-
-  test('overwrites previous session data if present', () => {
-    const req: Request = {
-      ...baseReq,
+  describe('when a valid Subject ID is provided', () => {
+    const baseReq: Request = {
       // @ts-expect-error stubbing session
       session: {
-        userData: {
-          subjectId: 'subjectIdToBeOverwritten',
-        },
+        userData: {},
+      },
+      body: {
+        subjectId: 'A1111AA',
       },
     }
-    SubjectIdController.saveSubjectId(req, res)
-    expect(req.session.userData.subjectId).toBe('A1111AA')
-    expect(res.redirect).toHaveBeenCalled()
-    expect(res.redirect).toBeCalledWith('/inputs')
+
+    test('saves to session', () => {
+      SubjectIdController.saveSubjectId(baseReq, res)
+      expect(baseReq.session.userData.subjectId).toBe('A1111AA')
+    })
+
+    test('redirects to the next page in the user journey', () => {
+      SubjectIdController.saveSubjectId(baseReq, res)
+      expect(res.redirect).toHaveBeenCalled()
+      expect(res.redirect).toBeCalledWith('/inputs')
+    })
+
+    describe('when a user has already provided a subject ID in the session', () => {
+      test('overwrites previous subjec tID', () => {
+        const req: Request = {
+          ...baseReq,
+          // @ts-expect-error stubbing session
+          session: {
+            userData: {
+              subjectId: 'Z9999ZZ',
+            },
+          },
+        }
+        SubjectIdController.saveSubjectId(req, res)
+        expect(req.session.userData.subjectId).toBe('A1111AA')
+        expect(res.redirect).toHaveBeenCalled()
+        expect(res.redirect).toBeCalledWith('/inputs')
+      })
+    })
+  })
+  describe('when an invalid Subject ID is provided', () => {
+    const baseReq: Request = {
+      // @ts-expect-error stubbing session
+      session: {
+        userData: {},
+      },
+      body: {
+        subjectId: 'invalid-subject-id',
+      },
+    }
+
+    test('user is returned to the subject ID page', () => {
+      SubjectIdController.saveSubjectId(baseReq, res)
+      expect(res.render).toBeCalledWith(
+        'pages/subjectid',
+        expect.objectContaining({
+          subjectId: baseReq.body.subjectId,
+        }),
+      )
+    })
+
+    test('user receives an invalid subject ID error', () => {
+      SubjectIdController.saveSubjectId(baseReq, res)
+      expect(res.render).toBeCalledWith(
+        'pages/subjectid',
+        expect.objectContaining({
+          subjectIdError: 'Subject ID must be a NOMIS prisoner number or nDelius case reference number',
+        }),
+      )
+    })
   })
 })

@@ -1,20 +1,30 @@
 import type { Request, Response } from 'express'
+import SubjectIdValidation from './subjectIdValidation'
 
 export default class SubjectIdController {
   static getSubjectId(req: Request, res: Response) {
     if (req.session.userData === undefined) {
       req.session.userData = {}
     }
-    const { userData } = req.session
+    const { subjectId } = req.session.userData
+
     res.render('pages/subjectid', {
-      subjectId: userData.subjectId,
+      subjectId,
     })
   }
 
   static saveSubjectId(req: Request, res: Response): void {
     const { subjectId } = req.body
-    req.session.userData.subjectId = subjectId
+    const subjectIdError = SubjectIdValidation.validateSubjectId(subjectId)
 
-    res.redirect('/inputs')
+    if (subjectIdError) {
+      res.render('pages/subjectid', {
+        subjectId,
+        subjectIdError,
+      })
+    } else {
+      req.session.userData.subjectId = subjectId
+      res.redirect('/inputs')
+    }
   }
 }

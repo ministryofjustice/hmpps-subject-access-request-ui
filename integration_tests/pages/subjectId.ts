@@ -12,4 +12,6 @@ export default class SubjectIdPage extends Page {
   additionalInformation = (): PageElement => cy.get('#additional-information')
 
   continueButton = (): PageElement => cy.get('#subject-id-continue')
+
+  errorSummaryBox = (): PageElement => cy.get('.govuk-error-summary')
 }

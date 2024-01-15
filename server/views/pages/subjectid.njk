@@ -2,6 +2,7 @@
 
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 
 {% block content %}
@@ -9,6 +10,24 @@
   <div class="govuk-width-container">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
+
+      {% if subjectIdError %}
+        {% set showErrors = true %}
+        {% set subjectIdErrorMessage = {text: subjectIdError} %}
+      {% endif %}
+
+      {% if showErrors %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: subjectIdError,
+              href: "#subject-id"
+            }
+          ]
+        }) }}
+      {% endif %}
+
       <form action="/subject-id" method="post">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         {{ govukInput({
@@ -23,7 +42,8 @@
             value: subjectId,
             hint: {
               text: "Provide a NOMIS Prisoner Number or a nDelius Case Reference Number for the subject of the Subject Access Request."
-            }
+            },
+            errorMessage: subjectIdErrorMessage
           }) }}
 
         <div class="govuk-inset-text" id="additional-information">
