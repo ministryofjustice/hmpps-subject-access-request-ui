@@ -1,6 +1,7 @@
 import Page from '../pages/page'
 import AuthSignInPage from '../pages/authSignIn'
 import SubjectIdPage from '../pages/subjectId'
+import InputsPage from '../pages/inputs'
 
 context('SubjectId', () => {
   beforeEach(() => {
@@ -51,6 +52,7 @@ context('SubjectId', () => {
     let subjectIdPage = Page.verifyOnPage(SubjectIdPage)
     subjectIdPage.idTextBox().clear().type('A1111AA')
     subjectIdPage.continueButton().click()
+    Page.verifyOnPage(InputsPage)
     cy.visit('/subject-id')
     subjectIdPage = Page.verifyOnPage(SubjectIdPage)
     subjectIdPage.idTextBox().should('have.value', 'A1111AA')
