@@ -1,9 +1,8 @@
 import { Request, Response } from 'express'
 import superagent from 'superagent'
 import config from '../config'
-import HmppsAuthClient from '../data/hmppsAuthClient'
-import TokenStore from '../data/tokenStore'
-import { createRedisClient } from '../data/redisClient'
+import { isNomisId, isNdeliusId } from '../utils/idHelpers'
+import { dataAccess } from '../data'
 
 export default class SummaryController {
   static getReportDetails(req: Request, res: Response) {
@@ -23,7 +22,8 @@ export default class SummaryController {
   }
 
   static async getUserToken() {
-    return new HmppsAuthClient(new TokenStore(createRedisClient())).getSystemClientToken()
+    const token = await dataAccess().hmppsAuthClient.getSystemClientToken()
+    return token
   }
 
   static async postSARAPI(req: Request, res: Response) {
@@ -34,17 +34,24 @@ export default class SummaryController {
     for (let i = 0; i < servicelist.length; i += 1) {
       list.push(`${servicelist[i].text}, ${servicelist[i].value}`)
     }
+    let nomisId: string = ''
+    let ndeliusCaseReferenceId: string = ''
+    if (isNomisId(userData.subjectId)) {
+      nomisId = userData.subjectId
+    } else if (isNdeliusId(userData.subjectId)) {
+      ndeliusCaseReferenceId = userData.subjectId
+    }
     try {
       const response = await superagent
         .post(`${config.apis.createSubjectAccessRequest.url}/api/createSubjectAccessRequest`)
         .set('Authorization', `Bearer ${token}`)
         .send({
-          dateFrom: userData.dateFrom,
+          dateFrom: userData.dateFrom, // need to implement a default
           dateTo: userData.dateTo,
           sarCaseReferenceNumber: userData.caseReference,
           services: list.toString(),
-          nomisId: userData.subjectId || '',
-          ndeliusCaseReferenceId: userData.ndeliusCaseReferenceId || '',
+          nomisId,
+          ndeliusCaseReferenceId,
         })
       res.redirect('/confirmation')
       return response

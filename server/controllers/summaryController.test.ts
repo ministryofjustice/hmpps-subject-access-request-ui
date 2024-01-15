@@ -66,8 +66,7 @@ describe('postSARAPI', () => {
           dateFrom: '01/01/2001',
           dateTo: '25/12/2022',
           caseReference: 'mockedCaseReference',
-          subjectId: '16',
-          ndeliusCaseReferenceId: '',
+          subjectId: 'A1111AA',
         },
         selectedList: [{ id: '1', text: 'service1', value: '.com' }],
       },
@@ -77,7 +76,7 @@ describe('postSARAPI', () => {
     fakeApi
       .post(
         '/api/createSubjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"16","ndeliusCaseReferenceId":""}',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusCaseReferenceId":""}',
       )
       .reply(200)
 
@@ -97,7 +96,6 @@ describe('postSARAPI', () => {
           dateTo: '25/12/2022',
           caseReference: 'mockedCaseReference',
           subjectId: '',
-          ndeliusCaseReferenceId: '',
         },
         selectedList: [{ id: '1', text: 'service1', value: '.com' }],
       },
@@ -109,31 +107,6 @@ describe('postSARAPI', () => {
         '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"","ndeliusCaseReferenceId":""}',
       )
       .reply(400)
-    await expect(SummaryController.postSARAPI(req, res)).rejects.toThrowError('Bad Request')
-  })
-
-  test('post request fails if both nomisId and ndeluisCaseReferenceId are provided', async () => {
-    const req: Request = {
-      // @ts-expect-error stubbing session
-      session: {
-        serviceList: [],
-        userData: {
-          dateFrom: '01/01/2001',
-          dateTo: '25/12/2022',
-          caseReference: 'mockedCaseReference',
-          subjectId: '1',
-          ndeliusCaseReferenceId: '16',
-        },
-        selectedList: [{ id: '1', text: 'service1', value: '.com' }],
-      },
-      body: { selectedservices: [] },
-    }
-    nock(config.apis.createSubjectAccessRequest.url)
-      .post(
-        '/api/createSubjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"1","ndeliusCaseReferenceId":"16"}',
-      )
-      .reply(400, 'Both nomisId and ndeliusCaseReferenceId are provided - exactly one is required')
     await expect(SummaryController.postSARAPI(req, res)).rejects.toThrowError('Bad Request')
   })
 })
