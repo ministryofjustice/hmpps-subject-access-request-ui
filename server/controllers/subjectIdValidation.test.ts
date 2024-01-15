@@ -16,14 +16,14 @@ describe('validateSubjectId', () => {
     test('accepts subject IDs in valid NOMIS ID format', () => {
       const validNomisIds = ['A1234BC', 'a1234bc', 'z9876YX', ' A1234BC', 'A1234BC ']
       validNomisIds.forEach(validNomisId => {
-        expect(SubjectIdValidation.validateSubjectId(validNomisId)).toEqual('nomisId')
+        expect(SubjectIdValidation.validateSubjectId(validNomisId)).toBeNull()
       })
     })
 
     test('accepts subject IDs in valid nDelius ID format', () => {
       const validNdeliusIds = ['A123456', 'a123456', ' Z098765', 'Z098765 ']
       validNdeliusIds.forEach(validNdelousId => {
-        expect(SubjectIdValidation.validateSubjectId(validNdelousId)).toEqual('ndeliusId')
+        expect(SubjectIdValidation.validateSubjectId(validNdelousId)).toBeNull()
       })
     })
 

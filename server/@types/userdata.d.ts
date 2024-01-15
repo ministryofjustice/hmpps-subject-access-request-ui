@@ -1,6 +1,5 @@
 export interface UserData {
-  nomisId: string
-  ndeliusId: string
+  subjectId: string
   dateFrom: string
   dateTo: string
   caseReference: string

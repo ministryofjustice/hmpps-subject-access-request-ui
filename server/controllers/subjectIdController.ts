@@ -6,7 +6,7 @@ export default class SubjectIdController {
     if (req.session.userData === undefined) {
       req.session.userData = {}
     }
-    const subjectId = req.session.userData.nomisId ? req.session.userData.nomisId : req.session.userData.ndeliusId
+    const { subjectId } = req.session.userData
 
     res.render('pages/subjectid', {
       subjectId,
@@ -15,23 +15,16 @@ export default class SubjectIdController {
 
   static saveSubjectId(req: Request, res: Response): void {
     const { subjectId } = req.body
-    const validatedSubjectId = SubjectIdValidation.validateSubjectId(subjectId)
+    const subjectIdError = SubjectIdValidation.validateSubjectId(subjectId)
 
-    if (validatedSubjectId === 'nomisId') {
-      req.session.userData.nomisId = subjectId
-      req.session.userData.ndeliusId = null
+    if (subjectIdError) {
+      res.render('pages/subjectid', {
+        subjectId,
+        subjectIdError,
+      })
+    } else {
+      req.session.userData.subjectId = subjectId
       res.redirect('/inputs')
-      return
     }
-    if (validatedSubjectId === 'ndeliusId') {
-      req.session.userData.ndeliusId = subjectId
-      req.session.userData.nomisId = null
-      res.redirect('/inputs')
-      return
-    }
-    res.render('pages/subjectid', {
-      subjectId,
-      subjectIdError: validatedSubjectId,
-    })
   }
 }
