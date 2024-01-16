@@ -26,7 +26,7 @@ export default class SummaryController {
     return token
   }
 
-  static async postSARAPI(req: Request, res: Response) {
+  static async postReportDetails(req: Request, res: Response) {
     const token = await SummaryController.getUserToken()
     const userData = req.session.userData ?? {}
     const list: string[] = []
@@ -35,23 +35,23 @@ export default class SummaryController {
       list.push(`${servicelist[i].text}, ${servicelist[i].value}`)
     }
     let nomisId: string = ''
-    let ndeliusCaseReferenceId: string = ''
+    let ndeliusId: string = ''
     if (isNomisId(userData.subjectId)) {
       nomisId = userData.subjectId
     } else if (isNdeliusId(userData.subjectId)) {
-      ndeliusCaseReferenceId = userData.subjectId
+      ndeliusId = userData.subjectId
     }
     try {
       const response = await superagent
-        .post(`${config.apis.createSubjectAccessRequest.url}/api/createSubjectAccessRequest`)
+        .post(`${config.apis.subjectAccessRequest.url}/api/createSubjectAccessRequest`)
         .set('Authorization', `Bearer ${token}`)
         .send({
-          dateFrom: userData.dateFrom, // need to implement a default
+          dateFrom: userData.dateFrom,
           dateTo: userData.dateTo,
           sarCaseReferenceNumber: userData.caseReference,
           services: list.toString(),
           nomisId,
-          ndeliusCaseReferenceId,
+          ndeliusId,
         })
       res.redirect('/confirmation')
       return response

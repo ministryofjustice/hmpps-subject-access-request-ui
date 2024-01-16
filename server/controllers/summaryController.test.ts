@@ -8,7 +8,7 @@ SummaryController.getUserToken = jest.fn().mockReturnValue('testtoken')
 let fakeApi: nock.Scope
 
 beforeEach(() => {
-  fakeApi = nock(config.apis.createSubjectAccessRequest.url)
+  fakeApi = nock(config.apis.subjectAccessRequest.url)
 })
 
 afterEach(() => {
@@ -51,13 +51,13 @@ describe('getReportDetails', () => {
   })
 })
 
-describe('postSARAPI', () => {
+describe('postReportDetails', () => {
   // @ts-expect-error stubbing res
   const res: Response = {
     redirect: jest.fn(),
   }
 
-  test('post request made to SAR endpoint renders confirmation page if successful', async () => {
+  test('post request made to createSubjectAccessRequest endpoint renders confirmation page if successful', async () => {
     const req: Request = {
       // @ts-expect-error stubbing session
       session: {
@@ -76,11 +76,11 @@ describe('postSARAPI', () => {
     fakeApi
       .post(
         '/api/createSubjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusCaseReferenceId":""}',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":""}',
       )
       .reply(200)
 
-    const response = await SummaryController.postSARAPI(req, res)
+    const response = await SummaryController.postReportDetails(req, res)
     expect(response.status).toBe(200)
     expect(res.redirect).toHaveBeenCalled()
     expect(res.redirect).toBeCalledWith('/confirmation')
@@ -101,12 +101,12 @@ describe('postSARAPI', () => {
       },
       body: { selectedservices: [] },
     }
-    nock(config.apis.createSubjectAccessRequest.url)
+    nock(config.apis.subjectAccessRequest.url)
       .post(
         '/api/createSubjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"","ndeliusCaseReferenceId":""}',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"","ndeliusId":""}',
       )
       .reply(400)
-    await expect(SummaryController.postSARAPI(req, res)).rejects.toThrowError('Bad Request')
+    await expect(SummaryController.postReportDetails(req, res)).rejects.toThrowError('Bad Request')
   })
 })

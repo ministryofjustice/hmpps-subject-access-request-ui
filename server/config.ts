@@ -48,7 +48,7 @@ export default {
     expiryMinutes: Number(get('WEB_SESSION_TIMEOUT_IN_MINUTES', 120)),
   },
   apis: {
-    createSubjectAccessRequest: {
+    subjectAccessRequest: {
       url: get('SAR_ENDPOINT_URL', 'http://localhost:8080', requiredInProduction),
     },
     hmppsAuth: {
