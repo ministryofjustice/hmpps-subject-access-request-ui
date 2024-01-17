@@ -12,10 +12,10 @@ export default class ServiceCatalogueClient {
   async getServiceList(): Promise<any> {
     const token = await ServiceCatalogueClient.getUserToken()
     try {
-      // const response =
-      superagent
+      const response = superagent
         .get(`${config.apis.serviceCatalogue.url}/sar-report-components?env=dev`)
         .set('Authorization', `OAuth ${token}`)
+      return (await response).body
     } catch (error) {
       return new Promise(resolve => {
         const list = [
@@ -26,14 +26,6 @@ export default class ServiceCatalogueClient {
         resolve(list)
       })
     }
-    return new Promise(resolve => {
-      const list = [
-        { text: 'Data from TestService1', value: 'https://foo.boo.com' },
-        { text: 'Data from TestService2', value: 'https://foo.boo.com' },
-        { text: 'Data from TestService3', value: 'https://foo.boo.com' },
-      ]
-      resolve(list)
-    })
 
     // return response
     // TODO: implement logic to get list of service from Service Catalogue response

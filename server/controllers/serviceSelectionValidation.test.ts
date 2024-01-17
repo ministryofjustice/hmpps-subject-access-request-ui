@@ -11,7 +11,9 @@ describe('validateSelection', () => {
       { input: [], expected: errors.select },
       { input: ['1'], expected: '' },
     ]
-    const mockService: ApiService[] = [{ id: '1', text: 'mockService', value: 'http://foo.boo' }]
+    const mockService: ApiService[] = [
+      { id: '1', text: 'mockService', value: 'http://foo.boo', name: 'test1', environments: [] },
+    ]
     testCases.forEach(testCase => {
       const selectedServicesError = ServiceSelectionValidation.validateSelection(testCase.input, mockService)
       expect(selectedServicesError).toEqual(testCase.expected)
@@ -22,7 +24,9 @@ describe('validateSelection', () => {
       { input: ['randomId'], expected: errors.invalidSelection },
       { input: ['1'], expected: '' },
     ]
-    const mockService: ApiService[] = [{ id: '1', text: 'mockService', value: 'http://foo.boo' }]
+    const mockService: ApiService[] = [
+      { id: '1', text: 'mockService', value: 'http://foo.boo', name: 'test2', environments: [] },
+    ]
     testCases.forEach(testCase => {
       const selectedServicesError = ServiceSelectionValidation.validateSelection(testCase.input, mockService)
       expect(selectedServicesError).toEqual(testCase.expected)
