@@ -8,10 +8,16 @@ export default class ServiceSelectionController {
     // TODO: GetServiceToken
     await catalogueclient.getServiceList().then(list => {
       // 'mockToken'
-      req.session.serviceList = list
+
+      const newList = []
+      for (let i = 0; i < list.length; i += 1) {
+        newList.push({ text: list[i].name, value: 'blah', id: list[i].id }) // + list[i].environments[0].get("url", "") + "}")
+      }
+      req.session.serviceList = newList
+      // console.log(new_list)
       const selectedList = req.session.selectedList ?? []
       res.render('pages/serviceselection', {
-        servicelist: list,
+        servicelist: newList,
         selectedList: selectedList.map(x => x.id),
       })
     })

@@ -28,7 +28,7 @@
   <div class="govuk-form-group">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
         <h1 class="govuk-fieldset__heading">
-        {{ servicelist[0].name }}
+        Select Services
         </h1>
       </legend>
       <div id="waste-hint" class="govuk-hint">
@@ -37,8 +37,8 @@
 
       {{ multiSelect({
           headers: ["Service Name"],
-          itemGroupName:"selectedServices",
-          items:servicelist,
+          itemGroupName: "selectedServices",
+          items: servicelist,
           selectedItems: selectedList,
           errorMessage: selectedServicesErrorMessage
       }) }}
