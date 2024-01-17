@@ -82,7 +82,11 @@ export default {
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
     serviceCatalogue: {
-      url: get('SERVICE_CATALOGUE_URL', 'http://localhost:1337/v1', requiredInProduction),
+      url: get(
+        'SERVICE_CATALOGUE_URL',
+        'https://service-catalogue-dev.hmpps.service.justice.gov.uk/v1',
+        requiredInProduction,
+      ),
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
