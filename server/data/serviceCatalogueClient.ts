@@ -17,14 +17,7 @@ export default class ServiceCatalogueClient {
         .set('Authorization', `OAuth ${token}`)
       return (await response).body
     } catch (error) {
-      return new Promise(resolve => {
-        const list = [
-          { text: 'Data from TestService1', value: 'https://foo.boo.com' },
-          { text: 'Data from TestService2', value: 'https://foo.boo.com' },
-          { text: 'Data from TestService3', value: 'https://foo.boo.com' },
-        ]
-        resolve(list)
-      })
+      return []
     }
   }
 }
