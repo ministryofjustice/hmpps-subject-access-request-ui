@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import { setUncaughtExceptionCaptureCallback } from 'process'
 import ServiceCatalogueClient from '../data/serviceCatalogueClient'
 import ServiceSelectionValidation from './serviceSelectionValidation'
 
