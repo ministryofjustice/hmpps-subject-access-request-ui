@@ -15,14 +15,11 @@ export default class ServiceSelectionController {
           for (let j = 0; j < list[i].environments.length; j += 1) {
             urlList.push(list[i].environments[j].url)
           }
-          console.log('env', list[i].environments[0].url)
-          console.log('Url', urlList)
           newList.push({ text: list[i].name, id: list[i].id, urls: urlList }) // , value: list[i].environments[i].url })
         }
       }
       req.session.serviceList = newList
       const selectedList = req.session.selectedList ?? []
-      console.log(selectedList.map(x => x.id))
       res.render('pages/serviceselection', {
         servicelist: newList,
         selectedList: selectedList.map(x => x.id),
@@ -46,7 +43,6 @@ export default class ServiceSelectionController {
         return
       }
       const selectedServices = list.filter(x => selectedList.includes(x.id.toString()))
-      console.log('SERV', selectedServices)
       req.session.selectedList = selectedServices
       res.redirect('/summary')
     }
