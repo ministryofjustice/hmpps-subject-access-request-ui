@@ -26,8 +26,5 @@ export default class ServiceCatalogueClient {
         resolve(list)
       })
     }
-
-    // return response
-    // TODO: implement logic to get list of service from Service Catalogue response
   }
 }
