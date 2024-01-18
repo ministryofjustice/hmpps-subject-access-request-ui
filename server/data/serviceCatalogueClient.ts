@@ -12,9 +12,14 @@ export default class ServiceCatalogueClient {
   async getServiceList(): Promise<any> {
     const token = await ServiceCatalogueClient.getUserToken()
     try {
-      const response = superagent
+      const response = await superagent
         .get(`${config.apis.serviceCatalogue.url}/sar-report-components?env=dev`)
         .set('Authorization', `OAuth ${token}`)
+      const body = response.body;
+
+      console.log(config.apis.serviceCatalogue.url);
+      console.log(body); // Verify it came from the wiremock stub
+
       return (await response).body
     } catch (error) {
       return [

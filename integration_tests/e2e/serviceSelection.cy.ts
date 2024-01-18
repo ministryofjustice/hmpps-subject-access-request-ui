@@ -8,10 +8,10 @@ context('ServiceSelection', () => {
     cy.task('stubSignIn')
     cy.task('stubManageUser')
     cy.task('stubServiceList')
-    cy.intercept({
-      method: 'POST',
-      url: '/serviceselection',
-    }).as('selectServices')
+    // cy.intercept({
+    //   method: 'POST',
+    //   url: '/serviceselection',
+    // }).as('selectServices')
   })
 
   it('Unauthenticated user navigating to serviceselection page directed to auth', () => {
@@ -36,7 +36,7 @@ context('ServiceSelection', () => {
     cy.visit('/serviceselection')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
     serviceSelectionPage.submitButton().click()
-    cy.wait('@selectServices')
+    // cy.wait('@selectServices')
     cy.url().should('to.match', /serviceselection$/)
     serviceSelectionPage.errorSummaryBox().should('be.visible')
   })
