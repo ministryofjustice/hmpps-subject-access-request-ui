@@ -102,7 +102,6 @@ context('Summary', () => {
   it('Selected services are carried through from /serviceselection', () => {
     cy.signIn()
     cy.visit('/serviceselection')
-    cy.wait('@getServices')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
     serviceSelectionPage.checkAllCheckBox().click()
     serviceSelectionPage.submitButton().click()
