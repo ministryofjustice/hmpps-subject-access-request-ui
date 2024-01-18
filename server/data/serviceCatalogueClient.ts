@@ -18,9 +18,11 @@ export default class ServiceCatalogueClient {
       return (await response).body
     } catch (error) {
       return [
-        { id: '1', text: 'This means the catalogue request failed', value: 'https://foo.boo.com', environments: [] },
-        { id: '2', text: 'Or', value: 'https://foo.boo.com' },
-        { id: '3', text: 'This is a test', value: 'https://foo.boo.com', environments: [] },
+        {
+          id: '1',
+          name: 'This is a TEST service.',
+          environments: [{ id: 1, url: 'www.foo.com' }],
+        },
       ]
     }
   }
