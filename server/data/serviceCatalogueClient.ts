@@ -18,11 +18,11 @@ export default class ServiceCatalogueClient {
       return (await response).body
     } catch (error) {
       return [
-        {
-          id: '1',
-          name: 'This is a TEST service.',
-          environments: [{ id: 1, url: 'www.foo.com' }],
-        },
+        // {
+        //   id: '1',
+        //   name: 'This is a TEST service.',
+        //   environments: [{ id: 1, url: 'www.foo.com' }],
+        // },
       ]
     }
   }

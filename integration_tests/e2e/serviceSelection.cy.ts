@@ -7,14 +7,11 @@ context('ServiceSelection', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubManageUser')
+    cy.task('stubServiceList')
     cy.intercept({
       method: 'POST',
       url: '/serviceselection',
     }).as('selectServices')
-    cy.intercept({
-      method: 'GET',
-      url: '/serviceselection',
-    }).as('getServices')
   })
 
   it('Unauthenticated user navigating to serviceselection page directed to auth', () => {
@@ -48,7 +45,6 @@ context('ServiceSelection', () => {
   it('Check all service when checkAll clicked once', () => {
     cy.signIn()
     cy.visit('/serviceselection')
-    // cy.wait('@getServices')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
     serviceSelectionPage.checkAllCheckBox().click()
     cy.get('.govuk-moj-multi-select__checkbox__input').should('be.checked')

@@ -4,13 +4,13 @@ import SummaryPage from '../pages/summary'
 import ServiceSelectionPage from '../pages/serviceSelection'
 import InputsPage from '../pages/inputs'
 import SubjectIdPage from '../pages/subjectId'
-import config from '../../dist/server/config'
 
 context('Summary', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubManageUser')
+    cy.task('stubServiceList')
     // cy.intercept({
     //   method: 'GET',
     //   url: '/serviceselection',
