@@ -11,6 +11,10 @@ context('ServiceSelection', () => {
       method: 'POST',
       url: '/serviceselection',
     }).as('selectServices')
+    cy.intercept({
+      method: 'GET',
+      url: '/serviceselection',
+    }).as('getServices')
   })
 
   it('Unauthenticated user navigating to serviceselection page directed to auth', () => {
@@ -25,6 +29,7 @@ context('ServiceSelection', () => {
   it('Contains check all Checkbox', () => {
     cy.signIn()
     cy.visit('/serviceselection')
+    // cy.wait('@getServices')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
     serviceSelectionPage.checkAllCheckBox().should('exist')
     serviceSelectionPage.submitButton().should('exist')
@@ -43,6 +48,7 @@ context('ServiceSelection', () => {
   it('Check all service when checkAll clicked once', () => {
     cy.signIn()
     cy.visit('/serviceselection')
+    // cy.wait('@getServices')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
     serviceSelectionPage.checkAllCheckBox().click()
     cy.get('.govuk-moj-multi-select__checkbox__input').should('be.checked')
@@ -51,6 +57,7 @@ context('ServiceSelection', () => {
   it('Uncheck all service when checkAll clicked twice', () => {
     cy.signIn()
     cy.visit('/serviceselection')
+    // cy.wait('@getServices')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
     serviceSelectionPage.checkAllCheckBox().click()
     serviceSelectionPage.checkAllCheckBox().click()
@@ -60,6 +67,7 @@ context('ServiceSelection', () => {
   it('Persists selected service when user returning to ServiceSelect page', () => {
     cy.signIn()
     cy.visit('/serviceselection')
+    // cy.wait('@getServices')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
     serviceSelectionPage.checkAllCheckBox().click()
     serviceSelectionPage.submitButton().click()
