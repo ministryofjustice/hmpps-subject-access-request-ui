@@ -20,7 +20,7 @@ export default class ServiceSelectionController {
         for (let j = 0; j < list[i].environments.length; j += 1) {
           urlList.push(list[i].environments[j].url)
         }
-        newList.push({ text: list[i].name, id: list[i].id, urls: urlList }) // , value: list[i].environments[i].url })
+        newList.push({ text: list[i].name, id: list[i].id, urls: urlList })
       }
     }
     req.session.serviceList = newList
