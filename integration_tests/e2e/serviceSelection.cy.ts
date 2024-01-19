@@ -7,7 +7,19 @@ context('ServiceSelection', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubManageUser')
-    cy.task('stubServiceList', '/sar-report-components\\?env=dev')
+    cy.task('stubServiceList', [
+      {
+        id: 351,
+        name: 'hmpps-prisoner-search',
+        environments: [{ id: 47254, url: 'https://prisoner-search-dev.prison.service.justice.gov.uk' }],
+      },
+      { id: 211, name: 'hmpps-book-secure-move-api', environments: [] },
+      {
+        id: 175,
+        name: 'hmpps-prisoner-search-indexer',
+        environments: [{ id: 47270, url: 'https://prisoner-search-indexer-dev.prison.service.justice.gov.uk' }],
+      },
+    ])
   })
 
   it('Unauthenticated user navigating to serviceselection page directed to auth', () => {
@@ -64,7 +76,7 @@ context('ServiceSelection', () => {
   })
 
   it('Raises error message if no services found', () => {
-    cy.task('stubServiceList', '/foo')
+    cy.task('stubServiceList', [])
     cy.signIn()
     cy.visit('/serviceselection')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
