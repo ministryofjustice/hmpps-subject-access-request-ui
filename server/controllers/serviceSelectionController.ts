@@ -13,6 +13,14 @@ export default class ServiceSelectionController {
 
   static async getServices(req: Request, res: Response) {
     const list = await ServiceSelectionController.getServiceCatalogueList()
+    if (list.length === 0) {
+      res.render('pages/serviceselection', {
+        selectedServicesError: `No services found. A report cannot be generated`,
+        servicelist: list,
+      })
+      return
+    }
+
     const newList = []
     for (let i = 0; i < list.length; i += 1) {
       if (list[i].environments[0]) {

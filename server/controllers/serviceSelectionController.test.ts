@@ -57,6 +57,23 @@ describe('getServices', () => {
       }),
     )
   })
+  test('renders an error if no services found', async () => {
+    ServiceSelectionController.getServiceCatalogueList = jest.fn().mockReturnValue([])
+    const req: Request = {
+      // @ts-expect-error stubbing session
+      session: { serviceList: [], selectedList: [{ id: '1' }] },
+      body: { selectedservices: [] },
+    }
+    await ServiceSelectionController.getServices(req, res)
+    expect(res.render).toHaveBeenCalled()
+    expect(res.render).toBeCalledWith(
+      'pages/serviceselection',
+      expect.objectContaining({
+        servicelist: expect.anything(),
+        selectedServicesError: `No services found. A report cannot be generated`,
+      }),
+    )
+  })
 })
 
 describe('selectServices', () => {
