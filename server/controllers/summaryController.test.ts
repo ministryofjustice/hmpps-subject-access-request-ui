@@ -68,7 +68,7 @@ describe('postReportDetails', () => {
           caseReference: 'mockedCaseReference',
           subjectId: 'A1111AA',
         },
-        selectedList: [{ id: '1', text: 'service1', value: '.com' }],
+        selectedList: [{ id: '1', text: 'service1', urls: '.com' }],
       },
       body: { selectedservices: [] },
     }
@@ -97,7 +97,7 @@ describe('postReportDetails', () => {
           caseReference: 'mockedCaseReference',
           subjectId: '',
         },
-        selectedList: [{ id: '1', text: 'service1', value: '.com' }],
+        selectedList: [{ id: '1', text: 'service1', urls: '.com' }],
       },
       body: { selectedservices: [] },
     }

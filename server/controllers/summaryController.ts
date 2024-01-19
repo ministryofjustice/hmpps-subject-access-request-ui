@@ -32,7 +32,7 @@ export default class SummaryController {
     const list: string[] = []
     const servicelist = req.session.selectedList
     for (let i = 0; i < servicelist.length; i += 1) {
-      list.push(`${servicelist[i].text}, ${servicelist[i].value}`)
+      list.push(`${servicelist[i].text}, ${servicelist[i].urls}`)
     }
     let nomisId: string = ''
     let ndeliusId: string = ''
