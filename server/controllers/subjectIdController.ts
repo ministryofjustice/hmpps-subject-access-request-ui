@@ -13,6 +13,7 @@ export default class SubjectIdController {
         subjectId,
         buttonText: 'Confirm and return to summary page',
       })
+      return
     }
 
     res.render('pages/subjectid', {
