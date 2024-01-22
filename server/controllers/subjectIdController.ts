@@ -16,6 +16,7 @@ export default class SubjectIdController {
   static saveSubjectId(req: Request, res: Response): void {
     const { subjectId } = req.body
     const subjectIdError = SubjectIdValidation.validateSubjectId(subjectId)
+    const hasAllAnswers = req.session.selectedList && req.session.selectedList.length !== 0
 
     if (subjectIdError) {
       res.render('pages/subjectid', {
@@ -24,6 +25,10 @@ export default class SubjectIdController {
       })
     } else {
       req.session.userData.subjectId = subjectId
+
+      if (hasAllAnswers) {
+        res.redirect('/summary')
+      }
       res.redirect('/inputs')
     }
   }

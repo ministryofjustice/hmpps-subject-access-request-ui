@@ -20,6 +20,8 @@ export default class InputsController {
     const { dateFrom, dateTo, caseReference } = req.body
     const { dateFromError, dateToError } = InputsValidation.validateDateRange(dateFrom, dateTo)
     const caseReferenceError = InputsValidation.validateCaseReference(caseReference)
+    const hasAllAnswers = req.session.selectedList && req.session.selectedList.length !== 0
+
     if ([dateFromError, dateToError, caseReferenceError].some(item => !!item)) {
       const today = formatDate(new Date().toISOString(), 'short')
       res.render('pages/inputs', {
@@ -31,12 +33,15 @@ export default class InputsController {
         dateToError,
         caseReferenceError,
       })
-      return
-    }
-    req.session.userData.dateFrom = dateFrom
-    req.session.userData.dateTo = dateTo
-    req.session.userData.caseReference = caseReference
+    } else {
+      req.session.userData.dateFrom = dateFrom
+      req.session.userData.dateTo = dateTo
+      req.session.userData.caseReference = caseReference
 
-    res.redirect('/serviceselection')
+      if (hasAllAnswers) {
+        res.redirect('/summary')
+      }
+      res.redirect('/serviceselection')
+    }
   }
 }

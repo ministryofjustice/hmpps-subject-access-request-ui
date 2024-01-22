@@ -86,7 +86,7 @@ describe('saveInputs', () => {
   const res: Response = {
     redirect: jest.fn(),
   }
-  test('persists values to the session and redirects', () => {
+  test('persists values to the session and redirects to service selection', () => {
     InputsController.saveInputs(baseReq, res)
     expect(baseReq.session.userData.dateFrom).toBe('30/12/2022')
     expect(baseReq.session.userData.dateTo).toBe('30/12/2022')
@@ -114,5 +114,29 @@ describe('saveInputs', () => {
     expect(req.session.userData.caseReference).toBe('mockedCaseReference')
     expect(res.redirect).toHaveBeenCalled()
     expect(res.redirect).toBeCalledWith('/serviceselection')
+  })
+
+  test('redirects to summary if all answers have been provided', () => {
+    const req: Request = {
+      // @ts-expect-error stubbing session
+      session: {
+        userData: {
+          subjectId: 'A1111AA',
+          dateFrom: '01/01/2001',
+          dateTo: '25/12/2022',
+          caseReference: 'mockedCaseReference',
+        },
+        selectedList: [{ id: '1', text: 'service1' }],
+      },
+      body: {
+        dateFrom: '30/12/2022',
+        dateTo: '30/12/2022',
+        caseReference: 'mockedCaseReference',
+      },
+    }
+
+    InputsController.saveInputs(req, res)
+    expect(res.redirect).toHaveBeenCalled()
+    expect(res.redirect).toBeCalledWith('/summary')
   })
 })
