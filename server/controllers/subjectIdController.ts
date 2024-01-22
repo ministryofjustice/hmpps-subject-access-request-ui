@@ -28,6 +28,7 @@ export default class SubjectIdController {
 
       if (hasAllAnswers) {
         res.redirect('/summary')
+        return
       }
       res.redirect('/inputs')
     }

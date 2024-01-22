@@ -40,6 +40,7 @@ export default class InputsController {
 
       if (hasAllAnswers) {
         res.redirect('/summary')
+        return
       }
       res.redirect('/serviceselection')
     }
