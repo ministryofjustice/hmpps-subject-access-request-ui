@@ -80,7 +80,7 @@ describe('saveSubjectId', () => {
     })
 
     describe('when a user has already provided a subject ID in the session', () => {
-      test('overwrites previous subjec tID', () => {
+      test('overwrites previous subject ID', () => {
         const req: Request = {
           ...baseReq,
           // @ts-expect-error stubbing session
@@ -94,6 +94,28 @@ describe('saveSubjectId', () => {
         expect(req.session.userData.subjectId).toBe('A1111AA')
         expect(res.redirect).toHaveBeenCalled()
         expect(res.redirect).toBeCalledWith('/inputs')
+      })
+
+      test('redirects to summary if all answers have been provided', () => {
+        const req: Request = {
+          // @ts-expect-error stubbing session
+          session: {
+            userData: {
+              subjectId: 'A1111AA',
+              dateFrom: '01/01/2001',
+              dateTo: '25/12/2022',
+              caseReference: 'mockedCaseReference',
+            },
+            selectedList: [{ id: '1', text: 'service1' }],
+          },
+          body: {
+            subjectId: 'A1111AA',
+          },
+        }
+
+        SubjectIdController.saveSubjectId(req, res)
+        expect(res.redirect).toHaveBeenCalled()
+        expect(res.redirect).toBeCalledWith('/summary')
       })
     })
   })
