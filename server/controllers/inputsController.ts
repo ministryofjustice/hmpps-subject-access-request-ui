@@ -15,7 +15,7 @@ export default class InputsController {
         dateFrom: userData.dateFrom,
         dateTo: userData.dateTo || today,
         caseReference: userData.caseReference,
-        buttonText: 'Return to summary page',
+        buttonText: 'Confirm and return to summary page',
       })
       return
     }

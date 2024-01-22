@@ -17,6 +17,7 @@ export default class ServiceSelectionController {
       res.render('pages/serviceselection', {
         selectedServicesError: `No services found. A report cannot be generated`,
         servicelist: list,
+        buttonText: 'Confirm',
       })
       return
     }
@@ -33,10 +34,20 @@ export default class ServiceSelectionController {
     }
     req.session.serviceList = newList
     const selectedList = req.session.selectedList ?? []
+    const hasAllAnswers = req.session.selectedList && req.session.selectedList.length !== 0
+    if (hasAllAnswers) {
+      res.render('pages/serviceselection', {
+        servicelist: newList,
+        selectedList: selectedList.map(x => x.id),
+        buttonText: 'Confirm and return to summary page',
+      })
+      return
+    }
 
     res.render('pages/serviceselection', {
       servicelist: newList,
       selectedList: selectedList.map(x => x.id),
+      buttonText: 'Confirm',
     })
   }
 

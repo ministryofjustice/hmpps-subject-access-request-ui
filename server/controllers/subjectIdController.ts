@@ -11,7 +11,7 @@ export default class SubjectIdController {
     if (hasAllAnswers) {
       res.render('pages/subjectid', {
         subjectId,
-        buttonText: 'Continue to summary page',
+        buttonText: 'Confirm and return to summary page',
       })
     }
 
