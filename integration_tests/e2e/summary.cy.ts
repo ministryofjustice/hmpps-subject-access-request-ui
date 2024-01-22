@@ -191,7 +191,7 @@ context('Summary', () => {
       const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
       serviceSelectionPage.checkAllCheckBox().click()
       serviceSelectionPage.submitButton().click()
-      const summaryPage = Page.verifyOnPage(SummaryPage)
+      Page.verifyOnPage(SummaryPage)
       cy.visit('/subject-id')
       const revisitedSubjectIdPage = Page.verifyOnPage(SubjectIdPage)
       revisitedSubjectIdPage.continueButton().click()

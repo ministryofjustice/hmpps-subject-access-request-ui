@@ -8,11 +8,23 @@ export default class InputsController {
   static getInputs(req: Request, res: Response) {
     const userData: UserData = req.session.userData ?? {}
     const today = formatDate(new Date().toISOString(), 'short')
+    const hasAllAnswers = req.session.selectedList && req.session.selectedList.length !== 0
+    if (hasAllAnswers) {
+      res.render('pages/inputs', {
+        today,
+        dateFrom: userData.dateFrom,
+        dateTo: userData.dateTo || today,
+        caseReference: userData.caseReference,
+        buttonText: 'Return to summary page',
+      })
+      return
+    }
     res.render('pages/inputs', {
       today,
       dateFrom: userData.dateFrom,
       dateTo: userData.dateTo || today,
       caseReference: userData.caseReference,
+      buttonText: 'Confirm',
     })
   }
 

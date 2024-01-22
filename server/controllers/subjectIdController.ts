@@ -7,9 +7,17 @@ export default class SubjectIdController {
       req.session.userData = {}
     }
     const { subjectId } = req.session.userData
+    const hasAllAnswers = req.session.selectedList && req.session.selectedList.length !== 0
+    if (hasAllAnswers) {
+      res.render('pages/subjectid', {
+        subjectId,
+        buttonText: 'Continue to summary page',
+      })
+    }
 
     res.render('pages/subjectid', {
       subjectId,
+      buttonText: 'Confirm',
     })
   }
 
