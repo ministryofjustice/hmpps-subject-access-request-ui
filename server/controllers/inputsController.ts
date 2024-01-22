@@ -44,6 +44,7 @@ export default class InputsController {
         dateFromError,
         dateToError,
         caseReferenceError,
+        buttonText: 'Confirm',
       })
     } else {
       req.session.userData.dateFrom = dateFrom

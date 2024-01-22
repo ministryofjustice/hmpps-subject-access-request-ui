@@ -30,6 +30,7 @@ export default class SubjectIdController {
       res.render('pages/subjectid', {
         subjectId,
         subjectIdError,
+        buttonText: 'Confirm',
       })
     } else {
       req.session.userData.subjectId = subjectId

@@ -63,6 +63,7 @@ export default class ServiceSelectionController {
         res.render('pages/serviceselection', {
           selectedServicesError,
           servicelist: list,
+          buttonText: 'Confirm',
         })
         return
       }
