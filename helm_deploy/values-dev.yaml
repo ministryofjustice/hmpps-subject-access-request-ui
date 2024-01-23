@@ -14,7 +14,7 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
     SERVICE_CATALOGUE_URL: "https://service-catalogue-dev.hmpps.service.justice.gov.uk/v1"
     ENVIRONMENT_NAME: DEV
-    SAR_ENDPOINT_URL: "https://subject-access-request-dev.hmpps.service.justice.gov.uk"
+    SAR_ENDPOINT_URL: "https://subject-access-request-api-dev.hmpps.service.justice.gov.uk"
 
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev

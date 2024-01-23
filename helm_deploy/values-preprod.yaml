@@ -14,7 +14,7 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-preprod.prison.service.justice.gov.uk"
     SERVICE_CATALOGUE_URL: "https://service-catalogue-dev.hmpps.service.justice.gov.uk/v1" # There doesn't seem to be a preprod environment - using dev url for now
     ENVIRONMENT_NAME: PRE-PRODUCTION
-    SAR_ENDPOINT_URL: "https://subject-access-request-preprod.hmpps.service.justice.gov.uk"
+    SAR_ENDPOINT_URL: "https://subject-access-request-api-preprod.hmpps.service.justice.gov.uk"
 
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
