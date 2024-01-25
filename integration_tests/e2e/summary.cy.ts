@@ -10,6 +10,19 @@ context('Summary', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubManageUser')
+    cy.task('stubServiceList', [
+      {
+        id: 351,
+        name: 'hmpps-prisoner-search',
+        environments: [{ id: 47254, url: 'https://prisoner-search-dev.prison.service.justice.gov.uk' }],
+      },
+      { id: 211, name: 'hmpps-book-secure-move-api', environments: [] },
+      {
+        id: 175,
+        name: 'hmpps-prisoner-search-indexer',
+        environments: [{ id: 47270, url: 'https://prisoner-search-indexer-dev.prison.service.justice.gov.uk' }],
+      },
+    ])
   })
 
   // All pages direct users to auth
@@ -105,7 +118,7 @@ context('Summary', () => {
     serviceSelectionPage.checkAllCheckBox().click()
     serviceSelectionPage.submitButton().click()
     const summaryPage = Page.verifyOnPage(SummaryPage)
-    summaryPage.reportSummaryBox().contains('TestService1')
+    summaryPage.reportSummaryBox().contains('hmpps-prisoner-search-indexer')
   })
 
   it('Details are carried through from /inputs', () => {
@@ -155,11 +168,59 @@ context('Summary', () => {
     )
   })
 
-  it('Redirects to /confirmation on clicking submit button', () => {
+  it('Redirects to /summary if info not present', () => {
     cy.signIn()
     cy.visit('/summary')
     const summaryPage = Page.verifyOnPage(SummaryPage)
     summaryPage.acceptConfirmButton().click()
-    cy.url().should('to.match', /confirmation$/)
+    cy.url().should('to.match', /summary$/)
   })
+
+  context('when all answers have been completed in the session', () => {
+    it('pages direct back to /summary', () => {
+      cy.signIn()
+      cy.visit('/subject-id')
+      const subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+      subjectIdPage.idTextBox().clear().type('A1111AA')
+      subjectIdPage.continueButton().click()
+      const inputsPage = Page.verifyOnPage(InputsPage)
+      inputsPage.datePickerFrom().clear().type('01/01/2001')
+      inputsPage.datePickerTo().clear().type('01/01/2021')
+      inputsPage.caseReferenceTextbox().clear().type('exampleCaseReference')
+      inputsPage.continueButton().click()
+      const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
+      serviceSelectionPage.checkAllCheckBox().click()
+      serviceSelectionPage.submitButton().click()
+      Page.verifyOnPage(SummaryPage)
+      cy.visit('/subject-id')
+      const revisitedSubjectIdPage = Page.verifyOnPage(SubjectIdPage)
+      revisitedSubjectIdPage.continueButton().click()
+      Page.verifyOnPage(SummaryPage)
+      cy.visit('/inputs')
+      const revisitedInputsPage = Page.verifyOnPage(InputsPage)
+      revisitedInputsPage.continueButton().click()
+      Page.verifyOnPage(SummaryPage)
+    })
+  })
+
+  // The below test fails because the backend isn't running and so the confirmation page
+  // doesn't render. I'm not sure how to test this.
+  // it('Redirects to /confirmation on clicking submit button', () => {
+  //   cy.signIn()
+  //   cy.visit('/subject-id')
+  //   const subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+  //   subjectIdPage.idTextBox().clear().type('A1111AA')
+  //   subjectIdPage.continueButton().click()
+  //   const inputsPage = Page.verifyOnPage(InputsPage)
+  //   inputsPage.datePickerFrom().clear().type('01/01/2001')
+  //   inputsPage.datePickerTo().clear().type('01/01/2021')
+  //   inputsPage.caseReferenceTextbox().clear().type('exampleCaseReference')
+  //   inputsPage.continueButton().click()
+  //   const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
+  //   serviceSelectionPage.checkAllCheckBox().click()
+  //   serviceSelectionPage.submitButton().click()
+  //   const summaryPage = Page.verifyOnPage(SummaryPage)
+  //   summaryPage.acceptConfirmButton().click()
+  //   cy.url().should('to.match', /confirmation$/)
+  // })
 })

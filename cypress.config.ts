@@ -3,6 +3,7 @@ import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
 import manageUsersApi from './integration_tests/mockApis/manageUsersApi'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
+import stubServiceList from './integration_tests/mockApis/serviceCatalogue'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -23,6 +24,7 @@ export default defineConfig({
         ...auth,
         ...manageUsersApi,
         ...tokenVerification,
+        stubServiceList,
       })
     },
     baseUrl: 'http://localhost:3007',

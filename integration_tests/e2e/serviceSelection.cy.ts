@@ -7,10 +7,19 @@ context('ServiceSelection', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubManageUser')
-    cy.intercept({
-      method: 'POST',
-      url: '/serviceselection',
-    }).as('selectServices')
+    cy.task('stubServiceList', [
+      {
+        id: 351,
+        name: 'hmpps-prisoner-search',
+        environments: [{ id: 47254, url: 'https://prisoner-search-dev.prison.service.justice.gov.uk' }],
+      },
+      { id: 211, name: 'hmpps-book-secure-move-api', environments: [] },
+      {
+        id: 175,
+        name: 'hmpps-prisoner-search-indexer',
+        environments: [{ id: 47270, url: 'https://prisoner-search-indexer-dev.prison.service.justice.gov.uk' }],
+      },
+    ])
   })
 
   it('Unauthenticated user navigating to serviceselection page directed to auth', () => {
@@ -35,7 +44,6 @@ context('ServiceSelection', () => {
     cy.visit('/serviceselection')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
     serviceSelectionPage.submitButton().click()
-    cy.wait('@selectServices')
     cy.url().should('to.match', /serviceselection$/)
     serviceSelectionPage.errorSummaryBox().should('be.visible')
   })
@@ -65,5 +73,13 @@ context('ServiceSelection', () => {
     serviceSelectionPage.submitButton().click()
     cy.visit('/serviceselection')
     cy.get('.govuk-moj-multi-select__checkbox__input').should('be.checked')
+  })
+
+  it('Raises error message if no services found', () => {
+    cy.task('stubServiceList', [])
+    cy.signIn()
+    cy.visit('/serviceselection')
+    const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
+    serviceSelectionPage.errorSummaryBox().should('be.visible')
   })
 })

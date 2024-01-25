@@ -6,7 +6,7 @@ export default class ServiceSelectionValidation {
       return `At least one service must be selected`
     }
     for (let i = 0; i < selections.length; i += 1) {
-      if (serviceList.findIndex(x => x.id === selections[i]) === -1) {
+      if (serviceList.findIndex(x => x.id.toString() === selections[i]) === -1) {
         return `Invalid service selection`
       }
     }

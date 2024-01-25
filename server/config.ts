@@ -54,6 +54,9 @@ export default {
     expiryMinutes: Number(get('WEB_SESSION_TIMEOUT_IN_MINUTES', 120)),
   },
   apis: {
+    subjectAccessRequest: {
+      url: get('SAR_ENDPOINT_URL', 'http://localhost:8080', requiredInProduction),
+    },
     hmppsAuth: {
       url: get('HMPPS_AUTH_URL', 'http://localhost:9090/auth', requiredInProduction),
       externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://localhost:9090/auth')),
@@ -85,7 +88,11 @@ export default {
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
     serviceCatalogue: {
-      url: get('SERVICE_CATALOGUE_URL', 'http://localhost:1337/v1', requiredInProduction),
+      url: get(
+        'SERVICE_CATALOGUE_URL',
+        'https://service-catalogue-dev.hmpps.service.justice.gov.uk/v1', /// sar-report-components?env=dev',
+        requiredInProduction,
+      ),
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
