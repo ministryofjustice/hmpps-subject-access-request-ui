@@ -205,22 +205,28 @@ context('Summary', () => {
 
   // The below test fails because the backend isn't running and so the confirmation page
   // doesn't render. I'm not sure how to test this.
-  // it('Redirects to /confirmation on clicking submit button', () => {
-  //   cy.signIn()
-  //   cy.visit('/subject-id')
-  //   const subjectIdPage = Page.verifyOnPage(SubjectIdPage)
-  //   subjectIdPage.idTextBox().clear().type('A1111AA')
-  //   subjectIdPage.continueButton().click()
-  //   const inputsPage = Page.verifyOnPage(InputsPage)
-  //   inputsPage.datePickerFrom().clear().type('01/01/2001')
-  //   inputsPage.datePickerTo().clear().type('01/01/2021')
-  //   inputsPage.caseReferenceTextbox().clear().type('exampleCaseReference')
-  //   inputsPage.continueButton().click()
-  //   const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
-  //   serviceSelectionPage.checkAllCheckBox().click()
-  //   serviceSelectionPage.submitButton().click()
-  //   const summaryPage = Page.verifyOnPage(SummaryPage)
-  //   summaryPage.acceptConfirmButton().click()
-  //   cy.url().should('to.match', /confirmation$/)
-  // })
+  it('Redirects to /confirmation on clicking submit button', () => {
+    cy.task('stubCreateSubjectAccessRequest', 201)
+    cy.intercept({
+      method: 'POST',
+      url: '/summary',
+    }).as('postReportDetails')
+    cy.signIn()
+    cy.visit('/subject-id')
+    const subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+    subjectIdPage.idTextBox().clear().type('A1111AA')
+    subjectIdPage.continueButton().click()
+    const inputsPage = Page.verifyOnPage(InputsPage)
+    inputsPage.datePickerFrom().clear().type('01/01/2001')
+    inputsPage.datePickerTo().clear().type('01/01/2021')
+    inputsPage.caseReferenceTextbox().clear().type('exampleCaseReference')
+    inputsPage.continueButton().click()
+    const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
+    serviceSelectionPage.checkAllCheckBox().click()
+    serviceSelectionPage.submitButton().click()
+    const summaryPage = Page.verifyOnPage(SummaryPage)
+    summaryPage.acceptConfirmButton().click()
+    cy.wait('@postReportDetails')
+    cy.url().should('to.match', /confirmation$/)
+  })
 })
