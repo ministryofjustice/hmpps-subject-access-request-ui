@@ -84,9 +84,10 @@ export default {
     serviceCatalogue: {
       url: get(
         'SERVICE_CATALOGUE_URL',
-        'https://service-catalogue-dev.hmpps.service.justice.gov.uk/v1', /// sar-report-components?env=dev',
+        'https://service-catalogue-dev.hmpps.service.justice.gov.uk/v1',
         requiredInProduction,
       ),
+      env: get('SERVICE_CATALOGUE_ENV', 'dev', requiredInProduction),
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
