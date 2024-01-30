@@ -13,7 +13,7 @@ export default class ServiceCatalogueClient {
     const token = await ServiceCatalogueClient.getUserToken()
     try {
       const response = await superagent
-        .get(`${config.apis.serviceCatalogue.url}/sar-report-components?env=dev`)
+        .get(`${config.apis.serviceCatalogue.url}/sar-report-components?env=${config.apis.serviceCatalogue.env}`)
         .set('Authorization', `OAuth ${token}`)
       const { body } = response
       return body

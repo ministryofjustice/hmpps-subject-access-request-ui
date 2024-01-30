@@ -71,6 +71,7 @@ services:
       - TOKEN_VERIFICATION_ENABLED=false
       - INGRESS_URL=http://localhost:3000
       - SERVICE_CATALOGUE_URL=http://localhost:1337/v1
+      - SERVICE_CATALOGUE_ENV=dev
 
 
 
