@@ -21,12 +21,12 @@ The original proposal was to use a queue in order to decouple the raising of a S
 
 ## Option B
 
-The alternative proposal was originally raised by Ben Pitt and the team have since done workshops in order to reduce the number of moving parts and use the database as the definitive source of truth on which reports still need to be fulfilled. In this approach, the flow is as follows:
+The alternative proposal was originally raised in order to reduce the number of moving parts and use the database as the definitive source of truth on which reports still need to be fulfilled. In this approach, the flow is as follows:
 
-- *SAR Worker* polls the *SAR API* on an infrequent interval to request a new task.
-- When polled, the *SAR API* checks the database for any reports matching the following:-
-    - Report status is not set to 'Complete'
-    - Report's last claimed date is either unset or not within the lock period[^1]
+- *SAR Worker* polls the *SAR API* on an interval to request a new task.
+- When polled, the *SAR API* checks the database for any reports matching either of the following:-
+    - Report has 0 claim attempts
+    - Report's last claim date is not within the lock period[^1] and the status is not set to 'Complete'
 - If any results are found, return the task details.
 - *SAR Worker* makes a PATCH request to set a lock on the report so no other worker can work on the same task.
 - *SAR API* sets a lock in the database by updating the claimDate if and only if the claimDate is already within the lock period[^1]
