@@ -1,5 +1,6 @@
 import Page from '../pages/page'
 import AuthSignInPage from '../pages/authSignIn'
+import ReportsPage from '../pages/reports'
 
 context('Reports', () => {
   beforeEach(() => {
@@ -16,5 +17,16 @@ context('Reports', () => {
   it('Renders for authenticated users', () => {
     cy.signIn()
     cy.visit('/reports')
+  })
+
+  it('Displays table of reports', () => {
+    cy.signIn()
+    cy.visit('/reports')
+    const reportsPage = Page.verifyOnPage(ReportsPage)
+    reportsPage.reportsTable().should('exist')
+    reportsPage.reportsTable().contains('Date of request')
+    reportsPage.reportsTable().contains('Case Reference')
+    reportsPage.reportsTable().contains('Subject ID')
+    reportsPage.reportsTable().contains('Status')
   })
 })
