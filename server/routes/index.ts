@@ -32,5 +32,9 @@ export default function routes(service: Services): Router {
 
   get('/confirmation', ConfirmationController.getConfirmation)
 
+  get('/reports', (req, res, next) => {
+    res.render('pages/reports')
+  })
+
   return router
 }

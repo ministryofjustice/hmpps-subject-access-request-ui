@@ -102,3 +102,14 @@ describe('GET /confirmation', () => {
       })
   })
 })
+
+describe('GET /reports', () => {
+  it('should render reports page', () => {
+    return request(app)
+      .get('/reports')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Subject Access Request Reports')
+      })
+  })
+})
