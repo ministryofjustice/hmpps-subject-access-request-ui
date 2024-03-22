@@ -5,66 +5,26 @@
 
   <h1 class="govuk-heading-l">Subject Access Request Reports</h1>
 
-  {{ govukTable({
-    firstCellIsHeader: false,
-    head: [
-      {
-        text: "Date of request"
-      },
-      {
-        text: "Case Reference"
-      },
-      {
-        text: "Subject ID"
-      },
-      {
-        text: "Status"
-      }
-    ],
-    rows: [
-      [
-        {
-          text: "25/03/2024"
-        },
-        {
-          text: "CaseReference1"
-        },
-        {
-          text: "A1234BC"
-        },
-        {
-          text: "Pending"
-        }
-      ],
-      [
-        {
-          text: "24/02/2024"
-        },
-        {
-          text: "CaseReference2"
-        },
-        {
-          text: "B1234CD"
-        },
-        {
-          text: "Complete"
-        }
-      ],
-      [
-        {
-          text: "23/01/2024"
-        },
-        {
-          text: "CaseReference3"
-        },
-        {
-          text: "C123456"
-        },
-        {
-          text: "Complete"
-        }
-      ]
-    ]
-  }) }}
+    <table class="govuk-table">
+      <caption class="govuk-table__caption govuk-table__caption--m">Dates and amounts</caption>
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Date of request</th>
+          <th scope="col" class="govuk-table__header">Case Reference</th>
+          <th scope="col" class="govuk-table__header">Subject ID</th>
+          <th scope="col" class="govuk-table__header">Status</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for report in reportList %}
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">{{report.dateOfRequest}}</td>
+                    <td class="govuk-table__cell">{{report.sarCaseReference}}</td>
+                    <td class="govuk-table__cell">{{report.subjectId}}</td>
+                    <td class="govuk-table__cell">{{report.status}}</td>
+                </tr>
+            {% endfor %}
+      </tbody>
+    </table>
 
 {% endblock %}
