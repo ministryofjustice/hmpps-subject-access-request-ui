@@ -33,11 +33,11 @@ context('Confirmation', () => {
     confirmationPage.nextSteps().should('exist')
   })
 
-  it('Displays link to view reports page', () => {
+  it('Redirects to /reports on clicking view reports link', () => {
     cy.signIn()
     cy.visit('/confirmation')
     const confirmationPage = Page.verifyOnPage(ConfirmationPage)
-    confirmationPage.viewReportsLink().should('exist')
-    confirmationPage.viewReportsLink().should('have.attr', 'href', '/reports')
+    confirmationPage.viewReportsLink().click()
+    cy.url().should('to.match', /reports$/)
   })
 })

@@ -1,5 +1,4 @@
 import type { Request, Response } from 'express'
-import { Report } from '../@types/report'
 
 export default class ReportsController {
   static getSubjectAccessRequestList() {
