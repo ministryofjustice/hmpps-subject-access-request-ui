@@ -29,4 +29,13 @@ context('Reports', () => {
     reportsPage.reportsTable().contains('Subject ID')
     reportsPage.reportsTable().contains('Status')
   })
+
+  it('Can be sorted on date of request', () => {
+    cy.signIn()
+    cy.visit('/reports')
+    const reportsPage = Page.verifyOnPage(ReportsPage)
+    reportsPage.reportsTableRow().first().contains('2024-12-01')
+    reportsPage.sortByDateButton().click()
+    reportsPage.reportsTableRow().first().contains('2022-12-30')
+  })
 })
