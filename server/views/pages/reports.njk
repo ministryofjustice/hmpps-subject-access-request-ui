@@ -1,0 +1,29 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% block content %}
+
+  <h1 class="govuk-heading-l">Subject Access Request Reports</h1>
+
+    <table class="govuk-table" data-module="moj-sortable-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header" aria-sort="descending">Date of request</th>
+          <th scope="col" class="govuk-table__header">Case Reference</th>
+          <th scope="col" class="govuk-table__header">Subject ID</th>
+          <th scope="col" class="govuk-table__header">Status</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for report in reportList %}
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">{{report.dateOfRequest}}</td>
+                    <td class="govuk-table__cell">{{report.sarCaseReference}}</td>
+                    <td class="govuk-table__cell">{{report.subjectId}}</td>
+                    <td class="govuk-table__cell">{{report.status}}</td>
+                </tr>
+            {% endfor %}
+      </tbody>
+    </table>
+
+{% endblock %}
