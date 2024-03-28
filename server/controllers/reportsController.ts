@@ -35,13 +35,17 @@ export default class ReportsController {
 
   static getReports(req: Request, res: Response) {
     const { reports, numberOfReports } = ReportsController.getSubjectAccessRequestList()
+    const currentPage = (req.query.page || '1') as string
+    const parsedPage = Number.parseInt(currentPage, 10) || 1
+    const visiblePageLinks = 5
+    const numberOfPages = Math.ceil(numberOfReports / RESULTSPERPAGE)
 
-    const previous = 1
-    const next = 2
-    const from = 1
-    const to = 50
+    const previous = Math.max(1, parsedPage - 1)
+    const next = Math.min(parsedPage + 1, numberOfPages)
+    const from = (parsedPage - 1) * RESULTSPERPAGE + 1
+    const to = Math.min(parsedPage * RESULTSPERPAGE, numberOfReports)
 
-    const pageLinks = getPageLinks({ pagesToShow: 5, numberOfPages: 50, currentPage: 1 })
+    const pageLinks = getPageLinks({ visiblePageLinks, numberOfPages, currentPage: parsedPage })
 
     res.render('pages/reports', {
       reportList: reports,

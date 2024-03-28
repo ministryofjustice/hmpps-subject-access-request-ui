@@ -35,9 +35,10 @@ afterEach(() => {
 })
 
 describe('getReports', () => {
-  const req: Request = {
+  let req: Request = {
     // @ts-expect-error stubbing session
     session: {},
+    query: {},
   }
   // @ts-expect-error stubbing res.render
   const res: Response = {
@@ -73,5 +74,185 @@ describe('getReports', () => {
         ],
       }),
     )
+  })
+
+  describe('pagination', () => {
+    beforeEach(() => {
+      ReportsController.getSubjectAccessRequestList = jest.fn().mockReturnValue({
+        reports: [],
+        numberOfReports: 240,
+      })
+    })
+    describe('when the current page is the first page', () => {
+      test('previous remains on first page', () => {
+        // TODO: update to remove previous for first page
+        ReportsController.getReports(req, res)
+        expect(res.render).toBeCalledWith(
+          'pages/reports',
+          expect.objectContaining({
+            previous: 1,
+          }),
+        )
+      })
+
+      test('next directs to second page', () => {
+        ReportsController.getReports(req, res)
+        expect(res.render).toBeCalledWith(
+          'pages/reports',
+          expect.objectContaining({
+            next: 2,
+          }),
+        )
+      })
+
+      test('from gives the first number of the range of displayed results on the page', () => {
+        ReportsController.getReports(req, res)
+        expect(res.render).toBeCalledWith(
+          'pages/reports',
+          expect.objectContaining({
+            from: 1,
+          }),
+        )
+      })
+
+      test('to gives the last number of the range of displayed results on the page', () => {
+        ReportsController.getReports(req, res)
+        expect(res.render).toBeCalledWith(
+          'pages/reports',
+          expect.objectContaining({
+            to: 50,
+          }),
+        )
+      })
+
+      test('numberOfReports gives the total number of reports', () => {
+        ReportsController.getReports(req, res)
+        expect(res.render).toBeCalledWith(
+          'pages/reports',
+          expect.objectContaining({
+            numberOfReports: 240,
+          }),
+        )
+      })
+    })
+
+    describe('when the current page is the fifth page', () => {
+      beforeEach(() => {
+        req = {
+          // @ts-expect-error stubbing session
+          session: {},
+          query: { page: '5' },
+        }
+      })
+      test('previous directs to the fourth page', () => {
+        ReportsController.getReports(req, res)
+        expect(res.render).toBeCalledWith(
+          'pages/reports',
+          expect.objectContaining({
+            previous: 4,
+          }),
+        )
+      })
+
+      test('next remains on the fifth page', () => {
+        // TODO: remove the next button on last pages
+        ReportsController.getReports(req, res)
+        expect(res.render).toBeCalledWith(
+          'pages/reports',
+          expect.objectContaining({
+            next: 5,
+          }),
+        )
+      })
+
+      test('from gives the first number of the range of displayed results on the page', () => {
+        ReportsController.getReports(req, res)
+        expect(res.render).toBeCalledWith(
+          'pages/reports',
+          expect.objectContaining({
+            from: 201,
+          }),
+        )
+      })
+
+      test('to gives the last number of the range of displayed results on the page', () => {
+        ReportsController.getReports(req, res)
+        expect(res.render).toBeCalledWith(
+          'pages/reports',
+          expect.objectContaining({
+            to: 240,
+          }),
+        )
+      })
+
+      test('numberOfReports gives the total number of reports', () => {
+        ReportsController.getReports(req, res)
+        expect(res.render).toBeCalledWith(
+          'pages/reports',
+          expect.objectContaining({
+            numberOfReports: 240,
+          }),
+        )
+      })
+    })
+
+    describe('when the current page is the third page', () => {
+      beforeEach(() => {
+        req = {
+          // @ts-expect-error stubbing session
+          session: {},
+          query: { page: '3' },
+        }
+      })
+      test('previous directs to the second page', () => {
+        ReportsController.getReports(req, res)
+        expect(res.render).toBeCalledWith(
+          'pages/reports',
+          expect.objectContaining({
+            previous: 2,
+          }),
+        )
+      })
+
+      test('next directs to fourth page', () => {
+        ReportsController.getReports(req, res)
+        expect(res.render).toBeCalledWith(
+          'pages/reports',
+          expect.objectContaining({
+            next: 4,
+          }),
+        )
+      })
+
+      test('from gives the first number of the range of displayed results on the page', () => {
+        ReportsController.getReports(req, res)
+        expect(res.render).toBeCalledWith(
+          'pages/reports',
+          expect.objectContaining({
+            from: 101,
+          }),
+        )
+      })
+
+      test('to gives the last number of the range of displayed results on the page', () => {
+        ReportsController.getReports(req, res)
+        expect(res.render).toBeCalledWith(
+          'pages/reports',
+          expect.objectContaining({
+            to: 150,
+          }),
+        )
+      })
+
+      test('numberOfReports gives the total number of reports', () => {
+        ReportsController.getReports(req, res)
+        expect(res.render).toBeCalledWith(
+          'pages/reports',
+          expect.objectContaining({
+            numberOfReports: 240,
+          }),
+        )
+      })
+    })
   })
 })
