@@ -1,9 +1,31 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 
 {% block content %}
 
+      {% set pagination %}
+        {{ mojPagination({
+          results: {
+            from: from,
+            to: to,
+            count: numberOfReports
+          },
+          previous: {
+            text: 'Previous',
+            href: '/reports?page=' + previous
+          },
+          next: {
+            text: 'Next',
+            href: '/reports?page=' + next
+          },
+          items: pageLinks
+        }) }}
+      {% endset %}
+
   <h1 class="govuk-heading-l">Subject Access Request Reports</h1>
+
+  {{ pagination | safe }}
 
     <table class="govuk-table" data-module="moj-sortable-table">
       <thead class="govuk-table__head">
@@ -25,5 +47,7 @@
             {% endfor %}
       </tbody>
     </table>
+
+  {{ pagination | safe }}
 
 {% endblock %}
