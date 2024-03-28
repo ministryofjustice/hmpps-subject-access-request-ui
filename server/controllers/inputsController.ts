@@ -1,6 +1,5 @@
 import type { Request, Response } from 'express'
 
-import { TelemetryClient } from 'applicationinsights'
 import type { UserData } from '../@types/userdata'
 import InputsValidation from './inputsValidation'
 import formatDate from '../utils/dateHelpers'
