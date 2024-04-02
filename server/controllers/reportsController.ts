@@ -40,8 +40,9 @@ export default class ReportsController {
     const visiblePageLinks = 5
     const numberOfPages = Math.ceil(numberOfReports / RESULTSPERPAGE)
 
-    const previous = Math.max(1, parsedPage - 1)
-    const next = Math.min(parsedPage + 1, numberOfPages)
+    const previous = parsedPage - 1
+    const next = parsedPage === numberOfPages ? 0 : parsedPage + 1
+
     const from = (parsedPage - 1) * RESULTSPERPAGE + 1
     const to = Math.min(parsedPage * RESULTSPERPAGE, numberOfReports)
 

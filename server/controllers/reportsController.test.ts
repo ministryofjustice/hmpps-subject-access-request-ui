@@ -84,13 +84,12 @@ describe('getReports', () => {
       })
     })
     describe('when the current page is the first page', () => {
-      test('previous remains on first page', () => {
-        // TODO: update to remove previous for first page
+      test('previous will be 0 and so will not appear', () => {
         ReportsController.getReports(req, res)
         expect(res.render).toBeCalledWith(
           'pages/reports',
           expect.objectContaining({
-            previous: 1,
+            previous: 0,
           }),
         )
       })
@@ -154,13 +153,12 @@ describe('getReports', () => {
         )
       })
 
-      test('next remains on the fifth page', () => {
-        // TODO: remove the next button on last pages
+      test('next will be 0 and so will not appear', () => {
         ReportsController.getReports(req, res)
         expect(res.render).toBeCalledWith(
           'pages/reports',
           expect.objectContaining({
-            next: 5,
+            next: 0,
           }),
         )
       })

@@ -4,6 +4,14 @@
 
 {% block content %}
 
+{% if previous != 0 %}
+  {% set previousButton = { text: 'Previous', href: '/reports?page=' + previous } %}
+{% endif %}
+
+{% if next != 0 %}
+  {% set nextButton = { text: 'Next', href: '/reports?page=' + next } %}
+{% endif %}
+
       {% set pagination %}
         {{ mojPagination({
           results: {
@@ -11,14 +19,8 @@
             to: to,
             count: numberOfReports
           },
-          previous: {
-            text: 'Previous',
-            href: '/reports?page=' + previous
-          },
-          next: {
-            text: 'Next',
-            href: '/reports?page=' + next
-          },
+          previous: previousButton,
+          next: nextButton,
           items: pageLinks
         }) }}
       {% endset %}
