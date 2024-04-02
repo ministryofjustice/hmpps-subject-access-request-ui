@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import ServiceCatalogueClient from '../data/serviceCatalogueClient'
 import ServiceSelectionValidation from './serviceSelectionValidation'
+import { dataAccess } from '../data'
 
 export default class ServiceSelectionController {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -54,6 +55,12 @@ export default class ServiceSelectionController {
   static selectServices(req: Request, res: Response) {
     const list = req.session.serviceList
     const selectedList: string[] = []
+    if (dataAccess().telemetryClient) {
+      dataAccess().telemetryClient.trackEvent({
+        name: 'selectServices',
+        properties: { id: req.session.selectedList },
+      })
+    }
     if (list) {
       if (Array.isArray(req.body.selectedServices)) selectedList.push(...req.body.selectedServices)
       else if (req.body.selectedServices) selectedList.push(req.body.selectedServices)

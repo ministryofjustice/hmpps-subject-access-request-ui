@@ -31,6 +31,9 @@ export default class SummaryController {
     const userData = req.session.userData ?? {}
     const list: string[] = []
     const servicelist = req.session.selectedList
+    if (dataAccess().telemetryClient) {
+      dataAccess().telemetryClient.trackEvent({ name: 'postReportDetails', properties: { id: userData.subjectId } })
+    }
     for (let i = 0; i < servicelist.length; i += 1) {
       list.push(`${servicelist[i].text}, ${servicelist[i].urls}`)
     }
