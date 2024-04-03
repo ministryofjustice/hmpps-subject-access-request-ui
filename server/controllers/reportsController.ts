@@ -1,7 +1,12 @@
 import type { Request, Response } from 'express'
+import getPageLinks from '../utils/paginationHelper'
+
+const RESULTSPERPAGE = 50
 
 export default class ReportsController {
   static getSubjectAccessRequestList() {
+    const numberOfReports = 500
+
     const reports = [
       {
         uuid: 'ae6f396d-f1b1-460b-8d13-9a5f3e569c1a',
@@ -25,14 +30,32 @@ export default class ReportsController {
         status: 'Complete',
       },
     ]
-    return reports
+    return { reports, numberOfReports }
   }
 
   static getReports(req: Request, res: Response) {
-    const reports = ReportsController.getSubjectAccessRequestList()
+    const { reports, numberOfReports } = ReportsController.getSubjectAccessRequestList()
+    const currentPage = (req.query.page || '1') as string
+    const parsedPage = Number.parseInt(currentPage, 10) || 1
+    const visiblePageLinks = 5
+    const numberOfPages = Math.ceil(numberOfReports / RESULTSPERPAGE)
+
+    const previous = parsedPage - 1
+    const next = parsedPage === numberOfPages ? 0 : parsedPage + 1
+
+    const from = (parsedPage - 1) * RESULTSPERPAGE + 1
+    const to = Math.min(parsedPage * RESULTSPERPAGE, numberOfReports)
+
+    const pageLinks = getPageLinks({ visiblePageLinks, numberOfPages, currentPage: parsedPage })
 
     res.render('pages/reports', {
       reportList: reports,
+      pageLinks,
+      previous,
+      next,
+      from,
+      to,
+      numberOfReports,
     })
   }
 }
