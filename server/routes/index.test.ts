@@ -70,10 +70,10 @@ describe('POST /inputs', () => {
   })
 })
 
-describe('GET /serviceselection', () => {
-  it('should render serviceselection page', () => {
+describe('GET /service-selection', () => {
+  it('should render service-selection page', () => {
     return request(app)
-      .get('/serviceselection')
+      .get('/service-selection')
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Select Services')
@@ -81,10 +81,10 @@ describe('GET /serviceselection', () => {
   })
 })
 
-describe('POST /serviceselection', () => {
+describe('POST /service-selection', () => {
   it.skip('should redirect to itself given no data', () => {
     return request(app)
-      .post('/serviceselection')
+      .post('/service-selection')
       .expect(res => {
         expect(res.statusCode).toBe(200)
         expect(res.text).toContain('Select services')

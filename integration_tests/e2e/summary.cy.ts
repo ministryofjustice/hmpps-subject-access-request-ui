@@ -103,17 +103,17 @@ context('Summary', () => {
     cy.location('pathname').should('eq', '/inputs')
   })
 
-  it('Selected services can be edited at /serviceselection', () => {
+  it('Selected services can be edited at /service-selection', () => {
     cy.signIn()
     cy.visit('/summary')
     const summaryPage = Page.verifyOnPage(SummaryPage)
     summaryPage.reportSummaryBox().get('#change-services').click()
-    cy.location('pathname').should('eq', '/serviceselection')
+    cy.location('pathname').should('eq', '/service-selection')
   })
 
-  it('Selected services are carried through from /serviceselection', () => {
+  it('Selected services are carried through from /service-selection', () => {
     cy.signIn()
-    cy.visit('/serviceselection')
+    cy.visit('/service-selection')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
     serviceSelectionPage.checkAllCheckBox().click()
     serviceSelectionPage.submitButton().click()

@@ -16,7 +16,7 @@ export default class ServiceSelectionController {
     const list = await ServiceSelectionController.getServiceCatalogueList()
     if (list.length === 0) {
       res.render('pages/serviceselection', {
-        selectedServicesError: `No services found. A report cannot be generated`,
+        selectedServicesError: `No services found. A report cannot be generated.`,
         servicelist: list,
         buttonText: 'Confirm',
       })

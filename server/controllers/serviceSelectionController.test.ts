@@ -70,7 +70,7 @@ describe('getServices', () => {
       'pages/serviceselection',
       expect.objectContaining({
         servicelist: expect.anything(),
-        selectedServicesError: `No services found. A report cannot be generated`,
+        selectedServicesError: `No services found. A report cannot be generated.`,
       }),
     )
   })
