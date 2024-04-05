@@ -27,9 +27,9 @@ export default function routes(service: Services): Router {
   get('/summary', SummaryController.getReportDetails)
   post('/summary', SummaryController.postReportDetails)
 
-  get('/serviceselection', ServiceSelectionController.getServices)
+  get('/service-selection', ServiceSelectionController.getServices)
 
-  router.post('/serviceselection', ServiceSelectionController.selectServices)
+  router.post('/service-selection', ServiceSelectionController.selectServices)
 
   get('/confirmation', ConfirmationController.getConfirmation)
 
