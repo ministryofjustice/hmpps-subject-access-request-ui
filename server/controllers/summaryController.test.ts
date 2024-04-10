@@ -113,4 +113,27 @@ describe('postReportDetails', () => {
       .reply(400)
     await expect(SummaryController.postReportDetails(req, res)).rejects.toThrowError('Bad Request')
   })
+
+  test('post request fails if no user ID could be found', async () => {
+    const req: Request = {
+      // @ts-expect-error stubbing session
+      session: {
+        userData: {
+          dateFrom: '01/01/2001',
+          dateTo: '25/12/2022',
+          caseReference: 'mockedCaseReference',
+          subjectId: 'A123456',
+        },
+        selectedList: [{ id: '1', text: 'service1', urls: '.com' }],
+      },
+      user: {
+        token:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+        authSource: 'auth',
+      },
+    }
+    await expect(SummaryController.postReportDetails(req, res)).rejects.toThrowError(
+      'Could not identify SAR requestor. RequestedBy field is null.',
+    )
+  })
 })

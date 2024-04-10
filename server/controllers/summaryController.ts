@@ -45,20 +45,24 @@ export default class SummaryController {
     }
 
     try {
-      const response = await superagent
-        .post(`${config.apis.subjectAccessRequest.url}/api/createSubjectAccessRequest`)
-        .set('Authorization', `Bearer ${token}`)
-        .send({
-          dateFrom: userData.dateFrom,
-          dateTo: userData.dateTo,
-          sarCaseReferenceNumber: userData.caseReference,
-          services: list.toString(),
-          nomisId,
-          ndeliusId,
-          requestedBy,
-        })
-      res.redirect('/confirmation')
-      return response
+      if (requestedBy == null) {
+        throw new Error('Could not identify SAR requestor. RequestedBy field is null.')
+      } else {
+        const response = await superagent
+          .post(`${config.apis.subjectAccessRequest.url}/api/createSubjectAccessRequest`)
+          .set('Authorization', `Bearer ${token}`)
+          .send({
+            dateFrom: userData.dateFrom,
+            dateTo: userData.dateTo,
+            sarCaseReferenceNumber: userData.caseReference,
+            services: list.toString(),
+            nomisId,
+            ndeliusId,
+            requestedBy,
+          })
+        res.redirect('/confirmation')
+        return response
+      }
     } catch (error) {
       if (error.status === 404) {
         // error.status >= 400 && error.status < 500) {
