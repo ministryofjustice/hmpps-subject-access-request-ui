@@ -20,14 +20,14 @@ export default class ReportsController {
         dateOfRequest: '2023-07-30',
         sarCaseReference: '2-casereference',
         subjectId: 'B2345BB',
-        status: 'Complete',
+        status: 'Completed',
       },
       {
         uuid: '756689d0-4a0b-405c-bf0c-312f11f9f1b7',
         dateOfRequest: '2022-12-30',
         sarCaseReference: '3-casereference',
         subjectId: 'C3456CC',
-        status: 'Complete',
+        status: 'Completed',
       },
     ]
     return { reports, numberOfReports }
