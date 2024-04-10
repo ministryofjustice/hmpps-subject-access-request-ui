@@ -20,14 +20,14 @@ export default class ReportsController {
         dateOfRequest: '2023-07-30',
         sarCaseReference: '2-casereference',
         subjectId: 'B2345BB',
-        status: 'Complete',
+        status: 'Completed',
       },
       {
         uuid: '756689d0-4a0b-405c-bf0c-312f11f9f1b7',
         dateOfRequest: '2022-12-30',
         sarCaseReference: '3-casereference',
         subjectId: 'C3456CC',
-        status: 'Complete',
+        status: 'Completed',
       },
     ]
     return { reports, numberOfReports }
@@ -48,11 +48,6 @@ export default class ReportsController {
 
     const pageLinks = getPageLinks({ visiblePageLinks, numberOfPages, currentPage: parsedPage })
 
-    reports.forEach(report => {
-      if (report.status === 'Complete') {
-        report.status = '<a href="/download" class="govuk-body govuk-link" id="download-report">View report</a>' // eslint-disable-line no-param-reassign
-      }
-    })
     res.render('pages/reports', {
       reportList: reports,
       pageLinks,
