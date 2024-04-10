@@ -48,6 +48,11 @@ export default class ReportsController {
 
     const pageLinks = getPageLinks({ visiblePageLinks, numberOfPages, currentPage: parsedPage })
 
+    reports.forEach(report => {
+      if (report.status === 'Complete') {
+        report.status = '<a href="/download" class="govuk-body govuk-link" id="download-report">View report</a>' // eslint-disable-line no-param-reassign
+      }
+    })
     res.render('pages/reports', {
       reportList: reports,
       pageLinks,
