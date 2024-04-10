@@ -3,6 +3,7 @@ import superagent from 'superagent'
 import config from '../config'
 import { isNomisId, isNdeliusId } from '../utils/idHelpers'
 import { dataAccess } from '../data'
+import getUserId from '../utils/userIdHelper'
 
 export default class SummaryController {
   static getReportDetails(req: Request, res: Response) {
@@ -21,19 +22,17 @@ export default class SummaryController {
     })
   }
 
-  static async getUserToken() {
-    const token = await dataAccess().hmppsAuthClient.getSystemClientToken()
-    return token
-  }
-
   static async postReportDetails(req: Request, res: Response) {
-    const token = await SummaryController.getUserToken()
+    const token = await SummaryController.getSystemToken()
     const userData = req.session.userData ?? {}
     const list: string[] = []
     const servicelist = req.session.selectedList
+    const requestedBy = getUserId(req)
+
     if (dataAccess().telemetryClient) {
       dataAccess().telemetryClient.trackEvent({ name: 'postReportDetails', properties: { id: userData.subjectId } })
     }
+
     for (let i = 0; i < servicelist.length; i += 1) {
       list.push(`${servicelist[i].text}, ${servicelist[i].urls}`)
     }
@@ -44,6 +43,7 @@ export default class SummaryController {
     } else if (isNdeliusId(userData.subjectId)) {
       ndeliusId = userData.subjectId
     }
+
     try {
       const response = await superagent
         .post(`${config.apis.subjectAccessRequest.url}/api/createSubjectAccessRequest`)
@@ -55,6 +55,7 @@ export default class SummaryController {
           services: list.toString(),
           nomisId,
           ndeliusId,
+          requestedBy,
         })
       res.redirect('/confirmation')
       return response
@@ -65,5 +66,10 @@ export default class SummaryController {
       }
       throw error
     }
+  }
+
+  static async getSystemToken() {
+    const token = await dataAccess().hmppsAuthClient.getSystemClientToken()
+    return token
   }
 }

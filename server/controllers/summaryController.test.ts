@@ -3,7 +3,7 @@ import nock from 'nock'
 import SummaryController from './summaryController'
 import config from '../config'
 
-SummaryController.getUserToken = jest.fn().mockReturnValue('testtoken')
+SummaryController.getSystemToken = jest.fn().mockReturnValue('testtoken')
 
 let fakeApi: nock.Scope
 
@@ -26,7 +26,6 @@ describe('getReportDetails', () => {
     const req: Request = {
       // @ts-expect-error stubbing session
       session: {
-        serviceList: [],
         userData: {
           subjectId: 'A1111AA',
           dateFrom: '01/01/2001',
@@ -35,7 +34,6 @@ describe('getReportDetails', () => {
         },
         selectedList: [{ id: '1', text: 'service1' }],
       },
-      body: { selectedservices: [] },
     }
     SummaryController.getReportDetails(req, res)
     expect(res.render).toHaveBeenCalled()
@@ -61,7 +59,6 @@ describe('postReportDetails', () => {
     const req: Request = {
       // @ts-expect-error stubbing session
       session: {
-        serviceList: [],
         userData: {
           dateFrom: '01/01/2001',
           dateTo: '25/12/2022',
@@ -70,13 +67,17 @@ describe('postReportDetails', () => {
         },
         selectedList: [{ id: '1', text: 'service1', urls: '.com' }],
       },
-      body: { selectedservices: [] },
+      user: {
+        token:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX3V1aWQiOiJtb2NrZWRVc2VySWQiLCJuYW1lIjoiRXhhbXBsZSBVc2VyIn0.KcjDfjwlAS8Jlz7swp-X2FlSyRAFtEKvQ6WuzLSzAaU',
+        authSource: 'auth',
+      },
     }
 
     fakeApi
       .post(
         '/api/createSubjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":""}',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":"","requestedBy":"mockedUserId"}',
       )
       .reply(200)
 
@@ -90,7 +91,6 @@ describe('postReportDetails', () => {
     const req: Request = {
       // @ts-expect-error stubbing session
       session: {
-        serviceList: [],
         userData: {
           dateFrom: '01/01/2001',
           dateTo: '25/12/2022',
@@ -99,12 +99,16 @@ describe('postReportDetails', () => {
         },
         selectedList: [{ id: '1', text: 'service1', urls: '.com' }],
       },
-      body: { selectedservices: [] },
+      user: {
+        token:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX3V1aWQiOiJtb2NrZWRVc2VySWQiLCJuYW1lIjoiRXhhbXBsZSBVc2VyIn0.KcjDfjwlAS8Jlz7swp-X2FlSyRAFtEKvQ6WuzLSzAaU',
+        authSource: 'auth',
+      },
     }
     nock(config.apis.subjectAccessRequest.url)
       .post(
         '/api/createSubjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"","ndeliusId":""}',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"","ndeliusId":"","requestedBy":"mockedUserId"}',
       )
       .reply(400)
     await expect(SummaryController.postReportDetails(req, res)).rejects.toThrowError('Bad Request')
