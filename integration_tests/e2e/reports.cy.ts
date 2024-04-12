@@ -7,6 +7,7 @@ context('Reports', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubManageUser')
+    cy.task('stubGetReports', 200)
   })
 
   it('Redirects to auth if requested by unauthenticated user', () => {
