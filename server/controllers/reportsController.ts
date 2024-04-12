@@ -7,10 +7,10 @@ import { dataAccess } from '../data'
 const RESULTSPERPAGE = 50
 
 export default class ReportsController {
-  static async getSubjectAccessRequestList() {
+  static async getSubjectAccessRequestList(page: string) {
     const token = await ReportsController.getSystemToken()
     const response = await superagent
-      .get(`${config.apis.subjectAccessRequest.url}/api/reports`)
+      .get(`${config.apis.subjectAccessRequest.url}/api/reports?pageSize=${RESULTSPERPAGE}&pageNumber=${page}`)
       .set('Authorization', `Bearer ${token}`)
     const numberOfReports = response.body.length
     const reports = response.body
@@ -44,8 +44,8 @@ export default class ReportsController {
   }
 
   static async getReports(req: Request, res: Response) {
-    const { reports, numberOfReports } = await ReportsController.getSubjectAccessRequestList()
     const currentPage = (req.query.page || '1') as string
+    const { reports, numberOfReports } = await ReportsController.getSubjectAccessRequestList(currentPage)
     const parsedPage = Number.parseInt(currentPage, 10) || 1
     const visiblePageLinks = 5
     const numberOfPages = Math.ceil(numberOfReports / RESULTSPERPAGE)
