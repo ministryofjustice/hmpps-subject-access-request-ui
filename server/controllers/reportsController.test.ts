@@ -283,7 +283,7 @@ describe('getReports', () => {
           status: 'Completed',
         },
       ])
-      const response = await ReportsController.getSubjectAccessRequestList('1')
+      const response = await ReportsController.getSubjectAccessRequestList()
       expect(response.numberOfReports).toBe(3)
     })
   })
