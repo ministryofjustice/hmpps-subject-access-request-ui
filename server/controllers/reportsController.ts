@@ -2,12 +2,16 @@ import type { Request, Response } from 'express'
 import superagent from 'superagent'
 import getPageLinks from '../utils/paginationHelper'
 import config from '../config'
+import { dataAccess } from '../data'
 
 const RESULTSPERPAGE = 50
 
 export default class ReportsController {
   static async getSubjectAccessRequestList() {
-    const response = await superagent.get(`${config.apis.subjectAccessRequest.url}/api/reports`)
+    const token = await ReportsController.getSystemToken()
+    const response = await superagent
+      .get(`${config.apis.subjectAccessRequest.url}/api/reports`)
+      .set('Authorization', `Bearer ${token}`)
     const numberOfReports = response.body.length
     const reports = response.body
 
@@ -62,5 +66,10 @@ export default class ReportsController {
       to,
       numberOfReports,
     })
+  }
+
+  static async getSystemToken() {
+    const token = await dataAccess().hmppsAuthClient.getSystemClientToken()
+    return token
   }
 }
