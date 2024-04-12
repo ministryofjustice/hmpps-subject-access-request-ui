@@ -260,7 +260,7 @@ describe('getReports', () => {
   })
   describe('report info', () => {
     test('getSubjectAccessRequestList gets correct response', async () => {
-      fakeApi.get('/api/reports').reply(200, [
+      fakeApi.get('/api/reports?pageSize=50&pageNumber=1').reply(200, [
         {
           uuid: 'ae6f396d-f1b1-460b-8d13-9a5f3e569c1a',
           dateOfRequest: '2024-12-20',
