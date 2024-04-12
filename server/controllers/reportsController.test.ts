@@ -1,7 +1,12 @@
 import type { Request, Response } from 'express'
+import nock from 'nock'
 import ReportsController from './reportsController'
+import config from '../config'
+
+let fakeApi: nock.Scope
 
 beforeEach(() => {
+  fakeApi = nock(config.apis.subjectAccessRequest.url)
   ReportsController.getSubjectAccessRequestList = jest.fn().mockReturnValue({
     reports: [
       {
@@ -44,8 +49,8 @@ describe('getReports', () => {
   const res: Response = {
     render: jest.fn(),
   }
-  test('renders a response with list of SAR reports', () => {
-    ReportsController.getReports(req, res)
+  test('renders a response with list of SAR reports', async () => {
+    await ReportsController.getReports(req, res)
     expect(res.render).toBeCalledWith(
       'pages/reports',
       expect.objectContaining({
@@ -84,8 +89,8 @@ describe('getReports', () => {
       })
     })
     describe('when the current page is the first page', () => {
-      test('previous will be 0 and so will not appear', () => {
-        ReportsController.getReports(req, res)
+      test('previous will be 0 and so will not appear', async () => {
+        await ReportsController.getReports(req, res)
         expect(res.render).toBeCalledWith(
           'pages/reports',
           expect.objectContaining({
@@ -94,8 +99,8 @@ describe('getReports', () => {
         )
       })
 
-      test('next directs to second page', () => {
-        ReportsController.getReports(req, res)
+      test('next directs to second page', async () => {
+        await ReportsController.getReports(req, res)
         expect(res.render).toBeCalledWith(
           'pages/reports',
           expect.objectContaining({
@@ -104,8 +109,8 @@ describe('getReports', () => {
         )
       })
 
-      test('from gives the first number of the range of displayed results on the page', () => {
-        ReportsController.getReports(req, res)
+      test('from gives the first number of the range of displayed results on the page', async () => {
+        await ReportsController.getReports(req, res)
         expect(res.render).toBeCalledWith(
           'pages/reports',
           expect.objectContaining({
@@ -114,8 +119,8 @@ describe('getReports', () => {
         )
       })
 
-      test('to gives the last number of the range of displayed results on the page', () => {
-        ReportsController.getReports(req, res)
+      test('to gives the last number of the range of displayed results on the page', async () => {
+        await ReportsController.getReports(req, res)
         expect(res.render).toBeCalledWith(
           'pages/reports',
           expect.objectContaining({
@@ -124,8 +129,8 @@ describe('getReports', () => {
         )
       })
 
-      test('numberOfReports gives the total number of reports', () => {
-        ReportsController.getReports(req, res)
+      test('numberOfReports gives the total number of reports', async () => {
+        await ReportsController.getReports(req, res)
         expect(res.render).toBeCalledWith(
           'pages/reports',
           expect.objectContaining({
@@ -143,8 +148,8 @@ describe('getReports', () => {
           query: { page: '5' },
         }
       })
-      test('previous directs to the fourth page', () => {
-        ReportsController.getReports(req, res)
+      test('previous directs to the fourth page', async () => {
+        await ReportsController.getReports(req, res)
         expect(res.render).toBeCalledWith(
           'pages/reports',
           expect.objectContaining({
@@ -153,8 +158,8 @@ describe('getReports', () => {
         )
       })
 
-      test('next will be 0 and so will not appear', () => {
-        ReportsController.getReports(req, res)
+      test('next will be 0 and so will not appear', async () => {
+        await ReportsController.getReports(req, res)
         expect(res.render).toBeCalledWith(
           'pages/reports',
           expect.objectContaining({
@@ -163,8 +168,8 @@ describe('getReports', () => {
         )
       })
 
-      test('from gives the first number of the range of displayed results on the page', () => {
-        ReportsController.getReports(req, res)
+      test('from gives the first number of the range of displayed results on the page', async () => {
+        await ReportsController.getReports(req, res)
         expect(res.render).toBeCalledWith(
           'pages/reports',
           expect.objectContaining({
@@ -173,8 +178,8 @@ describe('getReports', () => {
         )
       })
 
-      test('to gives the last number of the range of displayed results on the page', () => {
-        ReportsController.getReports(req, res)
+      test('to gives the last number of the range of displayed results on the page', async () => {
+        await ReportsController.getReports(req, res)
         expect(res.render).toBeCalledWith(
           'pages/reports',
           expect.objectContaining({
@@ -183,8 +188,8 @@ describe('getReports', () => {
         )
       })
 
-      test('numberOfReports gives the total number of reports', () => {
-        ReportsController.getReports(req, res)
+      test('numberOfReports gives the total number of reports', async () => {
+        await ReportsController.getReports(req, res)
         expect(res.render).toBeCalledWith(
           'pages/reports',
           expect.objectContaining({
@@ -202,8 +207,8 @@ describe('getReports', () => {
           query: { page: '3' },
         }
       })
-      test('previous directs to the second page', () => {
-        ReportsController.getReports(req, res)
+      test('previous directs to the second page', async () => {
+        await ReportsController.getReports(req, res)
         expect(res.render).toBeCalledWith(
           'pages/reports',
           expect.objectContaining({
@@ -212,8 +217,8 @@ describe('getReports', () => {
         )
       })
 
-      test('next directs to fourth page', () => {
-        ReportsController.getReports(req, res)
+      test('next directs to fourth page', async () => {
+        await ReportsController.getReports(req, res)
         expect(res.render).toBeCalledWith(
           'pages/reports',
           expect.objectContaining({
@@ -222,8 +227,8 @@ describe('getReports', () => {
         )
       })
 
-      test('from gives the first number of the range of displayed results on the page', () => {
-        ReportsController.getReports(req, res)
+      test('from gives the first number of the range of displayed results on the page', async () => {
+        await ReportsController.getReports(req, res)
         expect(res.render).toBeCalledWith(
           'pages/reports',
           expect.objectContaining({
@@ -232,8 +237,8 @@ describe('getReports', () => {
         )
       })
 
-      test('to gives the last number of the range of displayed results on the page', () => {
-        ReportsController.getReports(req, res)
+      test('to gives the last number of the range of displayed results on the page', async () => {
+        await ReportsController.getReports(req, res)
         expect(res.render).toBeCalledWith(
           'pages/reports',
           expect.objectContaining({
@@ -242,8 +247,8 @@ describe('getReports', () => {
         )
       })
 
-      test('numberOfReports gives the total number of reports', () => {
-        ReportsController.getReports(req, res)
+      test('numberOfReports gives the total number of reports', async () => {
+        await ReportsController.getReports(req, res)
         expect(res.render).toBeCalledWith(
           'pages/reports',
           expect.objectContaining({
@@ -251,6 +256,35 @@ describe('getReports', () => {
           }),
         )
       })
+    })
+  })
+  describe('report info', () => {
+    test('getSubjectAccessRequestList gets correct response', async () => {
+      fakeApi.get('/api/reports').reply(200, [
+        {
+          uuid: 'ae6f396d-f1b1-460b-8d13-9a5f3e569c1a',
+          dateOfRequest: '2024-12-20',
+          sarCaseReference: 'example1',
+          subjectId: 'B1234AA',
+          status: 'Pending',
+        },
+        {
+          uuid: '1e130369-f3fb-46ab-8855-abd621d0b032',
+          dateOfRequest: '2023-01-19',
+          sarCaseReference: 'example2',
+          subjectId: 'C2345BB',
+          status: 'Completed',
+        },
+        {
+          uuid: '756689d0-4a0b-405c-bf0c-312f11f9f1b7',
+          dateOfRequest: '2022-16-18',
+          sarCaseReference: 'example3',
+          subjectId: 'D3456CC',
+          status: 'Completed',
+        },
+      ])
+      const response = await ReportsController.getSubjectAccessRequestList()
+      expect(response.numberOfReports).toBe(3)
     })
   })
 })
