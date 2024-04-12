@@ -1,13 +1,17 @@
 import { stubFor } from './wiremock'
 
-const stubGetReports = responseStatus => {
+const stubGetReports = responseBody => {
   return stubFor({
     request: {
       method: 'GET',
       urlPattern: '/api/reports',
     },
     response: {
-      status: responseStatus,
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;',
+      },
+      jsonBody: responseBody,
     },
   })
 }
