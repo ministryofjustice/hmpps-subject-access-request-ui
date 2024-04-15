@@ -3,7 +3,7 @@ import superagent from 'superagent'
 import config from '../config'
 import { isNomisId, isNdeliusId } from '../utils/idHelpers'
 import { dataAccess } from '../data'
-import getUserId from '../utils/userIdHelper'
+import getUserToken from '../utils/userTokenHelper'
 
 export default class SummaryController {
   static getReportDetails(req: Request, res: Response) {
@@ -23,11 +23,10 @@ export default class SummaryController {
   }
 
   static async postReportDetails(req: Request, res: Response) {
-    const token = await SummaryController.getSystemToken()
+    const userToken = getUserToken(req)
     const userData = req.session.userData ?? {}
     const list: string[] = []
     const servicelist = req.session.selectedList
-    const requestedBy = getUserId(req)
 
     if (dataAccess().telemetryClient) {
       dataAccess().telemetryClient.trackEvent({ name: 'postReportDetails', properties: { id: userData.subjectId } })
@@ -45,24 +44,19 @@ export default class SummaryController {
     }
 
     try {
-      if (requestedBy == null) {
-        throw new Error('Could not identify SAR requestor. RequestedBy field is null.')
-      } else {
-        const response = await superagent
-          .post(`${config.apis.subjectAccessRequest.url}/api/createSubjectAccessRequest`)
-          .set('Authorization', `Bearer ${token}`)
-          .send({
-            dateFrom: userData.dateFrom,
-            dateTo: userData.dateTo,
-            sarCaseReferenceNumber: userData.caseReference,
-            services: list.toString(),
-            nomisId,
-            ndeliusId,
-            requestedBy,
-          })
-        res.redirect('/confirmation')
-        return response
-      }
+      const response = await superagent
+        .post(`${config.apis.subjectAccessRequest.url}/api/createSubjectAccessRequest`)
+        .set('Authorization', `Bearer ${userToken}`)
+        .send({
+          dateFrom: userData.dateFrom,
+          dateTo: userData.dateTo,
+          sarCaseReferenceNumber: userData.caseReference,
+          services: list.toString(),
+          nomisId,
+          ndeliusId,
+        })
+      res.redirect('/confirmation')
+      return response
     } catch (error) {
       if (error.status === 404) {
         // error.status >= 400 && error.status < 500) {
@@ -70,10 +64,5 @@ export default class SummaryController {
       }
       throw error
     }
-  }
-
-  static async getSystemToken() {
-    const token = await dataAccess().hmppsAuthClient.getSystemClientToken()
-    return token
   }
 }

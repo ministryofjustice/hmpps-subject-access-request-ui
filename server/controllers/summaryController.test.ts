@@ -3,8 +3,6 @@ import nock from 'nock'
 import SummaryController from './summaryController'
 import config from '../config'
 
-SummaryController.getSystemToken = jest.fn().mockReturnValue('testtoken')
-
 let fakeApi: nock.Scope
 
 beforeEach(() => {
@@ -68,8 +66,7 @@ describe('postReportDetails', () => {
         selectedList: [{ id: '1', text: 'service1', urls: '.com' }],
       },
       user: {
-        token:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX3V1aWQiOiJtb2NrZWRVc2VySWQiLCJuYW1lIjoiRXhhbXBsZSBVc2VyIn0.KcjDfjwlAS8Jlz7swp-X2FlSyRAFtEKvQ6WuzLSzAaU',
+        token: 'fakeUserToken',
         authSource: 'auth',
       },
     }
@@ -77,7 +74,7 @@ describe('postReportDetails', () => {
     fakeApi
       .post(
         '/api/createSubjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":"","requestedBy":"mockedUserId"}',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":""}',
       )
       .reply(200)
 
@@ -100,21 +97,31 @@ describe('postReportDetails', () => {
         selectedList: [{ id: '1', text: 'service1', urls: '.com' }],
       },
       user: {
-        token:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX3V1aWQiOiJtb2NrZWRVc2VySWQiLCJuYW1lIjoiRXhhbXBsZSBVc2VyIn0.KcjDfjwlAS8Jlz7swp-X2FlSyRAFtEKvQ6WuzLSzAaU',
+        token: 'fakeUserToken',
         authSource: 'auth',
       },
     }
     nock(config.apis.subjectAccessRequest.url)
       .post(
         '/api/createSubjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"","ndeliusId":"","requestedBy":"mockedUserId"}',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"","ndeliusId":""}',
       )
       .reply(400)
     await expect(SummaryController.postReportDetails(req, res)).rejects.toThrowError('Bad Request')
   })
 
-  test('post request fails if no user ID could be found', async () => {
+  test('post request sends userToken to authenticate with API', async () => {
+    fakeApi = nock(config.apis.subjectAccessRequest.url, {
+      reqheaders: {
+        authorization: 'Bearer fakeUserToken',
+      },
+    })
+      .post(
+        '/api/createSubjectAccessRequest',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":""}',
+      )
+      .reply(200)
+
     const req: Request = {
       // @ts-expect-error stubbing session
       session: {
@@ -122,18 +129,19 @@ describe('postReportDetails', () => {
           dateFrom: '01/01/2001',
           dateTo: '25/12/2022',
           caseReference: 'mockedCaseReference',
-          subjectId: 'A123456',
+          subjectId: 'A1111AA',
         },
         selectedList: [{ id: '1', text: 'service1', urls: '.com' }],
       },
       user: {
-        token:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+        token: 'fakeUserToken',
         authSource: 'auth',
       },
     }
-    await expect(SummaryController.postReportDetails(req, res)).rejects.toThrowError(
-      'Could not identify SAR requestor. RequestedBy field is null.',
-    )
+
+    const response = await SummaryController.postReportDetails(req, res)
+    expect(response.status).toBe(200)
+    expect(res.redirect).toHaveBeenCalled()
+    expect(res.redirect).toBeCalledWith('/confirmation')
   })
 })
