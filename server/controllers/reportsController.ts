@@ -11,8 +11,16 @@ export default class ReportsController {
   static async getSubjectAccessRequestList() {
     // This should be user token once implemented
     const token = await ReportsController.getSystemToken()
+    let zeroIndexedPageNumber
+    try {
+      zeroIndexedPageNumber = (Number.parseInt(currentPage, 10) - 1).toString
+    } catch {
+      zeroIndexedPageNumber = '0'
+    }
     const response = await superagent
-      .get(`${config.apis.subjectAccessRequest.url}/api/reports?pageSize=${RESULTSPERPAGE}&pageNumber=${currentPage}`)
+      .get(
+        `${config.apis.subjectAccessRequest.url}/api/reports?pageSize=${RESULTSPERPAGE}&pageNumber=${zeroIndexedPageNumber}`,
+      )
       .set('Authorization', `Bearer ${token}`)
     const numberOfReports = response.body.length
     const reports = response.body
