@@ -5,7 +5,7 @@ import config from '../config'
 import { dataAccess } from '../data'
 
 const RESULTSPERPAGE = 50
-let currentPage = '1'
+let currentPage = '0'
 
 export default class ReportsController {
   static async getSubjectAccessRequestList() {
