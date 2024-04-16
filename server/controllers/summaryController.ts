@@ -49,7 +49,7 @@ export default class SummaryController {
         throw new Error('Could not identify SAR requestor. RequestedBy field is null.')
       } else {
         const response = await superagent
-          .post(`${config.apis.subjectAccessRequest.url}/api/createSubjectAccessRequest`)
+          .post(`${config.apis.subjectAccessRequest.url}/api/subjectAccessRequest`)
           .set('Authorization', `Bearer ${token}`)
           .send({
             dateFrom: userData.dateFrom,

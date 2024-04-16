@@ -55,7 +55,7 @@ describe('postReportDetails', () => {
     redirect: jest.fn(),
   }
 
-  test('post request made to createSubjectAccessRequest endpoint renders confirmation page if successful', async () => {
+  test('post request made to SubjectAccessRequest endpoint renders confirmation page if successful', async () => {
     const req: Request = {
       // @ts-expect-error stubbing session
       session: {
@@ -76,7 +76,7 @@ describe('postReportDetails', () => {
 
     fakeApi
       .post(
-        '/api/createSubjectAccessRequest',
+        '/api/subjectAccessRequest',
         '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":"","requestedBy":"mockedUserId"}',
       )
       .reply(200)
@@ -107,7 +107,7 @@ describe('postReportDetails', () => {
     }
     nock(config.apis.subjectAccessRequest.url)
       .post(
-        '/api/createSubjectAccessRequest',
+        '/api/subjectAccessRequest',
         '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"","ndeliusId":"","requestedBy":"mockedUserId"}',
       )
       .reply(400)
