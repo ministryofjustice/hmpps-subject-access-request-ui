@@ -40,12 +40,21 @@
       </thead>
       <tbody class="govuk-table__body">
         {% for report in reportList %}
+          {% if report.status == 'Completed' %}
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">{{report.dateOfRequest}}</td>
+                    <td class="govuk-table__cell">{{report.sarCaseReference}}</td>
+                    <td class="govuk-table__cell">{{report.subjectId}}</td>
+                    <td class="govuk-table__cell"><a href="/download" class="govuk-body govuk-link" /a>View report</td>
+                </tr>
+          {% else %}
                 <tr class="govuk-table__row">
                     <td class="govuk-table__cell">{{report.dateOfRequest}}</td>
                     <td class="govuk-table__cell">{{report.sarCaseReference}}</td>
                     <td class="govuk-table__cell">{{report.subjectId}}</td>
                     <td class="govuk-table__cell">{{report.status}}</td>
                 </tr>
+          {% endif %}
             {% endfor %}
       </tbody>
     </table>
