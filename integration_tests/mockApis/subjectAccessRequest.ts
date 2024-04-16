@@ -1,10 +1,10 @@
 import { stubFor } from './wiremock'
 
-const stubCreateSubjectAccessRequest = responseStatus => {
+const stubSubjectAccessRequest = responseStatus => {
   return stubFor({
     request: {
       method: 'POST',
-      urlPattern: '/api/createSubjectAccessRequest',
+      urlPattern: '/api/subjectAccessRequest',
     },
     response: {
       status: responseStatus,
@@ -12,4 +12,4 @@ const stubCreateSubjectAccessRequest = responseStatus => {
   })
 }
 
-export default stubCreateSubjectAccessRequest
+export default stubSubjectAccessRequest

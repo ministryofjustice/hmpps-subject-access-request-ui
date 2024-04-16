@@ -206,7 +206,7 @@ context('Summary', () => {
   // The below test fails because the backend isn't running and so the confirmation page
   // doesn't render. I'm not sure how to test this.
   it('Redirects to /confirmation on clicking submit button', () => {
-    cy.task('stubCreateSubjectAccessRequest', 201)
+    cy.task('stubSubjectAccessRequest', 201)
     cy.intercept({
       method: 'POST',
       url: '/summary',
