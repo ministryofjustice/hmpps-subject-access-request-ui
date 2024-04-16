@@ -5,14 +5,22 @@ import config from '../config'
 import { dataAccess } from '../data'
 
 const RESULTSPERPAGE = 50
-let currentPage = '0'
+let currentPage = '1'
 
 export default class ReportsController {
   static async getSubjectAccessRequestList() {
     // This should be user token once implemented
     const token = await ReportsController.getSystemToken()
+    let zeroIndexedPageNumber
+    if (Number.parseInt(currentPage, 10) <= 0) {
+      zeroIndexedPageNumber = '0'
+    } else {
+      zeroIndexedPageNumber = (Number.parseInt(currentPage, 10) - 1).toString()
+    }
     const response = await superagent
-      .get(`${config.apis.subjectAccessRequest.url}/api/reports?pageSize=${RESULTSPERPAGE}&pageNumber=${currentPage}`)
+      .get(
+        `${config.apis.subjectAccessRequest.url}/api/reports?pageSize=${RESULTSPERPAGE}&pageNumber=${zeroIndexedPageNumber}`,
+      )
       .set('Authorization', `Bearer ${token}`)
     const numberOfReports = response.body.length
     const reports = response.body
@@ -21,7 +29,7 @@ export default class ReportsController {
   }
 
   static async getReports(req: Request, res: Response) {
-    currentPage = (req.query.page || '0') as string
+    currentPage = (req.query.page || '1') as string
     const { reports, numberOfReports } = await ReportsController.getSubjectAccessRequestList()
     const parsedPage = Number.parseInt(currentPage, 10) || 1
     const visiblePageLinks = 5
