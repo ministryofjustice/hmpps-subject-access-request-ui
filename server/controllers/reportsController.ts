@@ -12,10 +12,10 @@ export default class ReportsController {
     // This should be user token once implemented
     const token = await ReportsController.getSystemToken()
     let zeroIndexedPageNumber
-    try {
-      zeroIndexedPageNumber = (Number.parseInt(currentPage, 10) - 1).toString
-    } catch {
+    if (Number.parseInt(currentPage, 10) <= 0) {
       zeroIndexedPageNumber = '0'
+    } else {
+      zeroIndexedPageNumber = (Number.parseInt(currentPage, 10) - 1).toString
     }
     const response = await superagent
       .get(
