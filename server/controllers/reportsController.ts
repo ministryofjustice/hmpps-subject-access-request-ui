@@ -15,7 +15,7 @@ export default class ReportsController {
     if (Number.parseInt(currentPage, 10) <= 0) {
       zeroIndexedPageNumber = '0'
     } else {
-      zeroIndexedPageNumber = (Number.parseInt(currentPage, 10) - 1).toString
+      zeroIndexedPageNumber = (Number.parseInt(currentPage, 10) - 1).toString()
     }
     const response = await superagent
       .get(
