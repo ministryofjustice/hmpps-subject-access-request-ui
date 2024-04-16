@@ -21,7 +21,7 @@ export default class ReportsController {
   }
 
   static async getReports(req: Request, res: Response) {
-    currentPage = (req.query.page || '1') as string
+    currentPage = (req.query.page || '0') as string
     const { reports, numberOfReports } = await ReportsController.getSubjectAccessRequestList()
     const parsedPage = Number.parseInt(currentPage, 10) || 1
     const visiblePageLinks = 5
