@@ -9,6 +9,7 @@ let currentPage = '1'
 
 export default class ReportsController {
   static async getSubjectAccessRequestList() {
+    // This should be user token once implemented
     const token = await ReportsController.getSystemToken()
     const response = await superagent
       .get(`${config.apis.subjectAccessRequest.url}/api/reports?pageSize=${RESULTSPERPAGE}&pageNumber=${currentPage}`)

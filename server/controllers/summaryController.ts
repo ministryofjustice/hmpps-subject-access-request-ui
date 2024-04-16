@@ -23,7 +23,6 @@ export default class SummaryController {
   }
 
   static async postReportDetails(req: Request, res: Response) {
-    // This should be user token once implemented
     const token = await SummaryController.getSystemToken()
     const userData = req.session.userData ?? {}
     const list: string[] = []
