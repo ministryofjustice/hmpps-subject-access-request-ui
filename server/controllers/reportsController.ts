@@ -5,7 +5,7 @@ import config from '../config'
 import { dataAccess } from '../data'
 
 const RESULTSPERPAGE = 50
-let currentPage = '0'
+let currentPage = '1'
 
 export default class ReportsController {
   static async getSubjectAccessRequestList() {
@@ -21,7 +21,7 @@ export default class ReportsController {
   }
 
   static async getReports(req: Request, res: Response) {
-    currentPage = (req.query.page || '0') as string
+    currentPage = (req.query.page || '1') as string
     const { reports, numberOfReports } = await ReportsController.getSubjectAccessRequestList()
     const parsedPage = Number.parseInt(currentPage, 10) || 1
     const visiblePageLinks = 5
