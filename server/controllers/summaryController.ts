@@ -45,7 +45,7 @@ export default class SummaryController {
 
     try {
       const response = await superagent
-        .post(`${config.apis.subjectAccessRequest.url}/api/createSubjectAccessRequest`)
+        .post(`${config.apis.subjectAccessRequest.url}/api/subjectAccessRequest`)
         .set('Authorization', `Bearer ${userToken}`)
         .send({
           dateFrom: userData.dateFrom,

@@ -73,7 +73,7 @@ describe('postReportDetails', () => {
 
     fakeApi
       .post(
-        '/api/createSubjectAccessRequest',
+        '/api/subjectAccessRequest',
         '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":""}',
       )
       .reply(200)
@@ -103,7 +103,7 @@ describe('postReportDetails', () => {
     }
     nock(config.apis.subjectAccessRequest.url)
       .post(
-        '/api/createSubjectAccessRequest',
+        '/api/subjectAccessRequest',
         '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"","ndeliusId":""}',
       )
       .reply(400)
@@ -117,7 +117,7 @@ describe('postReportDetails', () => {
       },
     })
       .post(
-        '/api/createSubjectAccessRequest',
+        '/api/subjectAccessRequest',
         '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":""}',
       )
       .reply(200)
