@@ -53,7 +53,7 @@ describe('postReportDetails', () => {
     redirect: jest.fn(),
   }
 
-  test('post request made to createSubjectAccessRequest endpoint renders confirmation page if successful', async () => {
+  test('post request made to SubjectAccessRequest endpoint renders confirmation page if successful', async () => {
     const req: Request = {
       // @ts-expect-error stubbing session
       session: {
