@@ -52,8 +52,11 @@ export default {
       url: get('SAR_ENDPOINT_URL', 'http://localhost:8080', requiredInProduction),
     },
     hmppsAuth: {
-      url: get('HMPPS_AUTH_URL', 'http://localhost:9090/auth', requiredInProduction),
-      externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://localhost:9090/auth')),
+      url: get('HMPPS_AUTH_URL', 'https://sign-in-dev.hmpps.service.justice.gov.uk/auth', requiredInProduction),
+      externalUrl: get(
+        'HMPPS_AUTH_EXTERNAL_URL',
+        get('HMPPS_AUTH_URL', 'https://sign-in-dev.hmpps.service.justice.gov.uk/auth'),
+      ),
       timeout: {
         response: Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000)),
         deadline: Number(get('HMPPS_AUTH_TIMEOUT_DEADLINE', 10000)),
@@ -65,7 +68,7 @@ export default {
       systemClientSecret: get('SYSTEM_CLIENT_SECRET', 'clientsecret', requiredInProduction),
     },
     manageUsersApi: {
-      url: get('MANAGE_USERS_API_URL', 'http://localhost:9091', requiredInProduction),
+      url: get('MANAGE_USERS_API_URL', 'https://manage-users-dev.hmpps.service.justice.gov.uk/', requiredInProduction),
       timeout: {
         response: Number(get('MANAGE_USERS_API_TIMEOUT_RESPONSE', 10000)),
         deadline: Number(get('MANAGE_USERS_API_TIMEOUT_DEADLINE', 10000)),
