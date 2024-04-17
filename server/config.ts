@@ -68,7 +68,7 @@ export default {
       systemClientSecret: get('SYSTEM_CLIENT_SECRET', 'clientsecret', requiredInProduction),
     },
     manageUsersApi: {
-      url: get('MANAGE_USERS_API_URL', 'https://manage-users-dev.hmpps.service.justice.gov.uk/', requiredInProduction),
+      url: get('MANAGE_USERS_API_URL', 'https://manage-users-dev.hmpps.service.justice.gov.uk', requiredInProduction),
       timeout: {
         response: Number(get('MANAGE_USERS_API_TIMEOUT_RESPONSE', 10000)),
         deadline: Number(get('MANAGE_USERS_API_TIMEOUT_DEADLINE', 10000)),
