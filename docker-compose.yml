@@ -11,39 +11,6 @@ services:
     ports:
       - '6379:6379'
 
-
-
-
-  hmpps-auth:
-    image: quay.io/hmpps/hmpps-auth:latest
-    networks:
-      - hmpps
-    container_name: hmpps-auth
-    ports:
-      - "9090:8080"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/auth/health"]
-    environment:
-      - SPRING_PROFILES_ACTIVE=dev
-      - APPLICATION_AUTHENTICATION_UI_ALLOWLIST=0.0.0.0/0
-
-  manage-users-api:
-    image: quay.io/hmpps/hmpps-manage-users-api:latest
-    networks:
-      - hmpps
-    container_name: manage-users-api_mhaa
-    depends_on:
-      - hmpps-auth
-    ports:
-      - "9091:8080"
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
-    environment:
-      - SERVER_PORT=8080
-      - SPRING_PROFILES_ACTIVE=dev
-      - HMPPS_AUTH_ENDPOINT_URL=http://hmpps-auth:8080/auth
-      - EXTERNAL_USERS_ENDPOINT_URL=http://hmpps-external-users-api:8080
-
   app:
     build:
       context: .
@@ -72,50 +39,6 @@ services:
       - INGRESS_URL=http://localhost:3000
       - SERVICE_CATALOGUE_URL=http://localhost:1337/v1
       - SERVICE_CATALOGUE_ENV=dev
-
-
-
-
-  hmpps-service-catalogue:
-    image: quay.io/hmpps/hmpps-service-catalogue:latest
-    networks:
-      - hmpps
-    container_name: hmpps-service-catalogue
-    ports:
-      - "1337:1337"
-    env_file: .env.dpscatalogue.example
-    environment:
-      DATABASE_CLIENT: postgres
-      DATABASE_HOST: strapiDB
-      DATABASE_PORT: 5432
-      DATABASE_NAME: strapi
-      DATABASE_USERNAME: postgres
-      DATABASE_PASSWORD: password
-      JWT_SECRET: randomSecret
-      ADMIN_JWT_SECRET: randomJwtSecret
-      APP_KEYS: randomApiKey
-      NODE_ENV: development
-    depends_on:
-      - strapiDB
-
-  strapiDB:
-    container_name: strapiDB
-    platform: linux/amd64 #for platform error on Apple M1 chips
-    restart: unless-stopped
-    env_file: 
-      - .env.dpscatalogue.example
-    image: postgres:12.0-alpine
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: strapi
-    volumes:
-        - strapi-data:/var/lib/postgresql/data/ #using a volume
-    #   - ./data:/var/lib/postgresql/data/ # if you want to use a bind folder
-    ports:
-      - '5432:5432'
-    networks:
-      - hmpps
 
 volumes:
   strapi-data:
