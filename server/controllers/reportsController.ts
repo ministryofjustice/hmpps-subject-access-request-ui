@@ -10,7 +10,6 @@ let currentPage = '1'
 
 export default class ReportsController {
   static async getSubjectAccessRequestList(req: Request) {
-    // This should be user token once implemented
     const token = getUserToken(req)
     let zeroIndexedPageNumber
     if (Number.parseInt(currentPage, 10) <= 0) {
