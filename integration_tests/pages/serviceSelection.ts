@@ -10,4 +10,6 @@ export default class ServiceSelectionPage extends Page {
   checkAllCheckBox = (): PageElement => cy.get('#checkboxes-all')
 
   submitButton = (): PageElement => cy.get('#input-submit')
+
+  backLink = (): PageElement => cy.get('.govuk-back-link')
 }

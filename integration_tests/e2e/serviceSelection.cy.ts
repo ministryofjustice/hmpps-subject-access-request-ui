@@ -1,6 +1,7 @@
 import Page from '../pages/page'
 import ServiceSelectionPage from '../pages/serviceSelection'
 import AuthSignInPage from '../pages/authSignIn'
+import InputsPage from '../pages/inputs'
 
 context('ServiceSelection', () => {
   beforeEach(() => {
@@ -81,5 +82,13 @@ context('ServiceSelection', () => {
     cy.visit('/service-selection')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
     serviceSelectionPage.errorSummaryBox().should('be.visible')
+  })
+
+  it('redirects to inputs page when back link is clicked', () => {
+    cy.signIn()
+    cy.visit('/service-selection')
+    const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
+    serviceSelectionPage.backLink().click()
+    Page.verifyOnPage(InputsPage)
   })
 })

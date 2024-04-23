@@ -202,4 +202,12 @@ context('Inputs', () => {
     cy.wait('@saveInputs')
     cy.url().should('to.match', /inputs$/)
   })
+
+  it('redirects to subject ID page when back link is clicked', () => {
+    cy.signIn()
+    cy.visit('/inputs')
+    const inputsPage = Page.verifyOnPage(InputsPage)
+    inputsPage.backLink().click()
+    Page.verifyOnPage(SubjectIdPage)
+  })
 })

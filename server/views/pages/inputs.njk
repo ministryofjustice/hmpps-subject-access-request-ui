@@ -12,8 +12,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "../components/datepicker/macro.njk" import hmppsDatepicker %}
-
-
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% block content %}
 
@@ -51,6 +50,11 @@
     ]
   }) }}
 {% endif %}
+
+{{ govukBackLink({
+  text: "Back",
+  href: "/subject-id"
+}) }}
 
 <h1>Enter details</h1>
 <form action="/inputs" method="post">
