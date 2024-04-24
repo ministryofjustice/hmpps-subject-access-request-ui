@@ -59,8 +59,13 @@ export default class ReportsController {
     return token
   }
 
-  static async downloadReport(id: UUID) {
-    const array = new Uint8Array()
-    return array
+  static async downloadReport(id: UUID, req: Request) {
+    const token = getUserToken(req)
+    const response = await superagent
+      .get(`${config.apis.subjectAccessRequest.url}/api/report?id=${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .set('Content-Type', 'application/pdf')
+      .set('Content-Disposition', `attachment; filename=${id}.pdf`)
+    return response
   }
 }

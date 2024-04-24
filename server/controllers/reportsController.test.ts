@@ -44,6 +44,10 @@ describe('getReports', () => {
     // @ts-expect-error stubbing session
     session: {},
     query: {},
+    user: {
+      token: 'fakeUserToken',
+      authSource: 'auth',
+    },
   }
   // @ts-expect-error stubbing res.render
   const res: Response = {
@@ -205,6 +209,10 @@ describe('getReports', () => {
           // @ts-expect-error stubbing session
           session: {},
           query: { page: '3' },
+          user: {
+            token: 'fakeUserToken',
+            authSource: 'auth',
+          },
         }
       })
       test('previous directs to the second page', async () => {
@@ -288,9 +296,20 @@ describe('getReports', () => {
     })
 
     test('downloadReport returns byte array and takes an ID', async () => {
+      // let req: Request = {
+      //   // @ts-expect-error stubbing session
+      //   session: {},
+      //   query: {},
+      // user: {
+      //   token: 'fakeUserToken',
+      //   authSource: 'auth',
+      //   },
+      // }
+      const expectedReponseBody = new Uint8Array([14, 16, 24])
+      fakeApi.get('/api/report?id=df936446-719a-4463-acb6-9b13eea1f495').reply(200, expectedReponseBody)
       const testUUID = 'df936446-719a-4463-acb6-9b13eea1f495'
-      const response = await ReportsController.downloadReport(testUUID)
-      expect(response).toBeInstanceOf(Uint8Array)
+      const response = await ReportsController.downloadReport(testUUID, req)
+      expect(response.body).toStrictEqual({ '0': 14, '1': 16, '2': 24 })
     })
   })
 })
