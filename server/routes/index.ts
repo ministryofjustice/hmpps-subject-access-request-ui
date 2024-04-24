@@ -35,5 +35,7 @@ export default function routes(service: Services): Router {
 
   get('/reports', ReportsController.getReports)
 
+  get('/download-report', ReportsController.downloadReport)
+
   return router
 }

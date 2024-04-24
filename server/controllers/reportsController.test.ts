@@ -52,6 +52,8 @@ describe('getReports', () => {
   // @ts-expect-error stubbing res.render
   const res: Response = {
     render: jest.fn(),
+    set: jest.fn(),
+    send: jest.fn(),
   }
   test('renders a response with list of SAR reports', async () => {
     await ReportsController.getReports(req, res)
@@ -208,7 +210,7 @@ describe('getReports', () => {
         req = {
           // @ts-expect-error stubbing session
           session: {},
-          query: { page: '3' },
+          query: { page: '3', id: 'df936446-719a-4463-acb6-9b13eea1f495' },
           user: {
             token: 'fakeUserToken',
             authSource: 'auth',
@@ -295,21 +297,25 @@ describe('getReports', () => {
       expect(response.numberOfReports).toBe(3)
     })
 
-    test('downloadReport returns byte array and takes an ID', async () => {
-      // let req: Request = {
-      //   // @ts-expect-error stubbing session
-      //   session: {},
-      //   query: {},
-      // user: {
-      //   token: 'fakeUserToken',
-      //   authSource: 'auth',
-      //   },
-      // }
-      const expectedReponseBody = new Uint8Array([14, 16, 24])
-      fakeApi.get('/api/report?id=df936446-719a-4463-acb6-9b13eea1f495').reply(200, expectedReponseBody)
-      const testUUID = 'df936446-719a-4463-acb6-9b13eea1f495'
-      const response = await ReportsController.downloadReport(testUUID, req)
-      expect(response.body).toStrictEqual({ '0': 14, '1': 16, '2': 24 })
+    test('downloadReport calls res.send on happy path', async () => {
+      fakeApi.get('/api/report?id=df936446-719a-4463-acb6-9b13eea1f495').reply(200, 'BODY')
+      await ReportsController.downloadReport(req, res)
+      expect(res.set).toHaveBeenCalledWith(
+        'Content-Disposition',
+        `attachment; filename=df936446-719a-4463-acb6-9b13eea1f495.pdf`,
+      )
+      expect(res.send).toBeCalledWith(
+        expect.objectContaining({
+          text: 'BODY',
+          status: 200,
+        }),
+      )
+    })
+
+    test('downloadReport calls res.render on failure', async () => {
+      fakeApi.get('/api/report?id=df936446-719a-4463-acb6-9b13eea1f495').reply(400)
+      await ReportsController.downloadReport(req, res)
+      expect(res.render).toBeCalledWith('pages/download-error')
     })
   })
 })
