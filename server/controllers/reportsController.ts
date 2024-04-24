@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express'
 import superagent from 'superagent'
+import { UUID } from 'crypto'
 import getPageLinks from '../utils/paginationHelper'
 import config from '../config'
 import { dataAccess } from '../data'
@@ -58,7 +59,7 @@ export default class ReportsController {
     return token
   }
 
-  static async downloadReport() {
+  static async downloadReport(id: UUID) {
     const array = new Uint8Array()
     return array
   }

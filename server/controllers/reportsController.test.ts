@@ -287,8 +287,9 @@ describe('getReports', () => {
       expect(response.numberOfReports).toBe(3)
     })
 
-    test('downloadReport returns bytearray', async () => {
-      const response = await ReportsController.downloadReport()
+    test('downloadReport returns byte array and takes an ID', async () => {
+      const testUUID = 'df936446-719a-4463-acb6-9b13eea1f495'
+      const response = await ReportsController.downloadReport(testUUID)
       expect(response).toBeInstanceOf(Uint8Array)
     })
   })
