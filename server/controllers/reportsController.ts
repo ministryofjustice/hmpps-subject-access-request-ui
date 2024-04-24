@@ -3,14 +3,14 @@ import superagent from 'superagent'
 import getPageLinks from '../utils/paginationHelper'
 import config from '../config'
 import { dataAccess } from '../data'
+import getUserToken from '../utils/userTokenHelper'
 
 const RESULTSPERPAGE = 50
 let currentPage = '1'
 
 export default class ReportsController {
-  static async getSubjectAccessRequestList() {
-    // This should be user token once implemented
-    const token = await ReportsController.getSystemToken()
+  static async getSubjectAccessRequestList(req: Request) {
+    const token = getUserToken(req)
     let zeroIndexedPageNumber
     if (Number.parseInt(currentPage, 10) <= 0) {
       zeroIndexedPageNumber = '0'
@@ -30,7 +30,7 @@ export default class ReportsController {
 
   static async getReports(req: Request, res: Response) {
     currentPage = (req.query.page || '1') as string
-    const { reports, numberOfReports } = await ReportsController.getSubjectAccessRequestList()
+    const { reports, numberOfReports } = await ReportsController.getSubjectAccessRequestList(req)
     const parsedPage = Number.parseInt(currentPage, 10) || 1
     const visiblePageLinks = 5
     const numberOfPages = Math.ceil(numberOfReports / RESULTSPERPAGE)
