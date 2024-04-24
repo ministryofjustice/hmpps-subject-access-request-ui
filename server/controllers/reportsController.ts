@@ -57,4 +57,9 @@ export default class ReportsController {
     const token = await dataAccess().hmppsAuthClient.getSystemClientToken()
     return token
   }
+
+  static async downloadReport() {
+    const array = new Uint8Array()
+    return array
+  }
 }

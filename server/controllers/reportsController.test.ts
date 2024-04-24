@@ -286,5 +286,10 @@ describe('getReports', () => {
       const response = await ReportsController.getSubjectAccessRequestList(req)
       expect(response.numberOfReports).toBe(3)
     })
+
+    test('downloadReport returns bytearray', async () => {
+      const response = await ReportsController.downloadReport()
+      expect(response).toBeInstanceOf(Uint8Array)
+    })
   })
 })
