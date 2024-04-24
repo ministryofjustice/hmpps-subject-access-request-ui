@@ -4,6 +4,8 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "../components/multiselect.njk" import multiSelect %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
 {% block content %}
 
 {% if selectedServicesError %}
@@ -21,6 +23,11 @@
     ]
   }) }}
 {% endif %}
+
+{{ govukBackLink({
+  text: "Back",
+  href: "/inputs"
+}) }}
 
 <form action="/service-selection" method="post">
   <input type="hidden" name="_csrf" value="{{ csrfToken }}">

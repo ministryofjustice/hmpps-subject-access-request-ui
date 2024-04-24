@@ -2,6 +2,7 @@ import Page from '../pages/page'
 import AuthSignInPage from '../pages/authSignIn'
 import SubjectIdPage from '../pages/subjectId'
 import InputsPage from '../pages/inputs'
+import IndexPage from '../pages'
 
 context('SubjectId', () => {
   beforeEach(() => {
@@ -80,5 +81,13 @@ context('SubjectId', () => {
     cy.url().should('to.match', /subject-id$/)
     subjectIdPage = Page.verifyOnPage(SubjectIdPage)
     subjectIdPage.errorSummaryBox().should('exist')
+  })
+
+  it('redirects to homepage when back link is clicked', () => {
+    cy.signIn()
+    cy.visit('/subject-id')
+    const subjectIdPage = Page.verifyOnPage(SubjectIdPage)
+    subjectIdPage.backLink().click()
+    Page.verifyOnPage(IndexPage)
   })
 })
