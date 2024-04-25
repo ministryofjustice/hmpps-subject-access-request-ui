@@ -1,10 +1,10 @@
 import type { Request, Response } from 'express'
 import superagent from 'superagent'
-import { UUID } from 'crypto'
 import getPageLinks from '../utils/paginationHelper'
 import config from '../config'
 import { dataAccess } from '../data'
 import getUserToken from '../utils/userTokenHelper'
+
 
 const RESULTSPERPAGE = 50
 let currentPage = '1'
@@ -59,17 +59,24 @@ export default class ReportsController {
     return token
   }
 
-  static async downloadReport(req: Request, res: Response) {
-    const token = getUserToken(req)
-    try {
-      const response = await superagent
-        .get(`${config.apis.subjectAccessRequest.url}/api/report?id=${req.query.id}`)
-        .set('Authorization', `Bearer ${token}`)
-        .set('Content-Type', 'application/pdf')
-      res.set('Content-Disposition', `attachment; filename=${req.query.id}.pdf`)
-      res.send(response)
-    } catch {
-      res.render('pages/download-error')
-    }
-  }
+  // static async downloadReport(req: Request, res: Response) {
+  //   const token = getUserToken(req)
+  //   console.log("ID", req.query.id)
+  //   try {
+  //     const response = await superagent
+  //       .get(`${config.apis.subjectAccessRequest.url}/api/report?id=${req.query.id}`)
+  //       .set('Authorization', `Bearer ${token}`)
+  //       //.set('Content-Type', 'application/pdf')
+        
+  //     // at this point, response is the request details for the above superagent call
+  //     console.log(response.body["file"])
+  //     console.log(response.status)
+  //     res.set('Content-Disposition', `attachment; filename=${req.query.id}.pdf`)
+  //     // .set('Content-Type', 'application/pdf')
+  //     .send(response)
+  //   } catch (err: any) {
+  //     console.log(err)
+  //     res.render('pages/download-error')
+  //   }
+  // }
 }
