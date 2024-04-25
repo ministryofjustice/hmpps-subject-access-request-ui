@@ -50,14 +50,14 @@ export default function routes(service: Services): Router {
         req,
         res,
         next,
-        proxyRes => {
-          if (proxyRes.statusCode >= 400) {
-            throw new Error(
-              `${proxyRes.statusCode} - unable to download file.`
-            )
-          }
-        },
-        fileId
+        fileId,
+        // proxyRes => {
+        //   if (proxyRes.statusCode >= 400) {
+        //     throw new Error(
+        //       `${proxyRes.statusCode} - unable to download file.`
+        //     )
+        //   }
+        // },
       )
     }
   )
