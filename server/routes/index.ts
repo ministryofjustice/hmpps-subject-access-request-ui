@@ -7,6 +7,7 @@ import SummaryController from '../controllers/summaryController'
 import ConfirmationController from '../controllers/confirmationController'
 import SubjectIdController from '../controllers/subjectIdController'
 import ReportsController from '../controllers/reportsController'
+// import { raw } from  '../services/report'
 const {
   files: raw,
 } = require('../services/report')
@@ -51,13 +52,6 @@ export default function routes(service: Services): Router {
         res,
         next,
         fileId,
-        // proxyRes => {
-        //   if (proxyRes.statusCode >= 400) {
-        //     throw new Error(
-        //       `${proxyRes.statusCode} - unable to download file.`
-        //     )
-        //   }
-        // },
       )
     }
   )

@@ -1,9 +1,9 @@
 const proxy = require('express-http-proxy')
 import config from '../config'
 import { UUID } from 'crypto'
-import type { Handler, NextFunction, Request, Response } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 
-const getReport = (apiUrl: any) => {
+const getReport = (apiUrl: string) => {
     return {
 
       files: {
@@ -14,7 +14,7 @@ const getReport = (apiUrl: any) => {
         fileId: UUID,
       ) =>
         proxy(apiUrl, {
-          proxyReqOptDecorator: (proxyReqOpts: { headers: { Authorization: string } }) => {
+          proxyReqOptDecorator: (proxyReqOpts: any) => {
             proxyReqOpts.headers.Authorization = `Bearer ${req.user.token}`
             return proxyReqOpts
           },

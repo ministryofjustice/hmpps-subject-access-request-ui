@@ -296,26 +296,5 @@ describe('getReports', () => {
       const response = await ReportsController.getSubjectAccessRequestList(req)
       expect(response.numberOfReports).toBe(3)
     })
-
-    test('downloadReport calls res.send on happy path', async () => {
-      fakeApi.get('/api/report?id=df936446-719a-4463-acb6-9b13eea1f495').reply(200, 'BODY')
-      await ReportsController.downloadReport(req, res)
-      expect(res.set).toHaveBeenCalledWith(
-        'Content-Disposition',
-        `attachment; filename=df936446-719a-4463-acb6-9b13eea1f495.pdf`,
-      )
-      expect(res.send).toBeCalledWith(
-        expect.objectContaining({
-          text: 'BODY',
-          status: 200,
-        }),
-      )
-    })
-
-    test('downloadReport calls res.render on failure', async () => {
-      fakeApi.get('/api/report?id=df936446-719a-4463-acb6-9b13eea1f495').reply(400)
-      await ReportsController.downloadReport(req, res)
-      expect(res.render).toBeCalledWith('pages/download-error')
-    })
   })
 })
