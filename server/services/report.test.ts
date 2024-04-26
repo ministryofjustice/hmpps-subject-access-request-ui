@@ -1,8 +1,7 @@
 import { NextFunction } from 'express'
+import proxy from 'express-http-proxy'
 import config from '../config'
-
-const proxy = require('express-http-proxy')
-const getReport = require ('./report')
+import getReport from './report'
 
 jest.mock('express-http-proxy')
 
@@ -13,7 +12,7 @@ describe('getReport', () => {
     const mockReq = {}
     const mockRes = {}
     const mockNext = () => {}
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any, no-shadow
     proxy.mockImplementationOnce((url: string, config: any) => {
       expect(url).toBe(apiUrl)
       expect(config.proxyReqPathResolver()).toBe('/api/report?id=fileId')
