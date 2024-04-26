@@ -4,6 +4,7 @@ import config from '../config'
 import getReport from './report'
 
 jest.mock('express-http-proxy')
+const Proxy = proxy as jest.Mock
 
 const apiUrl = config.apis.subjectAccessRequest.url
 
@@ -12,8 +13,8 @@ describe('getReport', () => {
     const mockReq = {}
     const mockRes = {}
     const mockNext = () => {}
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any, no-shadow
-    proxy.mockImplementationOnce((url: string, config: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, no-shadow
+    Proxy.mockImplementationOnce((url: string, config: any) => {
       expect(url).toBe(apiUrl)
       expect(config.proxyReqPathResolver()).toBe('/api/report?id=fileId')
       return (myReq: Request, myRes: Response, myNext: NextFunction) => {
@@ -22,7 +23,8 @@ describe('getReport', () => {
         expect(myNext).toBe(mockNext)
       }
     })
-
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     getReport(mockReq, mockRes, mockNext, 'fileId')
   })
 })
