@@ -13,7 +13,7 @@ describe('getReport', () => {
     const mockReq = {}
     const mockRes = {}
     const mockNext = () => {}
-
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     proxy.mockImplementationOnce((url: string, config: any) => {
       expect(url).toBe(apiUrl)
       expect(config.proxyReqPathResolver()).toBe('/api/report?id=fileId')
