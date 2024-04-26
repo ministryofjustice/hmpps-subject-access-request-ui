@@ -1,0 +1,36 @@
+const {
+    files: raw,
+  } = require('../services/report')
+const proxy = require('express-http-proxy')
+jest.mock('express-http-proxy')
+import { NextFunction } from 'express'
+import config from '../config'
+const apiUrl = config.apis.subjectAccessRequest.url
+
+describe('getReport', () => {
+
+    it('should download a file', async () => {
+        const mockReq = {}
+        const mockRes = {}
+        const mockNext = () => {}
+
+        proxy.mockImplementationOnce((url: string, config: any) => {
+        expect(url).toBe(apiUrl)
+        expect(config.proxyReqPathResolver()).toBe(
+            '/api/report?id=fileId'
+        )
+        return (myReq: Request, myRes: Response, myNext: NextFunction) => {
+            expect(myReq).toBe(mockReq)
+            expect(myRes).toBe(mockRes)
+            expect(myNext).toBe(mockNext)
+        }
+        })
+
+        raw.getRaw(
+        mockReq,
+        mockRes,
+        mockNext,
+        'fileId'
+        )
+    })
+})
