@@ -5,7 +5,6 @@ import config from '../config'
 import { dataAccess } from '../data'
 import getUserToken from '../utils/userTokenHelper'
 
-
 const RESULTSPERPAGE = 50
 let currentPage = '1'
 

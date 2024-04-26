@@ -7,10 +7,8 @@ import SummaryController from '../controllers/summaryController'
 import ConfirmationController from '../controllers/confirmationController'
 import SubjectIdController from '../controllers/subjectIdController'
 import ReportsController from '../controllers/reportsController'
-// import { raw } from  '../services/report'
-const {
-  files: raw,
-} = require('../services/report')
+
+const { files: raw } = require('../services/report')
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes(service: Services): Router {
@@ -39,21 +37,11 @@ export default function routes(service: Services): Router {
 
   get('/reports', ReportsController.getReports)
 
-  //get('/download-report', ReportsController.downloadReport)
-
-  router.get(
-    '/download-report/:fileId',
-    (req, res, next) => {
-      const {
-        params: { fileId }
-      } = req
-      raw.getRaw(
-        req,
-        res,
-        next,
-        fileId,
-      )
-    }
-  )
+  router.get('/download-report/:fileId', (req, res, next) => {
+    const {
+      params: { fileId },
+    } = req
+    raw.getRaw(req, res, next, fileId)
+  })
   return router
 }
