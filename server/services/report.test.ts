@@ -2,7 +2,7 @@ import { NextFunction } from 'express'
 import config from '../config'
 
 const proxy = require('express-http-proxy')
-const { files: raw } = require('./report')
+const getReport = require ('./report')
 
 jest.mock('express-http-proxy')
 
@@ -24,6 +24,6 @@ describe('getReport', () => {
       }
     })
 
-    raw.getRaw(mockReq, mockRes, mockNext, 'fileId')
+    getReport(mockReq, mockRes, mockNext, 'fileId')
   })
 })
