@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express'
 import SubjectIdValidation from './subjectIdValidation'
+import { dataAccess } from '../data'
 
 export default class SubjectIdController {
   static getSubjectId(req: Request, res: Response) {
@@ -26,7 +27,12 @@ export default class SubjectIdController {
     const { subjectId } = req.body
     const subjectIdError = SubjectIdValidation.validateSubjectId(subjectId)
     const hasAllAnswers = req.session.selectedList && req.session.selectedList.length !== 0
-
+    if (dataAccess().telemetryClient) {
+      dataAccess().telemetryClient.trackEvent({
+        name: 'saveSubjectId',
+        properties: { id: req.session.userData.subjectId },
+      })
+    }
     if (subjectIdError) {
       res.render('pages/subjectid', {
         subjectId,

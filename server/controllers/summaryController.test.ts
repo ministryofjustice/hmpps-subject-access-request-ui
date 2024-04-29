@@ -3,8 +3,6 @@ import nock from 'nock'
 import SummaryController from './summaryController'
 import config from '../config'
 
-SummaryController.getUserToken = jest.fn().mockReturnValue('testtoken')
-
 let fakeApi: nock.Scope
 
 beforeEach(() => {
@@ -26,7 +24,6 @@ describe('getReportDetails', () => {
     const req: Request = {
       // @ts-expect-error stubbing session
       session: {
-        serviceList: [],
         userData: {
           subjectId: 'A1111AA',
           dateFrom: '01/01/2001',
@@ -35,7 +32,6 @@ describe('getReportDetails', () => {
         },
         selectedList: [{ id: '1', text: 'service1' }],
       },
-      body: { selectedservices: [] },
     }
     SummaryController.getReportDetails(req, res)
     expect(res.render).toHaveBeenCalled()
@@ -57,11 +53,10 @@ describe('postReportDetails', () => {
     redirect: jest.fn(),
   }
 
-  test('post request made to createSubjectAccessRequest endpoint renders confirmation page if successful', async () => {
+  test('post request made to SubjectAccessRequest endpoint renders confirmation page if successful', async () => {
     const req: Request = {
       // @ts-expect-error stubbing session
       session: {
-        serviceList: [],
         userData: {
           dateFrom: '01/01/2001',
           dateTo: '25/12/2022',
@@ -70,12 +65,15 @@ describe('postReportDetails', () => {
         },
         selectedList: [{ id: '1', text: 'service1', urls: '.com' }],
       },
-      body: { selectedservices: [] },
+      user: {
+        token: 'fakeUserToken',
+        authSource: 'auth',
+      },
     }
 
     fakeApi
       .post(
-        '/api/createSubjectAccessRequest',
+        '/api/subjectAccessRequest',
         '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":""}',
       )
       .reply(200)
@@ -90,7 +88,6 @@ describe('postReportDetails', () => {
     const req: Request = {
       // @ts-expect-error stubbing session
       session: {
-        serviceList: [],
         userData: {
           dateFrom: '01/01/2001',
           dateTo: '25/12/2022',
@@ -99,14 +96,52 @@ describe('postReportDetails', () => {
         },
         selectedList: [{ id: '1', text: 'service1', urls: '.com' }],
       },
-      body: { selectedservices: [] },
+      user: {
+        token: 'fakeUserToken',
+        authSource: 'auth',
+      },
     }
     nock(config.apis.subjectAccessRequest.url)
       .post(
-        '/api/createSubjectAccessRequest',
+        '/api/subjectAccessRequest',
         '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"","ndeliusId":""}',
       )
       .reply(400)
     await expect(SummaryController.postReportDetails(req, res)).rejects.toThrowError('Bad Request')
+  })
+
+  test('post request sends userToken to authenticate with API', async () => {
+    fakeApi = nock(config.apis.subjectAccessRequest.url, {
+      reqheaders: {
+        authorization: 'Bearer fakeUserToken',
+      },
+    })
+      .post(
+        '/api/subjectAccessRequest',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":""}',
+      )
+      .reply(200)
+
+    const req: Request = {
+      // @ts-expect-error stubbing session
+      session: {
+        userData: {
+          dateFrom: '01/01/2001',
+          dateTo: '25/12/2022',
+          caseReference: 'mockedCaseReference',
+          subjectId: 'A1111AA',
+        },
+        selectedList: [{ id: '1', text: 'service1', urls: '.com' }],
+      },
+      user: {
+        token: 'fakeUserToken',
+        authSource: 'auth',
+      },
+    }
+
+    const response = await SummaryController.postReportDetails(req, res)
+    expect(response.status).toBe(200)
+    expect(res.redirect).toHaveBeenCalled()
+    expect(res.redirect).toBeCalledWith('/confirmation')
   })
 })

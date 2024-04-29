@@ -3,6 +3,7 @@ import type { Request, Response } from 'express'
 import type { UserData } from '../@types/userdata'
 import InputsValidation from './inputsValidation'
 import formatDate from '../utils/dateHelpers'
+import { dataAccess } from '../data'
 
 export default class InputsController {
   static getInputs(req: Request, res: Response) {
@@ -33,7 +34,12 @@ export default class InputsController {
     const { dateFromError, dateToError } = InputsValidation.validateDateRange(dateFrom, dateTo)
     const caseReferenceError = InputsValidation.validateCaseReference(caseReference)
     const hasAllAnswers = req.session.selectedList && req.session.selectedList.length !== 0
-
+    if (dataAccess().telemetryClient) {
+      dataAccess().telemetryClient.trackEvent({
+        name: 'saveInputs',
+        properties: { id: req.session.userData.caseReference },
+      })
+    }
     if ([dateFromError, dateToError, caseReferenceError].some(item => !!item)) {
       const today = formatDate(new Date().toISOString(), 'short')
       res.render('pages/inputs', {
@@ -55,7 +61,7 @@ export default class InputsController {
         res.redirect('/summary')
         return
       }
-      res.redirect('/serviceselection')
+      res.redirect('/service-selection')
     }
   }
 }

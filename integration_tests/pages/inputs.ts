@@ -14,4 +14,6 @@ export default class InputsPage extends Page {
   caseReferenceTextbox = (): PageElement => cy.get('#input-caseReference')
 
   continueButton = (): PageElement => cy.get('#input-continue')
+
+  backLink = (): PageElement => cy.get('.govuk-back-link')
 }

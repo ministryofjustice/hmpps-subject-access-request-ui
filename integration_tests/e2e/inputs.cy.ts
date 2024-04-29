@@ -36,7 +36,7 @@ context('Inputs', () => {
     inputsPage.continueButton().should('exist')
   })
 
-  it('Submits user inputs and redirects to /serviceselection', () => {
+  it('Submits user inputs and redirects to /service-selection', () => {
     cy.signIn()
     cy.visit('/subject-id')
     const subjectIdPage = Page.verifyOnPage(SubjectIdPage)
@@ -54,7 +54,7 @@ context('Inputs', () => {
         .and('include', 'dateTo=')
         .and('include', 'caseReference=')
     })
-    cy.url().should('to.match', /serviceselection$/)
+    cy.url().should('to.match', /service-selection$/)
   })
 
   it('Persists user inputs when returning to inputs page', () => {
@@ -201,5 +201,13 @@ context('Inputs', () => {
     inputsPage.continueButton().click()
     cy.wait('@saveInputs')
     cy.url().should('to.match', /inputs$/)
+  })
+
+  it('redirects to subject ID page when back link is clicked', () => {
+    cy.signIn()
+    cy.visit('/inputs')
+    const inputsPage = Page.verifyOnPage(InputsPage)
+    inputsPage.backLink().click()
+    Page.verifyOnPage(SubjectIdPage)
   })
 })

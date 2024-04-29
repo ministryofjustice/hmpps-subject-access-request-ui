@@ -1,6 +1,7 @@
 import Page from '../pages/page'
 import ServiceSelectionPage from '../pages/serviceSelection'
 import AuthSignInPage from '../pages/authSignIn'
+import InputsPage from '../pages/inputs'
 
 context('ServiceSelection', () => {
   beforeEach(() => {
@@ -23,17 +24,17 @@ context('ServiceSelection', () => {
   })
 
   it('Unauthenticated user navigating to serviceselection page directed to auth', () => {
-    cy.visit('/serviceselection')
+    cy.visit('/service-selection')
     Page.verifyOnPage(AuthSignInPage)
   })
 
   it('Returns a response', () => {
-    cy.request('/serviceselection').its('body').should('exist')
+    cy.request('/service-selection').its('body').should('exist')
   })
 
   it('Contains check all Checkbox', () => {
     cy.signIn()
-    cy.visit('/serviceselection')
+    cy.visit('/service-selection')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
     serviceSelectionPage.checkAllCheckBox().should('exist')
     serviceSelectionPage.submitButton().should('exist')
@@ -41,16 +42,16 @@ context('ServiceSelection', () => {
 
   it('Does not allow none service selected', () => {
     cy.signIn()
-    cy.visit('/serviceselection')
+    cy.visit('/service-selection')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
     serviceSelectionPage.submitButton().click()
-    cy.url().should('to.match', /serviceselection$/)
+    cy.url().should('to.match', /service-selection$/)
     serviceSelectionPage.errorSummaryBox().should('be.visible')
   })
 
   it('Check all service when checkAll clicked once', () => {
     cy.signIn()
-    cy.visit('/serviceselection')
+    cy.visit('/service-selection')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
     serviceSelectionPage.checkAllCheckBox().click()
     cy.get('.govuk-moj-multi-select__checkbox__input').should('be.checked')
@@ -58,7 +59,7 @@ context('ServiceSelection', () => {
 
   it('Uncheck all service when checkAll clicked twice', () => {
     cy.signIn()
-    cy.visit('/serviceselection')
+    cy.visit('/service-selection')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
     serviceSelectionPage.checkAllCheckBox().click()
     serviceSelectionPage.checkAllCheckBox().click()
@@ -67,19 +68,27 @@ context('ServiceSelection', () => {
 
   it('Persists selected service when user returning to ServiceSelect page', () => {
     cy.signIn()
-    cy.visit('/serviceselection')
+    cy.visit('/service-selection')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
     serviceSelectionPage.checkAllCheckBox().click()
     serviceSelectionPage.submitButton().click()
-    cy.visit('/serviceselection')
+    cy.visit('/service-selection')
     cy.get('.govuk-moj-multi-select__checkbox__input').should('be.checked')
   })
 
   it('Raises error message if no services found', () => {
     cy.task('stubServiceList', [])
     cy.signIn()
-    cy.visit('/serviceselection')
+    cy.visit('/service-selection')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
     serviceSelectionPage.errorSummaryBox().should('be.visible')
+  })
+
+  it('redirects to inputs page when back link is clicked', () => {
+    cy.signIn()
+    cy.visit('/service-selection')
+    const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
+    serviceSelectionPage.backLink().click()
+    Page.verifyOnPage(InputsPage)
   })
 })

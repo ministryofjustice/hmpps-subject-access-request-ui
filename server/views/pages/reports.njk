@@ -1,9 +1,33 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 
 {% block content %}
 
+{% if previous != 0 %}
+  {% set previousButton = { text: 'Previous', href: '/reports?page=' + previous } %}
+{% endif %}
+
+{% if next != 0 %}
+  {% set nextButton = { text: 'Next', href: '/reports?page=' + next } %}
+{% endif %}
+
+      {% set pagination %}
+        {{ mojPagination({
+          results: {
+            from: from,
+            to: to,
+            count: numberOfReports
+          },
+          previous: previousButton,
+          next: nextButton,
+          items: pageLinks
+        }) }}
+      {% endset %}
+
   <h1 class="govuk-heading-l">Subject Access Request Reports</h1>
+
+  {{ pagination | safe }}
 
     <table class="govuk-table" data-module="moj-sortable-table">
       <thead class="govuk-table__head">
@@ -16,14 +40,25 @@
       </thead>
       <tbody class="govuk-table__body">
         {% for report in reportList %}
+          {% if report.status == 'Completed' %}
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">{{report.dateOfRequest}}</td>
+                    <td class="govuk-table__cell">{{report.sarCaseReference}}</td>
+                    <td class="govuk-table__cell">{{report.subjectId}}</td>
+                    <td class="govuk-table__cell"><a href="/download-report/{{report.uuid}}" download class="govuk-body govuk-link" /a>View report</td>
+                </tr>
+          {% else %}
                 <tr class="govuk-table__row">
                     <td class="govuk-table__cell">{{report.dateOfRequest}}</td>
                     <td class="govuk-table__cell">{{report.sarCaseReference}}</td>
                     <td class="govuk-table__cell">{{report.subjectId}}</td>
                     <td class="govuk-table__cell">{{report.status}}</td>
                 </tr>
+          {% endif %}
             {% endfor %}
       </tbody>
     </table>
+
+  {{ pagination | safe }}
 
 {% endblock %}

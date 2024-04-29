@@ -92,7 +92,7 @@ describe('saveInputs', () => {
     expect(baseReq.session.userData.dateTo).toBe('30/12/2022')
     expect(baseReq.session.userData.caseReference).toBe('mockedCaseReference')
     expect(res.redirect).toHaveBeenCalled()
-    expect(res.redirect).toBeCalledWith('/serviceselection')
+    expect(res.redirect).toBeCalledWith('/service-selection')
   })
 
   test('overwrites previous session data if present', () => {
@@ -113,7 +113,7 @@ describe('saveInputs', () => {
     expect(req.session.userData.dateTo).toBe('30/12/2022')
     expect(req.session.userData.caseReference).toBe('mockedCaseReference')
     expect(res.redirect).toHaveBeenCalled()
-    expect(res.redirect).toBeCalledWith('/serviceselection')
+    expect(res.redirect).toBeCalledWith('/service-selection')
   })
 
   test('redirects to summary if all answers have been provided', () => {
