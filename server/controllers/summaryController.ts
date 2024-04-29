@@ -35,8 +35,8 @@ export default class SummaryController {
     for (let i = 0; i < servicelist.length; i += 1) {
       list.push(`${servicelist[i].text}, ${servicelist[i].urls}`)
     }
-    let nomisId: string = ''
-    let ndeliusId: string = ''
+    let nomisId: string = null
+    let ndeliusId: string = null
     if (isNomisId(userData.subjectId)) {
       nomisId = userData.subjectId
     } else if (isNdeliusId(userData.subjectId)) {

@@ -74,7 +74,7 @@ describe('postReportDetails', () => {
     fakeApi
       .post(
         '/api/subjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":""}',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":null}',
       )
       .reply(200)
 
@@ -104,7 +104,7 @@ describe('postReportDetails', () => {
     nock(config.apis.subjectAccessRequest.url)
       .post(
         '/api/subjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"","ndeliusId":""}',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":null,"ndeliusId":null}',
       )
       .reply(400)
     await expect(SummaryController.postReportDetails(req, res)).rejects.toThrowError('Bad Request')
@@ -118,7 +118,7 @@ describe('postReportDetails', () => {
     })
       .post(
         '/api/subjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":""}',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":null}',
       )
       .reply(200)
 
