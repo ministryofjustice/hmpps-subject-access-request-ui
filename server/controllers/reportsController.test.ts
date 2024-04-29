@@ -44,10 +44,16 @@ describe('getReports', () => {
     // @ts-expect-error stubbing session
     session: {},
     query: {},
+    user: {
+      token: 'fakeUserToken',
+      authSource: 'auth',
+    },
   }
   // @ts-expect-error stubbing res.render
   const res: Response = {
     render: jest.fn(),
+    set: jest.fn(),
+    send: jest.fn(),
   }
   test('renders a response with list of SAR reports', async () => {
     await ReportsController.getReports(req, res)
@@ -204,7 +210,11 @@ describe('getReports', () => {
         req = {
           // @ts-expect-error stubbing session
           session: {},
-          query: { page: '3' },
+          query: { page: '3', id: 'df936446-719a-4463-acb6-9b13eea1f495' },
+          user: {
+            token: 'fakeUserToken',
+            authSource: 'auth',
+          },
         }
       })
       test('previous directs to the second page', async () => {
