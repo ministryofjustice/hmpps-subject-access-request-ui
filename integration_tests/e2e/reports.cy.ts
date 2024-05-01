@@ -30,7 +30,7 @@ context('Reports', () => {
         status: 'Completed',
       },
     ])
-    cy.task('stubGetReports', 56)
+    cy.task('stubGetTotalReports', 56)
   })
 
   it('Redirects to auth if requested by unauthenticated user', () => {
