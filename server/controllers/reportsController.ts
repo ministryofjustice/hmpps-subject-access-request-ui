@@ -24,7 +24,7 @@ export default class ReportsController {
       .set('Authorization', `Bearer ${token}`)
 
     const numberOfReportsResponse = await superagent
-      .get(`${config.apis.subjectAccessRequest.url}/api/subjectAccessRequestsTotal`)
+      .get(`${config.apis.subjectAccessRequest.url}/api/totalSubjectAccessRequests`)
       .set('Authorization', `Bearer ${token}`)
     const reports = response.body
     const numberOfReports = numberOfReportsResponse.text
