@@ -22,8 +22,12 @@ export default class ReportsController {
         `${config.apis.subjectAccessRequest.url}/api/reports?pageSize=${RESULTSPERPAGE}&pageNumber=${zeroIndexedPageNumber}`,
       )
       .set('Authorization', `Bearer ${token}`)
-    const numberOfReports = response.body.length
+
+    const numberOfReportsResponse = await superagent
+      .get(`${config.apis.subjectAccessRequest.url}/api/subjectAccessRequestsTotal`)
+      .set('Authorization', `Bearer ${token}`)
     const reports = response.body
+    const numberOfReports = numberOfReportsResponse.text
 
     return { reports, numberOfReports }
   }
@@ -31,17 +35,19 @@ export default class ReportsController {
   static async getReports(req: Request, res: Response) {
     currentPage = (req.query.page || '1') as string
     const { reports, numberOfReports } = await ReportsController.getSubjectAccessRequestList(req)
-    const parsedPage = Number.parseInt(currentPage, 10) || 1
+    const numberOfReportsInt = Number.parseInt(numberOfReports, 10)
+    const currentPageInt = Number.parseInt(currentPage, 10) || 1
     const visiblePageLinks = 5
-    const numberOfPages = Math.ceil(numberOfReports / RESULTSPERPAGE)
+    const numberOfPages = Math.ceil(numberOfReportsInt / RESULTSPERPAGE)
 
-    const previous = parsedPage - 1
-    const next = parsedPage === numberOfPages ? 0 : parsedPage + 1
+    const previous = currentPageInt - 1
+    const next = currentPageInt === numberOfPages ? 0 : currentPageInt + 1
 
-    const from = (parsedPage - 1) * RESULTSPERPAGE + 1
-    const to = Math.min(parsedPage * RESULTSPERPAGE, numberOfReports)
+    const from = (currentPageInt - 1) * RESULTSPERPAGE + 1
+    const to = Math.min(currentPageInt * RESULTSPERPAGE, numberOfReportsInt)
 
-    const pageLinks = getPageLinks({ visiblePageLinks, numberOfPages, currentPage: parsedPage })
+    const pageLinks = getPageLinks({ visiblePageLinks, numberOfPages, currentPage: currentPageInt })
+
     res.render('pages/reports', {
       reportList: reports,
       pageLinks,
