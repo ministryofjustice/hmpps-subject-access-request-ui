@@ -12,6 +12,7 @@
         Please confirm report details 
         </h1>
       </legend>
+
 {{ govukSummaryList({
   attributes: {
     "id": "report-summary"
@@ -83,7 +84,7 @@
         text: "Services selected"
       },
       value: {
-        text: selectedList
+        html: selectedList | replace (",", "<br>")
       },
       actions: {
         items: [
@@ -101,6 +102,8 @@
   ]
 }) }}
 <p>By accepting these details you are confirming that, to the best of your knowledge, these details are correct.</p>
+
+
   {{ govukButton({
     text: "Accept and create report",
     id: "accept-confirm"
