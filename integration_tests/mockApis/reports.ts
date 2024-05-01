@@ -16,4 +16,20 @@ const stubGetReports = responseBody => {
   })
 }
 
-export default stubGetReports
+const stubGetTotalReports = responseBody => {
+  return stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/api/subjectAccessRequestsTotal',
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;',
+      },
+      jsonBody: responseBody,
+    },
+  })
+}
+
+export default { stubGetReports, stubGetTotalReports }
