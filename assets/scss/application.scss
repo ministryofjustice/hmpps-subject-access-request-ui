@@ -4,13 +4,7 @@ $path: "/assets/images/";
 $moj-page-width: 1170px;
 $govuk-page-width: $moj-page-width;
 
-// @import "node_modules/govuk-frontend/govuk/all";
-@import "node_modules/govuk-frontend/dist/govuk/base";
-@import "node_modules/govuk-frontend/dist/govuk/core/index";
-@import "node_modules/govuk-frontend/dist/govuk/objects/index";
-@import "node_modules/govuk-frontend/dist/govuk/components/index";
-@import "node_modules/govuk-frontend/dist/govuk/utilities/index";
-@import "node_modules/govuk-frontend/dist/govuk/overrides/index";
+@import "node_modules/govuk-frontend/govuk/all";
 @import "node_modules/@ministryofjustice/frontend/moj/all";
 
 @import './components/header-bar';
