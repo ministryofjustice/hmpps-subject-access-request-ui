@@ -189,7 +189,7 @@ context('Summary', () => {
       inputsPage.caseReferenceTextbox().clear().type('exampleCaseReference')
       inputsPage.continueButton().click()
       const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
-      serviceSelectionPage.checkAllCheckBox().click()
+      serviceSelectionPage.checkAllCheckBox().click({ force: true })
       serviceSelectionPage.submitButton().click()
       Page.verifyOnPage(SummaryPage)
       cy.visit('/subject-id')
