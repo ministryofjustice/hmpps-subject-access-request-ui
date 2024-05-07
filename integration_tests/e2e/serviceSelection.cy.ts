@@ -53,7 +53,7 @@ context('ServiceSelection', () => {
     cy.signIn()
     cy.visit('/service-selection')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
-    serviceSelectionPage.checkAllCheckBox().click()
+    serviceSelectionPage.checkAllCheckBox().click({ force: true })
     cy.get('.govuk-moj-multi-select__checkbox__input').should('be.checked')
   })
 
@@ -61,8 +61,8 @@ context('ServiceSelection', () => {
     cy.signIn()
     cy.visit('/service-selection')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
-    serviceSelectionPage.checkAllCheckBox().click()
-    serviceSelectionPage.checkAllCheckBox().click()
+    serviceSelectionPage.checkAllCheckBox().click({ force: true })
+    serviceSelectionPage.checkAllCheckBox().click({ force: true })
     cy.get('.govuk-moj-multi-select__checkbox__input').should('not.be.checked')
   })
 
@@ -70,7 +70,7 @@ context('ServiceSelection', () => {
     cy.signIn()
     cy.visit('/service-selection')
     const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
-    serviceSelectionPage.checkAllCheckBox().click()
+    serviceSelectionPage.checkAllCheckBox().click({ force: true })
     serviceSelectionPage.submitButton().click()
     cy.visit('/service-selection')
     cy.get('.govuk-moj-multi-select__checkbox__input').should('be.checked')
