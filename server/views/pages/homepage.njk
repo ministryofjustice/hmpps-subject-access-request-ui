@@ -1,0 +1,41 @@
+{% extends "../partials/layout.njk" %}
+
+{% from "../components/card.njk" import card %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+
+{% block content %}
+
+<div class="homepage-content">
+  <h1>Subject Access Request Service</h1>
+
+  <div class="body-cards">
+
+      <div class="govuk-grid-row sar-card-group">
+        <div class="govuk-grid-column-one-third sar-card-group__item">
+          <div class="sar-card">
+            <h3 class="govuk-heading-m">
+              <a class="govuk-link" id="request-a-report" href="/subject-id">Request a report</a>
+            </h3>
+            <p class="govuk-body auth-card__description">Request a Subject Access Request report.</p>
+          </div>
+        </div>
+        <div class="govuk-grid-column-one-third sar-card-group__item">
+          <div class="sar-card">
+            <h3 class="govuk-heading-m">
+              <a class="govuk-link" id="view-reports" href="/reports">View reports</a>
+            </h3>
+            <p class="govuk-body">View all previously requested Subject Access Request reports.</p>
+          </div>
+        </div>
+      </div>
+    <div class="govuk-grid-row auth-card-group">
+        
+        
+        
+  </div>
+</div>
+
+{% endblock %}

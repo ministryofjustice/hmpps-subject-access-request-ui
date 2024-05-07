@@ -2,7 +2,7 @@ import Page from '../pages/page'
 import AuthSignInPage from '../pages/authSignIn'
 import SubjectIdPage from '../pages/subjectId'
 import InputsPage from '../pages/inputs'
-import IndexPage from '../pages'
+import IndexPage from '../pages/homepage'
 
 context('SubjectId', () => {
   beforeEach(() => {
