@@ -1,0 +1,31 @@
+.body-cards {
+    margin-left: -21.8vw;
+    margin-right: -21.8vw;
+    padding: 30px 21.8vw;
+    background: #f0f4f5;
+    margin-bottom: -150px;
+    min-height: 600px;
+}
+
+.sar-card-group {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+    padding: 0;
+}
+
+.sar-card-group__item {
+    display: flex;
+    list-style-type: none;
+    margin-bottom: 0;
+}
+
+.sar-card {
+    margin-bottom: 40px;
+    background: #fff;
+    border: 1px solid #d9dadb;
+    position: relative;
+    width: 100%;
+    padding: 25px;
+    border-bottom-width: 5px;
+}

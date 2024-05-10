@@ -16,7 +16,7 @@ export default function routes(service: Services): Router {
   const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   get('/', (req, res, next) => {
-    res.render('pages/index')
+    res.render('pages/homepage')
   })
 
   get('/subject-id', SubjectIdController.getSubjectId)
