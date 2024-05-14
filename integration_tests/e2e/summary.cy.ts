@@ -34,7 +34,7 @@ context('Summary', () => {
   it('Summary page title is HMPPS SAR UI', () => {
     cy.signIn()
     cy.visit('/summary')
-    cy.title().should('eq', 'Hmpps Subject Access Request Ui')
+    cy.title().should('eq', 'Subject Access Requests')
   })
 
   it('Results box exists', () => {
