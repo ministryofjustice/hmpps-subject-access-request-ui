@@ -20,13 +20,30 @@ describe('getConfirmation', () => {
         },
       },
     }
+
     await ConfirmationController.getConfirmation(req, res)
+
     expect(res.render).toHaveBeenCalled()
     expect(res.render).toBeCalledWith(
       'pages/confirmation',
       expect.objectContaining({
-        caseReference: req.session.userData.caseReference,
+        caseReference: 'ExampleCaseReference',
       }),
     )
+  })
+
+  test('clears user data from session', async () => {
+    const req: Request = {
+      // @ts-expect-error stubbing session
+      session: {
+        userData: {
+          caseReference: 'ExampleCaseReference',
+        },
+      },
+    }
+
+    await ConfirmationController.getConfirmation(req, res)
+
+    expect(req.session.userData).toEqual({})
   })
 })

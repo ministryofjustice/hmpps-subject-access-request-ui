@@ -7,5 +7,7 @@ export default class ConfirmationController {
     res.render('pages/confirmation', {
       caseReference: userData.caseReference,
     })
+
+    req.session.userData = {}
   }
 }
