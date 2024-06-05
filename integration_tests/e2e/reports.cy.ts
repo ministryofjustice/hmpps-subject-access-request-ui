@@ -54,6 +54,13 @@ context('Reports', () => {
     reportsPage.reportsTable().contains('Status')
   })
 
+  it('Displays search box for filtering', () => {
+    cy.signIn()
+    cy.visit('/reports')
+    const reportsPage = Page.verifyOnPage(ReportsPage)
+    reportsPage.searchBox().should('exist')
+  })
+
   it('Can be sorted on date of request', () => {
     cy.signIn()
     cy.visit('/reports')
