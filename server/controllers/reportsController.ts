@@ -30,12 +30,8 @@ export default class ReportsController {
 
   static async getSubjectAccessRequestList(req: Request, currentPage: string) {
     const token = getUserToken(req)
-    let zeroIndexedPageNumber
-    if (Number.parseInt(currentPage, 10) <= 0) {
-      zeroIndexedPageNumber = '0'
-    } else {
-      zeroIndexedPageNumber = (Number.parseInt(currentPage, 10) - 1).toString()
-    }
+    const zeroIndexedPageNumber = this.zeroIndexPageNumber(currentPage)
+
     const response = await superagent
       .get(
         `${config.apis.subjectAccessRequest.url}/api/reports?pageSize=${RESULTSPERPAGE}&pageNumber=${zeroIndexedPageNumber}`,
@@ -45,6 +41,7 @@ export default class ReportsController {
     const numberOfReportsResponse = await superagent
       .get(`${config.apis.subjectAccessRequest.url}/api/totalSubjectAccessRequests`)
       .set('Authorization', `Bearer ${token}`)
+
     const reports = response.body
     const numberOfReports = numberOfReportsResponse.text
 
@@ -54,6 +51,15 @@ export default class ReportsController {
   static async getSystemToken() {
     const token = await dataAccess().hmppsAuthClient.getSystemClientToken()
     return token
+  }
+
+  static async zeroIndexPageNumber(page: string) {
+    let zeroIndexedPageNumber
+    if (Number.parseInt(page, 10) <= 0) {
+      zeroIndexedPageNumber = '0'
+    } else {
+      zeroIndexedPageNumber = (Number.parseInt(page, 10) - 1).toString()
+    }
   }
 
   static async getPaginationInformation(numberOfReports: string, currentPage: string) {
