@@ -2,11 +2,11 @@ import type { Request, Response } from 'express'
 import nock from 'nock'
 import ReportsController from './reportsController'
 import config from '../config'
-import { sub } from 'date-fns'
+import type { SubjectAccessRequest } from '../@types/subjectAccessRequest'
 
 let fakeApi: nock.Scope
 
-const subjectAccessRequests: any = [
+const subjectAccessRequests: SubjectAccessRequest[] = [
   {
     id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
     status: 'Pending',
@@ -321,7 +321,7 @@ describe('getReports', () => {
       })
     })
   })
-  // TODO: 
+  // TODO:
   // - Remove this test
   // I don't believe this is testing properly - I believe its using the mocked info at the top of the file rather than below - and the zero indexing isnt being checked properly
   describe('report info', () => {
@@ -359,7 +359,7 @@ describe('getReports', () => {
       fakeApi.get('/api/subjectAccessRequests?pageSize=50&pageNumber=0').reply(200, subjectAccessRequests)
       fakeApi.get('/api/totalSubjectAccessRequests').reply(200, '3')
 
-      const response = await ReportsController.newGetSubjectAccessRequestList(req, '1')
+      const response = await ReportsController.getSubjectAccessRequestList(req, '1')
 
       expect(response.numberOfReports).toBe('3')
     })

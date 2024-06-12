@@ -1,10 +1,11 @@
 import type { Request, Response } from 'express'
 import superagent from 'superagent'
+import type { Report } from '../@types/report'
+import type { SubjectAccessRequest } from '../@types/subjectAccessRequest'
 import getPageLinks from '../utils/paginationHelper'
 import config from '../config'
 import { dataAccess } from '../data'
 import getUserToken from '../utils/userTokenHelper'
-import { sub } from 'date-fns'
 
 const RESULTSPERPAGE = 50
 
@@ -12,18 +13,19 @@ export default class ReportsController {
   static async getReports(req: Request, res: Response) {
     const currentPage = (req.query.page || '1') as string
 
-    const { reports, numberOfReports } = await ReportsController.getSubjectAccessRequestList(req, currentPage)
+    const { subjectAccessRequests, numberOfReports } = await ReportsController.getSubjectAccessRequestList(
+      req,
+      currentPage,
+    )
     const { pageLinks, previous, next, from, to } = await ReportsController.getPaginationInformation(
       numberOfReports,
       currentPage,
     )
 
-    //TODO:
-    // - call getCondensedSarList on the output of getSubjectAccessRequestList to get a condensed SAR list
-    // - pass the condensed list to the page for rendering, rather than the long-form one
+    const reportList = this.getCondensedSarList(subjectAccessRequests)
 
     res.render('pages/reports', {
-      reportList: reports,
+      reportList,
       pageLinks,
       previous,
       next,
@@ -31,28 +33,6 @@ export default class ReportsController {
       to,
       numberOfReports,
     })
-  }
-
-  // TODO:
-  // - Delete this function (and tests) and rename getNewSubjectAccessRequestList
-  static async getSubjectAccessRequestList(req: Request, currentPage: string) {
-    const token = getUserToken(req)
-    const zeroIndexedPageNumber = this.getZeroIndexedPageNumber(currentPage)
-
-    const response = await superagent
-      .get(
-        `${config.apis.subjectAccessRequest.url}/api/reports?pageSize=${RESULTSPERPAGE}&pageNumber=${zeroIndexedPageNumber}`,
-      )
-      .set('Authorization', `Bearer ${token}`)
-
-    const numberOfReportsResponse = await superagent
-      .get(`${config.apis.subjectAccessRequest.url}/api/totalSubjectAccessRequests`)
-      .set('Authorization', `Bearer ${token}`)
-
-    const reports = response.body
-    const numberOfReports = numberOfReportsResponse.text
-
-    return { reports, numberOfReports }
   }
 
   static async getSystemToken() {
@@ -84,9 +64,13 @@ export default class ReportsController {
     return { pageLinks, previous, next, from, to }
   }
 
-  // TODO:
-  // Rename this function 'getSubjectAccessRequestList' , delete the old version
-  static async newGetSubjectAccessRequestList(req: Request, currentPage: string) {
+  static async getSubjectAccessRequestList(
+    req: Request,
+    currentPage: string,
+  ): Promise<{
+    subjectAccessRequests: SubjectAccessRequest[]
+    numberOfReports: string
+  }> {
     const token = getUserToken(req)
     const zeroIndexedPageNumber = this.getZeroIndexedPageNumber(currentPage)
 
@@ -106,9 +90,13 @@ export default class ReportsController {
     return { subjectAccessRequests, numberOfReports }
   }
 
-
-  static async getCondensedSarList(subjectAccessRequests) {
-
+  static getCondensedSarList(subjectAccessRequests: SubjectAccessRequest[]): Report[] {
+    return subjectAccessRequests.map(subjectAccessRequest => ({
+      uuid: subjectAccessRequest.id.toString(),
+      dateOfRequest: subjectAccessRequest.requestDateTime.toString(),
+      sarCaseReference: subjectAccessRequest.sarCaseReferenceNumber,
+      subjectId: subjectAccessRequest.nomisId || subjectAccessRequest.ndeliusCaseReferenceId,
+      status: subjectAccessRequest.status.toString(),
+    }))
   }
 }
-
