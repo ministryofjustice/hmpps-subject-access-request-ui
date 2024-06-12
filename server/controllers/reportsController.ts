@@ -30,7 +30,7 @@ export default class ReportsController {
 
   static async getSubjectAccessRequestList(req: Request, currentPage: string) {
     const token = getUserToken(req)
-    const zeroIndexedPageNumber = this.zeroIndexPageNumber(currentPage)
+    const zeroIndexedPageNumber = this.getZeroIndexedPageNumber(currentPage)
 
     const response = await superagent
       .get(
@@ -53,13 +53,11 @@ export default class ReportsController {
     return token
   }
 
-  static async zeroIndexPageNumber(page: string) {
-    let zeroIndexedPageNumber
+  static getZeroIndexedPageNumber(page: string) {
     if (Number.parseInt(page, 10) <= 0) {
-      zeroIndexedPageNumber = '0'
-    } else {
-      zeroIndexedPageNumber = (Number.parseInt(page, 10) - 1).toString()
+      return '0'
     }
+    return (Number.parseInt(page, 10) - 1).toString()
   }
 
   static async getPaginationInformation(numberOfReports: string, currentPage: string) {
@@ -77,5 +75,25 @@ export default class ReportsController {
     const pageLinks = getPageLinks({ visiblePageLinks, numberOfPages, currentPage: currentPageInt })
 
     return { pageLinks, previous, next, from, to }
+  }
+
+  static async newGetSubjectAccessRequestList(req: Request, currentPage: string) {
+    const token = getUserToken(req)
+    const zeroIndexedPageNumber = this.getZeroIndexedPageNumber(currentPage)
+
+    const response = await superagent
+      .get(
+        `${config.apis.subjectAccessRequest.url}/api/subjectAccessRequests?pageSize=${RESULTSPERPAGE}&pageNumber=${zeroIndexedPageNumber}`,
+      )
+      .set('Authorization', `Bearer ${token}`)
+
+    const numberOfReportsResponse = await superagent
+      .get(`${config.apis.subjectAccessRequest.url}/api/totalSubjectAccessRequests`)
+      .set('Authorization', `Bearer ${token}`)
+
+    const reports = response.body
+    const numberOfReports = numberOfReportsResponse.text
+
+    return { reports, numberOfReports }
   }
 }

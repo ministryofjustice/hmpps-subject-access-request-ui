@@ -7,6 +7,7 @@ let fakeApi: nock.Scope
 
 beforeEach(() => {
   fakeApi = nock(config.apis.subjectAccessRequest.url)
+
   ReportsController.getSubjectAccessRequestList = jest.fn().mockReturnValue({
     reports: [
       {
@@ -269,6 +270,7 @@ describe('getReports', () => {
     })
   })
 
+  // I don't believe this is testing properly - I believe its using the mocked info at the top of the file rather than below - and the zero indexing isnt being checked properly
   describe('report info', () => {
     test('getSubjectAccessRequestList gets correct response', async () => {
       fakeApi.get('/api/reports?pageSize=50&pageNumber=1').reply(200, [
@@ -296,6 +298,66 @@ describe('getReports', () => {
       ])
       const response = await ReportsController.getSubjectAccessRequestList(req, '1')
       expect(response.numberOfReports).toBe(3)
+    })
+  })
+
+  describe('newGetSubjectAccessRequestList', () => {
+    test('newGetSubjectAccessRequestList gets correct response', async () => {
+      fakeApi.get('/api/subjectAccessRequests?pageSize=50&pageNumber=0').reply(200, [
+        {
+          id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
+          status: 'Pending',
+          dateFrom: '2024-03-01',
+          dateTo: '2024-03-12',
+          sarCaseReferenceNumber: 'caseRef1',
+          services:
+            'hmpps-activities-management-api, https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api, https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api, https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk',
+          nomisId: '',
+          ndeliusCaseReferenceId: 'A123456',
+          requestedBy: 'user',
+          requestDateTime: '2024-03-12T13:52:40.14177',
+          claimDateTime: '2024-03-27T14:49:08.67033',
+          claimAttempts: 1,
+          objectUrl: null,
+        },
+        {
+          id: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
+          status: 'Completed',
+          dateFrom: '2023-03-01',
+          dateTo: '2023-03-12',
+          sarCaseReferenceNumber: 'caseRef2',
+          services:
+            'hmpps-activities-management-api, https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api, https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api, https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk',
+          nomisId: '',
+          ndeliusCaseReferenceId: 'A123456',
+          requestedBy: 'user',
+          requestDateTime: '2023-03-12T13:52:40.14177',
+          claimDateTime: '2023-03-27T14:49:08.67033',
+          claimAttempts: 1,
+          objectUrl: null,
+        },
+        {
+          id: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
+          status: 'Completed',
+          dateFrom: '2022-03-01',
+          dateTo: '2022-03-12',
+          sarCaseReferenceNumber: 'caseRef3',
+          services:
+            'hmpps-activities-management-api, https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api, https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api, https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk',
+          nomisId: '',
+          ndeliusCaseReferenceId: 'A123456',
+          requestedBy: 'user',
+          requestDateTime: '2022-03-12T13:52:40.14177',
+          claimDateTime: '2022-03-27T14:49:08.67033',
+          claimAttempts: 1,
+          objectUrl: null,
+        },
+      ])
+      fakeApi.get('/api/totalSubjectAccessRequests').reply(200, '3')
+
+      const response = await ReportsController.newGetSubjectAccessRequestList(req, '1')
+
+      expect(response.numberOfReports).toBe('3')
     })
   })
 })
