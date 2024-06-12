@@ -2,8 +2,60 @@ import type { Request, Response } from 'express'
 import nock from 'nock'
 import ReportsController from './reportsController'
 import config from '../config'
+import { sub } from 'date-fns'
 
 let fakeApi: nock.Scope
+
+const subjectAccessRequests: any = [
+  {
+    id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
+    status: 'Pending',
+    dateFrom: '2024-03-01',
+    dateTo: '2024-03-12',
+    sarCaseReferenceNumber: 'caseRef1',
+    services:
+      'hmpps-activities-management-api, https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api, https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api, https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk',
+    nomisId: '',
+    ndeliusCaseReferenceId: 'A123456',
+    requestedBy: 'user',
+    requestDateTime: '2024-03-12T13:52:40.14177',
+    claimDateTime: '2024-03-27T14:49:08.67033',
+    claimAttempts: 1,
+    objectUrl: null,
+  },
+  {
+    id: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
+    status: 'Completed',
+    dateFrom: '2023-03-01',
+    dateTo: '2023-03-12',
+    sarCaseReferenceNumber: 'caseRef2',
+    services:
+      'hmpps-activities-management-api, https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api, https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api, https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk',
+    nomisId: '',
+    ndeliusCaseReferenceId: 'A123456',
+    requestedBy: 'user',
+    requestDateTime: '2023-03-12T13:52:40.14177',
+    claimDateTime: '2023-03-27T14:49:08.67033',
+    claimAttempts: 1,
+    objectUrl: null,
+  },
+  {
+    id: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
+    status: 'Completed',
+    dateFrom: '2022-03-01',
+    dateTo: '2022-03-12',
+    sarCaseReferenceNumber: 'caseRef3',
+    services:
+      'hmpps-activities-management-api, https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api, https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api, https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk',
+    nomisId: '',
+    ndeliusCaseReferenceId: 'A123456',
+    requestedBy: 'user',
+    requestDateTime: '2022-03-12T13:52:40.14177',
+    claimDateTime: '2022-03-27T14:49:08.67033',
+    claimAttempts: 1,
+    objectUrl: null,
+  },
+]
 
 beforeEach(() => {
   fakeApi = nock(config.apis.subjectAccessRequest.url)
@@ -269,7 +321,8 @@ describe('getReports', () => {
       })
     })
   })
-
+  // TODO: 
+  // - Remove this test
   // I don't believe this is testing properly - I believe its using the mocked info at the top of the file rather than below - and the zero indexing isnt being checked properly
   describe('report info', () => {
     test('getSubjectAccessRequestList gets correct response', async () => {
@@ -303,61 +356,44 @@ describe('getReports', () => {
 
   describe('newGetSubjectAccessRequestList', () => {
     test('newGetSubjectAccessRequestList gets correct response', async () => {
-      fakeApi.get('/api/subjectAccessRequests?pageSize=50&pageNumber=0').reply(200, [
-        {
-          id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
-          status: 'Pending',
-          dateFrom: '2024-03-01',
-          dateTo: '2024-03-12',
-          sarCaseReferenceNumber: 'caseRef1',
-          services:
-            'hmpps-activities-management-api, https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api, https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api, https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk',
-          nomisId: '',
-          ndeliusCaseReferenceId: 'A123456',
-          requestedBy: 'user',
-          requestDateTime: '2024-03-12T13:52:40.14177',
-          claimDateTime: '2024-03-27T14:49:08.67033',
-          claimAttempts: 1,
-          objectUrl: null,
-        },
-        {
-          id: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
-          status: 'Completed',
-          dateFrom: '2023-03-01',
-          dateTo: '2023-03-12',
-          sarCaseReferenceNumber: 'caseRef2',
-          services:
-            'hmpps-activities-management-api, https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api, https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api, https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk',
-          nomisId: '',
-          ndeliusCaseReferenceId: 'A123456',
-          requestedBy: 'user',
-          requestDateTime: '2023-03-12T13:52:40.14177',
-          claimDateTime: '2023-03-27T14:49:08.67033',
-          claimAttempts: 1,
-          objectUrl: null,
-        },
-        {
-          id: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
-          status: 'Completed',
-          dateFrom: '2022-03-01',
-          dateTo: '2022-03-12',
-          sarCaseReferenceNumber: 'caseRef3',
-          services:
-            'hmpps-activities-management-api, https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api, https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api, https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk',
-          nomisId: '',
-          ndeliusCaseReferenceId: 'A123456',
-          requestedBy: 'user',
-          requestDateTime: '2022-03-12T13:52:40.14177',
-          claimDateTime: '2022-03-27T14:49:08.67033',
-          claimAttempts: 1,
-          objectUrl: null,
-        },
-      ])
+      fakeApi.get('/api/subjectAccessRequests?pageSize=50&pageNumber=0').reply(200, subjectAccessRequests)
       fakeApi.get('/api/totalSubjectAccessRequests').reply(200, '3')
 
       const response = await ReportsController.newGetSubjectAccessRequestList(req, '1')
 
       expect(response.numberOfReports).toBe('3')
+    })
+  })
+
+  describe('getCondensedSarList', () => {
+    test('getCondensedSarList returns list of SARs with condensed information for display', async () => {
+      const condensedSarList = [
+        {
+          id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
+          status: 'Pending',
+          sarCaseReferenceNumber: 'caseRef1',
+          subjectId: 'A123456',
+          requestDateTime: '2024-03-12T13:52:40.14177',
+        },
+        {
+          id: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
+          status: 'Completed',
+          sarCaseReferenceNumber: 'caseRef2',
+          ndeliusCaseReferenceId: 'A123456',
+          requestDateTime: '2023-03-12T13:52:40.14177',
+        },
+        {
+          id: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
+          status: 'Completed',
+          sarCaseReferenceNumber: 'caseRef3',
+          ndeliusCaseReferenceId: 'A123456',
+          requestDateTime: '2022-03-12T13:52:40.14177',
+        },
+      ]
+
+      const response = ReportsController.getCondensedSarList(subjectAccessRequests)
+
+      expect(response).toBe(condensedSarList)
     })
   })
 })

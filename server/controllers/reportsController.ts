@@ -4,6 +4,7 @@ import getPageLinks from '../utils/paginationHelper'
 import config from '../config'
 import { dataAccess } from '../data'
 import getUserToken from '../utils/userTokenHelper'
+import { sub } from 'date-fns'
 
 const RESULTSPERPAGE = 50
 
@@ -17,6 +18,10 @@ export default class ReportsController {
       currentPage,
     )
 
+    //TODO:
+    // - call getCondensedSarList on the output of getSubjectAccessRequestList to get a condensed SAR list
+    // - pass the condensed list to the page for rendering, rather than the long-form one
+
     res.render('pages/reports', {
       reportList: reports,
       pageLinks,
@@ -28,6 +33,8 @@ export default class ReportsController {
     })
   }
 
+  // TODO:
+  // - Delete this function (and tests) and rename getNewSubjectAccessRequestList
   static async getSubjectAccessRequestList(req: Request, currentPage: string) {
     const token = getUserToken(req)
     const zeroIndexedPageNumber = this.getZeroIndexedPageNumber(currentPage)
@@ -77,6 +84,8 @@ export default class ReportsController {
     return { pageLinks, previous, next, from, to }
   }
 
+  // TODO:
+  // Rename this function 'getSubjectAccessRequestList' , delete the old version
   static async newGetSubjectAccessRequestList(req: Request, currentPage: string) {
     const token = getUserToken(req)
     const zeroIndexedPageNumber = this.getZeroIndexedPageNumber(currentPage)
@@ -91,9 +100,15 @@ export default class ReportsController {
       .get(`${config.apis.subjectAccessRequest.url}/api/totalSubjectAccessRequests`)
       .set('Authorization', `Bearer ${token}`)
 
-    const reports = response.body
+    const subjectAccessRequests = response.body
     const numberOfReports = numberOfReportsResponse.text
 
-    return { reports, numberOfReports }
+    return { subjectAccessRequests, numberOfReports }
+  }
+
+
+  static async getCondensedSarList(subjectAccessRequests) {
+
   }
 }
+
