@@ -6,10 +6,29 @@ import { dataAccess } from '../data'
 import getUserToken from '../utils/userTokenHelper'
 
 const RESULTSPERPAGE = 50
-let currentPage = '1'
 
 export default class ReportsController {
-  static async getSubjectAccessRequestList(req: Request) {
+  static async getReports(req: Request, res: Response) {
+    const currentPage = (req.query.page || '1') as string
+
+    const { reports, numberOfReports } = await ReportsController.getSubjectAccessRequestList(req, currentPage)
+    const { pageLinks, previous, next, from, to } = await ReportsController.getPaginationInformation(
+      numberOfReports,
+      currentPage,
+    )
+
+    res.render('pages/reports', {
+      reportList: reports,
+      pageLinks,
+      previous,
+      next,
+      from,
+      to,
+      numberOfReports,
+    })
+  }
+
+  static async getSubjectAccessRequestList(req: Request, currentPage: string) {
     const token = getUserToken(req)
     let zeroIndexedPageNumber
     if (Number.parseInt(currentPage, 10) <= 0) {
@@ -32,9 +51,12 @@ export default class ReportsController {
     return { reports, numberOfReports }
   }
 
-  static async getReports(req: Request, res: Response) {
-    currentPage = (req.query.page || '1') as string
-    const { reports, numberOfReports } = await ReportsController.getSubjectAccessRequestList(req)
+  static async getSystemToken() {
+    const token = await dataAccess().hmppsAuthClient.getSystemClientToken()
+    return token
+  }
+
+  static async getPaginationInformation(numberOfReports: string, currentPage: string) {
     const numberOfReportsInt = Number.parseInt(numberOfReports, 10)
     const currentPageInt = Number.parseInt(currentPage, 10) || 1
     const visiblePageLinks = 5
@@ -48,19 +70,6 @@ export default class ReportsController {
 
     const pageLinks = getPageLinks({ visiblePageLinks, numberOfPages, currentPage: currentPageInt })
 
-    res.render('pages/reports', {
-      reportList: reports,
-      pageLinks,
-      previous,
-      next,
-      from,
-      to,
-      numberOfReports,
-    })
-  }
-
-  static async getSystemToken() {
-    const token = await dataAccess().hmppsAuthClient.getSystemClientToken()
-    return token
+    return { pageLinks, previous, next, from, to }
   }
 }

@@ -268,6 +268,7 @@ describe('getReports', () => {
       })
     })
   })
+
   describe('report info', () => {
     test('getSubjectAccessRequestList gets correct response', async () => {
       fakeApi.get('/api/reports?pageSize=50&pageNumber=1').reply(200, [
@@ -293,7 +294,7 @@ describe('getReports', () => {
           status: 'Completed',
         },
       ])
-      const response = await ReportsController.getSubjectAccessRequestList(req)
+      const response = await ReportsController.getSubjectAccessRequestList(req, '1')
       expect(response.numberOfReports).toBe(3)
     })
   })
