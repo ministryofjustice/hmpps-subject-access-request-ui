@@ -4,7 +4,7 @@ const stubGetReports = responseBody => {
   return stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/api/reports\\?pageSize=50&pageNumber=0',
+      urlPattern: '/api/reports\\?pageSize=50&pageNumber=1',
     },
     response: {
       status: 200,
