@@ -22,7 +22,7 @@ export default class ReportsController {
       currentPage,
     )
 
-    const reportList = this.getCondensedSarList(subjectAccessRequests)
+    const reportList = ReportsController.getCondensedSarList(subjectAccessRequests)
 
     res.render('pages/reports', {
       reportList,
