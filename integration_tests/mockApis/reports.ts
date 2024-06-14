@@ -4,7 +4,7 @@ const stubGetSubjectAccessRequests = responseBody => {
   return stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/api/subjectAccessRequests\\?pageSize=50&pageNumber=0&search=""',
+      urlPattern: '/api/subjectAccessRequests\\?pageSize=50&pageNumber=0&search=',
     },
     response: {
       status: 200,
