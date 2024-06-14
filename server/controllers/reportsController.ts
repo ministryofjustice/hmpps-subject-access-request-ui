@@ -73,10 +73,11 @@ export default class ReportsController {
   }> {
     const token = getUserToken(req)
     const zeroIndexedPageNumber = this.getZeroIndexedPageNumber(currentPage)
+    const keyword = (req.query.keyword || '') as string
 
     const response = await superagent
       .get(
-        `${config.apis.subjectAccessRequest.url}/api/subjectAccessRequests?pageSize=${RESULTSPERPAGE}&pageNumber=${zeroIndexedPageNumber}`,
+        `${config.apis.subjectAccessRequest.url}/api/subjectAccessRequests?pageSize=${RESULTSPERPAGE}&pageNumber=${zeroIndexedPageNumber}&search=${keyword}`,
       )
       .set('Authorization', `Bearer ${token}`)
 

@@ -10,4 +10,6 @@ export default class SubjectIdPage extends Page {
   sortByDateButton = (): PageElement => cy.get('button:contains("Date of request")')
 
   reportsTableRow = (): PageElement => cy.get('.govuk-table__body').find('.govuk-table__row')
+
+  searchBox = (): PageElement => cy.get('#keyword')
 }
