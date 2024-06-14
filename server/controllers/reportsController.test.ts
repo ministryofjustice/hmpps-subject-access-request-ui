@@ -302,7 +302,7 @@ describe('getReports', () => {
 
   describe('report info', () => {
     test('getSubjectAccessRequestList gets correct response', async () => {
-      fakeApi.get('/api/subjectAccessRequests?pageSize=50&pageNumber=1').reply(200, [
+      fakeApi.get('/api/subjectAccessRequests?pageSize=50&pageNumber=1&search=').reply(200, [
         {
           id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
           status: 'Pending',
@@ -359,7 +359,7 @@ describe('getReports', () => {
 
   describe('newGetSubjectAccessRequestList', () => {
     test('newGetSubjectAccessRequestList gets correct response', async () => {
-      fakeApi.get('/api/subjectAccessRequests?pageSize=50&pageNumber=0').reply(200, subjectAccessRequests)
+      fakeApi.get('/api/subjectAccessRequests?pageSize=50&pageNumber=0&search=').reply(200, subjectAccessRequests)
       fakeApi.get('/api/totalSubjectAccessRequests').reply(200, '3')
 
       const response = await ReportsController.getSubjectAccessRequestList(req, '1')
