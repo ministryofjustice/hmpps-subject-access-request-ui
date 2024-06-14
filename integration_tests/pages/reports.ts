@@ -11,5 +11,5 @@ export default class SubjectIdPage extends Page {
 
   reportsTableRow = (): PageElement => cy.get('.govuk-table__body').find('.govuk-table__row')
 
-  searchBox = (): PageElement => cy.get('#search')
+  searchBox = (): PageElement => cy.get('#keyword')
 }
