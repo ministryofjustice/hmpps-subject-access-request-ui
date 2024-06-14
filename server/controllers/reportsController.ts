@@ -19,7 +19,7 @@ export default class ReportsController {
     }
     const response = await superagent
       .get(
-        `${config.apis.subjectAccessRequest.url}/api/reports?pageSize=${RESULTSPERPAGE}&pageNumber=${zeroIndexedPageNumber}`,
+        `${config.apis.subjectAccessRequest.url}/api/reports?pageSize=${RESULTSPERPAGE}&pageNumber=${zeroIndexedPageNumber}&search=${req.query.keyword}`,
       )
       .set('Authorization', `Bearer ${token}`)
 
