@@ -27,8 +27,6 @@ export default class ReportsController {
 
     const reportList = ReportsController.getCondensedSarList(subjectAccessRequests)
 
-    const searchKeyword = req.query.keyword
-
     res.render('pages/reports', {
       reportList,
       pageLinks,
@@ -37,7 +35,7 @@ export default class ReportsController {
       from,
       to,
       numberOfReports,
-      searchKeyword,
+      searchTerm,
     })
   }
 

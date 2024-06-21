@@ -6,11 +6,11 @@
 {% block content %}
 
 {% if previous != 0 %}
-  {% set previousButton = { text: 'Previous', href: '/reports?page=' + previous + '&keyword=' + searchKeyword } %}
+  {% set previousButton = { text: 'Previous', href: '/reports?page=' + previous + '&keyword=' + searchTerm } %}
 {% endif %}
 
 {% if next != 0 %}
-  {% set nextButton = { text: 'Next', href: '/reports?page=' + next + '&keyword=' + searchKeyword} %}
+  {% set nextButton = { text: 'Next', href: '/reports?page=' + next + '&keyword=' + searchTerm} %}
 {% endif %}
 
       {% set pagination %}
