@@ -74,7 +74,9 @@ export default class ReportsController {
     const token = getUserToken(req)
     const zeroIndexedPageNumber = this.getZeroIndexedPageNumber(currentPage)
     const keyword = (req.query.keyword || '') as string
-
+    console.log(
+      `${config.apis.subjectAccessRequest.url}/api/subjectAccessRequests?pageSize=${RESULTSPERPAGE}&pageNumber=${zeroIndexedPageNumber}&search=${keyword}`,
+    )
     const response = await superagent
       .get(
         `${config.apis.subjectAccessRequest.url}/api/subjectAccessRequests?pageSize=${RESULTSPERPAGE}&pageNumber=${zeroIndexedPageNumber}&search=${keyword}`,
@@ -82,11 +84,12 @@ export default class ReportsController {
       .set('Authorization', `Bearer ${token}`)
 
     const numberOfReportsResponse = await superagent
-      .get(`${config.apis.subjectAccessRequest.url}/api/totalSubjectAccessRequests`)
+      .get(`${config.apis.subjectAccessRequest.url}/api/totalSubjectAccessRequests?search=${keyword}`)
       .set('Authorization', `Bearer ${token}`)
 
     const subjectAccessRequests = response.body
     const numberOfReports = numberOfReportsResponse.text
+    console.log(`Found ${numberOfReports} reports`)
 
     return { subjectAccessRequests, numberOfReports }
   }
