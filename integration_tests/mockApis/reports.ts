@@ -20,7 +20,7 @@ const stubGetTotalSubjectAccessRequests = responseBody => {
   return stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/api/totalSubjectAccessRequests?search=',
+      urlPattern: '/api/totalSubjectAccessRequests\\?search=',
     },
     response: {
       status: 200,
