@@ -2,10 +2,12 @@ const getPageLinks = ({
   visiblePageLinks = 1,
   numberOfPages = 1,
   currentPage = 1,
+  searchTerm,
 }: {
   visiblePageLinks: number
   numberOfPages: number
   currentPage: number
+  searchTerm: string
 }): Array<{ text: string; href: string; selected: boolean }> => {
   let pageStartNumber = 1
   let pageEndNumber = visiblePageLinks
@@ -32,7 +34,7 @@ const getPageLinks = ({
     pageLinks.push({
       text: pageIndex.toString(),
       // TODO: Genericise pagination helper - pass in URL
-      href: `/reports?page=${pageIndex}`,
+      href: `/reports?page=${pageIndex}&keyword=${searchTerm}`,
       selected: pageIndex === currentPage,
     })
   }

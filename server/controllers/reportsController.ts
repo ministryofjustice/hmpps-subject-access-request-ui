@@ -17,12 +17,17 @@ export default class ReportsController {
       req,
       currentPage,
     )
+    const searchTerm = req.query.keyword || ''
+
     const { pageLinks, previous, next, from, to } = await ReportsController.getPaginationInformation(
       numberOfReports,
       currentPage,
+      searchTerm.toString(),
     )
 
     const reportList = ReportsController.getCondensedSarList(subjectAccessRequests)
+
+    const searchKeyword = req.query.keyword
 
     res.render('pages/reports', {
       reportList,
@@ -32,6 +37,7 @@ export default class ReportsController {
       from,
       to,
       numberOfReports,
+      searchKeyword,
     })
   }
 
@@ -47,7 +53,7 @@ export default class ReportsController {
     return (Number.parseInt(page, 10) - 1).toString()
   }
 
-  static async getPaginationInformation(numberOfReports: string, currentPage: string) {
+  static async getPaginationInformation(numberOfReports: string, currentPage: string, searchTerm: string) {
     const numberOfReportsInt = Number.parseInt(numberOfReports, 10)
     const currentPageInt = Number.parseInt(currentPage, 10) || 1
     const visiblePageLinks = 5
@@ -59,7 +65,7 @@ export default class ReportsController {
     const from = (currentPageInt - 1) * RESULTSPERPAGE + 1
     const to = Math.min(currentPageInt * RESULTSPERPAGE, numberOfReportsInt)
 
-    const pageLinks = getPageLinks({ visiblePageLinks, numberOfPages, currentPage: currentPageInt })
+    const pageLinks = getPageLinks({ visiblePageLinks, numberOfPages, currentPage: currentPageInt, searchTerm })
 
     return { pageLinks, previous, next, from, to }
   }
@@ -74,9 +80,6 @@ export default class ReportsController {
     const token = getUserToken(req)
     const zeroIndexedPageNumber = this.getZeroIndexedPageNumber(currentPage)
     const keyword = (req.query.keyword || '') as string
-    console.log(
-      `${config.apis.subjectAccessRequest.url}/api/subjectAccessRequests?pageSize=${RESULTSPERPAGE}&pageNumber=${zeroIndexedPageNumber}&search=${keyword}`,
-    )
     const response = await superagent
       .get(
         `${config.apis.subjectAccessRequest.url}/api/subjectAccessRequests?pageSize=${RESULTSPERPAGE}&pageNumber=${zeroIndexedPageNumber}&search=${keyword}`,
@@ -89,7 +92,6 @@ export default class ReportsController {
 
     const subjectAccessRequests = response.body
     const numberOfReports = numberOfReportsResponse.text
-    console.log(`Found ${numberOfReports} reports`)
 
     return { subjectAccessRequests, numberOfReports }
   }
