@@ -2,7 +2,7 @@
 [![repo standards badge](https://img.shields.io/badge/dynamic/json?color=blue&style=flat&logo=github&label=MoJ%20Compliant&query=%24.result&url=https%3A%2F%2Foperations-engineering-reports.cloud-platform.service.justice.gov.uk%2Fapi%2Fv1%2Fcompliant_public_repositories%2Fhmpps-subject-access-request-ui)](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/public-github-repositories.html#hmpps-subject-access-request-ui "Link to report")
 [![CircleCI](https://circleci.com/gh/ministryofjustice/hmpps-subject-access-request-ui/tree/main.svg?style=svg)](https://circleci.com/gh/ministryofjustice/hmpps-subject-access-request-ui)
 
-This project was created via the template github repo used for new Typescript based projects.
+UI for Subject Access Requests. The other components of this service are the [hmpps-subject-access-request-api](https://github.com/ministryofjustice/hmpps-subject-access-request-api) and the [hmpps-subject-access-request-worker](https://github.com/ministryofjustice/hmpps-subject-access-request-worker). The Confluence documentation for the service can be found [here](https://dsdmoj.atlassian.net/wiki/spaces/SARS/pages/4771479564/Overview).
 
 ## Documentation
 
@@ -66,7 +66,7 @@ Or run tests with the cypress UI:
 
 `npm run int-test-ui`
 
-## Change log
+## Changelog
 
 A changelog for the service is available [here](./CHANGELOG.md)
 
