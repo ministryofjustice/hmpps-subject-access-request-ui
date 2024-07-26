@@ -23,6 +23,7 @@ context('Reports', () => {
         claimDateTime: '2024-03-27T14:49:08.67033',
         claimAttempts: 1,
         objectUrl: null,
+        lastDownloaded: null,
       },
       {
         id: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
@@ -39,6 +40,7 @@ context('Reports', () => {
         claimDateTime: '2023-03-27T14:49:08.67033',
         claimAttempts: 1,
         objectUrl: null,
+        lastDownloaded: null,
       },
       {
         id: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
@@ -55,6 +57,7 @@ context('Reports', () => {
         claimDateTime: '2022-03-27T14:49:08.67033',
         claimAttempts: 1,
         objectUrl: null,
+        lastDownloaded: null,
       },
     ])
     cy.task('stubGetTotalSubjectAccessRequests', 3)

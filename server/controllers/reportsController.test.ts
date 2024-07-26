@@ -22,6 +22,7 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     claimDateTime: '2024-03-27T14:49:08.67033',
     claimAttempts: 1,
     objectUrl: null,
+    lastDownloaded: null,
   },
   {
     id: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
@@ -38,6 +39,7 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     claimDateTime: '2023-03-27T14:49:08.67033',
     claimAttempts: 1,
     objectUrl: null,
+    lastDownloaded: null,
   },
   {
     id: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
@@ -54,6 +56,7 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     claimDateTime: '2022-03-27T14:49:08.67033',
     claimAttempts: 1,
     objectUrl: null,
+    lastDownloaded: null,
   },
 ]
 
@@ -98,6 +101,7 @@ describe('getReports', () => {
             sarCaseReference: 'caseRef1',
             subjectId: 'A123456',
             dateOfRequest: '2024-03-12T13:52:40.14177',
+            lastDownloaded: '',
           },
           {
             uuid: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
@@ -105,6 +109,7 @@ describe('getReports', () => {
             sarCaseReference: 'caseRef2',
             subjectId: 'A123456',
             dateOfRequest: '2023-03-12T13:52:40.14177',
+            lastDownloaded: '',
           },
           {
             uuid: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
@@ -112,6 +117,7 @@ describe('getReports', () => {
             sarCaseReference: 'caseRef3',
             subjectId: 'A123456',
             dateOfRequest: '2022-03-12T13:52:40.14177',
+            lastDownloaded: '',
           },
         ],
       }),
@@ -377,6 +383,7 @@ describe('getReports', () => {
           sarCaseReference: 'caseRef1',
           subjectId: 'A123456',
           dateOfRequest: '2024-03-12T13:52:40.14177',
+          lastDownloaded: '',
         },
         {
           uuid: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
@@ -384,6 +391,7 @@ describe('getReports', () => {
           sarCaseReference: 'caseRef2',
           subjectId: 'A123456',
           dateOfRequest: '2023-03-12T13:52:40.14177',
+          lastDownloaded: '',
         },
         {
           uuid: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
@@ -391,6 +399,7 @@ describe('getReports', () => {
           sarCaseReference: 'caseRef3',
           subjectId: 'A123456',
           dateOfRequest: '2022-03-12T13:52:40.14177',
+          lastDownloaded: '',
         },
       ]
 
