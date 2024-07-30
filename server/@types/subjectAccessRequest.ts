@@ -12,4 +12,5 @@ export interface SubjectAccessRequest {
   claimDateTime: string
   claimAttempts: number
   objectUrl: string | null
+  lastDownloaded: string
 }

@@ -101,6 +101,7 @@ export default class ReportsController {
       sarCaseReference: subjectAccessRequest.sarCaseReferenceNumber,
       subjectId: subjectAccessRequest.nomisId || subjectAccessRequest.ndeliusCaseReferenceId,
       status: subjectAccessRequest.status.toString(),
+      lastDownloaded: (subjectAccessRequest.lastDownloaded || '').toString(),
     }))
   }
 }
