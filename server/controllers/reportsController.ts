@@ -97,11 +97,23 @@ export default class ReportsController {
   static getCondensedSarList(subjectAccessRequests: SubjectAccessRequest[]): Report[] {
     return subjectAccessRequests.map(subjectAccessRequest => ({
       uuid: subjectAccessRequest.id.toString(),
-      dateOfRequest: subjectAccessRequest.requestDateTime.toString(),
+      dateOfRequest: this.getFormattedDateTime(subjectAccessRequest.requestDateTime),
       sarCaseReference: subjectAccessRequest.sarCaseReferenceNumber,
       subjectId: subjectAccessRequest.nomisId || subjectAccessRequest.ndeliusCaseReferenceId,
       status: subjectAccessRequest.status.toString(),
-      lastDownloaded: (subjectAccessRequest.lastDownloaded || '').toString(),
+      lastDownloaded: (this.getFormattedDateTime(subjectAccessRequest.lastDownloaded) || '').toString(),
     }))
+  }
+
+  static getFormattedDateTime(dateTimeString: string): string {
+    if (dateTimeString != null) {
+      const padStart = (value: number): string => value.toString().padStart(2, '0')
+      const dateTime: Date = new Date(dateTimeString)
+
+      return `${padStart(dateTime.getDate())}/${padStart(
+        dateTime.getMonth() + 1,
+      )}/${dateTime.getFullYear()}, ${padStart(dateTime.getHours())}:${padStart(dateTime.getMinutes())}`
+    }
+    return null
   }
 }
