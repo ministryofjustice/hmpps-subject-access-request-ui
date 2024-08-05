@@ -110,9 +110,9 @@ export default class ReportsController {
       const padStart = (value: number): string => value.toString().padStart(2, '0')
       const dateTime: Date = new Date(dateTimeString)
 
-      return `${padStart(dateTime.getDate())}/${padStart(
-        dateTime.getMonth() + 1,
-      )}/${dateTime.getFullYear()}, ${padStart(dateTime.getHours())}:${padStart(dateTime.getMinutes())}`
+      return `${dateTime.getFullYear()}/${padStart(dateTime.getMonth() + 1)}/${padStart(
+        dateTime.getDate(),
+      )}, ${padStart(dateTime.getHours())}:${padStart(dateTime.getMinutes())}`
     }
     return null
   }
