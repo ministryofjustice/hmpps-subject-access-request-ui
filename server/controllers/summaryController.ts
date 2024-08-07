@@ -38,9 +38,9 @@ export default class SummaryController {
     let nomisId: string = null
     let ndeliusId: string = null
     if (isNomisId(userData.subjectId)) {
-      nomisId = userData.subjectId
+      nomisId = userData.subjectId.toString().toUpperCase()
     } else if (isNdeliusId(userData.subjectId)) {
-      ndeliusId = userData.subjectId
+      ndeliusId = userData.subjectId.toString().toUpperCase()
     }
 
     try {
