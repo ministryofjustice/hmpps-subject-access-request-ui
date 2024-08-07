@@ -144,4 +144,33 @@ describe('postReportDetails', () => {
     expect(res.redirect).toHaveBeenCalled()
     expect(res.redirect).toBeCalledWith('/confirmation')
   })
+
+  test('post request send subject ID capitalised when provided in lowercase', async () => {
+    const req: Request = {
+      // @ts-expect-error stubbing session
+      session: {
+        userData: {
+          dateFrom: '01/01/2001',
+          dateTo: '25/12/2022',
+          caseReference: 'mockedCaseReference',
+          subjectId: 'a1111aa',
+        },
+        selectedList: [{ id: '1', text: 'service1', urls: '.com' }],
+      },
+      user: {
+        token: 'fakeUserToken',
+        authSource: 'auth',
+      },
+    }
+
+    fakeApi
+      .post(
+        '/api/subjectAccessRequest',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":null}',
+      )
+      .reply(200)
+
+    const response = await SummaryController.postReportDetails(req, res)
+    expect(response.status).toBe(200)
+  })
 })
