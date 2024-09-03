@@ -7,7 +7,7 @@ import SummaryController from '../controllers/summaryController'
 import ConfirmationController from '../controllers/confirmationController'
 import SubjectIdController from '../controllers/subjectIdController'
 import ReportsController from '../controllers/reportsController'
-import getReport from '../services/report'
+import ReportDownloadController from '../controllers/reportDownloadController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes(service: Services): Router {
@@ -30,17 +30,13 @@ export default function routes(service: Services): Router {
 
   get('/service-selection', ServiceSelectionController.getServices)
 
-  router.post('/service-selection', ServiceSelectionController.selectServices)
+  post('/service-selection', ServiceSelectionController.selectServices)
 
   get('/confirmation', ConfirmationController.getConfirmation)
 
   get('/reports', ReportsController.getReports)
 
-  router.get('/download-report/:fileId', (req, res, next) => {
-    const {
-      params: { fileId },
-    } = req
-    getReport(req, res, next, fileId)
-  })
+  get('/download-report/report', ReportDownloadController.getReport)
+
   return router
 }
