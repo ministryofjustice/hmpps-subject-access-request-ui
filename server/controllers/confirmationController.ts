@@ -9,5 +9,6 @@ export default class ConfirmationController {
     })
 
     req.session.userData = {}
+    req.session.selectedList = []
   }
 }

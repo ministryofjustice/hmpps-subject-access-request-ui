@@ -39,11 +39,13 @@ describe('getConfirmation', () => {
         userData: {
           caseReference: 'ExampleCaseReference',
         },
+        selectedList: [{ id: '1', text: 'service1' }],
       },
     }
 
     await ConfirmationController.getConfirmation(req, res)
 
     expect(req.session.userData).toEqual({})
+    expect(req.session.selectedList).toEqual([])
   })
 })
