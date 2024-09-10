@@ -13,4 +13,5 @@ export default (req: Request, res: Response, next: NextFunction, fileId: string)
     proxyReqPathResolver: () => {
       return `/api/report?id=${fileId}`
     },
+    limit: '10mb',
   })(req, res, next)
