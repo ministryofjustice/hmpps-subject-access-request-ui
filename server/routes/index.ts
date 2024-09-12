@@ -38,5 +38,9 @@ export default function routes(service: Services): Router {
 
   get('/download-report/report', ReportDownloadController.getReport)
 
+  get('/terms', (req, res, next) => {
+    res.render('pages/terms')
+  })
+
   return router
 }

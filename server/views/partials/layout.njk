@@ -1,3 +1,4 @@
+{% from "govuk/components/footer/macro.njk" import govukFooter %}
 {% extends "govuk/template.njk" %}
 
 {% block head %}
@@ -21,6 +22,20 @@
 {% block bodyStart %}
 {% endblock %}
 
+{% block footer %}
+{{ govukFooter({
+  meta: {
+    items: [
+      {
+        href: "/terms",
+        text: "Terms and conditions"
+      }
+    ]
+  }
+}) }}
+
+{% endblock %}
+
 {% block bodyEnd %}
   {# Run JavaScript at end of the
   <body>, to avoid blocking the initial render. #}
@@ -33,4 +48,5 @@
   <script src="/assets/js/moj-init.js"></script>  
   <script src="/assets/moj/all.js"></script>
   <script src="/assets/datepicker.js"></script>
+
 {% endblock %}
