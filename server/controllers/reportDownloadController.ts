@@ -16,7 +16,7 @@ export default class ReportDownloadController {
 
     res.set(
       'Content-Disposition',
-      `attachment;filename="subject-access-request-report-${downloadDate}-${sarCaseReference}-${subjectId}"`,
+      `attachment;filename="subject-access-request-report-${downloadDate}-${sarCaseReference}-${subjectId}.pdf"`,
     )
 
     getReport(req, res, next, fileId)
