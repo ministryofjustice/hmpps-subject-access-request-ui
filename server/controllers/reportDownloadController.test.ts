@@ -30,7 +30,7 @@ describe('getReport', () => {
     expect(res.set).toHaveBeenCalled()
     expect(res.set).toHaveBeenCalledWith(
       'Content-Disposition',
-      `attachment;filename="subject-access-request-report-${date}-mock-sar-case-reference-mock-subject-ID"`,
+      `attachment;filename="subject-access-request-report-${date}-mock-sar-case-reference-mock-subject-ID.pdf"`,
     )
   })
 })
