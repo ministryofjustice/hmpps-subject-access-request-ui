@@ -1,6 +1,12 @@
 import type { Request, Response } from 'express'
+import { auditService } from '@ministryofjustice/hmpps-audit-client'
 import ReportDownloadController from './reportDownloadController'
 import formatDate from '../utils/dateHelpers'
+
+beforeEach(() => {
+  jest.resetAllMocks()
+  jest.spyOn(auditService, 'sendAuditMessage').mockResolvedValue()
+})
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -12,6 +18,13 @@ describe('getReport', () => {
     const res: Response = {
       set: jest.fn(),
       send: jest.fn(),
+      locals: {
+        user: {
+          token: 'fakeUserToken',
+          authSource: 'auth',
+          username: 'username',
+        },
+      },
     }
     const req: Request = {
       // @ts-expect-error stubbing session

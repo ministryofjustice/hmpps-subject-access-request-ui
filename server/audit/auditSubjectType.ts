@@ -4,4 +4,5 @@ export enum AuditSubjectType {
   ROLE_CODE = 'ROLE_CODE',
   GROUP_CODE = 'GROUP_CODE',
   EMAIL_DOMAIN_ID = 'EMAIL_DOMAIN_ID',
+  SAR_SUBJECT_ID = 'SAR_SUBJECT_ID',
 }

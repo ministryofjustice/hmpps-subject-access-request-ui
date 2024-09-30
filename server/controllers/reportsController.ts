@@ -8,7 +8,7 @@ import { dataAccess } from '../data'
 import getUserToken from '../utils/userTokenHelper'
 import { audit, AuditEvent } from '../audit'
 
-const RESULTSPERPAGE = 50
+const RESULTS_PER_PAGE = 50
 
 export default class ReportsController {
   static async getReports(req: Request, res: Response) {
@@ -21,12 +21,12 @@ export default class ReportsController {
       req,
       currentPage,
     )
-    const searchTerm = req.query.keyword || ''
+    const searchTerm = String(req.query.keyword || '')
 
     const { pageLinks, previous, next, from, to } = await ReportsController.getPaginationInformation(
       numberOfReports,
       currentPage,
-      searchTerm.toString(),
+      searchTerm,
     )
 
     const reportList = ReportsController.getCondensedSarList(subjectAccessRequests)
@@ -43,11 +43,6 @@ export default class ReportsController {
     })
   }
 
-  static async getSystemToken() {
-    const token = await dataAccess().hmppsAuthClient.getSystemClientToken()
-    return token
-  }
-
   static getZeroIndexedPageNumber(page: string) {
     if (Number.parseInt(page, 10) <= 0) {
       return '0'
@@ -59,13 +54,13 @@ export default class ReportsController {
     const numberOfReportsInt = Number.parseInt(numberOfReports, 10)
     const currentPageInt = Number.parseInt(currentPage, 10) || 1
     const visiblePageLinks = 5
-    const numberOfPages = Math.ceil(numberOfReportsInt / RESULTSPERPAGE)
+    const numberOfPages = Math.ceil(numberOfReportsInt / RESULTS_PER_PAGE)
 
     const previous = currentPageInt - 1
     const next = currentPageInt === numberOfPages ? 0 : currentPageInt + 1
 
-    const from = (currentPageInt - 1) * RESULTSPERPAGE + 1
-    const to = Math.min(currentPageInt * RESULTSPERPAGE, numberOfReportsInt)
+    const from = (currentPageInt - 1) * RESULTS_PER_PAGE + 1
+    const to = Math.min(currentPageInt * RESULTS_PER_PAGE, numberOfReportsInt)
 
     const pageLinks = getPageLinks({ visiblePageLinks, numberOfPages, currentPage: currentPageInt, searchTerm })
 
@@ -84,7 +79,7 @@ export default class ReportsController {
     const keyword = (req.query.keyword || '') as string
     const response = await superagent
       .get(
-        `${config.apis.subjectAccessRequest.url}/api/subjectAccessRequests?pageSize=${RESULTSPERPAGE}&pageNumber=${zeroIndexedPageNumber}&search=${keyword}`,
+        `${config.apis.subjectAccessRequest.url}/api/subjectAccessRequests?pageSize=${RESULTS_PER_PAGE}&pageNumber=${zeroIndexedPageNumber}&search=${keyword}`,
       )
       .set('Authorization', `Bearer ${token}`)
 
