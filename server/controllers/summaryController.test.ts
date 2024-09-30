@@ -1,11 +1,14 @@
 import { type Request, type Response } from 'express'
 import nock from 'nock'
+import { auditService } from '@ministryofjustice/hmpps-audit-client'
 import SummaryController from './summaryController'
 import config from '../config'
 
 let fakeApi: nock.Scope
 
 beforeEach(() => {
+  jest.resetAllMocks()
+  jest.spyOn(auditService, 'sendAuditMessage').mockResolvedValue()
   fakeApi = nock(config.apis.subjectAccessRequest.url)
 })
 
@@ -51,6 +54,13 @@ describe('postReportDetails', () => {
   // @ts-expect-error stubbing res
   const res: Response = {
     redirect: jest.fn(),
+    locals: {
+      user: {
+        token: 'fakeUserToken',
+        authSource: 'auth',
+        username: 'username',
+      },
+    },
   }
 
   test('post request made to SubjectAccessRequest endpoint renders confirmation page if successful', async () => {

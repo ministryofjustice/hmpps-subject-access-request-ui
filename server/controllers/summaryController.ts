@@ -4,6 +4,7 @@ import config from '../config'
 import { isNomisId, isNdeliusId } from '../utils/idHelpers'
 import { dataAccess } from '../data'
 import getUserToken from '../utils/userTokenHelper'
+import { AuditEvent, AuditSubjectType, auditWithSubject } from '../audit'
 
 export default class SummaryController {
   static getReportDetails(req: Request, res: Response) {
@@ -43,6 +44,21 @@ export default class SummaryController {
       ndeliusId = userData.subjectId.toString().toUpperCase()
     }
 
+    const sendMessage = auditWithSubject(
+      res.locals.user.username,
+      userData.subjectId,
+      AuditSubjectType.SAR_SUBJECT_ID,
+      {
+        dateFrom: userData.dateFrom,
+        dateTo: userData.dateTo,
+        sarCaseReferenceNumber: userData.caseReference,
+        services: list.toString(),
+        nomisId,
+        ndeliusId,
+      },
+    )
+    await sendMessage(AuditEvent.REQUEST_REPORT_ATTEMPT)
+
     try {
       const response = await superagent
         .post(`${config.apis.subjectAccessRequest.url}/api/subjectAccessRequest`)
@@ -58,6 +74,7 @@ export default class SummaryController {
       res.redirect('/confirmation')
       return response
     } catch (error) {
+      await sendMessage(AuditEvent.REQUEST_REPORT_FAILURE)
       if (error.status === 404) {
         // error.status >= 400 && error.status < 500) {
         return null
