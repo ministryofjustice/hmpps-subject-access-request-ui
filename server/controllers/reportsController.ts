@@ -4,7 +4,6 @@ import type { Report } from '../@types/report'
 import type { SubjectAccessRequest } from '../@types/subjectAccessRequest'
 import getPageLinks from '../utils/paginationHelper'
 import config from '../config'
-import { dataAccess } from '../data'
 import getUserToken from '../utils/userTokenHelper'
 import { audit, AuditEvent } from '../audit'
 

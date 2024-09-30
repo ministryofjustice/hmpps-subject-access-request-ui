@@ -17,7 +17,7 @@ export default class ServiceCatalogueClient {
         .set('Authorization', `OAuth ${token}`)
       const { body } = response
       return body
-    } catch (error) {
+    } catch {
       return []
     }
   }
