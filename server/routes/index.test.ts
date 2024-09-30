@@ -1,5 +1,6 @@
 import type { Express } from 'express'
 import request from 'supertest'
+import { auditService } from '@ministryofjustice/hmpps-audit-client'
 import { appWithAllRoutes } from './testutils/appSetup'
 import ServiceSelectionController from '../controllers/serviceSelectionController'
 import ReportsController from '../controllers/reportsController'
@@ -7,6 +8,9 @@ import ReportsController from '../controllers/reportsController'
 let app: Express
 
 beforeEach(() => {
+  jest.resetAllMocks()
+  jest.spyOn(auditService, 'sendAuditMessage').mockResolvedValue()
+
   app = appWithAllRoutes({})
   ServiceSelectionController.getServiceCatalogueList = jest.fn().mockReturnValue([
     {

@@ -6,12 +6,16 @@ import getPageLinks from '../utils/paginationHelper'
 import config from '../config'
 import { dataAccess } from '../data'
 import getUserToken from '../utils/userTokenHelper'
+import { audit, AuditEvent } from '../audit'
 
 const RESULTSPERPAGE = 50
 
 export default class ReportsController {
   static async getReports(req: Request, res: Response) {
     const currentPage = (req.query.page || '1') as string
+
+    const sendAudit = audit(res.locals.user.username, { page: currentPage })
+    await sendAudit(AuditEvent.VIEW_REPORT_LIST_ATTEMPT)
 
     const { subjectAccessRequests, numberOfReports } = await ReportsController.getSubjectAccessRequestList(
       req,
