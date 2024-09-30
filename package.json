@@ -92,6 +92,7 @@
   },
   "dependencies": {
     "@ministryofjustice/frontend": "^2.1.2",
+    "@ministryofjustice/hmpps-audit-client": "^1.1.1",
     "@ons/design-system": "^67.0.0",
     "agentkeepalive": "^4.5.0",
     "applicationinsights": "^2.9.0",
