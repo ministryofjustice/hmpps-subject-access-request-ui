@@ -3,6 +3,8 @@ import nock from 'nock'
 import { auditService } from '@ministryofjustice/hmpps-audit-client'
 import SummaryController from './summaryController'
 import config from '../config'
+import { auditAction } from '../utils/testUtils'
+import { AuditEvent } from '../audit'
 
 let fakeApi: nock.Scope
 
@@ -151,8 +153,9 @@ describe('postReportDetails', () => {
 
     const response = await SummaryController.postReportDetails(req, res)
     expect(response.status).toBe(200)
-    expect(res.redirect).toHaveBeenCalled()
-    expect(res.redirect).toBeCalledWith('/confirmation')
+    expect(res.redirect).toHaveBeenCalledWith('/confirmation')
+
+    expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.REQUEST_REPORT_ATTEMPT))
   })
 
   test('post request send subject ID capitalised when provided in lowercase', async () => {
@@ -182,5 +185,7 @@ describe('postReportDetails', () => {
 
     const response = await SummaryController.postReportDetails(req, res)
     expect(response.status).toBe(200)
+
+    expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.REQUEST_REPORT_ATTEMPT))
   })
 })

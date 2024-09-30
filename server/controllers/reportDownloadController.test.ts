@@ -2,6 +2,8 @@ import type { Request, Response } from 'express'
 import { auditService } from '@ministryofjustice/hmpps-audit-client'
 import ReportDownloadController from './reportDownloadController'
 import formatDate from '../utils/dateHelpers'
+import { auditAction } from '../utils/testUtils'
+import { AuditEvent } from '../audit'
 
 beforeEach(() => {
   jest.resetAllMocks()
@@ -45,5 +47,7 @@ describe('getReport', () => {
       'Content-Disposition',
       `attachment;filename="subject-access-request-report-${date}-mock-sar-case-reference-mock-subject-ID.pdf"`,
     )
+
+    expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.DOWNLOAD_REPORT_ATTEMPT))
   })
 })

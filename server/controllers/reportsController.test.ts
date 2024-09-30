@@ -4,6 +4,8 @@ import { auditService } from '@ministryofjustice/hmpps-audit-client'
 import ReportsController from './reportsController'
 import config from '../config'
 import type { SubjectAccessRequest } from '../@types/subjectAccessRequest'
+import { auditAction } from '../utils/testUtils'
+import { AuditEvent } from '../audit'
 
 let fakeApi: nock.Scope
 
@@ -133,6 +135,7 @@ describe('getReports', () => {
         ],
       }),
     )
+    expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.VIEW_REPORT_LIST_ATTEMPT))
   })
 
   describe('pagination', () => {
