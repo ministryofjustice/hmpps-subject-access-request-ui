@@ -42,7 +42,7 @@ export default class InputsValidation {
       dateDay = parseInt(dateDayString, 10)
       dateMonth = parseInt(dateMonthString, 10)
       dateYear = parseInt(dateYearString, 10)
-    } catch (e) {
+    } catch {
       throw new ValidationError(`${fieldName} must be in the format dd/mm/yyyy`)
     }
     // Validate that the input date matches the parsed date exactly

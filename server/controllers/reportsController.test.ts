@@ -1,8 +1,11 @@
 import type { Request, Response } from 'express'
 import nock from 'nock'
+import { auditService } from '@ministryofjustice/hmpps-audit-client'
 import ReportsController from './reportsController'
 import config from '../config'
 import type { SubjectAccessRequest } from '../@types/subjectAccessRequest'
+import { auditAction } from '../utils/testUtils'
+import { AuditEvent } from '../audit'
 
 let fakeApi: nock.Scope
 
@@ -61,8 +64,10 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
 ]
 
 beforeEach(() => {
-  fakeApi = nock(config.apis.subjectAccessRequest.url)
+  jest.resetAllMocks()
+  jest.spyOn(auditService, 'sendAuditMessage').mockResolvedValue()
 
+  fakeApi = nock(config.apis.subjectAccessRequest.url)
   ReportsController.getSubjectAccessRequestList = jest.fn().mockReturnValue({
     subjectAccessRequests,
     numberOfReports: 3,
@@ -81,6 +86,7 @@ describe('getReports', () => {
     user: {
       token: 'fakeUserToken',
       authSource: 'auth',
+      username: 'username',
     },
   }
   // @ts-expect-error stubbing res.render
@@ -88,6 +94,13 @@ describe('getReports', () => {
     render: jest.fn(),
     set: jest.fn(),
     send: jest.fn(),
+    locals: {
+      user: {
+        token: 'fakeUserToken',
+        authSource: 'auth',
+        username: 'username',
+      },
+    },
   }
   test('renders a response with list of SAR reports', async () => {
     await ReportsController.getReports(req, res)
@@ -122,6 +135,7 @@ describe('getReports', () => {
         ],
       }),
     )
+    expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.VIEW_REPORT_LIST_ATTEMPT))
   })
 
   describe('pagination', () => {
