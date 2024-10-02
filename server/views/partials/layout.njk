@@ -37,8 +37,9 @@
 {% endblock %}
 
 {% block bodyEnd %}
-  <script src='/assets/js/govukFrontendInit.js'></script>
-  <script src="/assets/js/moj-all.js"></script>   
+  <script type="module" src='/assets/govuk-frontend.min.js'></script>
+  <script type="module" src='/assets/js/govukFrontendInit.js'></script>
+  <script src="/assets/js/moj-all.js"></script>
   <script src="/assets/js/moj-init.js"></script>  
   <script src="/assets/js/datepicker.js"></script>
 {% endblock %}
