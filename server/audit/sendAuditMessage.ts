@@ -6,7 +6,7 @@ import { AuditEvent } from './auditEvent'
 import { AuditSubjectType } from './auditSubjectType'
 
 const sendAuditMessage = async (
-  manageUsersEvent: AuditEvent,
+  auditEvent: AuditEvent,
   username: string,
   subjectId: string,
   subjectType: AuditSubjectType,
@@ -14,15 +14,15 @@ const sendAuditMessage = async (
   correlationId: string,
 ) => {
   if (!config.apis.audit.enabled) {
-    logger.info(`${manageUsersEvent} - ${username} - ${subjectId} - ${subjectType} - ${JSON.stringify(details)}`)
+    logger.info(`${auditEvent} - ${username} - ${subjectId} - ${subjectType} - ${JSON.stringify(details)}`)
   } else {
     const auditMessage = {
-      action: manageUsersEvent,
+      action: auditEvent,
       who: username,
       subjectId,
       subjectType,
       correlationId,
-      service: config.productId,
+      service: config.serviceAccountName || config.productId,
       details: details ? JSON.stringify(details) : null,
     }
     await auditService.sendAuditMessage(auditMessage)
@@ -31,8 +31,8 @@ const sendAuditMessage = async (
 
 export const audit = (username: string, details?: Record<string, unknown>): AuditFunction => {
   const correlationId = uuidv4()
-  return async (manageUsersEvent: AuditEvent) => {
-    await sendAuditMessage(manageUsersEvent, username, null, null, details, correlationId)
+  return async (auditEvent: AuditEvent) => {
+    await sendAuditMessage(auditEvent, username, null, null, details, correlationId)
   }
 }
 
@@ -43,9 +43,9 @@ export const auditWithSubject = (
   details?: Record<string, unknown>,
 ): AuditFunction => {
   const correlationId = uuidv4()
-  return async (manageUsersEvent: AuditEvent) => {
-    await sendAuditMessage(manageUsersEvent, username, subjectId, subjectType, details, correlationId)
+  return async (auditEvent: AuditEvent) => {
+    await sendAuditMessage(auditEvent, username, subjectId, subjectType, details, correlationId)
   }
 }
 
-export type AuditFunction = (manageUsersEvent: AuditEvent) => Promise<void>
+export type AuditFunction = (auditEvent: AuditEvent) => Promise<void>
