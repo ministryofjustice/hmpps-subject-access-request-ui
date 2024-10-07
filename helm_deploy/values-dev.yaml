@@ -17,5 +17,10 @@ generic-service:
     ENVIRONMENT_NAME: DEV
     SAR_ENDPOINT_URL: "https://subject-access-request-api-dev.hmpps.service.justice.gov.uk"
 
+  allowlist:
+    groups:
+      - digital_staff_and_mojo
+      - moj_cloud_platform
+
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
