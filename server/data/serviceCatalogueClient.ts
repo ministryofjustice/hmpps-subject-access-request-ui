@@ -1,6 +1,7 @@
 import superagent from 'superagent'
 import config from '../config'
 import { dataAccess } from '.'
+import { getServiceCatalogueByEnvironment, ServiceCatalogueItem } from './serviceCatalogueData'
 
 export default class ServiceCatalogueClient {
   static async getSystemToken() {
@@ -8,17 +9,7 @@ export default class ServiceCatalogueClient {
     return token
   }
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  async getServiceList(): Promise<any> {
-    const token = await ServiceCatalogueClient.getSystemToken()
-    try {
-      const response = await superagent
-        .get(`${config.apis.serviceCatalogue.url}/sar-report-components?env=${config.apis.serviceCatalogue.env}`)
-        .set('Authorization', `OAuth ${token}`)
-      const { body } = response
-      return body
-    } catch {
-      return []
-    }
+  public getServiceList = (): ServiceCatalogueItem[] => {
+    return getServiceCatalogueByEnvironment(config.apis.serviceCatalogue.env)
   }
 }
