@@ -17,7 +17,7 @@ jest.mock('uuid', () => ({
 describe('audit function', () => {
   const username = 'testUser'
   const auditEvent = AuditEvent.VIEW_REPORT_LIST_ATTEMPT
-  const { serviceAccountName } = config
+  const { serviceName } = config.apis.audit
 
   it('should call sendAuditMessage with correct parameters when minimal audit is called', async () => {
     const auditFunction = audit(username)
@@ -29,7 +29,7 @@ describe('audit function', () => {
       subjectId: null,
       subjectType: null,
       correlationId: 'correlationId',
-      service: serviceAccountName,
+      service: serviceName,
       details: null,
     })
   })
@@ -46,7 +46,7 @@ describe('audit function', () => {
       subjectId: null,
       subjectType: null,
       correlationId: 'correlationId',
-      service: serviceAccountName,
+      service: serviceName,
       details: '{"test":"details"}',
     })
   })
@@ -55,7 +55,7 @@ describe('audit function', () => {
 describe('auditWithSubject function', () => {
   const username = 'testUser'
   const manageUsersEvent = AuditEvent.VIEW_REPORT_LIST_ATTEMPT
-  const { serviceAccountName } = config
+  const { serviceName } = config.apis.audit
   const subjectId = 'testSubjectId'
   const subjectType = AuditSubjectType.USER_ID
 
@@ -69,7 +69,7 @@ describe('auditWithSubject function', () => {
       subjectId,
       subjectType: 'USER_ID',
       correlationId: 'correlationId',
-      service: serviceAccountName,
+      service: serviceName,
       details: null,
     })
   })
@@ -86,7 +86,7 @@ describe('auditWithSubject function', () => {
       subjectId,
       subjectType: 'USER_ID',
       correlationId: 'correlationId',
-      service: serviceAccountName,
+      service: serviceName,
       details: '{"test":"details"}',
     })
   })
