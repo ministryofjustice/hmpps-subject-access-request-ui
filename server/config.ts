@@ -96,6 +96,8 @@ export default {
   environmentName: get('ENVIRONMENT_NAME', ''),
   serviceCatalogue: {
     env: get('SERVICE_CATALOGUE_ENV', 'dev', requiredInProduction),
-    disabledServices: get('DISABLED_SERVICES', '').split(',').map((service) => service.trim()),
+    disabledServices: get('DISABLED_SERVICES', '')
+      .split(',')
+      .map(service => service.trim()),
   },
 }

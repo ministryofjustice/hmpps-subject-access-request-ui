@@ -35,9 +35,9 @@ describe('getServices', () => {
     await ServiceSelectionController.getServices(req, res)
     expect(res.render).toHaveBeenCalled()
     expect(res.render).toBeCalledWith(
-      'pages/serviceselection',
+      'pages/serviceSelection',
       expect.objectContaining({
-        servicelist: expect.anything(),
+        serviceList: expect.anything(),
       }),
     )
   })
@@ -50,9 +50,9 @@ describe('getServices', () => {
     await ServiceSelectionController.getServices(req, res)
     expect(res.render).toHaveBeenCalled()
     expect(res.render).toBeCalledWith(
-      'pages/serviceselection',
+      'pages/serviceSelection',
       expect.objectContaining({
-        servicelist: expect.anything(),
+        serviceList: expect.anything(),
         selectedList: expect.arrayContaining(['1']),
       }),
     )
@@ -67,9 +67,9 @@ describe('getServices', () => {
     await ServiceSelectionController.getServices(req, res)
     expect(res.render).toHaveBeenCalled()
     expect(res.render).toBeCalledWith(
-      'pages/serviceselection',
+      'pages/serviceSelection',
       expect.objectContaining({
-        servicelist: expect.anything(),
+        serviceList: expect.anything(),
         selectedServicesError: `No services found. A report cannot be generated.`,
       }),
     )

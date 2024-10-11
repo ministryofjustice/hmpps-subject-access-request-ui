@@ -26,7 +26,7 @@ export default class SummaryController {
   static async postReportDetails(req: Request, res: Response) {
     const userToken = getUserToken(req)
     const userData = req.session.userData ?? {}
-    const selectedList = req.session.selectedList
+    const { selectedList } = req.session
 
     if (dataAccess().telemetryClient) {
       dataAccess().telemetryClient.trackEvent({ name: 'postReportDetails', properties: { id: userData.subjectId } })

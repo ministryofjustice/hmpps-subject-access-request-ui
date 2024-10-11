@@ -1,5 +1,6 @@
-// @ts-ignore
-export const mockGetSubjectAccessRequests = [
+'@ts-expect-error'
+
+const mockGetSubjectAccessRequests = [
   {
     id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
     status: 'Pending',
@@ -52,3 +53,5 @@ export const mockGetSubjectAccessRequests = [
     lastDownloaded: null,
   },
 ]
+
+export default mockGetSubjectAccessRequests

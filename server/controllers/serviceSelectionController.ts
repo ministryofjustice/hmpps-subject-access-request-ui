@@ -8,7 +8,7 @@ export default class ServiceSelectionController {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   static getServiceCatalogueList(): ServiceCatalogueItem[] {
     const catalogueClient = new ServiceCatalogueClient()
-    return  catalogueClient.getServiceList()
+    return catalogueClient.getServiceList()
   }
 
   static async getServices(req: Request, res: Response) {
@@ -22,7 +22,12 @@ export default class ServiceSelectionController {
       return
     }
 
-    const serviceCatalogue = serviceCatalogueItems.map(x => ({ name: x.label, id: x.name, url: x.url, disabled: x.disabled }))
+    const serviceCatalogue = serviceCatalogueItems.map(x => ({
+      name: x.label,
+      id: x.name,
+      url: x.url,
+      disabled: x.disabled,
+    }))
     req.session.serviceList = serviceCatalogue
     const selectedList = req.session.selectedList ?? []
     const hasAllAnswers = req.session.selectedList && req.session.selectedList.length !== 0
@@ -43,7 +48,7 @@ export default class ServiceSelectionController {
   }
 
   static selectServices(req: Request, res: Response) {
-    const serviceList = req.session.serviceList
+    const { serviceList } = req.session
     const selectedList: string[] = []
     if (dataAccess().telemetryClient) {
       dataAccess().telemetryClient.trackEvent({
