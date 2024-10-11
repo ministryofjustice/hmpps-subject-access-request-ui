@@ -12,31 +12,31 @@ export default class ServiceSelectionController {
   }
 
   static async getServices(req: Request, res: Response) {
-    const list = ServiceSelectionController.getServiceCatalogueList()
-    if (list.length === 0) {
-      res.render('pages/serviceselection', {
+    const serviceCatalogueItems = ServiceSelectionController.getServiceCatalogueList()
+    if (serviceCatalogueItems.length === 0) {
+      res.render('pages/serviceSelection', {
         selectedServicesError: `No services found. A report cannot be generated.`,
-        serviceList: list,
+        serviceList: serviceCatalogueItems,
         buttonText: 'Confirm',
       })
       return
     }
 
-    const newList = list.map(x => ({ name: x.label, id: x.name }))
-    req.session.serviceList = newList
+    const serviceCatalogue = serviceCatalogueItems.map(x => ({ name: x.label, id: x.name, url: x.url, disabled: x.disabled }))
+    req.session.serviceList = serviceCatalogue
     const selectedList = req.session.selectedList ?? []
     const hasAllAnswers = req.session.selectedList && req.session.selectedList.length !== 0
     if (hasAllAnswers) {
-      res.render('pages/serviceselection', {
-        serviceList: newList,
+      res.render('pages/serviceSelection', {
+        serviceList: serviceCatalogue,
         selectedList: selectedList.map(x => x.id),
         buttonText: 'Confirm and return to summary page',
       })
       return
     }
 
-    res.render('pages/serviceselection', {
-      serviceList: newList,
+    res.render('pages/serviceSelection', {
+      serviceList: serviceCatalogue,
       selectedList: selectedList.map(x => x.id),
       buttonText: 'Confirm',
     })
@@ -57,7 +57,7 @@ export default class ServiceSelectionController {
 
       const selectedServicesError = ServiceSelectionValidation.validateSelection(selectedList, serviceList)
       if (selectedServicesError) {
-        res.render('pages/serviceselection', {
+        res.render('pages/serviceSelection', {
           selectedServicesError,
           serviceList,
           buttonText: 'Confirm',

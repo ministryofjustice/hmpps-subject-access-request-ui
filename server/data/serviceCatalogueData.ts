@@ -7,6 +7,7 @@ export interface ServiceCatalogueItem {
   url: string
   label: string
   order: number
+  disabled: boolean
 }
 
 export function getServiceCatalogueByEnvironment(environment: string): ServiceCatalogueItem[] {
@@ -20,6 +21,7 @@ export function getServiceCatalogueByEnvironment(environment: string): ServiceCa
     url: service.url,
     label: service.label,
     order: service.order,
+    disabled: service.disabled === undefined ? false : service.disabled,
   }))
 }
 

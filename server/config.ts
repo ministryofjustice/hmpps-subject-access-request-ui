@@ -91,15 +91,11 @@ export default {
       agent: new AgentConfig(Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000))),
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
-    serviceCatalogue: {
-      url: get(
-        'SERVICE_CATALOGUE_URL',
-        'https://service-catalogue.hmpps.service.justice.gov.uk/v1',
-        requiredInProduction,
-      ),
-      env: get('SERVICE_CATALOGUE_ENV', 'dev', requiredInProduction),
-    },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
+  serviceCatalogue: {
+    env: get('SERVICE_CATALOGUE_ENV', 'dev', requiredInProduction),
+    disabledServices: get('DISABLED_SERVICES', '').split(',').map((service) => service.trim()),
+  },
 }

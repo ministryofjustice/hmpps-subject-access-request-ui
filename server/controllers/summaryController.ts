@@ -17,7 +17,7 @@ export default class SummaryController {
 
     res.render('pages/summary', {
       subjectId: userData.subjectId,
-      selectedList: selectedList.map(x => x.text).toString(),
+      selectedList: selectedList.map(x => x.name).toString(),
       dateRange,
       caseReference: userData.caseReference,
     })
@@ -26,36 +26,29 @@ export default class SummaryController {
   static async postReportDetails(req: Request, res: Response) {
     const userToken = getUserToken(req)
     const userData = req.session.userData ?? {}
-    const list: string[] = []
-    const servicelist = req.session.selectedList
+    const selectedList = req.session.selectedList
 
     if (dataAccess().telemetryClient) {
       dataAccess().telemetryClient.trackEvent({ name: 'postReportDetails', properties: { id: userData.subjectId } })
     }
 
-    for (let i = 0; i < servicelist.length; i += 1) {
-      list.push(`${servicelist[i].text}, ${servicelist[i].urls}`)
-    }
-    let nomisId: string = null
-    let ndeliusId: string = null
-    if (isNomisId(userData.subjectId)) {
-      nomisId = userData.subjectId.toString().toUpperCase()
-    } else if (isNdeliusId(userData.subjectId)) {
-      ndeliusId = userData.subjectId.toString().toUpperCase()
+    const serviceList = selectedList.map(service => `${service.id}, ${service.url}`)
+    const nomisId = isNomisId(userData.subjectId) ? userData.subjectId.toString().toUpperCase() : null
+    const ndeliusId = isNdeliusId(userData.subjectId) ? userData.subjectId.toString().toUpperCase() : null
+    const commonProperties = {
+      dateFrom: userData.dateFrom,
+      dateTo: userData.dateTo,
+      sarCaseReferenceNumber: userData.caseReference,
+      services: serviceList.toString(),
+      nomisId,
+      ndeliusId,
     }
 
     const sendMessage = auditWithSubject(
       res.locals.user.username,
       userData.subjectId,
       AuditSubjectType.SAR_SUBJECT_ID,
-      {
-        dateFrom: userData.dateFrom,
-        dateTo: userData.dateTo,
-        sarCaseReferenceNumber: userData.caseReference,
-        services: list.toString(),
-        nomisId,
-        ndeliusId,
-      },
+      commonProperties,
     )
     await sendMessage(AuditEvent.REQUEST_REPORT_ATTEMPT)
 
@@ -63,14 +56,7 @@ export default class SummaryController {
       const response = await superagent
         .post(`${config.apis.subjectAccessRequest.url}/api/subjectAccessRequest`)
         .set('Authorization', `Bearer ${userToken}`)
-        .send({
-          dateFrom: userData.dateFrom,
-          dateTo: userData.dateTo,
-          sarCaseReferenceNumber: userData.caseReference,
-          services: list.toString(),
-          nomisId,
-          ndeliusId,
-        })
+        .send(commonProperties)
       res.redirect('/confirmation')
       return response
     } catch (error) {
