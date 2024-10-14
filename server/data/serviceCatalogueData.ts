@@ -1,5 +1,6 @@
 import fs from 'fs'
 import yaml from 'js-yaml'
+import config from '../config'
 
 export interface ServiceCatalogueItem {
   name: string
@@ -31,7 +32,7 @@ export function getServiceCatalogueByEnvironment(environment: string): ServiceCa
   const file = fs.readFileSync('server/data/serviceCatalogue/serviceCatalogue.yaml', 'utf8')
   const data = yaml.load(file) as CatalogueData
 
-  const services = data.environments.find((env: unknown) => env.environment === environment)?.services || []
+  const services = data.environments.find((env: Environment) => env.environment === environment)?.services || []
   return services.map((service: Service) => ({
     name: service.name,
     environment,
@@ -40,4 +41,16 @@ export function getServiceCatalogueByEnvironment(environment: string): ServiceCa
     order: service.order,
     disabled: service.disabled === undefined ? false : service.disabled,
   }))
+}
+
+export function getServiceList(): ServiceCatalogueItem[] {
+  const { env, disabledServices } = config.serviceCatalogue
+  const services = getServiceCatalogueByEnvironment(env)
+
+  return services
+    .map(service => ({
+      ...service,
+      disabled: service.disabled || disabledServices.includes(service.name),
+    }))
+    .sort((a, b) => a.order - b.order)
 }

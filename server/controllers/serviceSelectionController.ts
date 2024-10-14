@@ -1,18 +1,12 @@
 import { Request, Response } from 'express'
-import ServiceCatalogueClient from '../data/serviceCatalogueClient'
 import ServiceSelectionValidation from './serviceSelectionValidation'
 import { dataAccess } from '../data'
-import { ServiceCatalogueItem } from '../data/serviceCatalogueData'
+import { getServiceList } from '../data/serviceCatalogueData'
 
 export default class ServiceSelectionController {
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  static getServiceCatalogueList(): ServiceCatalogueItem[] {
-    const catalogueClient = new ServiceCatalogueClient()
-    return catalogueClient.getServiceList()
-  }
-
   static async getServices(req: Request, res: Response) {
-    const serviceCatalogueItems = ServiceSelectionController.getServiceCatalogueList()
+    const serviceCatalogueItems = ServiceSelectionController.getServiceCatalogueItems()
+
     if (serviceCatalogueItems.length === 0) {
       res.render('pages/serviceSelection', {
         selectedServicesError: `No services found. A report cannot be generated.`,
@@ -22,18 +16,12 @@ export default class ServiceSelectionController {
       return
     }
 
-    const serviceCatalogue = serviceCatalogueItems.map(x => ({
-      name: x.label,
-      id: x.name,
-      url: x.url,
-      disabled: x.disabled,
-    }))
-    req.session.serviceList = serviceCatalogue
+    req.session.serviceList = serviceCatalogueItems
     const selectedList = req.session.selectedList ?? []
     const hasAllAnswers = req.session.selectedList && req.session.selectedList.length !== 0
     if (hasAllAnswers) {
       res.render('pages/serviceSelection', {
-        serviceList: serviceCatalogue,
+        serviceList: serviceCatalogueItems,
         selectedList: selectedList.map(x => x.id),
         buttonText: 'Confirm and return to summary page',
       })
@@ -41,7 +29,7 @@ export default class ServiceSelectionController {
     }
 
     res.render('pages/serviceSelection', {
-      serviceList: serviceCatalogue,
+      serviceList: serviceCatalogueItems,
       selectedList: selectedList.map(x => x.id),
       buttonText: 'Confirm',
     })
@@ -72,5 +60,15 @@ export default class ServiceSelectionController {
       req.session.selectedList = serviceList.filter(x => selectedList.includes(x.id.toString()))
       res.redirect('/summary')
     }
+  }
+
+  static getServiceCatalogueItems() {
+    const serviceCatalogueItems = getServiceList()
+    return serviceCatalogueItems.map(x => ({
+      name: x.label,
+      id: x.name,
+      url: x.url,
+      disabled: x.disabled,
+    }))
   }
 }

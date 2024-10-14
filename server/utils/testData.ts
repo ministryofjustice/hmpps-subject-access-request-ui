@@ -1,6 +1,23 @@
 '@ts-expect-error'
 
-const mockGetSubjectAccessRequests = [
+type MockGetSubjectAccessRequest = {
+  id: string
+  status: string
+  dateFrom: string
+  dateTo: string
+  sarCaseReferenceNumber: string
+  services: string
+  nomisId: string
+  ndeliusCaseReferenceId: string
+  requestedBy: string
+  requestDateTime: string
+  claimDateTime: string
+  claimAttempts: number
+  objectUrl: string | null
+  lastDownloaded: string | null
+}
+
+const mockGetSubjectAccessRequests: MockGetSubjectAccessRequest[] = [
   {
     id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
     status: 'Pending',

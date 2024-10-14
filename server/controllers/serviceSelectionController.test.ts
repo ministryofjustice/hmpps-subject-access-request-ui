@@ -2,17 +2,18 @@ import type { Request, Response } from 'express'
 import ServiceSelectionController from './serviceSelectionController'
 
 beforeEach(() => {
-  ServiceSelectionController.getServiceCatalogueList = jest.fn().mockReturnValue([
+  ServiceSelectionController.getServiceCatalogueItems = jest.fn().mockReturnValue([
     {
-      id: 351,
-      name: 'hmpps-prisoner-search',
-      environments: [{ id: 47254, url: 'https://prisoner-search-dev.prison.service.justice.gov.uk' }],
+      id: 'hmpps-prisoner-search',
+      name: 'Prisoner Search',
+      url: 'https://prisoner-search-dev.prison.service.justice.gov.uk',
+      disabled: false,
     },
-    { id: 211, name: 'hmpps-book-secure-move-api', environments: [] },
     {
-      id: 175,
-      name: 'hmpps-prisoner-search-indexer',
-      environments: [{ id: 47270, url: 'https://prisoner-search-indexer-dev.prison.service.justice.gov.uk' }],
+      id: 'hmpps-book-secure-move-api',
+      name: 'Book Secure Move API',
+      url: 'https://book-move-dev.prison.service.justice.gov.uk',
+      disabled: false,
     },
   ])
 })
@@ -58,7 +59,7 @@ describe('getServices', () => {
     )
   })
   test('renders an error if no services found', async () => {
-    ServiceSelectionController.getServiceCatalogueList = jest.fn().mockReturnValue([])
+    ServiceSelectionController.getServiceCatalogueItems = jest.fn().mockReturnValue([])
     const req: Request = {
       // @ts-expect-error stubbing session
       session: { serviceList: [], selectedList: [{ id: '1' }] },
