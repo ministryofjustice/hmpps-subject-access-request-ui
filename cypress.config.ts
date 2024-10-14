@@ -3,7 +3,6 @@ import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
 import manageUsersApi from './integration_tests/mockApis/manageUsersApi'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
-import stubServiceList from './integration_tests/mockApis/serviceCatalogue'
 import stubSubjectAccessRequest from './integration_tests/mockApis/subjectAccessRequest'
 import reports from './integration_tests/mockApis/reports'
 
@@ -26,7 +25,6 @@ export default defineConfig({
         ...auth,
         ...manageUsersApi,
         ...tokenVerification,
-        stubServiceList,
         stubSubjectAccessRequest,
         ...reports,
       })

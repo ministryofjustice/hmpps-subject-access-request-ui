@@ -1,3 +1,13 @@
+@import "node_modules/govuk-frontend/dist/govuk/all";
+
 .govuk-main-wrapper {
   min-height: 600px;
+}
+
+.disabled-govuk-checkboxes__input {
+  @extend .govuk-checkboxes__input
+}
+
+.disabled-text {
+  color: $govuk-border-colour;
 }

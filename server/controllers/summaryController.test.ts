@@ -35,7 +35,7 @@ describe('getReportDetails', () => {
           dateTo: '25/12/2022',
           caseReference: 'mockedCaseReference',
         },
-        selectedList: [{ id: '1', text: 'service1' }],
+        selectedList: [{ id: 'service-one', name: 'Service One', url: 'hmpps-service-one.com', disabled: false }],
       },
     }
     SummaryController.getReportDetails(req, res)
@@ -44,7 +44,7 @@ describe('getReportDetails', () => {
       'pages/summary',
       expect.objectContaining({
         subjectId: 'A1111AA',
-        selectedList: 'service1',
+        selectedList: 'Service One',
         dateRange: '01/01/2001 - 25/12/2022',
         caseReference: req.session.userData.caseReference,
       }),
@@ -75,7 +75,7 @@ describe('postReportDetails', () => {
           caseReference: 'mockedCaseReference',
           subjectId: 'A1111AA',
         },
-        selectedList: [{ id: '1', text: 'service1', urls: '.com' }],
+        selectedList: [{ id: 'service-one', name: 'service1', url: 'hmpps-service-one.com', disabled: false }],
       },
       user: {
         token: 'fakeUserToken',
@@ -86,7 +86,7 @@ describe('postReportDetails', () => {
     fakeApi
       .post(
         '/api/subjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":null}',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service-one, hmpps-service-one.com","nomisId":"A1111AA","ndeliusId":null}',
       )
       .reply(200)
 
@@ -106,7 +106,7 @@ describe('postReportDetails', () => {
           caseReference: 'mockedCaseReference',
           subjectId: '',
         },
-        selectedList: [{ id: '1', text: 'service1', urls: '.com' }],
+        selectedList: [{ id: 'service-one', name: 'service1', url: 'hmpps-service-one.com', disabled: false }],
       },
       user: {
         token: 'fakeUserToken',
@@ -116,7 +116,7 @@ describe('postReportDetails', () => {
     nock(config.apis.subjectAccessRequest.url)
       .post(
         '/api/subjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":null,"ndeliusId":null}',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service-one, hmpps-service-one.com","nomisId":null,"ndeliusId":null}',
       )
       .reply(400)
     await expect(SummaryController.postReportDetails(req, res)).rejects.toThrowError('Bad Request')
@@ -130,7 +130,7 @@ describe('postReportDetails', () => {
     })
       .post(
         '/api/subjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":null}',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service-one, hmpps-service-one.com","nomisId":"A1111AA","ndeliusId":null}',
       )
       .reply(200)
 
@@ -143,7 +143,7 @@ describe('postReportDetails', () => {
           caseReference: 'mockedCaseReference',
           subjectId: 'A1111AA',
         },
-        selectedList: [{ id: '1', text: 'service1', urls: '.com' }],
+        selectedList: [{ id: 'service-one', name: 'service1', url: 'hmpps-service-one.com', disabled: false }],
       },
       user: {
         token: 'fakeUserToken',
@@ -168,7 +168,7 @@ describe('postReportDetails', () => {
           caseReference: 'mockedCaseReference',
           subjectId: 'a1111aa',
         },
-        selectedList: [{ id: '1', text: 'service1', urls: '.com' }],
+        selectedList: [{ id: 'service-one', name: 'service1', url: 'hmpps-service-one.com', disabled: false }],
       },
       user: {
         token: 'fakeUserToken',
@@ -179,7 +179,7 @@ describe('postReportDetails', () => {
     fakeApi
       .post(
         '/api/subjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service1, .com","nomisId":"A1111AA","ndeliusId":null}',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service-one, hmpps-service-one.com","nomisId":"A1111AA","ndeliusId":null}',
       )
       .reply(200)
 

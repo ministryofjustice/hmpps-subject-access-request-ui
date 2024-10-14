@@ -32,6 +32,7 @@ export interface ApiConfig {
 export default {
   buildNumber: get('BUILD_NUMBER', '1_0_0', requiredInProduction),
   productId: get('PRODUCT_ID', 'UNASSIGNED', requiredInProduction),
+  serviceAccountName: get('SERVICE_ACCOUNT_NAME', 'hmpps-subject-access-request', requiredInProduction),
   gitRef: get('GIT_REF', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
   branchName: get('GIT_BRANCH', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
   production,
@@ -90,15 +91,13 @@ export default {
       agent: new AgentConfig(Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000))),
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
-    serviceCatalogue: {
-      url: get(
-        'SERVICE_CATALOGUE_URL',
-        'https://service-catalogue.hmpps.service.justice.gov.uk/v1',
-        requiredInProduction,
-      ),
-      env: get('SERVICE_CATALOGUE_ENV', 'dev', requiredInProduction),
-    },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
+  serviceCatalogue: {
+    env: get('SERVICE_CATALOGUE_ENV', 'dev', requiredInProduction),
+    disabledServices: get('DISABLED_SERVICES', '')
+      .split(',')
+      .map(service => service.trim()),
+  },
 }
