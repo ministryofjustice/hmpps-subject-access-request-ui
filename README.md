@@ -25,6 +25,28 @@ The base template requires:
 And for SAR functionality, we also require:
 * hmpps-service-catalogue - DPS service catalogue for API endpoints
 
+### Environment variables
+
+The `server/data/serviceCatalogue/serviceCatalogue.yaml` file contains a static list of services that the SAR service can request data from. 
+This is used to populate the services list in the UI and to send to the API when creating a SAR request.
+
+Fields are:
+```yaml
+    - name: create-and-vary-a-licence-api
+      label: Create And Vary A Licence
+      url: https://create-and-vary-a-licence-api-dev.hmpps.service.justice.gov.uk
+      order: 1
+      disabled: false
+```
+
+Where `name` is the service name, `label` is the display name, `url` is the base URL for the service, `order` is the
+order in which the service should be displayed in the UI and `disabled` allows you to disabled the service from
+selection in the UI.
+
+Services can further be enabled and disabled in the UI by setting a comma separated list of names in the DISABLED_SERVICES environment variable.:
+
+`DISABLED_SERVICES=hmpps-book-secure-move-api,hmpps-education-and-work-plan-api`
+
 ### Running the app for development
 
 To start the main services excluding the example typescript template app: 

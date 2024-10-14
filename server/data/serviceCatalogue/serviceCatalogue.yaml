@@ -35,7 +35,7 @@ environments:
       label: HMPPS Complexity Of Need
       url: https://complexity-of-need-staging.hmpps.service.justice.gov.uk
       order: 7
-      disabled: true
+      disabled: false
     - name: hmpps-education-and-work-plan-api
       label: HMPPS Education And Work Plan
       url: https://learningandworkprogress-api-dev.hmpps.service.justice.gov.uk
@@ -55,7 +55,7 @@ environments:
       label: HMPPS Incident Reporting
       url: https://incident-reporting-api-dev.hmpps.service.justice.gov.uk
       order: 11
-      disabled: true
+      disabled: false
     - name: hmpps-incentives-api
       label: HMPPS Incentives
       url: https://incentives-api-dev.hmpps.service.justice.gov.uk
