@@ -11,7 +11,6 @@ initialiseAppInsights()
 const telemetryClient = buildAppInsightsClient(applicationInfo)
 
 import HmppsAuthClient from './hmppsAuthClient'
-import ManageUsersApiClient from './manageUsersApiClient'
 import { createRedisClient } from './redisClient'
 import TokenStore from './tokenStore'
 
@@ -20,10 +19,9 @@ type RestClientBuilder<T> = (token: string) => T
 export const dataAccess = () => ({
   applicationInfo,
   hmppsAuthClient: new HmppsAuthClient(new TokenStore(createRedisClient())),
-  manageUsersApiClient: new ManageUsersApiClient(),
   telemetryClient,
 })
 
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { HmppsAuthClient, RestClientBuilder, ManageUsersApiClient }
+export { HmppsAuthClient, RestClientBuilder }

@@ -98,7 +98,6 @@ describe('saveInputs', () => {
   test('overwrites previous session data if present', () => {
     const req: Request = {
       ...baseReq,
-      // @ts-expect-error stubbing session
       session: {
         userData: {
           subjectId: 'A1111AA',
@@ -118,7 +117,6 @@ describe('saveInputs', () => {
 
   test('redirects to summary if all answers have been provided', () => {
     const req: Request = {
-      // @ts-expect-error stubbing session
       session: {
         userData: {
           subjectId: 'A1111AA',

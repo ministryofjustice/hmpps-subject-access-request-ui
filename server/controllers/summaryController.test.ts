@@ -20,14 +20,12 @@ afterEach(() => {
 })
 
 describe('getReportDetails', () => {
-  // @ts-expect-error stubbing res.render
-  const res: Response = {
+  const res: Partial<Response> = {
     render: jest.fn(),
   }
 
   test('renders a response with session data', async () => {
-    const req: Request = {
-      // @ts-expect-error stubbing session
+    const req: Partial<Request> = {
       session: {
         userData: {
           subjectId: 'A1111AA',
@@ -53,8 +51,7 @@ describe('getReportDetails', () => {
 })
 
 describe('postReportDetails', () => {
-  // @ts-expect-error stubbing res
-  const res: Response = {
+  const res: Partial<Response> = {
     redirect: jest.fn(),
     locals: {
       user: {
@@ -66,8 +63,7 @@ describe('postReportDetails', () => {
   }
 
   test('post request made to SubjectAccessRequest endpoint renders confirmation page if successful', async () => {
-    const req: Request = {
-      // @ts-expect-error stubbing session
+    const req: Partial<Request> = {
       session: {
         userData: {
           dateFrom: '01/01/2001',

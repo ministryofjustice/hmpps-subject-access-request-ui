@@ -6,8 +6,7 @@ import InputsPage from '../pages/inputs'
 context('ServiceSelection', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
-    cy.task('stubManageUser')
+    cy.task('stubSignIn', { roles: ['ROLE_SAR_USER_ACCESS'] })
   })
 
   it('Unauthenticated user navigating to serviceselection page directed to auth', () => {

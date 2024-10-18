@@ -7,8 +7,7 @@ import IndexPage from '../pages/homepage'
 context('SubjectId', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
-    cy.task('stubManageUser')
+    cy.task('stubSignIn', { roles: ['ROLE_SAR_USER_ACCESS'] })
     cy.intercept({
       method: 'POST',
       url: '/subject-id',

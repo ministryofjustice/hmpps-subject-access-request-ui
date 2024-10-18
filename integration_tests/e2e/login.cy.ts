@@ -6,8 +6,7 @@ import AuthManageDetailsPage from '../pages/authManageDetails'
 context('SignIn', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
-    cy.task('stubManageUser')
+    cy.task('stubSignIn', { roles: ['ROLE_SAR_USER_ACCESS'] })
   })
 
   it('Unauthenticated user directed to auth', () => {
@@ -41,6 +40,7 @@ context('SignIn', () => {
 
   it('User can manage their details', () => {
     cy.signIn()
+    cy.task('stubAuthManageDetails')
     const indexPage = Page.verifyOnPage(IndexPage)
 
     indexPage.manageDetails().get('a').invoke('removeAttr', 'target')
@@ -66,9 +66,9 @@ context('SignIn', () => {
     cy.request('/').its('body').should('contain', 'Sign in')
 
     cy.task('stubVerifyToken', true)
-    cy.task('stubManageUser', 'bobby brown')
+    cy.task('stubSignIn', { roles: ['ROLE_SAR_USER_ACCESS'] })
     cy.signIn()
 
-    indexPage.headerUserName().contains('B. Brown')
+    indexPage.headerUserName().contains('J. Smith')
   })
 })

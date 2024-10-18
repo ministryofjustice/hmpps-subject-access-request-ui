@@ -5,8 +5,7 @@ import Homepage from '../pages/homepage'
 context('Homepage', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
-    cy.task('stubManageUser')
+    cy.task('stubSignIn', { roles: ['ROLE_SAR_USER_ACCESS'] })
   })
 
   it('Redirects to auth if requested by unauthenticated user', () => {

@@ -1,7 +1,6 @@
 import { defineConfig } from 'cypress'
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
-import manageUsersApi from './integration_tests/mockApis/manageUsersApi'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import stubSubjectAccessRequest from './integration_tests/mockApis/subjectAccessRequest'
 import reports from './integration_tests/mockApis/reports'
@@ -23,7 +22,6 @@ export default defineConfig({
       on('task', {
         reset: resetStubs,
         ...auth,
-        ...manageUsersApi,
         ...tokenVerification,
         stubSubjectAccessRequest,
         ...reports,

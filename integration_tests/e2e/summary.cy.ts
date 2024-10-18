@@ -8,8 +8,7 @@ import SubjectIdPage from '../pages/subjectId'
 context('Summary', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
-    cy.task('stubManageUser')
+    cy.task('stubSignIn', { roles: ['ROLE_SAR_USER_ACCESS'] })
   })
 
   // All pages direct users to auth

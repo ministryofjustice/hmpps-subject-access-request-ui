@@ -5,8 +5,7 @@ import ReportsPage from '../pages/reports'
 context('Reports', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
-    cy.task('stubManageUser')
+    cy.task('stubSignIn', { roles: ['ROLE_SAR_USER_ACCESS'] })
     cy.task('stubGetSubjectAccessRequests', [
       {
         id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
