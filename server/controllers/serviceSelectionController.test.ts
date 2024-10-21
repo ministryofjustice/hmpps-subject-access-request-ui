@@ -2,17 +2,18 @@ import type { Request, Response } from 'express'
 import ServiceSelectionController from './serviceSelectionController'
 
 beforeEach(() => {
-  ServiceSelectionController.getServiceCatalogueList = jest.fn().mockReturnValue([
+  ServiceSelectionController.getServiceList = jest.fn().mockReturnValue([
     {
-      id: 351,
-      name: 'hmpps-prisoner-search',
-      environments: [{ id: 47254, url: 'https://prisoner-search-dev.prison.service.justice.gov.uk' }],
+      id: 'hmpps-prisoner-search',
+      name: 'Prisoner Search',
+      url: 'https://prisoner-search-dev.prison.service.justice.gov.uk',
+      disabled: false,
     },
-    { id: 211, name: 'hmpps-book-secure-move-api', environments: [] },
     {
-      id: 175,
-      name: 'hmpps-prisoner-search-indexer',
-      environments: [{ id: 47270, url: 'https://prisoner-search-indexer-dev.prison.service.justice.gov.uk' }],
+      id: 'hmpps-book-secure-move-api',
+      name: 'Book Secure Move API',
+      url: 'https://book-move-dev.prison.service.justice.gov.uk',
+      disabled: false,
     },
   ])
 })
@@ -35,9 +36,9 @@ describe('getServices', () => {
     await ServiceSelectionController.getServices(req, res)
     expect(res.render).toHaveBeenCalled()
     expect(res.render).toBeCalledWith(
-      'pages/serviceselection',
+      'pages/serviceSelection',
       expect.objectContaining({
-        servicelist: expect.anything(),
+        serviceList: expect.anything(),
       }),
     )
   })
@@ -50,15 +51,15 @@ describe('getServices', () => {
     await ServiceSelectionController.getServices(req, res)
     expect(res.render).toHaveBeenCalled()
     expect(res.render).toBeCalledWith(
-      'pages/serviceselection',
+      'pages/serviceSelection',
       expect.objectContaining({
-        servicelist: expect.anything(),
+        serviceList: expect.anything(),
         selectedList: expect.arrayContaining(['1']),
       }),
     )
   })
   test('renders an error if no services found', async () => {
-    ServiceSelectionController.getServiceCatalogueList = jest.fn().mockReturnValue([])
+    ServiceSelectionController.getServiceList = jest.fn().mockReturnValue([])
     const req: Request = {
       // @ts-expect-error stubbing session
       session: { serviceList: [], selectedList: [{ id: '1' }] },
@@ -67,9 +68,9 @@ describe('getServices', () => {
     await ServiceSelectionController.getServices(req, res)
     expect(res.render).toHaveBeenCalled()
     expect(res.render).toBeCalledWith(
-      'pages/serviceselection',
+      'pages/serviceSelection',
       expect.objectContaining({
-        servicelist: expect.anything(),
+        serviceList: expect.anything(),
         selectedServicesError: `No services found. A report cannot be generated.`,
       }),
     )

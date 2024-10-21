@@ -12,17 +12,18 @@ beforeEach(() => {
   jest.spyOn(auditService, 'sendAuditMessage').mockResolvedValue()
 
   app = appWithAllRoutes({})
-  ServiceSelectionController.getServiceCatalogueList = jest.fn().mockReturnValue([
+  ServiceSelectionController.getServiceList = jest.fn().mockReturnValue([
     {
-      id: 351,
-      name: 'hmpps-prisoner-search',
-      environments: [{ id: 47254, url: 'https://prisoner-search-dev.prison.service.justice.gov.uk' }],
+      id: 'hmpps-prisoner-search',
+      name: 'Prisoner Search',
+      url: 'https://prisoner-search-dev.prison.service.justice.gov.uk',
+      disabled: false,
     },
-    { id: 211, name: 'hmpps-book-secure-move-api', environments: [] },
     {
-      id: 175,
-      name: 'hmpps-prisoner-search-indexer',
-      environments: [{ id: 47270, url: 'https://prisoner-search-indexer-dev.prison.service.justice.gov.uk' }],
+      id: 'hmpps-book-secure-move-api',
+      name: 'Book Secure Move API',
+      url: 'https://book-move-dev.prison.service.justice.gov.uk',
+      disabled: false,
     },
   ])
   ReportsController.getSubjectAccessRequestList = jest.fn().mockReturnValue({
@@ -34,7 +35,7 @@ beforeEach(() => {
         dateTo: '2024-03-12',
         sarCaseReferenceNumber: 'caseRef1',
         services:
-          'hmpps-activities-management-api, https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api, https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api, https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk',
+          'hmpps-prisoner-search, https://prisoner-search-dev.prison.service.justice.gov.uk, hmpps-book-secure-move-api, https://book-move-dev.prison.service.justice.gov.uk',
         nomisId: '',
         ndeliusCaseReferenceId: 'A123456',
         requestedBy: 'user',
@@ -50,7 +51,7 @@ beforeEach(() => {
         dateTo: '2023-03-12',
         sarCaseReferenceNumber: 'caseRef2',
         services:
-          'hmpps-activities-management-api, https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api, https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api, https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk',
+          'hmpps-prisoner-search, https://prisoner-search-dev.prison.service.justice.gov.uk, hmpps-book-secure-move-api, https://book-move-dev.prison.service.justice.gov.uk',
         nomisId: '',
         ndeliusCaseReferenceId: 'A123456',
         requestedBy: 'user',
@@ -66,7 +67,7 @@ beforeEach(() => {
         dateTo: '2022-03-12',
         sarCaseReferenceNumber: 'caseRef3',
         services:
-          'hmpps-activities-management-api, https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api, https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api, https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk',
+          'hmpps-prisoner-search, https://prisoner-search-dev.prison.service.justice.gov.uk, hmpps-book-secure-move-api, https://book-move-dev.prison.service.justice.gov.uk',
         nomisId: '',
         ndeliusCaseReferenceId: 'A123456',
         requestedBy: 'user',
