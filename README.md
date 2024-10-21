@@ -22,9 +22,6 @@ The base template requires:
 * redis - session store and token caching
 * manage-users-api - for user management
 
-And for SAR functionality, we also require:
-* hmpps-service-catalogue - DPS service catalogue for API endpoints
-
 ### Environment variables
 
 The `server/data/serviceCatalogue/serviceCatalogue.yaml` file contains a static list of services that the SAR service can request data from. 

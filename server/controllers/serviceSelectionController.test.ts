@@ -2,7 +2,7 @@ import type { Request, Response } from 'express'
 import ServiceSelectionController from './serviceSelectionController'
 
 beforeEach(() => {
-  ServiceSelectionController.getServiceCatalogueItems = jest.fn().mockReturnValue([
+  ServiceSelectionController.getServiceList = jest.fn().mockReturnValue([
     {
       id: 'hmpps-prisoner-search',
       name: 'Prisoner Search',
@@ -59,7 +59,7 @@ describe('getServices', () => {
     )
   })
   test('renders an error if no services found', async () => {
-    ServiceSelectionController.getServiceCatalogueItems = jest.fn().mockReturnValue([])
+    ServiceSelectionController.getServiceList = jest.fn().mockReturnValue([])
     const req: Request = {
       // @ts-expect-error stubbing session
       session: { serviceList: [], selectedList: [{ id: '1' }] },

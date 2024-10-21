@@ -12,7 +12,7 @@ beforeEach(() => {
   jest.spyOn(auditService, 'sendAuditMessage').mockResolvedValue()
 
   app = appWithAllRoutes({})
-  ServiceSelectionController.getServiceCatalogueItems = jest.fn().mockReturnValue([
+  ServiceSelectionController.getServiceList = jest.fn().mockReturnValue([
     {
       id: 'hmpps-prisoner-search',
       name: 'Prisoner Search',

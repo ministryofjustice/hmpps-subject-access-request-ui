@@ -1,27 +1,27 @@
 import { Request, Response } from 'express'
 import ServiceSelectionValidation from './serviceSelectionValidation'
 import { dataAccess } from '../data'
-import { getServiceList } from '../data/serviceCatalogueData'
+import { getServicesData } from '../data/serviceData'
 
 export default class ServiceSelectionController {
   static async getServices(req: Request, res: Response) {
-    const serviceCatalogueItems = ServiceSelectionController.getServiceCatalogueItems()
+    const serviceList = ServiceSelectionController.getServiceList()
 
-    if (serviceCatalogueItems.length === 0) {
+    if (serviceList.length === 0) {
       res.render('pages/serviceSelection', {
         selectedServicesError: `No services found. A report cannot be generated.`,
-        serviceList: serviceCatalogueItems,
+        serviceList,
         buttonText: 'Confirm',
       })
       return
     }
 
-    req.session.serviceList = serviceCatalogueItems
+    req.session.serviceList = serviceList
     const selectedList = req.session.selectedList ?? []
     const hasAllAnswers = req.session.selectedList && req.session.selectedList.length !== 0
     if (hasAllAnswers) {
       res.render('pages/serviceSelection', {
-        serviceList: serviceCatalogueItems,
+        serviceList,
         selectedList: selectedList.map(x => x.id),
         buttonText: 'Confirm and return to summary page',
       })
@@ -29,7 +29,7 @@ export default class ServiceSelectionController {
     }
 
     res.render('pages/serviceSelection', {
-      serviceList: serviceCatalogueItems,
+      serviceList,
       selectedList: selectedList.map(x => x.id),
       buttonText: 'Confirm',
     })
@@ -62,9 +62,9 @@ export default class ServiceSelectionController {
     }
   }
 
-  static getServiceCatalogueItems() {
-    const serviceCatalogueItems = getServiceList()
-    return serviceCatalogueItems.map(x => ({
+  static getServiceList() {
+    const servicesData = getServicesData()
+    return servicesData.map(x => ({
       name: x.label,
       id: x.name,
       url: x.url,
