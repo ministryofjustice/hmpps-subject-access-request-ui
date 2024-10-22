@@ -105,7 +105,7 @@ context('Summary', () => {
     serviceSelectionPage.checkAllCheckBox().click({ force: true })
     serviceSelectionPage.submitButton().click()
     const summaryPage = Page.verifyOnPage(SummaryPage)
-    summaryPage.reportSummaryBox().contains('Create And Vary A Licence')
+    summaryPage.reportSummaryBox().contains('Create and Vary a Licence')
   })
 
   it('Details are carried through from /inputs', () => {
