@@ -28,7 +28,7 @@ interface CatalogueData {
 }
 
 export function getServicesDataByEnvironment(environment: string): ServiceDataItem[] {
-  const file = fs.readFileSync('server/data/services/services.yaml', 'utf8')
+  const file = getDataFile()
   const data = yaml.load(file) as CatalogueData
 
   const services = data.environments.find((env: Environment) => env.environment === environment)?.services || []
@@ -39,6 +39,14 @@ export function getServicesDataByEnvironment(environment: string): ServiceDataIt
     order: service.order,
     disabled: service.disabled === undefined ? false : service.disabled,
   }))
+}
+
+function getDataFile(): string {
+  const distFile = 'dist/server/data/services/services.yaml'
+  if (fs.existsSync(distFile)) {
+    return fs.readFileSync(distFile, 'utf8')
+  }
+  return fs.readFileSync('server/data/services/services.yaml', 'utf-8')
 }
 
 export function getServicesData(): ServiceDataItem[] {
