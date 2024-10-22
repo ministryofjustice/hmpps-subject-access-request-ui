@@ -64,11 +64,13 @@ export default class ServiceSelectionController {
 
   static getServiceList() {
     const servicesData = getServicesData()
-    return servicesData.map(x => ({
-      name: x.label,
-      id: x.name,
-      url: x.url,
-      disabled: x.disabled,
-    }))
+    return servicesData
+      .map(x => ({
+        name: x.label,
+        id: x.name,
+        url: x.url,
+        disabled: x.disabled,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name))
   }
 }
