@@ -15,6 +15,6 @@ generic-service:
     SERVICE_LIST_ENV: "preprod"
     ENVIRONMENT_NAME: PRE-PRODUCTION
     SAR_ENDPOINT_URL: "https://subject-access-request-api-preprod.hmpps.service.justice.gov.uk"
-
+    DISABLED_SERVICES: manage-soc-cases-api, launchpad-auth
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev

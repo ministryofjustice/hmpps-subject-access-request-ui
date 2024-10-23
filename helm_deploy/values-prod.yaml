@@ -12,6 +12,7 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api.prison.service.justice.gov.uk"
     SERVICE_LIST_ENV: "prod"
     SAR_ENDPOINT_URL: "https://subject-access-request-api.hmpps.service.justice.gov.uk"
+    DISABLED_SERVICES: manage-soc-cases-api, launchpad-auth
 
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service
