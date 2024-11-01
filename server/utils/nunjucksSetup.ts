@@ -45,4 +45,5 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   )
 
   njkEnv.addFilter('initialiseName', initialiseName)
+  njkEnv.addGlobal('homeUrl', config.apis.hmppsAuth.externalUrl)
 }
