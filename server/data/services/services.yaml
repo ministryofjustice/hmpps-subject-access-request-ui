@@ -116,6 +116,11 @@ environments:
         url: https://incident-reporting-api-dev.hmpps.service.justice.gov.uk
         order: 23
         disabled: false
+      - name: launchpad-auth
+        label: Launchpad
+        url: https://launchpad-auth-dev.hmpps.service.justice.gov.uk
+        order: 24
+        disabled: false
   - environment: preprod
     services:
       - name: keyworker-api
@@ -233,6 +238,11 @@ environments:
         url: https://incident-reporting-api-preprod.hmpps.service.justice.gov.uk
         order: 23
         disabled: false
+      - name: launchpad-auth
+        label: Launchpad
+        url: https://launchpad-auth-preprod.hmpps.service.justice.gov.uk
+        order: 24
+        disabled: false
   - environment: prod
     services:
       - name: keyworker-api
@@ -349,4 +359,9 @@ environments:
         label: HMPPS Incident Reporting
         url: https://incident-reporting-api.hmpps.service.justice.gov.uk
         order: 23
+        disabled: false
+      - name: launchpad-auth
+        label: Launchpad
+        url: https://launchpad-auth.hmpps.service.justice.gov.uk
+        order: 24
         disabled: false
