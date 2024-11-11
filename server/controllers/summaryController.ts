@@ -5,11 +5,13 @@ import { isNomisId, isNdeliusId } from '../utils/idHelpers'
 import { dataAccess } from '../data'
 import getUserToken from '../utils/userTokenHelper'
 import { AuditEvent, AuditSubjectType, auditWithSubject } from '../audit'
+import { UserData } from '../@types/userdata'
 
 export default class SummaryController {
   static getReportDetails(req: Request, res: Response) {
     const selectedList = req.session.selectedList ?? []
-    const userData = req.session.userData ?? {}
+    const orderedList = selectedList.sort((a, b) => a.label.localeCompare(b.label))
+    const userData = req.session.userData ?? ({} as UserData)
 
     const dateFrom = userData.dateFrom || 'Earliest available'
     const dateTo = userData.dateTo || 'Today'
@@ -17,7 +19,7 @@ export default class SummaryController {
 
     res.render('pages/summary', {
       subjectId: userData.subjectId,
-      selectedList: selectedList.map(x => x.name).toString(),
+      selectedList: orderedList.map(x => x.label).toString(),
       dateRange,
       caseReference: userData.caseReference,
     })
@@ -25,14 +27,14 @@ export default class SummaryController {
 
   static async postReportDetails(req: Request, res: Response) {
     const userToken = getUserToken(req)
-    const userData = req.session.userData ?? {}
+    const userData = req.session.userData ?? ({} as UserData)
     const { selectedList } = req.session
 
     if (dataAccess().telemetryClient) {
       dataAccess().telemetryClient.trackEvent({ name: 'postReportDetails', properties: { id: userData.subjectId } })
     }
 
-    const serviceList = selectedList.map(service => `${service.id}, ${service.url}`)
+    const serviceList = selectedList.map(service => `${service.name}, ${service.url}`)
     const nomisId = isNomisId(userData.subjectId) ? userData.subjectId.toString().toUpperCase() : null
     const ndeliusId = isNdeliusId(userData.subjectId) ? userData.subjectId.toString().toUpperCase() : null
     const commonProperties = {

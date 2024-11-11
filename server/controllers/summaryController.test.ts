@@ -20,12 +20,12 @@ afterEach(() => {
 })
 
 describe('getReportDetails', () => {
-  const res: Partial<Response> = {
+  const res: Response = {
     render: jest.fn(),
-  }
+  } as unknown as Response
 
   test('renders a response with session data', async () => {
-    const req: Partial<Request> = {
+    const req: Request = {
       session: {
         userData: {
           subjectId: 'A1111AA',
@@ -33,9 +33,11 @@ describe('getReportDetails', () => {
           dateTo: '25/12/2022',
           caseReference: 'mockedCaseReference',
         },
-        selectedList: [{ id: 'service-one', name: 'Service One', url: 'hmpps-service-one.com', disabled: false }],
+        selectedList: [
+          { name: 'service-one', label: 'Service One', order: 1, url: 'hmpps-service-one.com', disabled: false },
+        ],
       },
-    }
+    } as unknown as Request
     SummaryController.getReportDetails(req, res)
     expect(res.render).toHaveBeenCalled()
     expect(res.render).toBeCalledWith(
@@ -51,7 +53,7 @@ describe('getReportDetails', () => {
 })
 
 describe('postReportDetails', () => {
-  const res: Partial<Response> = {
+  const res: Response = {
     redirect: jest.fn(),
     locals: {
       user: {
@@ -60,10 +62,10 @@ describe('postReportDetails', () => {
         username: 'username',
       },
     },
-  }
+  } as unknown as Response
 
   test('post request made to SubjectAccessRequest endpoint renders confirmation page if successful', async () => {
-    const req: Partial<Request> = {
+    const req: Request = {
       session: {
         userData: {
           dateFrom: '01/01/2001',
@@ -71,13 +73,15 @@ describe('postReportDetails', () => {
           caseReference: 'mockedCaseReference',
           subjectId: 'A1111AA',
         },
-        selectedList: [{ id: 'service-one', name: 'service1', url: 'hmpps-service-one.com', disabled: false }],
+        selectedList: [
+          { name: 'service-one', label: 'service1', url: 'hmpps-service-one.com', disabled: false, order: 1 },
+        ],
       },
       user: {
         token: 'fakeUserToken',
         authSource: 'auth',
       },
-    }
+    } as unknown as Request
 
     fakeApi
       .post(
@@ -94,7 +98,6 @@ describe('postReportDetails', () => {
 
   test('post request fails if neither nomisId nor ndeluisCaseReferenceId is provided', async () => {
     const req: Request = {
-      // @ts-expect-error stubbing session
       session: {
         userData: {
           dateFrom: '01/01/2001',
@@ -102,13 +105,15 @@ describe('postReportDetails', () => {
           caseReference: 'mockedCaseReference',
           subjectId: '',
         },
-        selectedList: [{ id: 'service-one', name: 'service1', url: 'hmpps-service-one.com', disabled: false }],
+        selectedList: [
+          { name: 'service-one', label: 'service1', url: 'hmpps-service-one.com', disabled: false, order: 1 },
+        ],
       },
       user: {
         token: 'fakeUserToken',
         authSource: 'auth',
       },
-    }
+    } as unknown as Request
     nock(config.apis.subjectAccessRequest.url)
       .post(
         '/api/subjectAccessRequest',
@@ -131,7 +136,6 @@ describe('postReportDetails', () => {
       .reply(200)
 
     const req: Request = {
-      // @ts-expect-error stubbing session
       session: {
         userData: {
           dateFrom: '01/01/2001',
@@ -139,13 +143,15 @@ describe('postReportDetails', () => {
           caseReference: 'mockedCaseReference',
           subjectId: 'A1111AA',
         },
-        selectedList: [{ id: 'service-one', name: 'service1', url: 'hmpps-service-one.com', disabled: false }],
+        selectedList: [
+          { name: 'service-one', label: 'service1', url: 'hmpps-service-one.com', disabled: false, order: 1 },
+        ],
       },
       user: {
         token: 'fakeUserToken',
         authSource: 'auth',
       },
-    }
+    } as unknown as Request
 
     const response = await SummaryController.postReportDetails(req, res)
     expect(response.status).toBe(200)
@@ -156,7 +162,6 @@ describe('postReportDetails', () => {
 
   test('post request send subject ID capitalised when provided in lowercase', async () => {
     const req: Request = {
-      // @ts-expect-error stubbing session
       session: {
         userData: {
           dateFrom: '01/01/2001',
@@ -164,13 +169,15 @@ describe('postReportDetails', () => {
           caseReference: 'mockedCaseReference',
           subjectId: 'a1111aa',
         },
-        selectedList: [{ id: 'service-one', name: 'service1', url: 'hmpps-service-one.com', disabled: false }],
+        selectedList: [
+          { name: 'service-one', label: 'service1', url: 'hmpps-service-one.com', disabled: false, order: 1 },
+        ],
       },
       user: {
         token: 'fakeUserToken',
         authSource: 'auth',
       },
-    }
+    } as unknown as Request
 
     fakeApi
       .post(

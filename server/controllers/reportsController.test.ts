@@ -80,7 +80,6 @@ afterEach(() => {
 
 describe('getReports', () => {
   let req: Request = {
-    // @ts-expect-error stubbing session
     session: {},
     query: {},
     user: {
@@ -88,8 +87,7 @@ describe('getReports', () => {
       authSource: 'auth',
       username: 'username',
     },
-  }
-  // @ts-expect-error stubbing res.render
+  } as unknown as Request
   const res: Response = {
     render: jest.fn(),
     set: jest.fn(),
@@ -101,7 +99,7 @@ describe('getReports', () => {
         username: 'username',
       },
     },
-  }
+  } as unknown as Response
   test('renders a response with list of SAR reports', async () => {
     await ReportsController.getReports(req, res)
     expect(res.render).toBeCalledWith(
@@ -200,10 +198,9 @@ describe('getReports', () => {
     describe('when the current page is the fifth page', () => {
       beforeEach(() => {
         req = {
-          // @ts-expect-error stubbing session
           session: {},
           query: { page: '5' },
-        }
+        } as unknown as Request
       })
       test('previous directs to the fourth page', async () => {
         await ReportsController.getReports(req, res)
@@ -259,14 +256,13 @@ describe('getReports', () => {
     describe('when the current page is the third page', () => {
       beforeEach(() => {
         req = {
-          // @ts-expect-error stubbing session
           session: {},
           query: { page: '3', id: 'df936446-719a-4463-acb6-9b13eea1f495' },
           user: {
             token: 'fakeUserToken',
             authSource: 'auth',
           },
-        }
+        } as unknown as Request
       })
       test('previous directs to the second page', async () => {
         await ReportsController.getReports(req, res)

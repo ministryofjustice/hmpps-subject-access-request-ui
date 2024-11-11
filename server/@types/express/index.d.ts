@@ -28,7 +28,11 @@ export declare global {
     }
 
     interface Locals {
-      user: Express.User
+      user: HmppsUser
+    }
+
+    interface HmppsUser extends Express.User {
+      staffId?: number
     }
   }
 }

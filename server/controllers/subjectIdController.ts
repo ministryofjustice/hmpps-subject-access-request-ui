@@ -1,11 +1,12 @@
 import type { Request, Response } from 'express'
 import SubjectIdValidation from './subjectIdValidation'
 import { dataAccess } from '../data'
+import { UserData } from '../@types/userdata'
 
 export default class SubjectIdController {
   static getSubjectId(req: Request, res: Response) {
     if (req.session.userData === undefined) {
-      req.session.userData = {}
+      req.session.userData = {} as UserData
     }
     const { subjectId } = req.session.userData
     const hasAllAnswers = req.session.selectedList && req.session.selectedList.length !== 0

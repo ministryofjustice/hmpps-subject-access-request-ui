@@ -7,7 +7,7 @@ import { dataAccess } from '../data'
 
 export default class InputsController {
   static getInputs(req: Request, res: Response) {
-    const userData: UserData = req.session.userData ?? {}
+    const userData: UserData = req.session.userData ?? ({} as UserData)
     const today = formatDate(new Date().toISOString(), 'short')
     const hasAllAnswers = req.session.selectedList && req.session.selectedList.length !== 0
     if (hasAllAnswers) {

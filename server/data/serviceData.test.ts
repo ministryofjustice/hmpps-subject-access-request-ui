@@ -30,7 +30,7 @@ describe('getServiceDataByEnvironment', () => {
 
   it('should return services for the given environment', () => {
     const result = getServicesDataByEnvironment('test')
-    const expected: ServiceDataItem[] = [
+    const expected: Service[] = [
       {
         name: 'service1',
         url: 'http://service1.com',

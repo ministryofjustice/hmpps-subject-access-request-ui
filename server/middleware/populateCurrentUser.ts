@@ -2,6 +2,7 @@ import { RequestHandler } from 'express'
 import { jwtDecode } from 'jwt-decode'
 import logger from '../../logger'
 import { convertToTitleCase } from '../utils/utils'
+import { HmppsUser } from '../interfaces/hmppsUser'
 
 export default function populateCurrentUser(): RequestHandler {
   return async (req, res, next) => {
@@ -22,7 +23,7 @@ export default function populateCurrentUser(): RequestHandler {
         name,
         displayName: convertToTitleCase(name),
         userRoles: roles.map(role => role.substring(role.indexOf('_') + 1)),
-      }
+      } as HmppsUser
 
       if (res.locals.user.authSource === 'nomis') {
         res.locals.user.staffId = parseInt(userId, 10) || undefined

@@ -21,16 +21,14 @@ afterEach(() => {
 })
 
 describe('getInputs', () => {
-  // @ts-expect-error stubbing res.render
   const res: Response = {
     render: jest.fn(),
-  }
+  } as unknown as Response
 
   test('renders a response with default inputs', () => {
     const req: Request = {
-      // @ts-expect-error stubbing session
       session: {},
-    }
+    } as unknown as Request
     InputsController.getInputs(req, res)
     expect(res.render).toHaveBeenCalled()
     expect(res.render).toBeCalledWith(
@@ -45,7 +43,6 @@ describe('getInputs', () => {
   })
   test('renders a response with persisted values from previous session', () => {
     const req: Request = {
-      // @ts-expect-error stubbing session
       session: {
         userData: {
           dateFrom: '01/01/2001',
@@ -53,7 +50,7 @@ describe('getInputs', () => {
           caseReference: 'mockedCaseReference',
         },
       },
-    }
+    } as unknown as Request
 
     InputsController.getInputs(req, res)
     expect(res.render).toBeCalledWith(
@@ -70,7 +67,6 @@ describe('getInputs', () => {
 
 describe('saveInputs', () => {
   const baseReq: Request = {
-    // @ts-expect-error stubbing session
     session: {
       userData: {
         subjectId: 'A1111AA',
@@ -81,11 +77,10 @@ describe('saveInputs', () => {
       dateTo: '30/12/2022',
       caseReference: 'mockedCaseReference',
     },
-  }
-  // @ts-expect-error stubbing res
+  } as unknown as Request
   const res: Response = {
     redirect: jest.fn(),
-  }
+  } as unknown as Response
   test('persists values to the session and redirects to service selection', () => {
     InputsController.saveInputs(baseReq, res)
     expect(baseReq.session.userData.dateFrom).toBe('30/12/2022')
@@ -106,7 +101,7 @@ describe('saveInputs', () => {
           caseReference: 'caseReferenceToBeOverwritten',
         },
       },
-    }
+    } as unknown as Request
     InputsController.saveInputs(req, res)
     expect(req.session.userData.dateFrom).toBe('30/12/2022')
     expect(req.session.userData.dateTo).toBe('30/12/2022')
@@ -131,7 +126,7 @@ describe('saveInputs', () => {
         dateTo: '30/12/2022',
         caseReference: 'mockedCaseReference',
       },
-    }
+    } as unknown as Request
 
     InputsController.saveInputs(req, res)
     expect(res.redirect).toHaveBeenCalled()
