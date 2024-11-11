@@ -1,11 +1,11 @@
 import fs from 'fs'
 import yaml from 'js-yaml'
-import { getServiceCatalogueByEnvironment, ServiceCatalogueItem } from './serviceCatalogueData'
+import { getServicesDataByEnvironment } from './serviceData'
 
 jest.mock('fs')
 jest.mock('js-yaml')
 
-describe('getServiceCatalogueByEnvironment', () => {
+describe('getServiceDataByEnvironment', () => {
   const mockData = {
     environments: [
       {
@@ -29,11 +29,10 @@ describe('getServiceCatalogueByEnvironment', () => {
   })
 
   it('should return services for the given environment', () => {
-    const result = getServiceCatalogueByEnvironment('test')
-    const expected: ServiceCatalogueItem[] = [
+    const result = getServicesDataByEnvironment('test')
+    const expected: ServiceDataItem[] = [
       {
         name: 'service1',
-        environment: 'test',
         url: 'http://service1.com',
         label: 'Service 1',
         order: 1,
@@ -44,7 +43,7 @@ describe('getServiceCatalogueByEnvironment', () => {
   })
 
   it('should return an empty array if the environment does not exist', () => {
-    const result = getServiceCatalogueByEnvironment('nonexistent')
+    const result = getServicesDataByEnvironment('nonexistent')
     expect(result).toEqual([])
   })
 
@@ -52,6 +51,6 @@ describe('getServiceCatalogueByEnvironment', () => {
     ;(fs.readFileSync as jest.Mock).mockImplementation(() => {
       throw new Error('File not found')
     })
-    expect(() => getServiceCatalogueByEnvironment('test')).toThrow('File not found')
+    expect(() => getServicesDataByEnvironment('test')).toThrow('File not found')
   })
 })

@@ -2,7 +2,7 @@ import type { Request, Response } from 'express'
 import ServiceSelectionController from './serviceSelectionController'
 
 beforeEach(() => {
-  ServiceSelectionController.getServiceCatalogueItems = jest.fn().mockReturnValue([
+  ServiceSelectionController.getServiceList = jest.fn().mockReturnValue([
     {
       id: 'hmpps-prisoner-search',
       name: 'Prisoner Search',
@@ -30,7 +30,9 @@ describe('getServices', () => {
   test('renders a response with default inputs', async () => {
     const req: Request = {
       // @ts-expect-error stubbing session
-      session: { serviceList: [] },
+      session: {
+        serviceList: [],
+      },
       body: { selectedservices: [] },
     }
     await ServiceSelectionController.getServices(req, res)
@@ -45,7 +47,7 @@ describe('getServices', () => {
   test('renders a response with persisted values from session', async () => {
     const req: Request = {
       // @ts-expect-error stubbing session
-      session: { serviceList: [], selectedList: [{ id: '1' }] },
+      session: { serviceList: [], selectedList: [{ name: '1' }] },
       body: { selectedservices: [] },
     }
     await ServiceSelectionController.getServices(req, res)
@@ -59,10 +61,10 @@ describe('getServices', () => {
     )
   })
   test('renders an error if no services found', async () => {
-    ServiceSelectionController.getServiceCatalogueItems = jest.fn().mockReturnValue([])
+    ServiceSelectionController.getServiceList = jest.fn().mockReturnValue([])
     const req: Request = {
       // @ts-expect-error stubbing session
-      session: { serviceList: [], selectedList: [{ id: '1' }] },
+      session: { serviceList: [], selectedList: [{ name: '1' }] },
       body: { selectedservices: [] },
     }
     await ServiceSelectionController.getServices(req, res)
@@ -85,15 +87,20 @@ describe('selectServices', () => {
   test('persists values to the session and redirects', async () => {
     const baseReq: Request = {
       // @ts-expect-error stubbing session
-      session: { serviceList: [{ text: 'service', value: 'service.com', id: '1' }] },
+      session: {
+        serviceList: [
+          { name: 'service-1', label: 'Service 1', url: 'service-1.com', order: 1, disabled: false },
+          { name: 'service-2', label: 'Service 2', url: 'service-2.com', order: 2, disabled: false },
+        ],
+        selectedList: [],
+      },
       body: {
-        selectedServices: ['1'],
+        selectedServices: ['service-1'],
       },
     }
     await ServiceSelectionController.selectServices(baseReq, res)
-    expect(baseReq.session.selectedList[0].id).toBe('1')
-    expect(baseReq.session.selectedList[0].text).toBe('service')
-    expect(baseReq.session.selectedList[0].value).toBe('service.com')
+    expect(baseReq.session.selectedList[0].name).toBe('service-1')
+    expect(baseReq.session.selectedList[0].label).toBe('Service 1')
     expect(res.redirect).toHaveBeenCalled()
     expect(res.redirect).toBeCalledWith('/summary')
   })
@@ -103,19 +110,18 @@ describe('selectServices', () => {
       // @ts-expect-error stubbing session
       session: {
         serviceList: [
-          { text: 'service', value: 'service.com', id: '1' },
-          { text: 'service2', value: 'service2.com', id: '2' },
+          { name: 'service-1', label: 'Service 1', url: 'service-1.com', order: 1, disabled: false },
+          { name: 'service-2', label: 'Service 2', url: 'service-2.com', order: 2, disabled: false },
         ],
-        selectedList: [{ text: 'service', value: 'service.com', id: '1' }],
+        selectedList: [{ name: 'service-1', label: 'Service 1', url: 'service-1.com', order: 1, disabled: false }],
       },
       body: {
-        selectedServices: ['2'],
+        selectedServices: ['service-2'],
       },
     }
     ServiceSelectionController.selectServices(req, res)
-    expect(req.session.selectedList[0].id).toBe('2')
-    expect(req.session.selectedList[0].text).toBe('service2')
-    expect(req.session.selectedList[0].value).toBe('service2.com')
+    expect(req.session.selectedList[0].name).toBe('service-2')
+    expect(req.session.selectedList[0].label).toBe('Service 2')
     expect(res.redirect).toHaveBeenCalled()
     expect(res.redirect).toBeCalledWith('/summary')
   })

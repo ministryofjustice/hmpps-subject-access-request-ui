@@ -1,4 +1,3 @@
-import { ApiService } from '../@types/apiservice'
 import ServiceSelectionValidation from './serviceSelectionValidation'
 
 describe('validateSelection', () => {
@@ -9,10 +8,10 @@ describe('validateSelection', () => {
   test('checks for no selections correctly', () => {
     const testCases = [
       { input: [], expected: errors.select },
-      { input: ['1'], expected: '' },
+      { input: ['test1'], expected: '' },
     ]
-    const mockService: ApiService[] = [
-      { id: '1', text: 'mockService', value: 'http://foo.boo', name: 'test1', environments: [] },
+    const mockService: Service[] = [
+      { name: 'test1', label: 'Test one', url: 'http://foo.boo', order: 1, disabled: false },
     ]
     testCases.forEach(testCase => {
       const selectedServicesError = ServiceSelectionValidation.validateSelection(testCase.input, mockService)
@@ -22,10 +21,10 @@ describe('validateSelection', () => {
   test('checks for invalid service selection', () => {
     const testCases = [
       { input: ['randomId'], expected: errors.invalidSelection },
-      { input: ['1'], expected: '' },
+      { input: ['test1'], expected: '' },
     ]
-    const mockService: ApiService[] = [
-      { id: '1', text: 'mockService', value: 'http://foo.boo', name: 'test2', environments: [] },
+    const mockService: Service[] = [
+      { name: 'test1', label: 'Test one', url: 'http://foo.boo', order: 1, disabled: false },
     ]
     testCases.forEach(testCase => {
       const selectedServicesError = ServiceSelectionValidation.validateSelection(testCase.input, mockService)

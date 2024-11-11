@@ -1,4 +1,4 @@
-import { HmppsUser } from '../../interfaces/hmppsUser'
+import { UserData } from '../userdata'
 
 export default {}
 
@@ -7,6 +7,9 @@ export declare module 'express-session' {
   interface SessionData {
     returnTo: string
     nowInMinutes: number
+    userData: UserData
+    serviceList: Service[]
+    selectedList: Service[]
   }
 }
 
@@ -25,7 +28,7 @@ export declare global {
     }
 
     interface Locals {
-      user: HmppsUser
+      user: Express.User
     }
   }
 }

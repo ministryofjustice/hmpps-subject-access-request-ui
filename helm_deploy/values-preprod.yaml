@@ -11,8 +11,7 @@ generic-service:
     INGRESS_URL: "https://subject-access-request-preprod.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-preprod.prison.service.justice.gov.uk"
-    SERVICE_CATALOGUE_URL: "https://service-catalogue.hmpps.service.justice.gov.uk/v1"
-    SERVICE_CATALOGUE_ENV: "preprod"
+    SERVICE_LIST_ENV: "preprod"
     ENVIRONMENT_NAME: PRE-PRODUCTION
     SAR_ENDPOINT_URL: "https://subject-access-request-api-preprod.hmpps.service.justice.gov.uk"
 

@@ -86,8 +86,8 @@ export default {
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
-  serviceCatalogue: {
-    env: get('SERVICE_CATALOGUE_ENV', 'dev', requiredInProduction),
+  serviceList: {
+    env: get('SERVICE_LIST_ENV', 'dev', requiredInProduction),
     disabledServices: get('DISABLED_SERVICES', '')
       .split(',')
       .map(service => service.trim()),
