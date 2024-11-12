@@ -111,11 +111,6 @@ environments:
         url: https://education-employment-api-dev.hmpps.service.justice.gov.uk
         order: 22
         disabled: false
-      - name: hmpps-incidents-reporting-api
-        label: Incident Reporting
-        url: https://incident-reporting-api-dev.hmpps.service.justice.gov.uk
-        order: 23
-        disabled: false
       - name: launchpad-auth
         label: Launchpad
         url: https://launchpad-auth-dev.hmpps.service.justice.gov.uk
@@ -233,11 +228,6 @@ environments:
         url: https://education-employment-api-preprod.hmpps.service.justice.gov.uk
         order: 22
         disabled: false
-      - name: hmpps-incidents-reporting-api
-        label: Incident Reporting
-        url: https://incident-reporting-api-preprod.hmpps.service.justice.gov.uk
-        order: 23
-        disabled: false
       - name: launchpad-auth
         label: Launchpad
         url: https://launchpad-auth-preprod.hmpps.service.justice.gov.uk
@@ -354,11 +344,6 @@ environments:
         label: HMPPS Education Employment
         url: https://education-employment-api.hmpps.service.justice.gov.uk
         order: 22
-        disabled: false
-      - name: hmpps-incidents-reporting-api
-        label: HMPPS Incident Reporting
-        url: https://incident-reporting-api.hmpps.service.justice.gov.uk
-        order: 23
         disabled: false
       - name: launchpad-auth
         label: Launchpad
