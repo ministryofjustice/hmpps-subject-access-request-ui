@@ -20,29 +20,29 @@
       <td class="govuk-table__cell">
           <div class="govuk-checkboxes__item govuk-checkboxes--small">
             <input type="checkbox" class="disabled-govuk-checkboxes__input"
-                   id="{{ item.id }}"
-                   name="{{ params.itemGroupName }}" value="{{ item.id }}" disabled>
-            <label class="govuk-label govuk-checkboxes__label" for="{{ item.id }}">
-              <span class="govuk-visually-hidden">Select {{ item.name }}</span>
+                   id="{{ item.name }}"
+                   name="{{ params.itemGroupName }}" value="{{ item.name }}" disabled>
+            <label class="govuk-label govuk-checkboxes__label" for="{{ item.name }}">
+              <span class="govuk-visually-hidden">Select {{ item.label }}</span>
             </label>
           </div>
       </td>
           <td class="govuk-table__cell"><span class='disabled-text'>{{item.name}}</span></td>
         {% else %}
       <td class="govuk-table__cell">
-          {% set isChecked = (item.disabled == false) and (params.selectedItems or []).indexOf(item.id) > -1 %}
+          {% set isChecked = (item.disabled == false) and (params.selectedItems or []).indexOf(item.name) > -1 %}
           <div class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox">
             <input type="checkbox" class="govuk-checkboxes__input govuk-moj-multi-select__checkbox__input"
-                   id="{{ item.id }}"
-                   name="{{ params.itemGroupName }}" value="{{ item.id }}"
+                   id="{{ item.name }}"
+                   name="{{ params.itemGroupName }}" value="{{ item.name }}"
                     {{- " checked" if isChecked }} >
 
-            <label class="govuk-label govuk-checkboxes__label" for="{{ item.id }}">
-              <span class="govuk-visually-hidden">Select {{ item.name }}</span>
+            <label class="govuk-label govuk-checkboxes__label" for="{{ item.name }}">
+              <span class="govuk-visually-hidden">Select {{ item.label }}</span>
             </label>
           </div>
       </td>
-          <td class="govuk-table__cell">{{item.name}} </td>
+          <td class="govuk-table__cell">{{item.label}} </td>
         {% endif %}
     </tr>   
      {% endfor %}

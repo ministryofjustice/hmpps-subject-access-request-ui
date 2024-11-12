@@ -8,6 +8,7 @@ import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
 import type { Services } from '../../services'
 import type { ApplicationInfo } from '../../applicationInfo'
+import { HmppsUser } from '../../interfaces/hmppsUser'
 
 const testAppInfo: ApplicationInfo = {
   applicationName: 'test',
@@ -17,20 +18,20 @@ const testAppInfo: ApplicationInfo = {
   branchName: 'main',
 }
 
-export const user: Express.User = {
+export const user: HmppsUser = {
   name: 'FIRST LAST',
   userId: 'id',
   token: 'token',
   username: 'user1',
   displayName: 'First Last',
-  active: true,
-  activeCaseLoadId: 'MDI',
-  authSource: 'NOMIS',
+  authSource: 'nomis',
+  staffId: 1234,
+  userRoles: [],
 }
 
 export const flashProvider = jest.fn()
 
-function appSetup(services: Services, production: boolean, userSupplier: () => Express.User): Express {
+function appSetup(services: Services, production: boolean, userSupplier: () => HmppsUser): Express {
   const app = express()
 
   app.set('view engine', 'njk')
@@ -41,7 +42,7 @@ function appSetup(services: Services, production: boolean, userSupplier: () => E
     req.user = userSupplier()
     req.flash = flashProvider
     res.locals = {
-      user: { ...req.user },
+      user: { ...req.user } as HmppsUser,
     }
     next()
   })
@@ -61,7 +62,7 @@ export function appWithAllRoutes({
 }: {
   production?: boolean
   services?: Partial<Services>
-  userSupplier?: () => Express.User
+  userSupplier?: () => HmppsUser
 }): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()
   return appSetup(services as Services, production, userSupplier)

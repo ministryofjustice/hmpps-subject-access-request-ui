@@ -6,8 +6,7 @@ import SubjectIdPage from '../pages/subjectId'
 context('Inputs', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
-    cy.task('stubManageUser')
+    cy.task('stubSignIn', { roles: ['ROLE_SAR_USER_ACCESS'] })
     cy.intercept({
       method: 'POST',
       url: '/inputs',

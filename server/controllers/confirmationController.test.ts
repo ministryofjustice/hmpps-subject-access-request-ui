@@ -9,17 +9,16 @@ describe('getConfirmation', () => {
   // @ts-expect-error stubbing res.render
   const res: Response = {
     render: jest.fn(),
-  }
+  } as Response
 
   test('renders a response with session data', async () => {
-    const req: Request = {
-      // @ts-expect-error stubbing session
+    const req = {
       session: {
         userData: {
           caseReference: 'ExampleCaseReference',
         },
       },
-    }
+    } as unknown as Request
 
     await ConfirmationController.getConfirmation(req, res)
 
@@ -33,15 +32,14 @@ describe('getConfirmation', () => {
   })
 
   test('clears user data from session', async () => {
-    const req: Request = {
-      // @ts-expect-error stubbing session
+    const req = {
       session: {
         userData: {
           caseReference: 'ExampleCaseReference',
         },
         selectedList: [{ id: '1', text: 'service1' }],
       },
-    }
+    } as unknown as Request
 
     await ConfirmationController.getConfirmation(req, res)
 

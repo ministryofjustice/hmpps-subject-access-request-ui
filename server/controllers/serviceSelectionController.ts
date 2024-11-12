@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import ServiceSelectionValidation from './serviceSelectionValidation'
 import { dataAccess } from '../data'
+
 import { getServicesData } from '../data/serviceData'
 
 export default class ServiceSelectionController {
@@ -22,7 +23,7 @@ export default class ServiceSelectionController {
     if (hasAllAnswers) {
       res.render('pages/serviceSelection', {
         serviceList,
-        selectedList: selectedList.map(x => x.id),
+        selectedList: selectedList.map(x => x.name),
         buttonText: 'Confirm and return to summary page',
       })
       return
@@ -30,7 +31,7 @@ export default class ServiceSelectionController {
 
     res.render('pages/serviceSelection', {
       serviceList,
-      selectedList: selectedList.map(x => x.id),
+      selectedList: selectedList.map(x => x.name),
       buttonText: 'Confirm',
     })
   }
@@ -57,20 +58,12 @@ export default class ServiceSelectionController {
         })
         return
       }
-      req.session.selectedList = serviceList.filter(x => selectedList.includes(x.id.toString()))
+      req.session.selectedList = serviceList.filter(x => selectedList.includes(x.name.toString()))
       res.redirect('/summary')
     }
   }
 
   static getServiceList() {
-    const servicesData = getServicesData()
-    return servicesData
-      .map(x => ({
-        name: x.label,
-        id: x.name,
-        url: x.url,
-        disabled: x.disabled,
-      }))
-      .sort((a, b) => a.name.localeCompare(b.name))
+    return getServicesData().sort((a, b) => a.order - b.order)
   }
 }
