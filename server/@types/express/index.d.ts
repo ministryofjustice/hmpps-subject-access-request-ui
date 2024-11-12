@@ -1,4 +1,5 @@
 import { UserData } from '../userdata'
+import { HmppsUser } from '../../interfaces/hmppsUser'
 
 export default {}
 
@@ -29,10 +30,6 @@ export declare global {
 
     interface Locals {
       user: HmppsUser
-    }
-
-    interface HmppsUser extends Express.User {
-      staffId?: number
     }
   }
 }

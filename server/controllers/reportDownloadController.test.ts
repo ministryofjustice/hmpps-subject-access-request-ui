@@ -16,27 +16,25 @@ afterEach(() => {
 
 describe('getReport', () => {
   test('creates a fileName from request query parameters', async () => {
-    // @ts-expect-error stubbing res.set
     const res: Response = {
       set: jest.fn(),
       send: jest.fn(),
       locals: {
         user: {
           token: 'fakeUserToken',
-          authSource: 'auth',
+          authSource: 'external',
           username: 'username',
         },
       },
-    }
+    } as unknown as Response
     const req: Request = {
-      // @ts-expect-error stubbing session
       session: {},
       query: {
         id: 'mock-file-ID',
         sarCaseReference: 'mock-sar-case-reference',
         subjectId: 'mock-subject-ID',
       },
-    }
+    } as unknown as Request
     const next = jest.fn()
     const date = formatDate(new Date().toISOString(), 'short')
 
