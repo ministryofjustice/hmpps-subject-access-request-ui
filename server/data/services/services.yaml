@@ -116,6 +116,21 @@ environments:
         url: https://launchpad-auth-dev.hmpps.service.justice.gov.uk
         order: 24
         disabled: false
+      - name: G1
+        label: G1
+        url: G1
+        order: 25
+        disabled: false
+      - name: G2
+        label: G2
+        url: G2
+        order: 26
+        disabled: false
+      - name: G3
+        label: G3
+        url: G3
+        order: 27
+        disabled: false
   - environment: preprod
     services:
       - name: keyworker-api
@@ -233,6 +248,21 @@ environments:
         url: https://launchpad-auth-preprod.hmpps.service.justice.gov.uk
         order: 24
         disabled: false
+      - name: G1
+        label: G1
+        url: G1
+        order: 25
+        disabled: false
+      - name: G2
+        label: G2
+        url: G2
+        order: 26
+        disabled: false
+      - name: G3
+        label: G3
+        url: G3
+        order: 27
+        disabled: false
   - environment: prod
     services:
       - name: keyworker-api
@@ -349,4 +379,19 @@ environments:
         label: Launchpad
         url: https://launchpad-auth.hmpps.service.justice.gov.uk
         order: 24
+        disabled: false
+      - name: G1
+        label: G1
+        url: G1
+        order: 25
+        disabled: false
+      - name: G2
+        label: G2
+        url: G2
+        order: 26
+        disabled: false
+      - name: G3
+        label: G3
+        url: G3
+        order: 27
         disabled: false
