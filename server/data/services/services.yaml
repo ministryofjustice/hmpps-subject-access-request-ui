@@ -7,7 +7,7 @@ environments:
         order: 1
         disabled: false
       - name: offender-case-notes
-        label: Offender Sensitive Case Notes
+        label: Sensitive Case Notes
         url: https://dev.offender-case-notes.service.justice.gov.uk
         order: 2
         disabled: false
@@ -139,7 +139,7 @@ environments:
         order: 1
         disabled: false
       - name: offender-case-notes
-        label: Offender Sensitive Case Notes
+        label: Sensitive Case Notes
         url: https://preprod.offender-case-notes.service.justice.gov.uk
         order: 2
         disabled: false
@@ -271,7 +271,7 @@ environments:
         order: 1
         disabled: false
       - name: offender-case-notes
-        label: Offender Sensitive Case Notes
+        label: Sensitive Case Notes
         url: https://offender-case-notes.service.justice.gov.uk
         order: 2
         disabled: false
