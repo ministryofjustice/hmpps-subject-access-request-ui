@@ -105,12 +105,16 @@ export default class ReportsController {
 
   static getFormattedDateTime(dateTimeString: string): string {
     if (dateTimeString != null) {
-      const padStart = (value: number): string => value.toString().padStart(2, '0')
+      const padded = (value: number): string => value.toString().padStart(2, '0')
       const dateTime: Date = new Date(dateTimeString)
 
-      return `${dateTime.getFullYear()}/${padStart(dateTime.getMonth() + 1)}/${padStart(
-        dateTime.getDate(),
-      )}, ${padStart(dateTime.getHours())}:${padStart(dateTime.getMinutes())}`
+      const day = `${padded(dateTime.getDate())}`
+      const month = `${padded(dateTime.getMonth() + 1)}`
+      const year = `${dateTime.getFullYear()}`
+      const hour = `${padded(dateTime.getHours())}`
+      const minute = `${padded(dateTime.getMinutes())}`
+
+      return `${day}/${month}/${year} ${hour}:${minute}`
     }
     return null
   }
