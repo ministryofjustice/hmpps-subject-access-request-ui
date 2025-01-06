@@ -1,5 +1,5 @@
 # Stage: base image
-FROM node:22.12-bullseye-slim as base
+FROM node:22.12-bookworm-slim as base
 
 ARG BUILD_NUMBER
 ARG GIT_REF
@@ -37,11 +37,9 @@ ARG BUILD_NUMBER
 ARG GIT_REF
 ARG GIT_BRANCH
 
-#RUN apt-get update && \
-#        apt-get install -y make python g++
-
 COPY package*.json ./
 RUN CYPRESS_INSTALL_BINARY=0 npm ci --no-audit
+ENV NODE_ENV='production'
 
 COPY . .
 RUN npm run build
@@ -56,16 +54,13 @@ COPY --from=build --chown=appuser:appgroup \
         /app/package-lock.json \
         ./
 
-#COPY --from=build --chown=appuser:appgroup \
-#        /app/assets ./assets
-
 COPY --from=build --chown=appuser:appgroup \
         /app/dist ./dist
 
 COPY --from=build --chown=appuser:appgroup \
         /app/node_modules ./node_modules
 
-EXPOSE 3000 ##3001
+EXPOSE 3000
 ENV NODE_ENV='production'
 USER 2000
 
