@@ -111,7 +111,7 @@ describe('getReports', () => {
             status: 'Pending',
             sarCaseReference: 'caseRef1',
             subjectId: 'A123456',
-            dateOfRequest: '2024/03/12, 13:52',
+            dateOfRequest: '12/03/2024 13:52',
             lastDownloaded: '',
           },
           {
@@ -119,7 +119,7 @@ describe('getReports', () => {
             status: 'Completed',
             sarCaseReference: 'caseRef2',
             subjectId: 'A123456',
-            dateOfRequest: '2023/03/12, 13:52',
+            dateOfRequest: '12/03/2023 13:52',
             lastDownloaded: '',
           },
           {
@@ -127,7 +127,7 @@ describe('getReports', () => {
             status: 'Completed',
             sarCaseReference: 'caseRef3',
             subjectId: 'A123456',
-            dateOfRequest: '2022/03/12, 13:52',
+            dateOfRequest: '12/03/2022 13:52',
             lastDownloaded: '',
           },
         ],
@@ -392,7 +392,7 @@ describe('getReports', () => {
           status: 'Pending',
           sarCaseReference: 'caseRef1',
           subjectId: 'A123456',
-          dateOfRequest: '2024/03/12, 13:52',
+          dateOfRequest: '12/03/2024 13:52',
           lastDownloaded: '',
         },
         {
@@ -400,7 +400,7 @@ describe('getReports', () => {
           status: 'Completed',
           sarCaseReference: 'caseRef2',
           subjectId: 'A123456',
-          dateOfRequest: '2023/03/12, 13:52',
+          dateOfRequest: '12/03/2023 13:52',
           lastDownloaded: '',
         },
         {
@@ -408,7 +408,7 @@ describe('getReports', () => {
           status: 'Completed',
           sarCaseReference: 'caseRef3',
           subjectId: 'A123456',
-          dateOfRequest: '2022/03/12, 13:52',
+          dateOfRequest: '12/03/2022 13:52',
           lastDownloaded: '',
         },
       ]
@@ -422,7 +422,7 @@ describe('getReports', () => {
   describe('getFormattedDateTime', () => {
     test('returns dateTime custom formatted', () => {
       const dateTimeString = '2024-07-30T10:19:20.785075'
-      const expectedFormattedDateTime = '2024/07/30, 10:19'
+      const expectedFormattedDateTime = '30/07/2024 10:19'
 
       const formattedDateTime = ReportsController.getFormattedDateTime(dateTimeString)
 
