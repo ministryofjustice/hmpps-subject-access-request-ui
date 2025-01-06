@@ -37,8 +37,8 @@ ARG BUILD_NUMBER
 ARG GIT_REF
 ARG GIT_BRANCH
 
-RUN apt-get update && \
-        apt-get install -y make python g++
+#RUN apt-get update && \
+#        apt-get install -y make python g++
 
 COPY package*.json ./
 RUN CYPRESS_INSTALL_BINARY=0 npm ci --no-audit
@@ -56,8 +56,8 @@ COPY --from=build --chown=appuser:appgroup \
         /app/package-lock.json \
         ./
 
-COPY --from=build --chown=appuser:appgroup \
-        /app/assets ./assets
+#COPY --from=build --chown=appuser:appgroup \
+#        /app/assets ./assets
 
 COPY --from=build --chown=appuser:appgroup \
         /app/dist ./dist
@@ -65,7 +65,7 @@ COPY --from=build --chown=appuser:appgroup \
 COPY --from=build --chown=appuser:appgroup \
         /app/node_modules ./node_modules
 
-EXPOSE 3000 3001
+EXPOSE 3000 ##3001
 ENV NODE_ENV='production'
 USER 2000
 
