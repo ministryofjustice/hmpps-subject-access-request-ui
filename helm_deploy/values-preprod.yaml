@@ -15,5 +15,11 @@ generic-service:
     ENVIRONMENT_NAME: PRE-PRODUCTION
     SAR_ENDPOINT_URL: "https://subject-access-request-api-preprod.hmpps.service.justice.gov.uk"
 
+  scheduledDowntime:
+    enabled: true
+    startup: '31 6 * * 1-5' # Start at 6.31am UTC Monday-Friday
+    shutdown: '48 21 * * 1-5' # Stop at 9.48pm UTC Monday-Friday
+
 generic-prometheus-alerts:
+  businessHoursOnly: true
   alertSeverity: digital-prison-service-dev

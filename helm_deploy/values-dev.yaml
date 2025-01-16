@@ -15,5 +15,11 @@ generic-service:
     ENVIRONMENT_NAME: DEV
     SAR_ENDPOINT_URL: "https://subject-access-request-api-dev.hmpps.service.justice.gov.uk"
 
+  scheduledDowntime:
+    enabled: true
+    startup: '29 6 * * 1-5' # Start at 6.29am UTC Monday-Friday
+    shutdown: '49 21 * * 1-5' # Stop at 9.49pm UTC Monday-Friday
+
 generic-prometheus-alerts:
+  businessHoursOnly: true
   alertSeverity: digital-prison-service-dev
