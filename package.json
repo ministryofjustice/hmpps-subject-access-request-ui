@@ -6,7 +6,6 @@
   "license": "MIT",
   "scripts": {
     "prepare": "husky install",
-    "copy-data": "cp -R server/data/services dist/server/data",
     "copy-views": "cp -R server/views dist/server/",
     "compile-sass": "sass --quiet-deps --no-source-map --load-path=node_modules/govuk-frontend/dist --load-path=node_modules/@ministryofjustice/frontend --load-path=. assets/scss/application.scss:./assets/stylesheets/application.css --style compressed",
     "watch-ts": "tsc -w",
