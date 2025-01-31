@@ -1,4 +1,5 @@
 interface Service {
+  id: string
   name: string
   url: string
   label: string

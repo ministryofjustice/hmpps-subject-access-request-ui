@@ -11,7 +11,7 @@ describe('validateSelection', () => {
       { input: ['test1'], expected: '' },
     ]
     const mockService: Service[] = [
-      { name: 'test1', label: 'Test one', url: 'http://foo.boo', order: 1, disabled: false },
+      { id: '1', name: 'test1', label: 'Test one', url: 'http://foo.boo', order: 1, disabled: false },
     ]
     testCases.forEach(testCase => {
       const selectedServicesError = ServiceSelectionValidation.validateSelection(testCase.input, mockService)
@@ -24,7 +24,7 @@ describe('validateSelection', () => {
       { input: ['test1'], expected: '' },
     ]
     const mockService: Service[] = [
-      { name: 'test1', label: 'Test one', url: 'http://foo.boo', order: 1, disabled: false },
+      { id: '1', name: 'test1', label: 'Test one', url: 'http://foo.boo', order: 1, disabled: false },
     ]
     testCases.forEach(testCase => {
       const selectedServicesError = ServiceSelectionValidation.validateSelection(testCase.input, mockService)
