@@ -7,6 +7,16 @@ context('ServiceSelection', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { roles: ['ROLE_SAR_USER_ACCESS'] })
+    cy.task('stubGetServicesRequest', [
+      {
+        id: '93381fde-7685-4660-8dd2-59144ed6673e',
+        name: 'keyworker-api',
+        label: 'Keyworker',
+        url: 'https://keyworker-api-dev.prison.service.justice.gov.uk',
+        order: 1,
+        enabled: true,
+      },
+    ])
   })
 
   it('Unauthenticated user navigating to serviceselection page directed to auth', () => {

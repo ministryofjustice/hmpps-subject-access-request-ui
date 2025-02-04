@@ -18,7 +18,7 @@ beforeEach(() => {
       name: 'hmpps-prisoner-search',
       label: 'Prisoner Search',
       url: 'https://prisoner-search-dev.prison.service.justice.gov.uk',
-      disabled: false,
+      enabled: true,
       order: 1,
     },
     {
@@ -26,7 +26,7 @@ beforeEach(() => {
       name: 'hmpps-book-secure-move-api',
       label: 'Book Secure Move API',
       url: 'https://book-move-dev.prison.service.justice.gov.uk',
-      disabled: false,
+      enabled: true,
       order: 2,
     },
   ]
@@ -113,8 +113,8 @@ describe('selectServices', () => {
       // @ts-expect-error stubbing session
       session: {
         serviceList: [
-          { id: '1', name: 'service-1', label: 'Service 1', url: 'service-1.com', order: 1, disabled: false },
-          { id: '2', name: 'service-2', label: 'Service 2', url: 'service-2.com', order: 2, disabled: false },
+          { id: '1', name: 'service-1', label: 'Service 1', url: 'service-1.com', order: 1, enabled: true },
+          { id: '2', name: 'service-2', label: 'Service 2', url: 'service-2.com', order: 2, enabled: true },
         ],
         selectedList: [],
       },
@@ -134,11 +134,11 @@ describe('selectServices', () => {
       // @ts-expect-error stubbing session
       session: {
         serviceList: [
-          { id: '1', name: 'service-1', label: 'Service 1', url: 'service-1.com', order: 1, disabled: false },
-          { id: '2', name: 'service-2', label: 'Service 2', url: 'service-2.com', order: 2, disabled: false },
+          { id: '1', name: 'service-1', label: 'Service 1', url: 'service-1.com', order: 1, enabled: true },
+          { id: '2', name: 'service-2', label: 'Service 2', url: 'service-2.com', order: 2, enabled: true },
         ],
         selectedList: [
-          { id: '1', name: 'service-1', label: 'Service 1', url: 'service-1.com', order: 1, disabled: false },
+          { id: '1', name: 'service-1', label: 'Service 1', url: 'service-1.com', order: 1, enabled: true },
         ],
       },
       body: {

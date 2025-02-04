@@ -9,6 +9,16 @@ context('Summary', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { roles: ['ROLE_SAR_USER_ACCESS'] })
+    cy.task('stubGetServicesRequest', [
+      {
+        id: 'ae752767-c489-4190-ae5e-811ca0935dff',
+        name: 'create-and-vary-a-licence-api',
+        label: 'Create and Vary a Licence',
+        url: 'https://create-and-vary-a-licence-api-dev.hmpps.service.justice.gov.uk',
+        order: 1,
+        enabled: true,
+      },
+    ])
   })
 
   // All pages direct users to auth

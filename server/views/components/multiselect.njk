@@ -16,7 +16,7 @@
      {% for item in params.items %}
     <tr class="govuk-table__row govuk-table__row--selected">        
 
-        {% if item.disabled %}
+        {% if not item.enabled %}
       <td class="govuk-table__cell">
           <div class="govuk-checkboxes__item govuk-checkboxes--small">
             <input type="checkbox" class="disabled-govuk-checkboxes__input"
@@ -30,7 +30,7 @@
           <td class="govuk-table__cell"><span class='disabled-text'>{{item.name}}</span></td>
         {% else %}
       <td class="govuk-table__cell">
-          {% set isChecked = (item.disabled == false) and (params.selectedItems or []).indexOf(item.name) > -1 %}
+          {% set isChecked = (item.enabled) and (params.selectedItems or []).indexOf(item.name) > -1 %}
           <div class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox">
             <input type="checkbox" class="govuk-checkboxes__input govuk-moj-multi-select__checkbox__input"
                    id="{{ item.name }}"

@@ -34,7 +34,7 @@ export default class SummaryController {
       dataAccess().telemetryClient.trackEvent({ name: 'postReportDetails', properties: { id: userData.subjectId } })
     }
 
-    const serviceList = selectedList.map(service => `${service.name}, ${service.url}`)
+    const serviceList = selectedList.map(service => `${service.name}`)
     const nomisId = isNomisId(userData.subjectId) ? userData.subjectId.toString().toUpperCase() : null
     const ndeliusId = isNdeliusId(userData.subjectId) ? userData.subjectId.toString().toUpperCase() : null
     const commonProperties = {

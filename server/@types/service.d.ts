@@ -4,7 +4,7 @@ interface Service {
   url: string
   label: string
   order: number
-  disabled?: boolean
+  enabled?: boolean
 }
 
 interface Environment {
