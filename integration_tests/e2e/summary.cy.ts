@@ -11,10 +11,10 @@ context('Summary', () => {
     cy.task('stubSignIn', { roles: ['ROLE_SAR_USER_ACCESS'] })
     cy.task('stubGetServicesRequest', [
       {
-        id: 'ae752767-c489-4190-ae5e-811ca0935dff',
+        id: 'ae752767-c489-4190-ae5e-811cb0935dfe',
         name: 'create-and-vary-a-licence-api',
         label: 'Create and Vary a Licence',
-        url: 'https://create-and-vary-a-licence-api-dev.hmpps.service.justice.gov.uk',
+        url: 'https://the-create-and-vary-a-licence-api.com',
         order: 1,
         enabled: true,
       },
