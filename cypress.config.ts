@@ -4,6 +4,7 @@ import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import stubSubjectAccessRequest from './integration_tests/mockApis/subjectAccessRequest'
 import reports from './integration_tests/mockApis/reports'
+import services from './integration_tests/mockApis/services'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -25,6 +26,7 @@ export default defineConfig({
         ...tokenVerification,
         stubSubjectAccessRequest,
         ...reports,
+        ...services,
       })
     },
     baseUrl: 'http://localhost:3007',

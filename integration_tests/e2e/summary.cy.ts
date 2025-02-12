@@ -9,6 +9,16 @@ context('Summary', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { roles: ['ROLE_SAR_USER_ACCESS'] })
+    cy.task('stubGetServicesRequest', [
+      {
+        id: 'ae752767-c489-4190-ae5e-811cb0935dfe',
+        name: 'create-and-vary-a-licence-api',
+        label: 'Create and Vary a Licence',
+        url: 'https://the-create-and-vary-a-licence-api.com',
+        order: 1,
+        enabled: true,
+      },
+    ])
   })
 
   // All pages direct users to auth

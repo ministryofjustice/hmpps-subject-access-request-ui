@@ -1,12 +1,13 @@
 import { Request, Response } from 'express'
+import superagent from 'superagent'
 import ServiceSelectionValidation from './serviceSelectionValidation'
 import { dataAccess } from '../data'
-
-import { getServicesData } from '../data/serviceData'
+import getUserToken from '../utils/userTokenHelper'
+import config from '../config'
 
 export default class ServiceSelectionController {
   static async getServices(req: Request, res: Response) {
-    const serviceList = ServiceSelectionController.getServiceList()
+    const serviceList = await ServiceSelectionController.getServiceList(req)
 
     if (serviceList.length === 0) {
       res.render('pages/serviceSelection', {
@@ -63,7 +64,12 @@ export default class ServiceSelectionController {
     }
   }
 
-  static getServiceList() {
-    return getServicesData().sort((a, b) => a.order - b.order)
+  static async getServiceList(req: Request) {
+    const response = await superagent
+      .get(`${config.apis.subjectAccessRequest.url}/api/services`)
+      .set('Authorization', `Bearer ${getUserToken(req)}`)
+
+    const servicesList: Service[] = response.body
+    return servicesList.sort((a, b) => a.order - b.order)
   }
 }

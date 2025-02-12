@@ -1,9 +1,10 @@
 interface Service {
+  id: string
   name: string
   url: string
   label: string
   order: number
-  disabled?: boolean
+  enabled?: boolean
 }
 
 interface Environment {
