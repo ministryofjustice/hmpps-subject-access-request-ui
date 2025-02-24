@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
 import { auditService } from '@ministryofjustice/hmpps-audit-client'
 import ReportDownloadController from './reportDownloadController'
-import formatDate from '../utils/dateHelpers'
+import { formatDate } from '../utils/dateHelpers'
 import { auditAction } from '../utils/testUtils'
 import { AuditEvent } from '../audit'
 

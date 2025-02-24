@@ -1,10 +1,11 @@
 import type { Request, Response } from 'express'
 import { auditService } from '@ministryofjustice/hmpps-audit-client'
-import ReportsController from './reportsController'
 import type { SubjectAccessRequest } from '../@types/subjectAccessRequest'
 import { auditAction } from '../utils/testUtils'
 import { AuditEvent } from '../audit'
+import AdminController from './adminController'
 import reportService from '../services/report'
+import ReportsController from './reportsController'
 
 const subjectAccessRequests: SubjectAccessRequest[] = [
   {
@@ -13,10 +14,9 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     dateFrom: '2024-03-01',
     dateTo: '2024-03-12',
     sarCaseReferenceNumber: 'caseRef1',
-    services:
-      'hmpps-activities-management-api, https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api, https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api, https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk',
-    nomisId: '',
-    ndeliusCaseReferenceId: 'A123456',
+    services: 'hmpps-activities-management-api, keyworker-api, hmpps-manage-adjudications-api',
+    nomisId: 'A123456',
+    ndeliusCaseReferenceId: 'X718253',
     requestedBy: 'user',
     requestDateTime: '2024-03-12T13:52:40.14177',
     claimDateTime: '2024-03-27T14:49:08.67033',
@@ -30,10 +30,9 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     dateFrom: '2023-03-01',
     dateTo: '2023-03-12',
     sarCaseReferenceNumber: 'caseRef2',
-    services:
-      'hmpps-activities-management-api, https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api, https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api, https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk',
+    services: 'hmpps-activities-management-api, keyworker-api, hmpps-manage-adjudications-api',
     nomisId: '',
-    ndeliusCaseReferenceId: 'A123456',
+    ndeliusCaseReferenceId: 'X718253',
     requestedBy: 'user',
     requestDateTime: '2023-03-12T13:52:40.14177',
     claimDateTime: '2023-03-27T14:49:08.67033',
@@ -47,10 +46,9 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     dateFrom: '2022-03-01',
     dateTo: '2022-03-12',
     sarCaseReferenceNumber: 'caseRef3',
-    services:
-      'hmpps-activities-management-api, https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api, https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api, https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk',
-    nomisId: '',
-    ndeliusCaseReferenceId: 'A123456',
+    services: 'hmpps-activities-management-api, keyworker-api, hmpps-manage-adjudications-api',
+    nomisId: 'A123456',
+    ndeliusCaseReferenceId: '',
     requestedBy: 'user',
     requestDateTime: '2022-03-12T13:52:40.14177',
     claimDateTime: '2022-03-27T14:49:08.67033',
@@ -65,7 +63,7 @@ beforeEach(() => {
   jest.spyOn(auditService, 'sendAuditMessage').mockResolvedValue()
   reportService.getSubjectAccessRequestList = jest.fn().mockReturnValue({
     subjectAccessRequests,
-    numberOfReports: 3,
+    numberOfReports: '3',
   })
 })
 
@@ -73,7 +71,7 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('getReports', () => {
+describe('getAdminSummary', () => {
   let req: Request = {
     session: {},
     query: {},
@@ -96,9 +94,9 @@ describe('getReports', () => {
     },
   } as unknown as Response
   test('renders a response with list of SAR reports', async () => {
-    await ReportsController.getReports(req, res)
+    await AdminController.getAdminSummary(req, res)
     expect(res.render).toHaveBeenCalledWith(
-      'pages/reports',
+      'pages/admin',
       expect.objectContaining({
         reportList: [
           {
@@ -106,29 +104,27 @@ describe('getReports', () => {
             status: 'Pending',
             sarCaseReference: 'caseRef1',
             subjectId: 'A123456',
-            dateOfRequest: '12/03/2024 13:52',
-            lastDownloaded: '',
+            dateOfRequest: '12/03/2024, 13:52',
           },
           {
             uuid: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
             status: 'Completed',
             sarCaseReference: 'caseRef2',
-            subjectId: 'A123456',
-            dateOfRequest: '12/03/2023 13:52',
-            lastDownloaded: '',
+            subjectId: 'X718253',
+            dateOfRequest: '12/03/2023, 13:52',
           },
           {
             uuid: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
             status: 'Completed',
             sarCaseReference: 'caseRef3',
             subjectId: 'A123456',
-            dateOfRequest: '12/03/2022 13:52',
-            lastDownloaded: '',
+            dateOfRequest: '12/03/2022, 13:52',
           },
         ],
       }),
     )
-    expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.VIEW_REPORT_LIST_ATTEMPT))
+    expect(req.session.subjectAccessRequests).toEqual(subjectAccessRequests)
+    expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.VIEW_ADMIN_ATTEMPT))
   })
 
   describe('pagination', () => {
@@ -193,57 +189,35 @@ describe('getReports', () => {
     })
   })
 
-  describe('getCondensedSarList', () => {
-    test('getCondensedSarList returns list of SARs with condensed information for display', async () => {
+  describe('getSarSummaryList', () => {
+    test('getSarSummaryList returns list of SARs with summary information for display', async () => {
       const condensedSarList = [
         {
           uuid: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
           status: 'Pending',
           sarCaseReference: 'caseRef1',
           subjectId: 'A123456',
-          dateOfRequest: '12/03/2024 13:52',
-          lastDownloaded: '',
+          dateOfRequest: '12/03/2024, 13:52',
         },
         {
           uuid: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
           status: 'Completed',
           sarCaseReference: 'caseRef2',
-          subjectId: 'A123456',
-          dateOfRequest: '12/03/2023 13:52',
-          lastDownloaded: '',
+          subjectId: 'X718253',
+          dateOfRequest: '12/03/2023, 13:52',
         },
         {
           uuid: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
           status: 'Completed',
           sarCaseReference: 'caseRef3',
           subjectId: 'A123456',
-          dateOfRequest: '12/03/2022 13:52',
-          lastDownloaded: '',
+          dateOfRequest: '12/03/2022, 13:52',
         },
       ]
 
-      const response = ReportsController.getCondensedSarList(subjectAccessRequests)
+      const response = AdminController.getSarSummaryList(subjectAccessRequests)
 
       expect(response).toStrictEqual(condensedSarList)
-    })
-  })
-
-  describe('getFormattedDateTime', () => {
-    test('returns dateTime custom formatted', () => {
-      const dateTimeString = '2024-07-30T10:19:20.785075'
-      const expectedFormattedDateTime = '30/07/2024 10:19'
-
-      const formattedDateTime = ReportsController.getFormattedDateTime(dateTimeString)
-
-      expect(formattedDateTime).toEqual(expectedFormattedDateTime)
-    })
-
-    test('returns null if dateTime is null', () => {
-      const dateTimeString: string = null
-
-      const formattedDateTime = ReportsController.getFormattedDateTime(dateTimeString)
-
-      expect(formattedDateTime).toEqual(null)
     })
   })
 })

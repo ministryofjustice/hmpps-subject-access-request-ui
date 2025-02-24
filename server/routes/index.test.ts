@@ -1,17 +1,26 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import { auditService } from '@ministryofjustice/hmpps-audit-client'
-import { appWithAllRoutes } from './testutils/appSetup'
+import { appWithAllRoutes, user } from './testutils/appSetup'
 import ServiceSelectionController from '../controllers/serviceSelectionController'
-import ReportsController from '../controllers/reportsController'
+import reportService from '../services/report'
+import { HmppsUser } from '../interfaces/hmppsUser'
 
 let app: Express
+let adminUserApp: Express
 
 beforeEach(() => {
   jest.resetAllMocks()
   jest.spyOn(auditService, 'sendAuditMessage').mockResolvedValue()
 
   app = appWithAllRoutes({})
+  const adminUser: HmppsUser = {
+    ...user,
+    userRoles: ['SAR_ADMIN_ACCESS'],
+  }
+  adminUserApp = appWithAllRoutes({
+    userSupplier: (): HmppsUser => adminUser,
+  })
   ServiceSelectionController.getServiceList = jest.fn().mockReturnValue([
     {
       id: 'hmpps-prisoner-search',
@@ -26,7 +35,7 @@ beforeEach(() => {
       disabled: false,
     },
   ])
-  ReportsController.getSubjectAccessRequestList = jest.fn().mockReturnValue({
+  reportService.getSubjectAccessRequestList = jest.fn().mockReturnValue({
     subjectAccessRequests: [
       {
         id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
@@ -92,6 +101,17 @@ describe('GET /', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Subject Access Request Service')
+        expect(res.text).not.toContain('Admin')
+      })
+  })
+
+  it('should render homepage when admin role', () => {
+    return request(adminUserApp)
+      .get('/')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Subject Access Request Service')
+        expect(res.text).toContain('Admin')
       })
   })
 })
@@ -182,6 +202,28 @@ describe('GET /terms', () => {
         expect(res.text).toContain(
           'Access to, and use of, this system is restricted to authorized Prison-NOMIS account users only.',
         )
+      })
+  })
+})
+
+describe('GET /admin', () => {
+  it('should render admin page', () => {
+    return request(adminUserApp)
+      .get('/admin')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Subject Access Request Admin')
+      })
+  })
+})
+
+describe('GET /admin/details', () => {
+  it('should render admin details page', () => {
+    return request(adminUserApp)
+      .get('/admin')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Subject Access Request Admin')
       })
   })
 })

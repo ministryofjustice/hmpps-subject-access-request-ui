@@ -2,7 +2,7 @@ import type { Request, Response } from 'express'
 
 import type { UserData } from '../@types/userdata'
 import InputsValidation from './inputsValidation'
-import formatDate from '../utils/dateHelpers'
+import { formatDate } from '../utils/dateHelpers'
 import { dataAccess } from '../data'
 
 export default class InputsController {

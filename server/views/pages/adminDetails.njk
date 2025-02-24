@@ -1,0 +1,129 @@
+{% extends "../partials/layout.njk" %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+
+{% block content %}
+
+  {{ govukBackLink({
+    text: "Back",
+    href: "/admin"
+  }) }}
+
+  <form action="/summary" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+      <h1 class="govuk-fieldset__heading">
+        Subject Access Request Details
+      </h1>
+    </legend>
+
+    {{ govukSummaryList({
+      attributes: {
+        "id": "report-summary"
+      },
+
+      rows: [
+        {
+          key: {
+          text: "ID"
+        },
+          value: {
+          text: subjectAccessRequest.id
+        }
+        },
+        {
+          key: {
+            text: "Subject ID"
+          },
+          value: {
+            text: subjectAccessRequest.nomisId or subjectAccessRequest.ndeliusCaseReferenceId
+          }
+        },
+        {
+          key: {
+            text: "Case ID"
+          },
+          value: {
+            text: subjectAccessRequest.sarCaseReferenceNumber
+          }
+        },
+        {
+          key: {
+            text: "Query date from"
+          },
+          value: {
+            text: subjectAccessRequest.dateFrom
+          }
+        },
+        {
+          key: {
+            text: "Query date to"
+          },
+          value: {
+            text: subjectAccessRequest.dateTo
+          }
+        },
+        {
+          key: {
+            text: "Requested by"
+          },
+          value: {
+            text: subjectAccessRequest.requestedBy
+          }
+        },
+        {
+          key: {
+            text: "Requested date time"
+          },
+          value: {
+            text: subjectAccessRequest.requestDateTime
+          }
+        },
+        {
+          key: {
+            text: "Services selected"
+          },
+          value: {
+            html: subjectAccessRequest.services | replace (",", "<br>")
+          }
+        },
+        {
+          key: {
+            text: "Status"
+          },
+          value: {
+            text: subjectAccessRequest.status
+          }
+        },
+        {
+          key: {
+            text: "Claim date time"
+          },
+          value: {
+            text: subjectAccessRequest.claimDateTime
+          }
+        },
+        {
+          key: {
+            text: "Claim attempts"
+          },
+          value: {
+            text: subjectAccessRequest.claimAttempts
+          }
+        },
+        {
+          key: {
+            text: "Last downloaded"
+          },
+          value: {
+            text: subjectAccessRequest.lastDownloaded
+          }
+        }
+      ]
+    }) }}
+  </form>
+
+{% endblock %}
