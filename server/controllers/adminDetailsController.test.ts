@@ -105,10 +105,10 @@ describe('getAdminDetails', () => {
           ndeliusCaseReferenceId: 'X718253',
           objectUrl: null,
           requestedBy: 'user',
-          requestDateTime: '12 March 2022 at 13:52:40 GMT',
-          claimDateTime: '20 March 2022 at 14:49:08 GMT',
+          requestDateTime: '12 March 2022 at 13:52:40 UTC',
+          claimDateTime: '20 March 2022 at 14:49:08 UTC',
           claimAttempts: 1,
-          lastDownloaded: '23 March 2022 at 18:22:38 GMT',
+          lastDownloaded: '23 March 2022 at 18:22:38 UTC',
         },
       }),
     )

@@ -25,5 +25,5 @@ export const formatDate = (isoDate: string, style: 'short' | 'full' | 'long' | '
  */
 export const formatDateTime = (isoDate: string, style: 'short' | 'full' | 'long' | 'medium' = 'long'): string => {
   if (!isoDate) return ''
-  return new Date(isoDate).toLocaleString('en-gb', { dateStyle: style, timeStyle: style })
+  return new Date(isoDate).toLocaleString('en-gb', { dateStyle: style, timeStyle: style, timeZone: 'UTC' })
 }

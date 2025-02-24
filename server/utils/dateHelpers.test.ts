@@ -19,10 +19,10 @@ describe('format date', () => {
 describe('format date time', () => {
   it.each([
     [null, null, undefined, ''],
-    ['[default]', '2023-01-20T11:14:35', undefined, '20 January 2023 at 11:14:35 GMT'],
-    ['long', '2023-01-20T11:14:35', 'long', '20 January 2023 at 11:14:35 GMT'],
+    ['[default]', '2023-01-20T11:14:35', undefined, '20 January 2023 at 11:14:35 UTC'],
+    ['long', '2023-01-20T11:14:35', 'long', '20 January 2023 at 11:14:35 UTC'],
     ['short', '2023-01-20T11:14:35', 'short', '20/01/2023, 11:14'],
-    ['full', '2023-01-20T11:14:35', 'full', 'Friday, 20 January 2023 at 11:14:35 Greenwich Mean Time'],
+    ['full', '2023-01-20T11:14:35', 'full', 'Friday, 20 January 2023 at 11:14:35 Coordinated Universal Time'],
     ['medium', '2023-01-20T11:14:35', 'medium', '20 Jan 2023, 11:14:35'],
   ])(
     '%s: formatDateTime(%s, %s)',
