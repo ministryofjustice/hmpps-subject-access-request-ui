@@ -11,6 +11,8 @@ export default class Homepage extends Page {
 
   viewReportsLink = (): PageElement => cy.get('#view-reports')
 
+  adminLink = (): PageElement => cy.get('#admin')
+
   headerUserName = (): PageElement => cy.get('[data-qa=header-user-name]')
 
   headerPhaseBanner = (): PageElement => cy.get('[data-qa=header-phase-banner]')

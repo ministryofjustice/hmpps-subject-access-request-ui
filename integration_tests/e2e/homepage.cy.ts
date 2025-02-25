@@ -18,11 +18,25 @@ context('Homepage', () => {
     cy.visit('/')
   })
 
-  it('Displays SAR action cards', () => {
+  it('Displays SAR action cards when not admin', () => {
     cy.signIn()
     cy.visit('/')
     const homepage = Page.verifyOnPage(Homepage)
     homepage.sarActionCards().should('exist')
+    homepage.requestReportLink().should('exist')
+    homepage.viewReportsLink().should('exist')
+    homepage.adminLink().should('not.exist')
+  })
+
+  it('Displays SAR action cards when admin', () => {
+    cy.task('stubSignIn', { roles: ['ROLE_SAR_ADMIN_ACCESS'] })
+    cy.signIn()
+    cy.visit('/')
+    const homepage = Page.verifyOnPage(Homepage)
+    homepage.sarActionCards().should('exist')
+    homepage.requestReportLink().should('exist')
+    homepage.viewReportsLink().should('exist')
+    homepage.adminLink().should('exist')
   })
 
   it('Redirects to /subject-id on clicking Request a report link', () => {
@@ -39,5 +53,14 @@ context('Homepage', () => {
     const confirmationPage = Page.verifyOnPage(Homepage)
     confirmationPage.viewReportsLink().click()
     cy.url().should('to.match', /reports$/)
+  })
+
+  it('Redirects to /admin on clicking Admin link', () => {
+    cy.task('stubSignIn', { roles: ['ROLE_SAR_ADMIN_ACCESS'] })
+    cy.signIn()
+    cy.visit('/')
+    const confirmationPage = Page.verifyOnPage(Homepage)
+    confirmationPage.adminLink().click()
+    cy.url().should('to.match', /admin$/)
   })
 })
