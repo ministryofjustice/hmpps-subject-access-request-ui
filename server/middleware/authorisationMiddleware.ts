@@ -4,16 +4,37 @@ import type { RequestHandler } from 'express'
 import logger from '../../logger'
 import asyncMiddleware from './asyncMiddleware'
 
+enum AuthRole {
+  SAR_ADMIN_ACCESS = 'ROLE_SAR_ADMIN_ACCESS',
+}
+
+const authorisationMap = {
+  '/admin': [AuthRole.SAR_ADMIN_ACCESS],
+  '/admin/details': [AuthRole.SAR_ADMIN_ACCESS],
+}
+
 export default function authorisationMiddleware(authorisedRoles: string[] = []): RequestHandler {
   return asyncMiddleware((req, res, next) => {
     if (res.locals?.user?.token) {
       const { authorities: roles = [] } = jwtDecode(res.locals.user.token) as { authorities?: string[] }
 
-      if (authorisedRoles.length && !roles.some(role => authorisedRoles.includes(role))) {
-        logger.error('User is not authorised to access this')
+      try {
+        if (authorisedRoles.length && !roles.some(role => authorisedRoles.includes(role))) {
+          throw Error('User is not authorised to access this')
+        }
+
+        Object.entries(authorisationMap).forEach(([urlMatch, authorisationMapRoles]) => {
+          if (req.originalUrl.includes(urlMatch)) {
+            const accessAllowed = authorisationMapRoles.filter(authorisedRole => roles.includes(authorisedRole))
+            if (accessAllowed.length === 0) {
+              throw Error(`User is not authorised to access ${urlMatch} page`)
+            }
+          }
+        })
+      } catch (e) {
+        logger.error(e.message)
         return res.redirect('/authError')
       }
-
       return next()
     }
 

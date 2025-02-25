@@ -8,6 +8,8 @@ import ConfirmationController from '../controllers/confirmationController'
 import SubjectIdController from '../controllers/subjectIdController'
 import ReportsController from '../controllers/reportsController'
 import ReportDownloadController from '../controllers/reportDownloadController'
+import AdminController from '../controllers/adminController'
+import AdminDetailsController from '../controllers/adminDetailsController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes(service: Services): Router {
@@ -16,7 +18,7 @@ export default function routes(service: Services): Router {
   const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   get('/', (req, res, next) => {
-    res.render('pages/homepage')
+    res.render('pages/homepage', { hasAdminRole: res.locals.user.userRoles.includes('SAR_ADMIN_ACCESS') })
   })
 
   get('/subject-id', SubjectIdController.getSubjectId)
@@ -41,6 +43,9 @@ export default function routes(service: Services): Router {
   get('/terms', (req, res, next) => {
     res.render('pages/terms')
   })
+
+  get('/admin', AdminController.getAdminSummary)
+  get('/admin/details', AdminDetailsController.getAdminDetail)
 
   return router
 }

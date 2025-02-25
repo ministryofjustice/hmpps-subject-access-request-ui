@@ -8,9 +8,22 @@
  * @param style formatting style to use - long (default), short, full, medium
  * @returns formatted date string
  */
-const formatDate = (isoDate: string, style: 'short' | 'full' | 'long' | 'medium' = 'long'): string => {
+export const formatDate = (isoDate: string, style: 'short' | 'full' | 'long' | 'medium' = 'long'): string => {
   if (!isoDate) return ''
   return new Date(isoDate).toLocaleDateString('en-gb', { dateStyle: style })
 }
 
-export default formatDate
+/**
+ * Formats an ISO-8601 date and time string to standard display format, e.g. 20 January 2023 at 16:33:03 GMT
+ *
+ * Also supports passing in an optional style string to output other standard formats:
+ * short, full and medium
+ *
+ * @param isoDate ISO-8601 format date time string
+ * @param style formatting style to use - long (default), short, full, medium
+ * @returns formatted date time string
+ */
+export const formatDateTime = (isoDate: string, style: 'short' | 'full' | 'long' | 'medium' = 'long'): string => {
+  if (!isoDate) return ''
+  return new Date(isoDate).toLocaleString('en-gb', { dateStyle: style, timeStyle: style, timeZone: 'UTC' })
+}

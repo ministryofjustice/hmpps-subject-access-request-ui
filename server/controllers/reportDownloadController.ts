@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
-import getReport from '../services/report'
-import formatDate from '../utils/dateHelpers'
+import reportService from '../services/report'
+import { formatDate } from '../utils/dateHelpers'
 import { AuditEvent, AuditSubjectType, auditWithSubject } from '../audit'
 
 export default class ReportDownloadController {
@@ -29,7 +29,7 @@ export default class ReportDownloadController {
         `attachment;filename="subject-access-request-report-${downloadDate}-${sarCaseReference}-${subjectId}.pdf"`,
       )
 
-      getReport(req, res, next, fileId)
+      reportService.getReport(req, res, next, fileId)
     } catch (error) {
       await sendMessage(AuditEvent.DOWNLOAD_REPORT_FAILURE)
       next(error)

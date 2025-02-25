@@ -30,6 +30,16 @@
             <p class="govuk-body">View all previously requested Subject Access Request reports.</p>
           </div>
         </div>
+        {% if hasAdminRole %}
+        <div class="govuk-grid-column-one-third sar-card-group__item">
+          <div class="sar-card">
+            <h3 class="govuk-heading-m">
+              <a class="govuk-link" id="admin" href="/admin">Admin</a>
+            </h3>
+            <p class="govuk-body">Subject Access Request admin area</p>
+          </div>
+        </div>
+        {% endif %}
       </div>
     <div class="govuk-grid-row auth-card-group">
         
