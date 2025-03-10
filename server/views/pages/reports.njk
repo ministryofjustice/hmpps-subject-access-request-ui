@@ -72,19 +72,19 @@
         {% for report in reportList %}
           {% if report.status == 'Completed' %}
                 <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">{{report.dateOfRequest}}</td>
+                    <td class="govuk-table__cell "data-sort-value="{{ report.dateOfRequest }}">{{report.dateOfRequest | formatDate}}</td>
                     <td class="govuk-table__cell">{{report.sarCaseReference}}</td>
                     <td class="govuk-table__cell">{{report.subjectId}}</td>
                     <td class="govuk-table__cell"><a href="/download-report/report?id={{report.uuid}}&sarCaseReference={{report.sarCaseReference}}&subjectId={{report.subjectId}}" download class="govuk-body govuk-link noDoubleClick">View report</a></td>
-                    <td class="govuk-table__cell">{{report.lastDownloaded}}</td>
+                    <td class="govuk-table__cell">{{report.lastDownloaded | formatDate}}</td>
                 </tr>
           {% else %}
                 <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">{{report.dateOfRequest}}</td>
+                    <td class="govuk-table__cell "data-sort-value="{{ report.dateOfRequest }}">{{report.dateOfRequest | formatDate}}</td>
                     <td class="govuk-table__cell">{{report.sarCaseReference}}</td>
                     <td class="govuk-table__cell">{{report.subjectId}}</td>
                     <td class="govuk-table__cell">{{report.status}}</td>
-                    <td class="govuk-table__cell">{{report.lastDownloaded}}</td>
+                    <td class="govuk-table__cell">{{report.lastDownloaded | formatDate}}</td>
                 </tr>
           {% endif %}
             {% endfor %}
