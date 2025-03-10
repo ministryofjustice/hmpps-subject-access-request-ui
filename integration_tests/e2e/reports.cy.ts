@@ -18,8 +18,8 @@ context('Reports', () => {
         nomisId: '',
         ndeliusCaseReferenceId: 'A123456',
         requestedBy: 'user',
-        requestDateTime: '2024-03-12T13:52:40.14177',
-        claimDateTime: '2024-03-27T14:49:08.67033',
+        requestDateTime: '2025-03-07T13:52:40.14177',
+        claimDateTime: '2025-03-07T14:49:08.67033',
         claimAttempts: 1,
         objectUrl: null,
         lastDownloaded: null,
@@ -35,8 +35,8 @@ context('Reports', () => {
         nomisId: '',
         ndeliusCaseReferenceId: 'A123456',
         requestedBy: 'user',
-        requestDateTime: '2023-03-12T13:52:40.14177',
-        claimDateTime: '2023-03-27T14:49:08.67033',
+        requestDateTime: '2023-01-10T13:56:40.14177',
+        claimDateTime: '2023-01-10T14:49:08.67033',
         claimAttempts: 1,
         objectUrl: null,
         lastDownloaded: null,
@@ -52,8 +52,8 @@ context('Reports', () => {
         nomisId: '',
         ndeliusCaseReferenceId: 'A123456',
         requestedBy: 'user',
-        requestDateTime: '2022-03-12T13:52:40.14177',
-        claimDateTime: '2022-03-27T14:49:08.67033',
+        requestDateTime: '2022-03-07T12:53:40.14177',
+        claimDateTime: '2022-03-07T14:49:08.67033',
         claimAttempts: 1,
         objectUrl: null,
         lastDownloaded: null,
@@ -94,8 +94,8 @@ context('Reports', () => {
     cy.signIn()
     cy.visit('/reports')
     const reportsPage = Page.verifyOnPage(ReportsPage)
-    reportsPage.reportsTableRow().first().contains('12/03/2024')
+    reportsPage.reportsTableRow().first().contains('07/03/2025 13:52')
     reportsPage.sortByDateButton().click()
-    reportsPage.reportsTableRow().first().contains('12/03/2022')
+    reportsPage.reportsTableRow().first().contains('07/03/2022 12:53')
   })
 })
