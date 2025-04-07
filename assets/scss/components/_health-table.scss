@@ -1,0 +1,38 @@
+.health-table {
+
+  .table-width-one-tenth {
+    width: 10% !important
+  }
+
+  .govuk-table__cell {
+    word-break: break-all;
+  }
+
+  &__cell_UP {
+    @include govuk-link-common;
+
+    color: govuk-colour("white");
+    background-color: $govuk-success-colour;
+    border: 2px solid govuk-colour("white");
+    text-decoration: none;
+    padding-left: 5px;
+  }
+
+  &__cell_DOWN {
+    @include govuk-link-common;
+
+    color: govuk-colour("white");
+    background-color: $govuk-error-colour;
+    border: 2px solid govuk-colour("white");
+    text-decoration: none;
+    padding-left: 5px;
+  }
+
+  &__cell_UP.a:link {
+    color: govuk-colour("white");
+  }
+
+  &__cell_DOWN.a:link {
+    color: govuk-colour("white");
+  }
+}

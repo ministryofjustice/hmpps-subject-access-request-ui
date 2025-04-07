@@ -5,13 +5,7 @@ export default class AdminPage extends Page {
     super('Subject Access Request Admin')
   }
 
-  reportsTable = (): PageElement => cy.get('.govuk-table')
+  healthLink = (): PageElement => cy.get('.govuk-link--no-visited-state').eq(0)
 
-  sortByDateButton = (): PageElement => cy.get('button:contains("Date of request")')
-
-  reportsTableRow = (): PageElement => cy.get('.govuk-table__body').find('.govuk-table__row')
-
-  searchBox = (): PageElement => cy.get('#keyword')
-
-  reportsTableDetailsLink = (): PageElement => cy.get('.govuk-table__body').find('.govuk-link')
+  reportsLink = (): PageElement => cy.get('.govuk-link--no-visited-state').eq(1)
 }
