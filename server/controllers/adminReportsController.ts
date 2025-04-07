@@ -7,12 +7,12 @@ import reportService from '../services/report'
 
 const RESULTS_PER_PAGE = 50
 
-export default class AdminController {
+export default class AdminReportsController {
   static async getAdminSummary(req: Request, res: Response) {
     const currentPage = (req.query.page || '1') as string
 
     const sendAudit = audit(res.locals.user.username, { page: currentPage })
-    await sendAudit(AuditEvent.VIEW_ADMIN_ATTEMPT)
+    await sendAudit(AuditEvent.VIEW_ADMIN_REPORTS_ATTEMPT)
 
     const { subjectAccessRequests, numberOfReports } = await reportService.getSubjectAccessRequestList(
       req,
@@ -29,9 +29,9 @@ export default class AdminController {
       RESULTS_PER_PAGE,
     )
 
-    const reportList = AdminController.getSarSummaryList(subjectAccessRequests)
+    const reportList = AdminReportsController.getSarSummaryList(subjectAccessRequests)
 
-    res.render('pages/admin', {
+    res.render('pages/adminReports', {
       reportList,
       pageLinks,
       previous,

@@ -1,0 +1,104 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
+{%- from "moj/components/search/macro.njk" import mojSearch -%}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/admin"
+  }) }}
+
+  <h1 class="govuk-heading-l">Health</h1>
+
+  {{ govukTable({
+    caption: "Document store",
+    classes: "health-table",
+    head: [
+      {
+        text: "Service",
+        classes: "govuk-!-width-one-quarter"
+      },
+      {
+        text: "Health",
+        classes: "table-width-one-tenth"
+      },
+      {
+        text: "Up/Down",
+        classes: "table-width-one-tenth"
+      },
+      {
+        text: "Error Details",
+        classes: "govuk-!-width-one-quarter"
+      },
+      {
+        text: "Dev Portal",
+        classes: "table-width-one-tenth"
+      }
+    ],
+    rows: documentStoreHealthRows
+  }) }}
+
+  {{ govukTable({
+    caption: "Lookup services",
+    classes: "health-table",
+    head: [
+      {
+        text: "Service",
+        classes: "govuk-!-width-one-quarter"
+      },
+      {
+        text: "Health",
+        classes: "table-width-one-tenth"
+      },
+      {
+        text: "Up/Down",
+        classes: "table-width-one-tenth"
+      },
+      {
+        text: "Error Details",
+        classes: "govuk-!-width-one-quarter"
+      },
+      {
+        text: "Dev Portal",
+        classes: "table-width-one-tenth"
+      }
+    ],
+    rows: lookupServiceHealthRows
+  }) }}
+
+  {{ govukTable({
+    caption: "SAR services",
+    classes: "health-table",
+    head: [
+      {
+        text: "Service",
+        classes: "govuk-!-width-one-quarter"
+      },
+      {
+        text: "Health",
+        classes: "table-width-one-tenth"
+      },
+      {
+        text: "Up/Down",
+        classes: "table-width-one-tenth"
+      },
+      {
+        text: "Error Details",
+        classes: "govuk-!-width-one-quarter"
+      },
+      {
+        text: "Dev Portal",
+        classes: "table-width-one-tenth"
+      }
+    ],
+    rows: sarServiceHealthRows
+  }) }}
+
+{% endblock %}

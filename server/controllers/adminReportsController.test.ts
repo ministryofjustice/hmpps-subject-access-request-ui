@@ -3,7 +3,7 @@ import { auditService } from '@ministryofjustice/hmpps-audit-client'
 import type { SubjectAccessRequest } from '../@types/subjectAccessRequest'
 import { auditAction } from '../utils/testUtils'
 import { AuditEvent } from '../audit'
-import AdminController from './adminController'
+import AdminReportsController from './adminReportsController'
 import reportService from '../services/report'
 import ReportsController from './reportsController'
 
@@ -94,9 +94,9 @@ describe('getAdminSummary', () => {
     },
   } as unknown as Response
   test('renders a response with list of SAR reports', async () => {
-    await AdminController.getAdminSummary(req, res)
+    await AdminReportsController.getAdminSummary(req, res)
     expect(res.render).toHaveBeenCalledWith(
-      'pages/admin',
+      'pages/adminReports',
       expect.objectContaining({
         reportList: [
           {
@@ -124,7 +124,7 @@ describe('getAdminSummary', () => {
       }),
     )
     expect(req.session.subjectAccessRequests).toEqual(subjectAccessRequests)
-    expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.VIEW_ADMIN_ATTEMPT))
+    expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.VIEW_ADMIN_REPORTS_ATTEMPT))
   })
 
   describe('pagination', () => {
@@ -215,7 +215,7 @@ describe('getAdminSummary', () => {
         },
       ]
 
-      const response = AdminController.getSarSummaryList(subjectAccessRequests)
+      const response = AdminReportsController.getSarSummaryList(subjectAccessRequests)
 
       expect(response).toStrictEqual(condensedSarList)
     })

@@ -8,8 +8,9 @@ import ConfirmationController from '../controllers/confirmationController'
 import SubjectIdController from '../controllers/subjectIdController'
 import ReportsController from '../controllers/reportsController'
 import ReportDownloadController from '../controllers/reportDownloadController'
-import AdminController from '../controllers/adminController'
 import AdminDetailsController from '../controllers/adminDetailsController'
+import AdminHealthController from '../controllers/adminHealthController'
+import AdminReportsController from '../controllers/adminReportsController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes(service: Services): Router {
@@ -44,8 +45,12 @@ export default function routes(service: Services): Router {
     res.render('pages/terms')
   })
 
-  get('/admin', AdminController.getAdminSummary)
+  get('/admin', (req, res, next) => {
+    res.render('pages/admin')
+  })
+  get('/admin/reports', AdminReportsController.getAdminSummary)
   get('/admin/details', AdminDetailsController.getAdminDetail)
+  get('/admin/health', AdminHealthController.getHealth)
 
   return router
 }

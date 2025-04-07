@@ -112,6 +112,6 @@ describe('getAdminDetails', () => {
         },
       }),
     )
-    expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.VIEW_ADMIN_DETAIL_ATTEMPT))
+    expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.VIEW_ADMIN_REPORT_DETAIL_ATTEMPT))
   })
 })

@@ -1,9 +1,11 @@
 import type { Express } from 'express'
 import request from 'supertest'
+import requestSession from 'supertest-session'
 import { auditService } from '@ministryofjustice/hmpps-audit-client'
 import { appWithAllRoutes, user } from './testutils/appSetup'
 import ServiceSelectionController from '../controllers/serviceSelectionController'
 import reportService from '../services/report'
+import adminHealthService from '../services/adminHealth'
 import { HmppsUser } from '../interfaces/hmppsUser'
 
 let app: Express
@@ -87,6 +89,18 @@ beforeEach(() => {
       },
     ],
     numberOfReports: 3,
+  })
+  adminHealthService.getHealth = jest.fn().mockReturnValue({
+    components: {
+      'hmpps-document-management-api': { status: 'UP' },
+      'hmpps-external-users-api': { status: 'UP' },
+      'hmpps-locations-inside-prison-api': { status: 'UP' },
+      'hmpps-nomis-mapping-service': { status: 'UP' },
+      'nomis-user-roles-api': { status: 'DOWN' },
+      'prison-register': { status: 'UP' },
+      'subject-access-requests-and-delius': { status: 'UP' },
+      sarServiceApis: { details: { G1: { status: 'DOWN' }, 'hmpps-book-secure-move-api': { status: 'UP' } } },
+    },
   })
 })
 
@@ -217,13 +231,37 @@ describe('GET /admin', () => {
   })
 })
 
-describe('GET /admin/details', () => {
+describe('GET /admin/reports', () => {
   it('should render admin details page', () => {
     return request(adminUserApp)
-      .get('/admin')
+      .get('/admin/reports')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Subject Access Request Admin')
+        expect(res.text).toContain('Reports Admin')
+      })
+  })
+})
+
+describe('GET /admin/details', () => {
+  it('should render admin details page', async () => {
+    const sessionBasedRequest = requestSession(adminUserApp)
+    await sessionBasedRequest.get('/admin/reports')
+    return sessionBasedRequest
+      .get('/admin/details?id=aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34')
+      .expect('Content-Type', /html/)
+      .expect((res: { text: string }) => {
+        expect(res.text).toContain('Subject Access Request Details')
+      })
+  })
+})
+
+describe('GET /admin/health', () => {
+  it('should render admin health page', () => {
+    return request(adminUserApp)
+      .get('/admin/health')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Health')
       })
   })
 })
