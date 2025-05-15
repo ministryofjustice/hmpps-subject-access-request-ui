@@ -9,8 +9,7 @@ context('Admin', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { roles: ['ROLE_SAR_ADMIN_ACCESS'] })
-    cy.task('stubGetSubjectAccessRequests', [])
-    cy.task('stubGetTotalSubjectAccessRequests', 0)
+    cy.task('stubGetSubjectAccessRequestAdminSummary', { requests: [], filterCount: 0 })
     cy.task('stubGetHealth', {
       components: {
         'hmpps-document-management-api': { status: 'UP' },

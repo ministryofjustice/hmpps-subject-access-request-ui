@@ -9,7 +9,7 @@
 
   {{ govukBackLink({
     text: "Back",
-    href: "/admin/reports"
+    href: "/admin/reports?" + searchParamsString
   }) }}
 
   <form action="/summary" method="post">

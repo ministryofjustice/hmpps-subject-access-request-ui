@@ -1,6 +1,7 @@
 import { UserData } from '../userdata'
 import { HmppsUser } from '../../interfaces/hmppsUser'
 import type { SubjectAccessRequest } from '../subjectAccessRequest'
+import type { SearchOptions } from '../searchOptions'
 
 export default {}
 
@@ -13,6 +14,7 @@ export declare module 'express-session' {
     serviceList: Service[]
     selectedList: Service[]
     subjectAccessRequests: SubjectAccessRequest[]
+    searchOptions: SearchOptions
   }
 }
 

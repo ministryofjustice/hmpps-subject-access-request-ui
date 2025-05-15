@@ -37,57 +37,62 @@ beforeEach(() => {
       disabled: false,
     },
   ])
+  const subjectAccessRequests = [
+    {
+      id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
+      status: 'Pending',
+      dateFrom: '2024-03-01',
+      dateTo: '2024-03-12',
+      sarCaseReferenceNumber: 'caseRef1',
+      services:
+        'hmpps-prisoner-search, https://prisoner-search-dev.prison.service.justice.gov.uk, hmpps-book-secure-move-api, https://book-move-dev.prison.service.justice.gov.uk',
+      nomisId: '',
+      ndeliusCaseReferenceId: 'A123456',
+      requestedBy: 'user',
+      requestDateTime: '2024-03-12T13:52:40.14177',
+      claimDateTime: '2024-03-27T14:49:08.67033',
+      claimAttempts: 1,
+      objectUrl: '',
+    },
+    {
+      id: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
+      status: 'Completed',
+      dateFrom: '2023-03-01',
+      dateTo: '2023-03-12',
+      sarCaseReferenceNumber: 'caseRef2',
+      services:
+        'hmpps-prisoner-search, https://prisoner-search-dev.prison.service.justice.gov.uk, hmpps-book-secure-move-api, https://book-move-dev.prison.service.justice.gov.uk',
+      nomisId: '',
+      ndeliusCaseReferenceId: 'A123456',
+      requestedBy: 'user',
+      requestDateTime: '2023-03-12T13:52:40.14177',
+      claimDateTime: '2023-03-27T14:49:08.67033',
+      claimAttempts: 1,
+      objectUrl: '',
+    },
+    {
+      id: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
+      status: 'Completed',
+      dateFrom: '2022-03-01',
+      dateTo: '2022-03-12',
+      sarCaseReferenceNumber: 'caseRef3',
+      services:
+        'hmpps-prisoner-search, https://prisoner-search-dev.prison.service.justice.gov.uk, hmpps-book-secure-move-api, https://book-move-dev.prison.service.justice.gov.uk',
+      nomisId: '',
+      ndeliusCaseReferenceId: 'A123456',
+      requestedBy: 'user',
+      requestDateTime: '2022-03-12T13:52:40.14177',
+      claimDateTime: '2022-03-27T14:49:08.67033',
+      claimAttempts: 1,
+      objectUrl: '',
+    },
+  ]
   reportService.getSubjectAccessRequestList = jest.fn().mockReturnValue({
-    subjectAccessRequests: [
-      {
-        id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
-        status: 'Pending',
-        dateFrom: '2024-03-01',
-        dateTo: '2024-03-12',
-        sarCaseReferenceNumber: 'caseRef1',
-        services:
-          'hmpps-prisoner-search, https://prisoner-search-dev.prison.service.justice.gov.uk, hmpps-book-secure-move-api, https://book-move-dev.prison.service.justice.gov.uk',
-        nomisId: '',
-        ndeliusCaseReferenceId: 'A123456',
-        requestedBy: 'user',
-        requestDateTime: '2024-03-12T13:52:40.14177',
-        claimDateTime: '2024-03-27T14:49:08.67033',
-        claimAttempts: 1,
-        objectUrl: null,
-      },
-      {
-        id: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
-        status: 'Completed',
-        dateFrom: '2023-03-01',
-        dateTo: '2023-03-12',
-        sarCaseReferenceNumber: 'caseRef2',
-        services:
-          'hmpps-prisoner-search, https://prisoner-search-dev.prison.service.justice.gov.uk, hmpps-book-secure-move-api, https://book-move-dev.prison.service.justice.gov.uk',
-        nomisId: '',
-        ndeliusCaseReferenceId: 'A123456',
-        requestedBy: 'user',
-        requestDateTime: '2023-03-12T13:52:40.14177',
-        claimDateTime: '2023-03-27T14:49:08.67033',
-        claimAttempts: 1,
-        objectUrl: null,
-      },
-      {
-        id: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
-        status: 'Completed',
-        dateFrom: '2022-03-01',
-        dateTo: '2022-03-12',
-        sarCaseReferenceNumber: 'caseRef3',
-        services:
-          'hmpps-prisoner-search, https://prisoner-search-dev.prison.service.justice.gov.uk, hmpps-book-secure-move-api, https://book-move-dev.prison.service.justice.gov.uk',
-        nomisId: '',
-        ndeliusCaseReferenceId: 'A123456',
-        requestedBy: 'user',
-        requestDateTime: '2022-03-12T13:52:40.14177',
-        claimDateTime: '2022-03-27T14:49:08.67033',
-        claimAttempts: 1,
-        objectUrl: null,
-      },
-    ],
+    subjectAccessRequests,
+    numberOfReports: 3,
+  })
+  reportService.getAdminSubjectAccessRequestDetails = jest.fn().mockReturnValue({
+    subjectAccessRequests,
     numberOfReports: 3,
   })
   adminHealthService.getHealth = jest.fn().mockReturnValue({

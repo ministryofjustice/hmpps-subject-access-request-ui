@@ -1,0 +1,36 @@
+.count-table {
+
+  .table-width-one-fifth {
+    width: 20% !important
+  }
+
+  &__cell_SUCCESS {
+    @include govuk-link-common;
+
+    color: govuk-colour("white");
+    background-color: $govuk-success-colour;
+    border: 2px solid govuk-colour("white");
+    text-decoration: none;
+    padding-left: 5px;
+  }
+
+  &__cell_ERROR {
+    @include govuk-link-common;
+
+    color: govuk-colour("white");
+    background-color: $govuk-error-colour;
+    border: 2px solid govuk-colour("white");
+    text-decoration: none;
+    padding-left: 5px;
+  }
+
+  &__cell_WARN {
+    @include govuk-link-common;
+
+    color: govuk-colour("white");
+    background-color: #FFBF00;
+    border: 2px solid govuk-colour("white");
+    text-decoration: none;
+    padding-left: 5px;
+  }
+}

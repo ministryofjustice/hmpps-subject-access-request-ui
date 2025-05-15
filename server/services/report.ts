@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from 'express'
 import proxy from 'express-http-proxy'
 import superagent from 'superagent'
 import config from '../config'
-import type { SubjectAccessRequest } from '../@types/subjectAccessRequest'
+import type { AdminSubjectAccessRequest, SubjectAccessRequest } from '../@types/subjectAccessRequest'
 import getUserToken from '../utils/userTokenHelper'
 import getPageLinks from '../utils/paginationHelper'
 
@@ -54,6 +54,36 @@ const getSubjectAccessRequestList = async (
   return { subjectAccessRequests, numberOfReports }
 }
 
+const getAdminSubjectAccessRequestDetails = async (
+  req: Request,
+  searchOptions: SearchOptions,
+  currentPage: string,
+  resultsPerPage: number,
+): Promise<{
+  subjectAccessRequests: AdminSubjectAccessRequest[]
+  numberOfReports: string
+  countSummary: CountSummary
+}> => {
+  const token = getUserToken(req)
+  const zeroIndexedPageNumber = getZeroIndexedPageNumber(currentPage)
+  const response = await superagent
+    .get(
+      `${config.apis.subjectAccessRequest.url}/api/admin/subjectAccessRequests?completed=${searchOptions.completed}&errored=${searchOptions.errored}&overdue=${searchOptions.overdue}&pending=${searchOptions.pending}&pageSize=${resultsPerPage}&pageNumber=${zeroIndexedPageNumber}&search=${searchOptions.searchTerm}`,
+    )
+    .set('Authorization', `Bearer ${token}`)
+
+  const subjectAccessRequests = response.body.requests
+  const numberOfReports = response.body.filterCount
+  const { totalCount, completedCount, erroredCount, overdueCount, pendingCount } = response.body
+  const countSummary = { totalCount, completedCount, erroredCount, overdueCount, pendingCount }
+
+  return {
+    subjectAccessRequests,
+    numberOfReports,
+    countSummary,
+  }
+}
+
 const getPaginationInformation = (
   numberOfReports: string,
   currentPage: string,
@@ -79,5 +109,6 @@ const getPaginationInformation = (
 export default {
   getReport,
   getSubjectAccessRequestList,
+  getAdminSubjectAccessRequestDetails,
   getPaginationInformation,
 }
