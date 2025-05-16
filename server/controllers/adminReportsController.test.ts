@@ -1,13 +1,12 @@
 import type { Request, Response } from 'express'
 import { auditService } from '@ministryofjustice/hmpps-audit-client'
-import type { SubjectAccessRequest } from '../@types/subjectAccessRequest'
+import type { AdminSubjectAccessRequest } from '../@types/subjectAccessRequest'
 import { auditAction } from '../utils/testUtils'
 import { AuditEvent } from '../audit'
 import AdminReportsController from './adminReportsController'
 import reportService from '../services/report'
-import ReportsController from './reportsController'
 
-const subjectAccessRequests: SubjectAccessRequest[] = [
+const subjectAccessRequests: AdminSubjectAccessRequest[] = [
   {
     id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
     status: 'Pending',
@@ -23,6 +22,8 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     claimAttempts: 1,
     objectUrl: null,
     lastDownloaded: null,
+    durationHumanReadable: '1d',
+    appInsightsEventsUrl: 'appInsights',
   },
   {
     id: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
@@ -39,6 +40,8 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     claimAttempts: 1,
     objectUrl: null,
     lastDownloaded: null,
+    durationHumanReadable: '1d',
+    appInsightsEventsUrl: 'appInsights',
   },
   {
     id: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
@@ -55,15 +58,25 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     claimAttempts: 1,
     objectUrl: null,
     lastDownloaded: null,
+    durationHumanReadable: '1d',
+    appInsightsEventsUrl: 'appInsights',
   },
 ]
+const countSummary = {
+  totalCount: 10,
+  completedCount: 5,
+  erroredCount: 4,
+  overdueCount: 3,
+  pendingCount: 2,
+}
 
 beforeEach(() => {
   jest.resetAllMocks()
   jest.spyOn(auditService, 'sendAuditMessage').mockResolvedValue()
-  reportService.getSubjectAccessRequestList = jest.fn().mockReturnValue({
+  reportService.getAdminSubjectAccessRequestDetails = jest.fn().mockReturnValue({
     subjectAccessRequests,
     numberOfReports: '3',
+    countSummary,
   })
 })
 
@@ -93,51 +106,79 @@ describe('getAdminSummary', () => {
       },
     },
   } as unknown as Response
-  test('renders a response with list of SAR reports', async () => {
-    await AdminReportsController.getAdminSummary(req, res)
-    expect(res.render).toHaveBeenCalledWith(
-      'pages/adminReports',
-      expect.objectContaining({
-        reportList: [
-          {
-            uuid: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
-            status: 'Pending',
-            sarCaseReference: 'caseRef1',
-            subjectId: 'A123456',
-            dateOfRequest: '12/03/2024, 13:52',
-          },
-          {
-            uuid: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
-            status: 'Completed',
-            sarCaseReference: 'caseRef2',
-            subjectId: 'X718253',
-            dateOfRequest: '12/03/2023, 13:52',
-          },
-          {
-            uuid: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
-            status: 'Completed',
-            sarCaseReference: 'caseRef3',
-            subjectId: 'A123456',
-            dateOfRequest: '12/03/2022, 13:52',
-          },
-        ],
-      }),
-    )
-    expect(req.session.subjectAccessRequests).toEqual(subjectAccessRequests)
-    expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.VIEW_ADMIN_REPORTS_ATTEMPT))
-  })
+  test.each([
+    [
+      { keyword: '123abc', status: ['completed', 'errored', 'overdue', 'pending'] },
+      { searchTerm: '123abc', completed: true, errored: true, overdue: true, pending: true },
+    ],
+    [
+      { keyword: '', status: ['completed', 'errored', 'overdue', 'pending'] },
+      { searchTerm: '', completed: true, errored: true, overdue: true, pending: true },
+    ],
+    [
+      { keyword: '123abc', status: ['errored', 'pending'] },
+      { searchTerm: '123abc', completed: false, errored: true, overdue: false, pending: true },
+    ],
+    [{ status: ['errored'] }, { searchTerm: '', completed: false, errored: true, overdue: false, pending: false }],
+    [{ keyword: '123abc' }, { searchTerm: '123abc', completed: false, errored: false, overdue: false, pending: false }],
+    [{}, { searchTerm: '', completed: false, errored: false, overdue: false, pending: false }],
+  ])(
+    'renders a response with list of SAR reports when query params "%s" supplied',
+    async (queryParams, expectedSearchOptions: SearchOptions) => {
+      req.query = queryParams
+      await AdminReportsController.getAdminSummary(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/adminReports',
+        expect.objectContaining({
+          reportList: [
+            {
+              uuid: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
+              status: 'Pending',
+              sarCaseReference: 'caseRef1',
+              subjectId: 'A123456',
+              dateOfRequest: '12/03/2024, 13:52',
+              durationHumanReadable: '1d',
+              appInsightsEventsUrl: 'appInsights',
+            },
+            {
+              uuid: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
+              status: 'Completed',
+              sarCaseReference: 'caseRef2',
+              subjectId: 'X718253',
+              dateOfRequest: '12/03/2023, 13:52',
+              durationHumanReadable: '1d',
+              appInsightsEventsUrl: 'appInsights',
+            },
+            {
+              uuid: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
+              status: 'Completed',
+              sarCaseReference: 'caseRef3',
+              subjectId: 'A123456',
+              dateOfRequest: '12/03/2022, 13:52',
+              durationHumanReadable: '1d',
+              appInsightsEventsUrl: 'appInsights',
+            },
+          ],
+          searchOptions: expectedSearchOptions,
+          countSummary,
+        }),
+      )
+      expect(req.session.subjectAccessRequests).toEqual(subjectAccessRequests)
+      expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.VIEW_ADMIN_REPORTS_ATTEMPT))
+    },
+  )
 
   describe('pagination', () => {
     beforeEach(() => {
-      reportService.getSubjectAccessRequestList = jest.fn().mockReturnValue({
+      reportService.getAdminSubjectAccessRequestDetails = jest.fn().mockReturnValue({
         subjectAccessRequests: [],
         numberOfReports: 240,
       })
     })
     test('when the current page is the first page', async () => {
-      await ReportsController.getReports(req, res)
+      await AdminReportsController.getAdminSummary(req, res)
       expect(res.render).toHaveBeenCalledWith(
-        'pages/reports',
+        'pages/adminReports',
         expect.objectContaining({
           previous: 0,
           next: 2,
@@ -153,9 +194,9 @@ describe('getAdminSummary', () => {
         session: {},
         query: { page: '5' },
       } as unknown as Request
-      await ReportsController.getReports(req, res)
+      await AdminReportsController.getAdminSummary(req, res)
       expect(res.render).toHaveBeenCalledWith(
-        'pages/reports',
+        'pages/adminReports',
         expect.objectContaining({
           previous: 4,
           next: 0,
@@ -175,9 +216,9 @@ describe('getAdminSummary', () => {
           authSource: 'auth',
         },
       } as unknown as Request
-      await ReportsController.getReports(req, res)
+      await AdminReportsController.getAdminSummary(req, res)
       expect(res.render).toHaveBeenCalledWith(
-        'pages/reports',
+        'pages/adminReports',
         expect.objectContaining({
           previous: 2,
           next: 4,
@@ -198,6 +239,8 @@ describe('getAdminSummary', () => {
           sarCaseReference: 'caseRef1',
           subjectId: 'A123456',
           dateOfRequest: '12/03/2024, 13:52',
+          durationHumanReadable: '1d',
+          appInsightsEventsUrl: 'appInsights',
         },
         {
           uuid: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
@@ -205,6 +248,8 @@ describe('getAdminSummary', () => {
           sarCaseReference: 'caseRef2',
           subjectId: 'X718253',
           dateOfRequest: '12/03/2023, 13:52',
+          durationHumanReadable: '1d',
+          appInsightsEventsUrl: 'appInsights',
         },
         {
           uuid: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
@@ -212,6 +257,8 @@ describe('getAdminSummary', () => {
           sarCaseReference: 'caseRef3',
           subjectId: 'A123456',
           dateOfRequest: '12/03/2022, 13:52',
+          durationHumanReadable: '1d',
+          appInsightsEventsUrl: 'appInsights',
         },
       ]
 

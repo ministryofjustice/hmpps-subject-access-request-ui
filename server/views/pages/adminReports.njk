@@ -4,6 +4,10 @@
 {%- from "moj/components/search/macro.njk" import mojSearch -%}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{%- from "moj/components/filter/macro.njk" import mojFilter -%}
+{%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
+{%- from "govuk/components/input/macro.njk" import govukInput -%}
+{%- from "govuk/components/tag/macro.njk" import govukTag -%}
 
 {% block content %}
 
@@ -20,52 +24,151 @@
   {% set nextButton = { text: 'Next', href: '/admin/reports?page=' + next + '&keyword=' + searchTerm} %}
 {% endif %}
 
-      {% set pagination %}
-        {{ mojPagination({
-          results: {
-            from: from,
-            to: to,
-            count: numberOfReports
-          },
-          previous: previousButton,
-          next: nextButton,
-          items: pageLinks
+  {% set pagination %}
+    {{ mojPagination({
+      results: {
+        from: from,
+        to: to,
+        count: numberOfReports
+      },
+      previous: previousButton,
+      next: nextButton,
+      items: pageLinks
+    }) }}
+  {% endset %}
+
+
+  {%- set filterOptionsHtml %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        {{ govukInput({
+          id: "keyword",
+          name: "keyword",
+          value: searchOptions.searchTerm,
+          label: {
+            text: "Subject ID or SAR case reference number",
+            classes: "govuk-label--m"
+          }
         }) }}
-      {% endset %}
+      </div>
+      <div class="govuk-grid-column-one-third">
+        {{ govukCheckboxes({
+          idPrefix: "status",
+          name: "status",
+          classes: "govuk-checkboxes--small",
+          fieldset: {
+            legend: {
+              text: "Status",
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          items: [
+            {
+              value: "completed",
+              text: "Completed",
+              checked: searchOptions.completed
+            },
+            {
+              value: "errored",
+              text: "Errored",
+              checked: searchOptions.errored
+            },
+            {
+              value: "overdue",
+              text: "Overdue",
+              checked: searchOptions.overdue
+            },
+            {
+              value: "pending",
+              text: "Pending",
+              checked: searchOptions.pending
+            }
+          ]
+        }) }}
+      </div>
+    </div>
+  {% endset -%}
+
 
   <h1 class="govuk-heading-l">Reports Admin</h1>
+  <p class="govuk-warning-text">The below details only reflect activity over last 7 days due to reports only being retained for that period.</p>
 
-  {{ mojSearch({
-    action: '#',
-    method: 'get',
-    input: {
-      id: 'keyword',
-      name: 'keyword'
-    },
-    label: {
-      text: 'Find a report',
-      classes: 'govuk-!-font-weight-bold'
-    },
-    hint: {
-      text: 'You can search by subject ID or SAR case reference number'
-    },
-    button: {
-      text: 'Search'
-    }
+  {{ govukTable({
+    caption: "Reports count",
+    classes: "status-table",
+    head: [
+      {
+        text: "All",
+        classes: "table-width-one-fifth"
+      },
+      {
+        text: "Completed",
+        classes: "table-width-one-fifth"
+      },
+      {
+        text: "Errored",
+        classes: "table-width-one-fifth"
+      },
+      {
+        text: "Overdue",
+        classes: "table-width-one-fifth"
+      },
+      {
+        text: "Pending",
+        classes: "table-width-one-fifth"
+      }
+    ],
+    rows: [
+      [
+        {
+          text: countSummary.totalCount
+        },
+        {
+          html: "<strong class='govuk-tag govuk-tag--green'>" + countSummary.completedCount + "</strong>"
+        },
+        {
+          html: "<strong class='govuk-tag govuk-tag--red'>" + countSummary.erroredCount + "</strong>"
+        },
+        {
+          html: "<strong class='govuk-tag govuk-tag--orange'>" + countSummary.overdueCount + "</strong>"
+        },
+        {
+          html: "<strong class='govuk-tag govuk-tag--yellow'>" + countSummary.pendingCount + "</strong>"
+        }
+      ]
+    ]
   }) }}
 
-  <br /> 
-  <br /> 
+  <form id="filter-form" novalidate>
+    {{ mojFilter({
+      heading: {
+        text: "Find report"
+      },
+      submit: {
+        text: "Search",
+        attributes: {
+          "data-test-id": "submit-button"
+        }
+      },
+      optionsHtml: filterOptionsHtml
+    }) }}
+  </form>
+  <div class="moj-action-bar__filterTagsContainer govuk-!-margin-bottom-5"></div>
+
+  <br />
+  <br />
 
   {{ pagination | safe }}
 
-    <table class="govuk-table" data-module="moj-sortable-table">
+    <table class="govuk-table status-table" data-module="moj-sortable-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header" aria-sort="descending">Date of request</th>
           <th scope="col" class="govuk-table__header">Case Reference</th>
           <th scope="col" class="govuk-table__header">Subject ID</th>
           <th scope="col" class="govuk-table__header">Status</th>
+          <th scope="col" class="govuk-table__header">Duration</th>
+          <th scope="col" class="govuk-table__header">AppInsights</th>
           <th scope="col" class="govuk-table__header"></th>
         </tr>
       </thead>
@@ -75,7 +178,37 @@
             <td class="govuk-table__cell">{{report.dateOfRequest}}</td>
             <td class="govuk-table__cell">{{report.sarCaseReference}}</td>
             <td class="govuk-table__cell">{{report.subjectId}}</td>
-            <td class="govuk-table__cell">{{report.status}}</td>
+            {% if report.status == "Errored" %}
+              <td class="govuk-table__cell" >
+                {{govukTag({
+                  text: report.status,
+                  classes: "govuk-tag--red"
+                })}}
+              </td>
+            {% elseif report.status == "Pending" %}
+              <td class="govuk-table__cell" >
+                {{govukTag({
+                  text: report.status,
+                  classes: "govuk-tag--yellow"
+                })}}
+              </td>
+            {% elseif report.status == "Overdue" %}
+              <td class="govuk-table__cell" >
+                {{govukTag({
+                  text: report.status,
+                  classes: "govuk-tag--orange"
+                })}}
+              </td>
+            {% else %}
+              <td class="govuk-table__cell" >
+                {{govukTag({
+                  text: report.status,
+                  classes: "govuk-tag--green"
+                })}}
+              </td>
+            {%- endif %}
+            <td class="govuk-table__cell">{{report.durationHumanReadable}}</td>
+            <td class="govuk-table__cell"><a href="{{report.appInsightsEventsUrl}}" target="_blank" class="govuk-body govuk-link noDoubleClick">App Insights</a></td>
             <td class="govuk-table__cell"><a href="/admin/details?id={{report.uuid}}" class="govuk-body govuk-link noDoubleClick">View details</a></td>
           </tr>
         {% endfor %}
@@ -84,4 +217,9 @@
 
   {{ pagination | safe }}
 
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+  <script src="/assets/js/moj-filter-button-toggle.js"></script>
 {% endblock %}

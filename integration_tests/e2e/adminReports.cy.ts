@@ -8,57 +8,70 @@ context('Admin Reports', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { roles: ['ROLE_SAR_ADMIN_ACCESS'] })
-    cy.task('stubGetSubjectAccessRequests', [
-      {
-        id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
-        status: 'Pending',
-        dateFrom: '2024-03-01',
-        dateTo: '2024-03-12',
-        sarCaseReferenceNumber: 'caseRef1',
-        services: 'hmpps-activities-management-api, keyworker-api, hmpps-manage-adjudications-api',
-        nomisId: '',
-        ndeliusCaseReferenceId: 'A123456',
-        requestedBy: 'user',
-        requestDateTime: '2024-03-12T13:52:40.14177',
-        claimDateTime: '2024-03-27T14:49:08.67033',
-        claimAttempts: 1,
-        objectUrl: null,
-        lastDownloaded: '2024-03-28T16:33:27.84934',
-      },
-      {
-        id: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
-        status: 'Completed',
-        dateFrom: '2023-03-01',
-        dateTo: '2023-03-12',
-        sarCaseReferenceNumber: 'caseRef2',
-        services: 'hmpps-activities-management-api, keyworker-api, hmpps-manage-adjudications-api',
-        nomisId: '',
-        ndeliusCaseReferenceId: 'A123456',
-        requestedBy: 'user',
-        requestDateTime: '2023-03-12T13:52:40.14177',
-        claimDateTime: '2023-03-27T14:49:08.67033',
-        claimAttempts: 1,
-        objectUrl: null,
-        lastDownloaded: null,
-      },
-      {
-        id: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
-        status: 'Completed',
-        dateFrom: '2022-03-01',
-        dateTo: '2022-03-12',
-        sarCaseReferenceNumber: 'caseRef3',
-        services: 'hmpps-activities-management-api, keyworker-api, hmpps-manage-adjudications-api',
-        nomisId: '',
-        ndeliusCaseReferenceId: 'A123456',
-        requestedBy: 'user',
-        requestDateTime: '2022-03-12T13:52:40.14177',
-        claimDateTime: '2022-03-27T14:49:08.67033',
-        claimAttempts: 1,
-        objectUrl: null,
-        lastDownloaded: null,
-      },
-    ])
-    cy.task('stubGetTotalSubjectAccessRequests', 3)
+    cy.task('stubGetSubjectAccessRequestAdminSummary', {
+      requests: [
+        {
+          id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
+          status: 'Pending',
+          dateFrom: '2024-03-01',
+          dateTo: '2024-03-12',
+          sarCaseReferenceNumber: 'caseRef1',
+          services: 'hmpps-activities-management-api, keyworker-api, hmpps-manage-adjudications-api',
+          nomisId: '',
+          ndeliusCaseReferenceId: 'A123456',
+          requestedBy: 'user',
+          requestDateTime: '2024-03-12T13:52:40.14177',
+          claimDateTime: '2024-03-27T14:49:08.67033',
+          claimAttempts: 1,
+          objectUrl: null,
+          lastDownloaded: '2024-03-28T16:33:27.84934',
+          durationHumanReadable: '6h',
+          appInsightsEventsUrl: 'http://appinsights',
+        },
+        {
+          id: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
+          status: 'Completed',
+          dateFrom: '2023-03-01',
+          dateTo: '2023-03-12',
+          sarCaseReferenceNumber: 'caseRef2',
+          services: 'hmpps-activities-management-api, keyworker-api, hmpps-manage-adjudications-api',
+          nomisId: '',
+          ndeliusCaseReferenceId: 'A123456',
+          requestedBy: 'user',
+          requestDateTime: '2023-03-12T13:52:40.14177',
+          claimDateTime: '2023-03-27T14:49:08.67033',
+          claimAttempts: 1,
+          objectUrl: null,
+          lastDownloaded: null,
+          durationHumanReadable: '7h',
+          appInsightsEventsUrl: 'http://appinsights',
+        },
+        {
+          id: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
+          status: 'Completed',
+          dateFrom: '2022-03-01',
+          dateTo: '2022-03-12',
+          sarCaseReferenceNumber: 'caseRef3',
+          services: 'hmpps-activities-management-api, keyworker-api, hmpps-manage-adjudications-api',
+          nomisId: '',
+          ndeliusCaseReferenceId: 'A123456',
+          requestedBy: 'user',
+          requestDateTime: '2022-03-12T13:52:40.14177',
+          claimDateTime: '2022-03-27T14:49:08.67033',
+          claimAttempts: 1,
+          objectUrl: null,
+          lastDownloaded: null,
+          durationHumanReadable: '8h',
+          appInsightsEventsUrl: 'http://appinsights',
+        },
+      ],
+      filterCount: 3,
+      totalCount: 15,
+      completedCount: 8,
+      erroredCount: 6,
+      overdueCount: 4,
+      pendingCount: 2,
+    })
   })
 
   it('Redirects to auth if requested by unauthenticated user', () => {
@@ -86,6 +99,23 @@ context('Admin Reports', () => {
     Page.verifyOnPage(AdminReportsPage)
   })
 
+  it('Displays report counts', () => {
+    cy.signIn()
+    cy.visit('/admin/reports')
+    const adminPage = Page.verifyOnPage(AdminReportsPage)
+    adminPage.countTable().should('exist')
+    adminPage.countTable().contains('All')
+    adminPage.countTable().contains('Completed')
+    adminPage.countTable().contains('Errored')
+    adminPage.countTable().contains('Overdue')
+    adminPage.countTable().contains('Pending')
+    adminPage.countTableCell().eq(0).contains('15')
+    adminPage.countTableCell().eq(1).contains('8')
+    adminPage.countTableCell().eq(2).contains('6')
+    adminPage.countTableCell().eq(3).contains('4')
+    adminPage.countTableCell().eq(4).contains('2')
+  })
+
   it('Displays table of reports', () => {
     cy.signIn()
     cy.visit('/admin/reports')
@@ -95,13 +125,37 @@ context('Admin Reports', () => {
     adminPage.reportsTable().contains('Case Reference')
     adminPage.reportsTable().contains('Subject ID')
     adminPage.reportsTable().contains('Status')
+    adminPage.reportsTable().contains('Duration')
+    adminPage.reportsTable().contains('AppInsights')
   })
 
-  it('Displays search box for filtering', () => {
+  it('Displays search input and checkboxes for filtering', () => {
     cy.signIn()
     cy.visit('/admin/reports')
     const adminPage = Page.verifyOnPage(AdminReportsPage)
     adminPage.searchBox().should('exist')
+    adminPage.filterCheckbox().eq(0).should('exist').contains('Completed')
+    adminPage.filterCheckbox().eq(1).should('exist').contains('Errored')
+    adminPage.filterCheckbox().eq(2).should('exist').contains('Overdue')
+    adminPage.filterCheckbox().eq(3).should('exist').contains('Pending')
+    adminPage.searchButton().should('exist').contains('Search')
+  })
+
+  it('Can search and filter reports', () => {
+    cy.signIn()
+    cy.visit('/admin/reports')
+    const adminPage = Page.verifyOnPage(AdminReportsPage)
+    adminPage.searchBox().type('123')
+    adminPage.filterCheckboxInput().eq(0).click()
+    adminPage.filterCheckboxInput().eq(1).click()
+    adminPage.filterCheckboxInput().eq(2).click()
+    adminPage.filterCheckboxInput().eq(3).click()
+    adminPage.searchButton().click().wait(1000)
+    adminPage.searchBox().should('have.value', '123')
+    adminPage.filterCheckboxInput().eq(0).should('be.checked')
+    adminPage.filterCheckboxInput().eq(1).should('be.checked')
+    adminPage.filterCheckboxInput().eq(2).should('be.checked')
+    adminPage.filterCheckboxInput().eq(3).should('be.checked')
   })
 
   it('Can be sorted on date of request', () => {
@@ -117,7 +171,7 @@ context('Admin Reports', () => {
     cy.signIn()
     cy.visit('/admin/reports')
     const adminPage = Page.verifyOnPage(AdminReportsPage)
-    adminPage.reportsTableDetailsLink().first().click()
+    adminPage.reportsTableDetailsLink().click()
     Page.verifyOnPage(AdminDetailsPage)
   })
 

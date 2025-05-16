@@ -16,6 +16,22 @@ const stubGetSubjectAccessRequests = responseBody => {
   })
 }
 
+const stubGetSubjectAccessRequestAdminSummary = responseBody => {
+  return stubFor({
+    request: {
+      method: 'GET',
+      urlPath: '/api/admin/subjectAccessRequests',
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;',
+      },
+      jsonBody: responseBody,
+    },
+  })
+}
+
 const stubGetTotalSubjectAccessRequests = responseBody => {
   return stubFor({
     request: {
@@ -32,4 +48,8 @@ const stubGetTotalSubjectAccessRequests = responseBody => {
   })
 }
 
-export default { stubGetSubjectAccessRequests, stubGetTotalSubjectAccessRequests }
+export default {
+  stubGetSubjectAccessRequests,
+  stubGetTotalSubjectAccessRequests,
+  stubGetSubjectAccessRequestAdminSummary,
+}

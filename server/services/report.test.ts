@@ -3,7 +3,7 @@ import proxy from 'express-http-proxy'
 import nock from 'nock'
 import config from '../config'
 import reportService from './report'
-import type { SubjectAccessRequest } from '../@types/subjectAccessRequest'
+import type { AdminSubjectAccessRequest } from '../@types/subjectAccessRequest'
 
 jest.mock('express-http-proxy')
 const Proxy = proxy as jest.Mock
@@ -20,7 +20,7 @@ const apiUrl = config.apis.subjectAccessRequest.url
 
 let fakeApi: nock.Scope
 
-const subjectAccessRequests: SubjectAccessRequest[] = [
+const subjectAccessRequests: AdminSubjectAccessRequest[] = [
   {
     id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
     status: 'Pending',
@@ -36,6 +36,8 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     claimAttempts: 1,
     objectUrl: null,
     lastDownloaded: null,
+    durationHumanReadable: '1d',
+    appInsightsEventsUrl: 'appInsights',
   },
   {
     id: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
@@ -52,6 +54,8 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     claimAttempts: 1,
     objectUrl: null,
     lastDownloaded: null,
+    durationHumanReadable: '1d',
+    appInsightsEventsUrl: 'appInsights',
   },
   {
     id: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
@@ -68,6 +72,8 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     claimAttempts: 1,
     objectUrl: null,
     lastDownloaded: null,
+    durationHumanReadable: '1d',
+    appInsightsEventsUrl: 'appInsights',
   },
 ]
 
@@ -120,6 +126,38 @@ describe('report', () => {
 
       expect(response.subjectAccessRequests).toEqual(subjectAccessRequests)
       expect(response.numberOfReports).toEqual('3')
+    })
+  })
+
+  describe('getAdminSubjectAccessRequestDetails', () => {
+    test('getAdminSubjectAccessRequestDetails gets correct response', async () => {
+      fakeApi
+        .get(
+          '/api/admin/subjectAccessRequests?completed=true&errored=true&overdue=false&pending=true&pageSize=50&pageNumber=0&search=123abd',
+        )
+        .reply(200, {
+          requests: subjectAccessRequests,
+          filterCount: 3,
+          totalCount: 10,
+          completedCount: 6,
+          erroredCount: 7,
+          overdueCount: 8,
+          pendingCount: 9,
+        })
+      fakeApi.get('/api/totalSubjectAccessRequests?search=').reply(200, '3')
+      const searchOptions = { searchTerm: '123abd', completed: true, errored: true, overdue: false, pending: true }
+
+      const response = await reportService.getAdminSubjectAccessRequestDetails(req, searchOptions, '1', 50)
+
+      expect(response.subjectAccessRequests).toEqual(subjectAccessRequests)
+      expect(response.numberOfReports).toEqual(3)
+      expect(response.countSummary).toEqual({
+        totalCount: 10,
+        completedCount: 6,
+        erroredCount: 7,
+        overdueCount: 8,
+        pendingCount: 9,
+      })
     })
   })
 

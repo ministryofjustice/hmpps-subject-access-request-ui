@@ -11,5 +11,6 @@ $govuk-page-width: $moj-page-width;
 @import 'assets/scss/local';
 @import './components/date-picker';
 @import './components/health-table';
+@import 'components/status-table';
 
 @import './homepage';

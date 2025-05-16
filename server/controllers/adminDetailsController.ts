@@ -15,8 +15,18 @@ export default class AdminDetailsController {
       subjectAccessRequests.find(sar => sar.id === sarId),
     )
 
+    const searchParams = new URLSearchParams({})
+    if (req.session.searchOptions) {
+      if (req.session.searchOptions.searchTerm) searchParams.append('keyword', req.session.searchOptions.searchTerm)
+      if (req.session.searchOptions.completed) searchParams.append('status', 'completed')
+      if (req.session.searchOptions.errored) searchParams.append('status', 'errored')
+      if (req.session.searchOptions.overdue) searchParams.append('status', 'overdue')
+      if (req.session.searchOptions.pending) searchParams.append('status', 'pending')
+    }
+
     res.render('pages/adminDetails', {
       subjectAccessRequest,
+      searchParamsString: searchParams.toString(),
     })
   }
 

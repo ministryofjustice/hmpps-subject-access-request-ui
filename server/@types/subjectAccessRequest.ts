@@ -14,3 +14,8 @@ export interface SubjectAccessRequest {
   objectUrl: string | null
   lastDownloaded: string
 }
+
+export interface AdminSubjectAccessRequest extends SubjectAccessRequest {
+  durationHumanReadable: string | null
+  appInsightsEventsUrl: string | null
+}
