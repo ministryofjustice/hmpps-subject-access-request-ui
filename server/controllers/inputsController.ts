@@ -30,7 +30,7 @@ export default class InputsController {
   }
 
   static saveInputs(req: Request, res: Response): void {
-    const { dateFrom, dateTo, caseReference } = req.body
+    const { dateFrom, dateTo, caseReference } = req.body || {}
     const { dateFromError, dateToError } = InputsValidation.validateDateRange(dateFrom, dateTo)
     const caseReferenceError = InputsValidation.validateCaseReference(caseReference)
     const hasAllAnswers = req.session.selectedList && req.session.selectedList.length !== 0
