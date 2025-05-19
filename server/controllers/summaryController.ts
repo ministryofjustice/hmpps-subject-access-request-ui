@@ -25,7 +25,11 @@ export default class SummaryController {
     })
   }
 
-  static async postReportDetails(req: Request, res: Response) {
+  static async postReportDetail(req: Request, res: Response) {
+    await SummaryController.postReportDetailsAndReturnResponse(req, res)
+  }
+
+  static async postReportDetailsAndReturnResponse(req: Request, res: Response) {
     const userToken = getUserToken(req)
     const userData = req.session.userData ?? ({} as UserData)
     const { selectedList } = req.session

@@ -39,7 +39,7 @@ export default class HmppsAuthClient {
     return new RestClient('HMPPS Auth Client', config.apis.hmppsAuth, token)
   }
 
-  async getSystemClientToken(username?: string): Promise<string> {
+  async getSystemClientToken(username?: string): Promise<string | Buffer<ArrayBufferLike>> {
     const key = username || '%ANONYMOUS%'
 
     const token = await this.tokenStore.getToken(key)

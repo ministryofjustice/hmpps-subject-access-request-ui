@@ -129,3 +129,5 @@ integration_tests/screenshots/
 /.vs
 
 .DS_Store
+
+gitleaks.json
