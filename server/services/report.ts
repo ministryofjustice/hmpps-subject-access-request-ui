@@ -5,6 +5,8 @@ import config from '../config'
 import type { AdminSubjectAccessRequest, SubjectAccessRequest } from '../@types/subjectAccessRequest'
 import getUserToken from '../utils/userTokenHelper'
 import getPageLinks from '../utils/paginationHelper'
+import logger from '../../logger'
+import getSanitisedError from '../sanitisedError'
 
 const getReport = (req: Request, res: Response, next: NextFunction, fileId: string) =>
   proxy(config.apis.subjectAccessRequest.url, {
@@ -84,6 +86,18 @@ const getAdminSubjectAccessRequestDetails = async (
   }
 }
 
+const restartSubjectAccessRequest = async (req: Request, sarId: string) => {
+  const token = getUserToken(req)
+  return superagent
+    .patch(`${config.apis.subjectAccessRequest.url}/api/admin/subjectAccessRequests/${sarId}/restart`)
+    .set('Authorization', `Bearer ${token}`)
+    .then(res => ({ success: res.status === 200 }))
+    .catch(error => {
+      logger.error(getSanitisedError(error), 'Error restarting subject access request')
+      return { success: false, message: error.response.body.userMessage }
+    })
+}
+
 const getPaginationInformation = (
   numberOfReports: string,
   currentPage: string,
@@ -111,4 +125,5 @@ export default {
   getSubjectAccessRequestList,
   getAdminSubjectAccessRequestDetails,
   getPaginationInformation,
+  restartSubjectAccessRequest,
 }

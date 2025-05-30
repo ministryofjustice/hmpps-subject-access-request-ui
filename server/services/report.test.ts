@@ -201,4 +201,26 @@ describe('report', () => {
       })
     })
   })
+
+  describe('restartSubjectAccessRequest', () => {
+    const sarId = 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34'
+
+    test('restartSubjectAccessRequest calls restart successfully', async () => {
+      fakeApi.patch(`/api/admin/subjectAccessRequests/${sarId}/restart`).reply(200)
+
+      const response = await reportService.restartSubjectAccessRequest(req, sarId)
+
+      expect(response).toEqual({ success: true })
+    })
+
+    test('restartSubjectAccessRequest calls restart with response error', async () => {
+      fakeApi
+        .patch(`/api/admin/subjectAccessRequests/${sarId}/restart`)
+        .reply(400, { userMessage: 'some error message' })
+
+      const response = await reportService.restartSubjectAccessRequest(req, sarId)
+
+      expect(response).toEqual({ success: false, message: 'some error message' })
+    })
+  })
 })

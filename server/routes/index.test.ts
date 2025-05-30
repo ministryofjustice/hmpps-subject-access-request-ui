@@ -270,3 +270,25 @@ describe('GET /admin/health', () => {
       })
   })
 })
+
+describe('GET /admin/restart', () => {
+  it('should redirect to admin details and preserve query param', () => {
+    return request(adminUserApp)
+      .get('/admin/restart?id=aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34')
+      .expect(res => {
+        expect(res.text).toContain('Redirecting to /admin/details?id=aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34')
+      })
+  })
+})
+
+describe('POST /admin/restart', () => {
+  it('should redirect to admin details', () => {
+    return request(app)
+      .post('/admin/restart?id=aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34')
+      .expect(res => {
+        expect(res.statusCode).toBe(200)
+        expect(res.text).toContain('Subject Access Request Details')
+        expect(res.text).toContain('There was a problem restarting the subject access request')
+      })
+  })
+})
