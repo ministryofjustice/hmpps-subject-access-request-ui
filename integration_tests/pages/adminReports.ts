@@ -24,5 +24,6 @@ export default class AdminReportsPage extends Page {
 
   searchButton = (): PageElement => cy.get('.govuk-button')
 
-  reportsTableDetailsLink = (): PageElement => cy.get('.govuk-table__body').eq(1).find('.govuk-link').eq(1)
+  reportsTableDetailsLink = (row = 0): PageElement =>
+    cy.get('.govuk-table__body').eq(1).find('.govuk-table__row').eq(row).find('.govuk-link').eq(1)
 }

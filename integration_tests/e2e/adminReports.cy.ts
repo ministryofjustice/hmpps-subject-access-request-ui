@@ -6,6 +6,8 @@ import AuthErrorPage from '../pages/authError'
 
 context('Admin Reports', () => {
   beforeEach(() => {
+    cy.viewport(1200, 1000)
+
     cy.task('reset')
     cy.task('stubSignIn', { roles: ['ROLE_SAR_ADMIN_ACCESS'] })
     cy.task('stubGetSubjectAccessRequestAdminSummary', {
@@ -48,7 +50,7 @@ context('Admin Reports', () => {
         },
         {
           id: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
-          status: 'Completed',
+          status: 'Errored',
           dateFrom: '2022-03-01',
           dateTo: '2022-03-12',
           sarCaseReferenceNumber: 'caseRef3',
@@ -207,5 +209,67 @@ context('Admin Reports', () => {
     detailsPage.summaryRow().eq(10).contains('1')
     detailsPage.summaryRow().eq(11).contains('Last downloaded')
     detailsPage.summaryRow().eq(11).contains('28 March 2024 at 16:33:27 UTC')
+    detailsPage.successPanel().should('not.exist')
+    detailsPage.errorSummary().should('not.exist')
+  })
+
+  it('Displays restart button for errored request only', () => {
+    cy.signIn()
+    cy.visit('/admin/reports')
+    const reportsPage = Page.verifyOnPage(AdminReportsPage)
+    reportsPage.reportsTableDetailsLink(0).click()
+    const detailsPage = Page.verifyOnPage(AdminDetailsPage)
+    detailsPage.summaryRow().eq(8).contains('Pending')
+    detailsPage.restartButton().should('not.exist')
+    detailsPage.backLink().click()
+    reportsPage.reportsTableDetailsLink(1).click()
+    detailsPage.summaryRow().eq(8).contains('Completed')
+    detailsPage.restartButton().should('not.exist')
+    detailsPage.backLink().click()
+    reportsPage.reportsTableDetailsLink(2).click()
+    detailsPage.summaryRow().eq(8).contains('Errored')
+    detailsPage.restartButton().should('exist')
+    detailsPage.restartButton().contains('Restart')
+  })
+
+  it('Can restart request successfully', () => {
+    cy.signIn()
+    cy.task('stubRestartSubjectAccessRequest', {
+      sarId: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
+      responseStatus: 200,
+      responseMessage: '',
+    })
+    cy.visit('/admin/reports')
+    const reportsPage = Page.verifyOnPage(AdminReportsPage)
+    reportsPage.reportsTableDetailsLink(2).click()
+    const detailsPage = Page.verifyOnPage(AdminDetailsPage)
+    detailsPage.summaryRow().eq(8).contains('Errored')
+    detailsPage.restartButton().click()
+    const reloadedDetailsPage = Page.verifyOnPage(AdminDetailsPage)
+    reloadedDetailsPage.summaryRow().eq(0).contains('cccccccc-cb77-4c0e-a4de-1efc0e86ff34')
+    reloadedDetailsPage.successPanel().should('exist')
+    reloadedDetailsPage.successPanel().contains('Request restarted successfully')
+    reloadedDetailsPage.errorSummary().should('not.exist')
+  })
+
+  it('Restart request when error', () => {
+    cy.signIn()
+    cy.task('stubRestartSubjectAccessRequest', {
+      sarId: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
+      responseStatus: 400,
+      responseMessage: 'test error message',
+    })
+    cy.visit('/admin/reports')
+    const reportsPage = Page.verifyOnPage(AdminReportsPage)
+    reportsPage.reportsTableDetailsLink(2).click()
+    const detailsPage = Page.verifyOnPage(AdminDetailsPage)
+    detailsPage.summaryRow().eq(8).contains('Errored')
+    detailsPage.restartButton().click()
+    const reloadedDetailsPage = Page.verifyOnPage(AdminDetailsPage)
+    reloadedDetailsPage.summaryRow().eq(0).contains('cccccccc-cb77-4c0e-a4de-1efc0e86ff34')
+    reloadedDetailsPage.successPanel().should('not.exist')
+    reloadedDetailsPage.errorSummary().should('exist')
+    reloadedDetailsPage.errorSummary().contains('There was a problem restarting the subject access request:')
+    reloadedDetailsPage.errorSummary().contains('test error message')
   })
 })

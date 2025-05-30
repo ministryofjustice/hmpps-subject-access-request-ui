@@ -15,6 +15,7 @@ export declare module 'express-session' {
     selectedList: Service[]
     subjectAccessRequests: SubjectAccessRequest[]
     searchOptions: SearchOptions
+    currentPage: string
   }
 }
 

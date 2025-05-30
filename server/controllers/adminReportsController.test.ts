@@ -164,6 +164,7 @@ describe('getAdminSummary', () => {
         }),
       )
       expect(req.session.subjectAccessRequests).toEqual(subjectAccessRequests)
+      expect(req.session.currentPage).toEqual('1')
       expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.VIEW_ADMIN_REPORTS_ATTEMPT))
     },
   )

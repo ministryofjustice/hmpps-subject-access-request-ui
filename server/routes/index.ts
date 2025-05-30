@@ -51,6 +51,11 @@ export default function routes(service: Services): Router {
   get('/admin/reports', AdminReportsController.getAdminSummary)
   get('/admin/details', AdminDetailsController.getAdminDetail)
   get('/admin/health', AdminHealthController.getHealth)
+  get('/admin/restart', (req, res, next) => {
+    const searchParams = new URLSearchParams(Object.entries(req.query).map(([key, value]) => [key, String(value)]))
+    res.redirect(`/admin/details?${searchParams.toString()}`)
+  })
+  post('/admin/restart', AdminDetailsController.restartRequest)
 
   return router
 }

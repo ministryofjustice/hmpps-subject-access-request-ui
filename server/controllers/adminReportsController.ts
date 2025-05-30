@@ -5,11 +5,12 @@ import { audit, AuditEvent } from '../audit'
 import { formatDateTime } from '../utils/dateHelpers'
 import reportService from '../services/report'
 
-const RESULTS_PER_PAGE = 50
+export const RESULTS_PER_PAGE = 50
 
 export default class AdminReportsController {
   static async getAdminSummary(req: Request, res: Response) {
     const currentPage = (req.query.page || '1') as string
+    req.session.currentPage = currentPage
     const searchOptions = {
       completed: !!req.query.status && (<Array<string>>req.query.status).includes('completed'),
       errored: !!req.query.status && (<Array<string>>req.query.status).includes('errored'),

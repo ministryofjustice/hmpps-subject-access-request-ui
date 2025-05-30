@@ -48,8 +48,27 @@ const stubGetTotalSubjectAccessRequests = responseBody => {
   })
 }
 
+const stubRestartSubjectAccessRequest = args => {
+  return stubFor({
+    request: {
+      method: 'PATCH',
+      urlPattern: `/api/admin/subjectAccessRequests/${args.sarId}/restart`,
+    },
+    response: {
+      status: args.responseStatus,
+      headers: {
+        'Content-Type': 'application/json;',
+      },
+      jsonBody: {
+        userMessage: args.responseMessage,
+      },
+    },
+  })
+}
+
 export default {
   stubGetSubjectAccessRequests,
   stubGetTotalSubjectAccessRequests,
   stubGetSubjectAccessRequestAdminSummary,
+  stubRestartSubjectAccessRequest,
 }
