@@ -6,6 +6,8 @@ import AuthErrorPage from '../pages/authError'
 
 context('Admin Reports', () => {
   beforeEach(() => {
+    cy.viewport(1200, 1000)
+
     cy.task('reset')
     cy.task('stubSignIn', { roles: ['ROLE_SAR_ADMIN_ACCESS'] })
     cy.task('stubGetSubjectAccessRequestAdminSummary', {

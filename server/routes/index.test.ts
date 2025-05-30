@@ -107,6 +107,9 @@ beforeEach(() => {
       sarServiceApis: { details: { G1: { status: 'DOWN' }, 'hmpps-book-secure-move-api': { status: 'UP' } } },
     },
   })
+  reportService.restartSubjectAccessRequest = jest.fn().mockReturnValue({
+    success: true,
+  })
 })
 
 afterEach(() => {
@@ -288,7 +291,7 @@ describe('POST /admin/restart', () => {
       .expect(res => {
         expect(res.statusCode).toBe(200)
         expect(res.text).toContain('Subject Access Request Details')
-        expect(res.text).toContain('There was a problem restarting the subject access request')
+        expect(res.text).toContain('Request restarted successfully')
       })
   })
 })
