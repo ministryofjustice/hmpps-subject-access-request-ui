@@ -42,5 +42,20 @@ describe('adminHealth', () => {
 
       expect(response).toEqual(healthResponse)
     })
+
+    test.each([400, 503])('getHealth returns response when error code %s', async errorCode => {
+      fakeApi.get('/health').reply(errorCode, healthResponse)
+
+      const response = await adminHealthService.getHealth()
+
+      expect(response).toEqual(healthResponse)
+    })
+
+    test.each([400, 503])('getHealth throws error when error code %s but no response', async errorCode => {
+      fakeApi.get('/health').reply(errorCode, {})
+      await expect(() => adminHealthService.getHealth()).rejects.toThrow(
+        `Error getting health details, no health components returned for response status ${errorCode}`,
+      )
+    })
   })
 })
