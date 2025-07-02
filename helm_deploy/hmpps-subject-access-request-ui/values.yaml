@@ -55,7 +55,7 @@ generic-service:
     hmpps-subject-access-request-ui-auth-code:
       AUTH_CODE_CLIENT_ID: "AUTH_CODE_CLIENT_ID"
       AUTH_CODE_CLIENT_SECRET: "AUTH_CODE_CLIENT_SECRET"
-    hmpps-subject-access-request-ui-client_creds:
+    hmpps-subject-access-request-ui-client-creds:
       CLIENT_CREDS_CLIENT_ID: "CLIENT_CREDS_CLIENT_ID"
       CLIENT_CREDS_CLIENT_SECRET: "CLIENT_CREDS_CLIENT_SECRET"
     sqs-hmpps-audit-secret:
