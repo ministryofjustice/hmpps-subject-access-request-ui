@@ -40,7 +40,7 @@ describe('getReportDetails', () => {
     } as unknown as Request
     SummaryController.getReportDetails(req, res)
     expect(res.render).toHaveBeenCalled()
-    expect(res.render).toBeCalledWith(
+    expect(res.render).toHaveBeenCalledWith(
       'pages/summary',
       expect.objectContaining({
         subjectId: 'A1111AA',
@@ -93,7 +93,7 @@ describe('postReportDetails', () => {
     const response = await SummaryController.postReportDetailsAndReturnResponse(req, res)
     expect(response.status).toBe(200)
     expect(res.redirect).toHaveBeenCalled()
-    expect(res.redirect).toBeCalledWith('/confirmation')
+    expect(res.redirect).toHaveBeenCalledWith('/confirmation')
   })
 
   test('post request fails if neither nomisId nor ndeluisCaseReferenceId is provided', async () => {
@@ -120,7 +120,7 @@ describe('postReportDetails', () => {
         '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service-one","nomisId":null,"ndeliusId":null}',
       )
       .reply(400)
-    await expect(SummaryController.postReportDetailsAndReturnResponse(req, res)).rejects.toThrowError('Bad Request')
+    await expect(SummaryController.postReportDetailsAndReturnResponse(req, res)).rejects.toThrow('Bad Request')
   })
 
   test('post request sends userToken to authenticate with API', async () => {
