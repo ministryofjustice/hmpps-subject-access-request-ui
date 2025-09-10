@@ -23,7 +23,7 @@ describe('getConfirmation', () => {
     await ConfirmationController.getConfirmation(req, res)
 
     expect(res.render).toHaveBeenCalled()
-    expect(res.render).toBeCalledWith(
+    expect(res.render).toHaveBeenCalledWith(
       'pages/confirmation',
       expect.objectContaining({
         caseReference: 'ExampleCaseReference',

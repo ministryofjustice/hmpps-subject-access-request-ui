@@ -31,7 +31,7 @@ describe('getInputs', () => {
     } as unknown as Request
     InputsController.getInputs(req, res)
     expect(res.render).toHaveBeenCalled()
-    expect(res.render).toBeCalledWith(
+    expect(res.render).toHaveBeenCalledWith(
       'pages/inputs',
       expect.objectContaining({
         today: '30/12/2022',
@@ -53,7 +53,7 @@ describe('getInputs', () => {
     } as unknown as Request
 
     InputsController.getInputs(req, res)
-    expect(res.render).toBeCalledWith(
+    expect(res.render).toHaveBeenCalledWith(
       'pages/inputs',
       expect.objectContaining({
         today: '30/12/2022',
@@ -87,7 +87,7 @@ describe('saveInputs', () => {
     expect(baseReq.session.userData.dateTo).toBe('30/12/2022')
     expect(baseReq.session.userData.caseReference).toBe('mockedCaseReference')
     expect(res.redirect).toHaveBeenCalled()
-    expect(res.redirect).toBeCalledWith('/service-selection')
+    expect(res.redirect).toHaveBeenCalledWith('/service-selection')
   })
 
   test('overwrites previous session data if present', () => {
@@ -107,7 +107,7 @@ describe('saveInputs', () => {
     expect(req.session.userData.dateTo).toBe('30/12/2022')
     expect(req.session.userData.caseReference).toBe('mockedCaseReference')
     expect(res.redirect).toHaveBeenCalled()
-    expect(res.redirect).toBeCalledWith('/service-selection')
+    expect(res.redirect).toHaveBeenCalledWith('/service-selection')
   })
 
   test('redirects to summary if all answers have been provided', () => {
@@ -130,6 +130,6 @@ describe('saveInputs', () => {
 
     InputsController.saveInputs(req, res)
     expect(res.redirect).toHaveBeenCalled()
-    expect(res.redirect).toBeCalledWith('/summary')
+    expect(res.redirect).toHaveBeenCalledWith('/summary')
   })
 })

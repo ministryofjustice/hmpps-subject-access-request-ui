@@ -56,7 +56,7 @@ describe('getServices', () => {
     }
     await ServiceSelectionController.getServices(req, res)
     expect(res.render).toHaveBeenCalled()
-    expect(res.render).toBeCalledWith(
+    expect(res.render).toHaveBeenCalledWith(
       'pages/serviceSelection',
       expect.objectContaining({
         serviceList: expect.anything(),
@@ -74,7 +74,7 @@ describe('getServices', () => {
     }
     await ServiceSelectionController.getServices(req, res)
     expect(res.render).toHaveBeenCalled()
-    expect(res.render).toBeCalledWith(
+    expect(res.render).toHaveBeenCalledWith(
       'pages/serviceSelection',
       expect.objectContaining({
         serviceList: expect.anything(),
@@ -93,7 +93,7 @@ describe('getServices', () => {
     }
     await ServiceSelectionController.getServices(req, res)
     expect(res.render).toHaveBeenCalled()
-    expect(res.render).toBeCalledWith(
+    expect(res.render).toHaveBeenCalledWith(
       'pages/serviceSelection',
       expect.objectContaining({
         serviceList: expect.anything(),
@@ -126,7 +126,7 @@ describe('selectServices', () => {
     expect(baseReq.session.selectedList[0].name).toBe('service-1')
     expect(baseReq.session.selectedList[0].label).toBe('Service 1')
     expect(res.redirect).toHaveBeenCalled()
-    expect(res.redirect).toBeCalledWith('/summary')
+    expect(res.redirect).toHaveBeenCalledWith('/summary')
   })
 
   test('overwrites previous session data if present', () => {
@@ -149,7 +149,7 @@ describe('selectServices', () => {
     expect(req.session.selectedList[0].name).toBe('service-2')
     expect(req.session.selectedList[0].label).toBe('Service 2')
     expect(res.redirect).toHaveBeenCalled()
-    expect(res.redirect).toBeCalledWith('/summary')
+    expect(res.redirect).toHaveBeenCalledWith('/summary')
   })
 })
 
@@ -168,7 +168,7 @@ describe('getServiceList', () => {
   ])('should return error: "$expected" on status: $status', async ({ status, expected }) => {
     sarApiMock.get('/api/services').reply(status, { message: expected })
 
-    await expect(() => ServiceSelectionController.getServiceList(req)).rejects.toThrowError(expected)
+    await expect(() => ServiceSelectionController.getServiceList(req)).rejects.toThrow(expected)
   })
 
   test('API response with empty list is successful', async () => {

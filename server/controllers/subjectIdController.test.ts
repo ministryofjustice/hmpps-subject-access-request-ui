@@ -17,7 +17,7 @@ describe('getSubjectId', () => {
       } as unknown as Request
 
       SubjectIdController.getSubjectId(req, res)
-      expect(res.render).toBeCalledWith(
+      expect(res.render).toHaveBeenCalledWith(
         'pages/subjectid',
         expect.objectContaining({
           subjectId: undefined,
@@ -37,7 +37,7 @@ describe('getSubjectId', () => {
       } as unknown as Request
 
       SubjectIdController.getSubjectId(req, res)
-      expect(res.render).toBeCalledWith(
+      expect(res.render).toHaveBeenCalledWith(
         'pages/subjectid',
         expect.objectContaining({
           subjectId: req.session.userData.subjectId,
@@ -71,7 +71,7 @@ describe('saveSubjectId', () => {
     test('redirects to the next page in the user journey', () => {
       SubjectIdController.saveSubjectId(baseReq, res)
       expect(res.redirect).toHaveBeenCalled()
-      expect(res.redirect).toBeCalledWith('/inputs')
+      expect(res.redirect).toHaveBeenCalledWith('/inputs')
     })
 
     describe('when a user has already provided a subject ID in the session', () => {
@@ -87,7 +87,7 @@ describe('saveSubjectId', () => {
         SubjectIdController.saveSubjectId(req, res)
         expect(req.session.userData.subjectId).toBe('A1111AA')
         expect(res.redirect).toHaveBeenCalled()
-        expect(res.redirect).toBeCalledWith('/inputs')
+        expect(res.redirect).toHaveBeenCalledWith('/inputs')
       })
 
       test('redirects to summary if all answers have been provided', () => {
@@ -108,7 +108,7 @@ describe('saveSubjectId', () => {
 
         SubjectIdController.saveSubjectId(req, res)
         expect(res.redirect).toHaveBeenCalled()
-        expect(res.redirect).toBeCalledWith('/summary')
+        expect(res.redirect).toHaveBeenCalledWith('/summary')
       })
     })
   })
@@ -124,7 +124,7 @@ describe('saveSubjectId', () => {
 
     test('user is returned to the subject ID page', () => {
       SubjectIdController.saveSubjectId(baseReq, res)
-      expect(res.render).toBeCalledWith(
+      expect(res.render).toHaveBeenCalledWith(
         'pages/subjectid',
         expect.objectContaining({
           subjectId: baseReq.body.subjectId,
@@ -134,7 +134,7 @@ describe('saveSubjectId', () => {
 
     test('user receives an invalid subject ID error', () => {
       SubjectIdController.saveSubjectId(baseReq, res)
-      expect(res.render).toBeCalledWith(
+      expect(res.render).toHaveBeenCalledWith(
         'pages/subjectid',
         expect.objectContaining({
           subjectIdError: 'Subject ID must be a NOMIS prisoner number or nDelius case reference number',
