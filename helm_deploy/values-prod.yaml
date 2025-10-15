@@ -13,4 +13,4 @@ generic-service:
     SAR_ENDPOINT_URL: "https://subject-access-request-api.hmpps.service.justice.gov.uk"
 
 generic-prometheus-alerts:
-  alertSeverity: digital-prison-service
+  alertSeverity: hmpps_tech
