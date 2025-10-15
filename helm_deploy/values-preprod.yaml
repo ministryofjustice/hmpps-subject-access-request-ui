@@ -22,4 +22,4 @@ generic-service:
 
 generic-prometheus-alerts:
   businessHoursOnly: true
-  alertSeverity: digital-prison-service-dev
+  alertSeverity: hmpps_tech_non_prod
