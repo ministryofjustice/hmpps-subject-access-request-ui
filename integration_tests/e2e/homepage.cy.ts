@@ -34,8 +34,8 @@ context('Homepage', () => {
     cy.visit('/')
     const homepage = Page.verifyOnPage(Homepage)
     homepage.sarActionCards().should('exist')
-    homepage.requestReportLink().should('exist')
-    homepage.viewReportsLink().should('exist')
+    homepage.requestReportLink().should('not.exist')
+    homepage.viewReportsLink().should('not.exist')
     homepage.adminLink().should('exist')
   })
 
