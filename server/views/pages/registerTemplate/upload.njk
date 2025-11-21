@@ -1,0 +1,122 @@
+{% extends "../../partials/layout.njk" %}
+{% set mainClasses = "app-container govuk-body" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+{% block content %}
+
+    {% if uploadError %}
+        {% set uploadErrorMessage = { text: uploadError } %}
+        {% set showErrors = true %}
+    {% endif %}
+
+    {% if showErrors %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem!",
+            errorList: [
+                {
+                    text: uploadError
+                }
+            ]
+        }) }}
+    {% endif %}
+
+    {{ govukBackLink({
+        text: "Back",
+        href: "/register-template/select-service"
+    }) }}
+
+    {% if not selectedService.templateMigrated %}
+        {{ govukNotificationBanner({
+            text: 'This service has not been configured as having its template migrated yet.
+                   A template can still be registered but the configuration will need to be updated before it will be able to be used.'
+        }) }}
+    {% endif %}
+
+    {% if versionList.length > 0 and versionList[0].status == 'PENDING' %}
+    {{ govukNotificationBanner({
+        text: 'The latest template version registered for this service has not been activated yet.
+        Registering a new template will override this template version instead of creating a new one.'
+    }) }}
+    {% endif %}
+
+    <form action="/register-template/upload" method="post" enctype="multipart/form-data" >
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-form-group">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    Upload Template for {{ selectedService.label }}
+                </h1>
+            </legend>
+
+            {% if versionList.length == 0 %}
+                <div class="govuk-table__caption--m">No current registered template</div>
+            {% else %}
+
+                {% set displayRows = [] %}
+
+                {% for version in versionList %}
+                    {% set row = [
+                        { "text": version.version },
+                        { "text": version.fileHash },
+                        { "text": version.createdDate },
+                        { "text": version.status }
+                    ] %}
+                    {% set displayRows = displayRows.concat([row]) %}
+                {% endfor %}
+
+
+                {{ govukTable({
+                    caption: "Latest registered template (including Pending if exists)",
+                    captionClasses: "govuk-table__caption--m",
+                    head: [
+                        {
+                            text: "Version"
+                        },
+                        {
+                            text: "Hash"
+                        },
+                        {
+                            text: "Created"
+                        },
+                        {
+                            text: "Status"
+                        }
+                    ],
+                    rows: displayRows
+                }) }}
+            {% endif %}
+
+            <div class="govuk-body">
+                Please provide the template to register by uploading it below.
+                Once confirmed a new version will be generated using the hash of the supplied template file.
+                This will allow that template provided by this service to be used to generate a subject access report.
+            </div>
+
+            {{ govukFileUpload({
+                id: "template",
+                name: "template",
+                javascript: true,
+                label: {
+                    text: "Upload template",
+                    classes: "govuk-table__caption--m"
+                },
+                errorMessage: uploadErrorMessage
+            }) }}
+        </div>
+
+
+
+        {{ govukButton({
+            text: "Continue",
+            id: "input-submit",
+            type: "submit",
+            preventDoubleClick: true
+        }) }}
+
+    </form>
+{% endblock %}

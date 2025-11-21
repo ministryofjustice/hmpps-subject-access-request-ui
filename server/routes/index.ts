@@ -1,4 +1,4 @@
-import { type RequestHandler, Router } from 'express'
+import { Request, type RequestHandler, Response, Router } from 'express'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 import InputsController from '../controllers/inputsController'
@@ -11,15 +11,23 @@ import ReportDownloadController from '../controllers/reportDownloadController'
 import AdminDetailsController from '../controllers/adminDetailsController'
 import AdminHealthController from '../controllers/adminHealthController'
 import AdminReportsController from '../controllers/adminReportsController'
+import RegisterTemplateServiceController from '../controllers/registerTemplateServiceController'
+import RegisterTemplateUploadController from '../controllers/registerTemplateUploadController'
+import RegisterTemplateConfirmationController from '../controllers/registerTemplateConfirmationController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes(service: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const post = (path: string | string[], ...handlers: RequestHandler[]) =>
+    router.post(path, ...handlers.map(handler => asyncMiddleware(handler)))
 
   get('/', (req, res, next) => {
-    res.render('pages/homepage', { hasAdminRole: res.locals.user.userRoles.includes('SAR_ADMIN_ACCESS') })
+    res.render('pages/homepage', {
+      hasSarUserRole: res.locals.user.userRoles.includes('SAR_USER_ACCESS'),
+      hasAdminRole: res.locals.user.userRoles.includes('SAR_ADMIN_ACCESS'),
+      hasRegisterTemplateRole: res.locals.user.userRoles.includes('SAR_REGISTER_TEMPLATE'),
+    })
   })
 
   get('/subject-id', SubjectIdController.getSubjectId)
@@ -44,6 +52,22 @@ export default function routes(service: Services): Router {
   get('/terms', (req, res, next) => {
     res.render('pages/terms')
   })
+
+  get('/register-template/select-service', RegisterTemplateServiceController.getServices)
+  post('/register-template/select-service', RegisterTemplateServiceController.selectService)
+
+  get('/register-template/upload', RegisterTemplateUploadController.getServiceTemplateVersion)
+  post('/register-template/upload', RegisterTemplateUploadController.uploadTemplate)
+
+  get('/register-template/confirmation', (req: Request, res: Response) =>
+    res.render('pages/registerTemplate/confirmation', {
+      selectedService: req.session.selectedService,
+      templateName: req.session.templateName,
+    }),
+  )
+  post('/register-template/confirmation', RegisterTemplateConfirmationController.registerTemplate)
+
+  get('/register-template/result', RegisterTemplateConfirmationController.getResult)
 
   get('/admin', (req, res, next) => {
     res.render('pages/admin')

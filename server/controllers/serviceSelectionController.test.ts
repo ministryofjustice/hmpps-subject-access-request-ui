@@ -1,17 +1,11 @@
 import type { Request, Response } from 'express'
-import nock from 'nock'
 import ServiceSelectionController from './serviceSelectionController'
-import config from '../config'
+import serviceConfigsService from '../services/serviceConfigurations'
 
-let sarApiMock: nock.Scope
 let serviceConfigurationList: Service[]
 const requestUser = { token: 'token-abc123', username: '', authSource: '' }
 
 beforeEach(() => {
-  sarApiMock = nock(`${config.apis.subjectAccessRequest.url}`, {
-    reqheaders: { Authorization: `Bearer ${requestUser.token}` },
-  })
-
   serviceConfigurationList = [
     {
       id: 'e46c70cd-a2c3-4692-8a95-95905f06d4bf',
@@ -30,11 +24,11 @@ beforeEach(() => {
       order: 2,
     },
   ]
+  serviceConfigsService.getServiceList = jest.fn().mockReturnValue(serviceConfigurationList)
 })
 
 afterEach(() => {
   jest.resetAllMocks()
-  nock.cleanAll()
 })
 
 describe('getServices', () => {
@@ -44,7 +38,7 @@ describe('getServices', () => {
   }
 
   test('renders a response with default inputs', async () => {
-    sarApiMock.get('/api/services').reply(200, serviceConfigurationList)
+    serviceConfigsService.getServiceList = jest.fn().mockReturnValue(serviceConfigurationList)
 
     const req: Request = {
       user: requestUser,
@@ -63,8 +57,9 @@ describe('getServices', () => {
       }),
     )
   })
+
   test('renders a response with persisted values from session', async () => {
-    sarApiMock.get('/api/services').reply(200, serviceConfigurationList)
+    serviceConfigsService.getServiceList = jest.fn().mockReturnValue(serviceConfigurationList)
 
     const req: Request = {
       user: requestUser,
@@ -82,8 +77,9 @@ describe('getServices', () => {
       }),
     )
   })
+
   test('renders an error if no services found', async () => {
-    sarApiMock.get('/api/services').reply(200, [])
+    serviceConfigsService.getServiceList = jest.fn().mockReturnValue([])
 
     const req: Request = {
       user: requestUser,
@@ -150,38 +146,5 @@ describe('selectServices', () => {
     expect(req.session.selectedList[0].label).toBe('Service 2')
     expect(res.redirect).toHaveBeenCalled()
     expect(res.redirect).toHaveBeenCalledWith('/summary')
-  })
-})
-
-describe('getServiceList', () => {
-  const req: Request = {
-    user: requestUser,
-    // @ts-expect-error stubbing session
-    session: { serviceList: [], selectedList: [] },
-    body: { selectedservices: [] },
-  }
-
-  test.each([
-    { status: 401, expected: 'Unauthorized' },
-    { status: 403, expected: 'Forbidden' },
-    { status: 500, expected: 'Internal Server Error' },
-  ])('should return error: "$expected" on status: $status', async ({ status, expected }) => {
-    sarApiMock.get('/api/services').reply(status, { message: expected })
-
-    await expect(() => ServiceSelectionController.getServiceList(req)).rejects.toThrow(expected)
-  })
-
-  test('API response with empty list is successful', async () => {
-    sarApiMock.get('/api/services').reply(200, [])
-
-    const result = await ServiceSelectionController.getServiceList(req)
-    expect(result).toStrictEqual([])
-  })
-
-  test('returns service list', async () => {
-    sarApiMock.get('/api/services').reply(200, serviceConfigurationList)
-
-    const result = await ServiceSelectionController.getServiceList(req)
-    expect(result).toStrictEqual(serviceConfigurationList)
   })
 })

@@ -13,6 +13,11 @@ export declare module 'express-session' {
     userData: UserData
     serviceList: Service[]
     selectedList: Service[]
+    selectedService: Service
+    versionList: ServiceVersion[]
+    newVersion: ServiceVersion
+    templateName: string
+    templateFileBase64: string
     subjectAccessRequests: SubjectAccessRequest[]
     searchOptions: SearchOptions
     currentPage: string

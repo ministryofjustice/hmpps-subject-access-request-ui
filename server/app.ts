@@ -2,6 +2,7 @@ import express from 'express'
 
 import createError from 'http-errors'
 
+import multer from 'multer'
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
@@ -34,7 +35,8 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpStaticResources())
   nunjucksSetup(app, services.applicationInfo)
   app.use(setUpAuthentication())
-  app.use(authorisationMiddleware(['ROLE_SAR_USER_ACCESS', 'ROLE_SAR_ADMIN_ACCESS']))
+  app.use(authorisationMiddleware(['ROLE_SAR_USER_ACCESS', 'ROLE_SAR_ADMIN_ACCESS', 'ROLE_SAR_REGISTER_TEMPLATE']))
+  app.use(multer().single('template'))
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
 

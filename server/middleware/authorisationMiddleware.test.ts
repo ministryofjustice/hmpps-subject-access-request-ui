@@ -62,21 +62,35 @@ describe('authorisationMiddleware', () => {
     expect(res.redirect).not.toHaveBeenCalled()
   })
 
-  it.each(['/admin', '/admin/details'])('should redirect for %s when user has not got authorised role', adminPage => {
-    const reqAdmin = { originalUrl: adminPage } as Request
+  it.each([
+    '/admin',
+    '/admin/details',
+    '/register-template/select-service',
+    '/register-template/upload',
+    '/register-template/confirmation',
+    '/register-template/result',
+  ])('should redirect for %s when user has not got authorised role', page => {
+    const reqForPage = { originalUrl: page } as Request
     const res = createResWithToken({ authorities: ['SOME_OTHER_ROLE'] })
 
-    authorisationMiddleware(['SOME_OTHER_ROLE'])(reqAdmin, res, next)
+    authorisationMiddleware(['SOME_OTHER_ROLE'])(reqForPage, res, next)
 
     expect(next).not.toHaveBeenCalled()
     expect(res.redirect).toHaveBeenCalledWith('/authError')
   })
 
-  it.each(['/admin', '/admin/details'])('should return next for %s when user has authorised role', adminPage => {
-    const reqAdmin = { originalUrl: adminPage } as Request
-    const res = createResWithToken({ authorities: ['ROLE_SAR_ADMIN_ACCESS'] })
+  it.each([
+    { page: '/admin', role: 'ROLE_SAR_ADMIN_ACCESS' },
+    { page: '/admin/details', role: 'ROLE_SAR_ADMIN_ACCESS' },
+    { page: '/register-template/select-service', role: 'ROLE_SAR_REGISTER_TEMPLATE' },
+    { page: '/register-template/upload', role: 'ROLE_SAR_REGISTER_TEMPLATE' },
+    { page: '/register-template/confirmation', role: 'ROLE_SAR_REGISTER_TEMPLATE' },
+    { page: '/register-template/result', role: 'ROLE_SAR_REGISTER_TEMPLATE' },
+  ])('should return next for %s when user has authorised role', ({ page, role }) => {
+    const reqForPage = { originalUrl: page } as Request
+    const res = createResWithToken({ authorities: [role] })
 
-    authorisationMiddleware(['ROLE_SAR_ADMIN_ACCESS'])(reqAdmin, res, next)
+    authorisationMiddleware([role])(reqForPage, res, next)
 
     expect(next).toHaveBeenCalled()
     expect(res.redirect).not.toHaveBeenCalled()

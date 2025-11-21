@@ -1,0 +1,56 @@
+{% extends "../../partials/layout.njk" %}
+{% set mainClasses = "app-container govuk-body" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block content %}
+
+    <div class="govuk-panel govuk-panel--confirmation" id="confirmation-panel">
+        <h1 class="govuk-panel__title">
+            New template version for {{ selectedService.label }} successfully registered
+        </h1>
+    </div>
+
+    {{ govukSummaryList({
+        attributes: {
+            "id": "version-summary"
+        },
+        rows: [
+            {
+                key: { text: "Service" },
+                value: { text: selectedService.label }
+            },
+            {
+                key: { text: "Version" },
+                value: { text: newVersion.version }
+            },
+            {
+                key: { text: "File hash" },
+                value: { text: newVersion.fileHash }
+            },
+            {
+                key: { text: "Status" },
+                value: { text: newVersion.status }
+            }
+        ]
+    }) }}
+
+    <section id="next-steps">
+        <h2 class="govuk-heading-m">What happens next</h2>
+        {% if selectedService.templateMigrated %}
+            <p class="govuk-body">Once the service starts returning this template then it will be used to generate reports.</p>
+        {% else %}
+            <p class="govuk-body">Once the service configuration has been updated to indicate this service is migrated and the service starts returning this template then it will be used to generate reports.</p>
+        {% endif %}
+
+
+
+    </section>
+
+  {{ govukButton({
+      text: "Continue",
+      type: "button",
+      href: "/"
+  }) }}
+
+{% endblock %}

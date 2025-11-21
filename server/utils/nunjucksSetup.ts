@@ -51,4 +51,6 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addFilter('formatDate', dateString =>
     dateString ? moment(new Date(dateString)).format('DD/MM/YYYY HH:mm') : null,
   )
+
+  njkEnv.addFilter('addBlankOption', (values, text = '') => [{ text, value: '' }].concat(values))
 }

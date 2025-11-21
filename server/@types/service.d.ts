@@ -5,6 +5,7 @@ interface Service {
   label: string
   order: number
   enabled?: boolean
+  templateMigrated?: boolean
 }
 
 interface Environment {

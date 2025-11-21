@@ -1,0 +1,66 @@
+{% extends "../../partials/layout.njk" %}
+{% set mainClasses = "app-container govuk-body" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{% block content %}
+
+{% if selectedServiceError %}
+  {% set selectedServiceErrorMessage = { text: selectedServiceError } %}
+  {% set showErrors = true %}
+{% endif %}
+
+{% if showErrors %}
+  {{ govukErrorSummary({
+    titleText: "There is a problem!",
+    errorList: [
+      {
+        text: selectedServiceError
+      }
+    ]
+  }) }}
+{% endif %}
+
+{{ govukBackLink({
+  text: "Back",
+  href: "/"
+}) }}
+
+{% set serviceItems = [] %}
+{% for service in serviceList %}
+    {% set item = { "text": service.label, "value": service.id } %}
+    {% set serviceItems = serviceItems.concat([item]) %}
+{% endfor %}
+
+<form action="/register-template/select-service" method="post">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+  <div class="govuk-form-group">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+      <h1 class="govuk-fieldset__heading">
+        Select Service
+      </h1>
+    </legend>
+
+      <div class="govuk-list">
+        {{ govukSelect({label: {
+            text: "Select service to register template for"
+          },
+          id: 'service',
+          name: 'service',
+          items: serviceItems | addBlankOption(),
+          errorMessage: selectedServiceErrorMessage
+        }) }}
+      </div>
+  </div>
+
+  {{ govukButton({
+      text: "Continue",
+      id: "input-submit",
+      type: "submit",
+      preventDoubleClick: true
+  }) }}
+
+</form>
+{% endblock %}
