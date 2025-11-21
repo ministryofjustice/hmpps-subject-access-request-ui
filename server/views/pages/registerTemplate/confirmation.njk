@@ -1,0 +1,40 @@
+{% extends "../../partials/layout.njk" %}
+{% set mainClasses = "app-container govuk-body" %}
+{%- from "moj/components/interruption-card/macro.njk" import interruptionCard -%}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% block content %}
+
+    {% if registerError %}
+        {{ govukErrorSummary({
+            titleText: "Problem registering template",
+            errorList: [
+                {
+                    text: registerError
+                }
+            ]
+        }) }}
+    {% endif %}
+
+    <form action="/register-template/confirmation" method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+        {% call interruptionCard({
+            heading: "Are you sure you want to register?",
+            primaryAction: {
+                text: "Confirm"
+            },
+            secondaryAction: {
+                text: "Cancel",
+                href: "/register-template/upload"
+            }
+        }) -%}
+            <p>You've chosen to register the template below, this means the new template will be used for the service to generate reports.</p>
+            <p><strong>Service: {{ selectedService.label }}</strong></p>
+            <p><strong>Filename: {{ templateName }}</strong></p>
+
+            <p>By selecting confirm you are agreeing that this template has been signed off by the Offender SAR team, if it has not then please select cancel.</p>
+        {%- endcall %}
+    </form>
+
+{% endblock %}

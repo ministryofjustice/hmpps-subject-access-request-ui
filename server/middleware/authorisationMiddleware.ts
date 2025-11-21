@@ -6,11 +6,13 @@ import asyncMiddleware from './asyncMiddleware'
 
 enum AuthRole {
   SAR_ADMIN_ACCESS = 'ROLE_SAR_ADMIN_ACCESS',
+  SAR_REGISTER_TEMPLATE = 'ROLE_SAR_REGISTER_TEMPLATE',
 }
 
 const authorisationMap = {
   '/admin': [AuthRole.SAR_ADMIN_ACCESS],
   '/admin/details': [AuthRole.SAR_ADMIN_ACCESS],
+  '/register-template/': [AuthRole.SAR_REGISTER_TEMPLATE],
 }
 
 export default function authorisationMiddleware(authorisedRoles: string[] = []): RequestHandler {

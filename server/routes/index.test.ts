@@ -3,27 +3,42 @@ import request from 'supertest'
 import requestSession from 'supertest-session'
 import { auditService } from '@ministryofjustice/hmpps-audit-client'
 import { appWithAllRoutes, user } from './testutils/appSetup'
-import ServiceSelectionController from '../controllers/serviceSelectionController'
 import reportService from '../services/report'
 import adminHealthService from '../services/adminHealth'
+import serviceConfigsService from '../services/serviceConfigurations'
+import templateVersionService from '../services/templateVersions'
 import { HmppsUser } from '../interfaces/hmppsUser'
 
 let app: Express
 let adminUserApp: Express
+let regTemplateUserApp: Express
 
 beforeEach(() => {
   jest.resetAllMocks()
   jest.spyOn(auditService, 'sendAuditMessage').mockResolvedValue()
 
-  app = appWithAllRoutes({})
+  const sarUser: HmppsUser = {
+    ...user,
+    userRoles: ['SAR_USER_ACCESS'],
+  }
   const adminUser: HmppsUser = {
     ...user,
     userRoles: ['SAR_ADMIN_ACCESS'],
   }
+  const registerTemplateUser: HmppsUser = {
+    ...user,
+    userRoles: ['SAR_REGISTER_TEMPLATE'],
+  }
+  app = appWithAllRoutes({
+    userSupplier: (): HmppsUser => sarUser,
+  })
   adminUserApp = appWithAllRoutes({
     userSupplier: (): HmppsUser => adminUser,
   })
-  ServiceSelectionController.getServiceList = jest.fn().mockReturnValue([
+  regTemplateUserApp = appWithAllRoutes({
+    userSupplier: (): HmppsUser => registerTemplateUser,
+  })
+  const serviceConfigs = [
     {
       id: 'hmpps-prisoner-search',
       name: 'Prisoner Search',
@@ -36,7 +51,19 @@ beforeEach(() => {
       url: 'https://book-move-dev.prison.service.justice.gov.uk',
       disabled: false,
     },
-  ])
+  ]
+  serviceConfigsService.getServiceList = jest.fn().mockReturnValue(serviceConfigs)
+  serviceConfigsService.getTemplateRegistrationServiceList = jest.fn().mockReturnValue(serviceConfigs)
+  const templateVersion = {
+    createdDate: '2025-11-13T11:34:45Z',
+    fileHash: 'abc',
+    id: '123',
+    serviceName: 'my-service',
+    status: 'PENDING',
+    version: 1,
+  }
+  templateVersionService.getTemplateVersions = jest.fn().mockReturnValue([templateVersion])
+  templateVersionService.createTemplateVersion = jest.fn().mockReturnValue(templateVersion)
   const subjectAccessRequests = [
     {
       id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
@@ -123,7 +150,10 @@ describe('GET /', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Subject Access Request Service')
+        expect(res.text).toContain('Request a report')
+        expect(res.text).toContain('View reports')
         expect(res.text).not.toContain('Admin')
+        expect(res.text).not.toContain('Register a template')
       })
   })
 
@@ -133,7 +163,23 @@ describe('GET /', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Subject Access Request Service')
+        expect(res.text).not.toContain('Request a report')
+        expect(res.text).not.toContain('View reports')
         expect(res.text).toContain('Admin')
+        expect(res.text).not.toContain('Register a template')
+      })
+  })
+
+  it('should render homepage when register template role', () => {
+    return request(regTemplateUserApp)
+      .get('/')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Subject Access Request Service')
+        expect(res.text).not.toContain('Request a report')
+        expect(res.text).not.toContain('View reports')
+        expect(res.text).not.toContain('Admin')
+        expect(res.text).toContain('Register a template')
       })
   })
 })
@@ -224,6 +270,50 @@ describe('GET /terms', () => {
         expect(res.text).toContain(
           'Access to, and use of, this system is restricted to authorized Prison-NOMIS account users only.',
         )
+      })
+  })
+})
+
+describe('GET /register-template/select-service', () => {
+  it('should render register template service page', () => {
+    return request(regTemplateUserApp)
+      .get('/register-template/select-service')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Select Service')
+      })
+  })
+})
+
+describe('GET /register-template/upload', () => {
+  it('should render register template upload page', () => {
+    return request(regTemplateUserApp)
+      .get('/register-template/upload')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Upload Template for')
+      })
+  })
+})
+
+describe('GET /register-template/confirmation', () => {
+  it('should render register template confirmation page', () => {
+    return request(regTemplateUserApp)
+      .get('/register-template/confirmation')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Are you sure you want to register?')
+      })
+  })
+})
+
+describe('GET /register-template/result', () => {
+  it('should render register template result page', () => {
+    return request(regTemplateUserApp)
+      .get('/register-template/result')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('New template version for  successfully registered')
       })
   })
 })

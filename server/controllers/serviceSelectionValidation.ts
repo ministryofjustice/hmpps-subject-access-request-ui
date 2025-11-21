@@ -10,4 +10,14 @@ export default class ServiceSelectionValidation {
     }
     return ''
   }
+
+  static validateSingleSelection(selection: string, serviceList: Service[]): string {
+    if (!selection) {
+      return `A service must be selected`
+    }
+    if (serviceList.findIndex(service => service.id.toString() === selection) === -1) {
+      return `Invalid service selection`
+    }
+    return ''
+  }
 }
