@@ -37,7 +37,7 @@ describe('registerTemplate', () => {
     redirect: jest.fn(),
   } as unknown as Response
 
-  test('redirects tp result page after new service version registered successfully', async () => {
+  test('redirects to result page after new service version registered successfully', async () => {
     req.session.templateName = templateName
     req.session.templateFileBase64 = templateFileBase64
     templateVersionsService.createTemplateVersion = jest.fn().mockReturnValue(newServiceVersion)
