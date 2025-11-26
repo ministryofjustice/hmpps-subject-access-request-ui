@@ -87,7 +87,17 @@
     "comma-dangle": ["error", "always-multiline"],
     "import/no-extraneous-dependencies": [
       "error",
-      { "devDependencies": ["**/*.test.js", "**/*.test.ts", "**/testutils/**", "cypress.config.ts", "esbuild/**/*"] }
+      {
+        "devDependencies": [
+          "**/*.test.js",
+          "**/*.test.ts",
+          "**/testutils/**",
+          "cypress.config.ts",
+          "esbuild/**/*",
+          "playwright.config.ts",
+          "integration_tests_pw/**/*"
+        ]
+      }
     ],
     "no-only-tests/no-only-tests": "error",
     "prettier/prettier": [
