@@ -32,10 +32,12 @@ describe('validateDateTo', () => {
     valid: 'Date To must be a valid date',
     future: 'Date To must not be in the future',
     after: 'Date To must be after Date From',
+    required: 'Date To must be provided (default value of today has been prefilled)',
   }
-  test('validates dateFrom value correctly', () => {
+  test('validates dateTo value correctly', () => {
     const testCases = [
-      { inputTo: '', inputFrom: '', expected: '' },
+      { inputTo: '', inputFrom: '', expected: errors.required },
+      { inputTo: '', inputFrom: '01/01/2022', expected: errors.required },
       { inputTo: '01/02/2001', inputFrom: '', expected: '' },
       { inputTo: 'test', inputFrom: '', expected: errors.format },
       { inputTo: '01/13/2022', inputFrom: '', expected: errors.valid },
@@ -47,6 +49,8 @@ describe('validateDateTo', () => {
       { inputTo: '01/01/2150', inputFrom: '', expected: errors.future },
       { inputTo: '01/01/2021', inputFrom: '01/01/2022', expected: errors.after },
       { inputTo: '30/01/2021', inputFrom: '01/01/2022', expected: errors.after },
+      { inputTo: '30/01/2021', inputFrom: '30/01/2021', expected: '' },
+      { inputTo: '30/01/2021', inputFrom: '29/01/2021', expected: '' },
     ]
     testCases.forEach(testCase => {
       const actual = InputsValidation.validateDateRange(testCase.inputFrom, testCase.inputTo)
