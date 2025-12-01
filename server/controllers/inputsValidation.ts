@@ -5,7 +5,7 @@ export default class InputsValidation {
 
   static validateDateRange(dateFrom: string, dateTo: string): { dateFromError: string; dateToError: string } {
     const { validationError: dateFromError, parsedDate: dateFromDate } = this.validateDateString(dateFrom, 'Date From')
-    const { validationError: interimToError, parsedDate: dateToDate } = this.validateDateString(dateTo, 'Date To')
+    const { validationError: interimToError, parsedDate: dateToDate } = this.validateDateString(dateTo, 'Date To', true)
 
     let dateToError = interimToError
     if (dateFromDate && dateToDate && dateFromDate > dateToDate) {
@@ -15,9 +15,19 @@ export default class InputsValidation {
     return { dateFromError, dateToError }
   }
 
-  static validateDateString(inputDate: string, fieldName: string): { validationError: string; parsedDate: Date } {
-    // optional parameter - if blank, no error
+  static validateDateString(
+    inputDate: string,
+    fieldName: string,
+    isMandatory: boolean = false,
+  ): { validationError: string; parsedDate: Date } {
     if (!inputDate) {
+      if (isMandatory) {
+        return {
+          validationError: `${fieldName} must be provided (default value of today has been prefilled)`,
+          parsedDate: null,
+        }
+      }
+      // optional parameter - if blank no error
       return { validationError: '', parsedDate: null }
     }
     try {

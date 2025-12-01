@@ -6,6 +6,8 @@ import AbstractPage from './pages/abstractPage'
 import RegisterTemplateServicePage from './pages/registerTemplateServicePage'
 import RegisterTemplateUploadPage from './pages/registerTemplateUploadPage'
 import RegisterTemplateConfirmationPage from './pages/registerTemplateConfirmationPage'
+import RequestReportSubjectIdPage from './pages/requestReportSubjectIdPage'
+import RequestReportInputsPage from './pages/requestReportInputsPage'
 
 export { resetStubs }
 
@@ -42,6 +44,15 @@ export const verifyOnPage = async <T extends AbstractPage>(
   const pageInstance = new constructor(page)
   await expect(pageInstance.header).toBeVisible()
   return pageInstance
+}
+
+export const requestReportInputs = async (page: Page) => {
+  await login(page, { roles: [USER_ROLE] })
+  await page.goto('/subject-id')
+  const subjectIdPage = await verifyOnPage(page, RequestReportSubjectIdPage)
+  await subjectIdPage.inputSubjectId('A1111AA')
+  await subjectIdPage.continue()
+  return verifyOnPage(page, RequestReportInputsPage)
 }
 
 export const registerTemplateUpload = async (page: Page, { serviceId = '1' }) => {
