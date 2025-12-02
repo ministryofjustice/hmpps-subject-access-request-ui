@@ -28,7 +28,8 @@
     "int-test": "npx playwright test",
     "int-test-ui": "npx playwright test --ui",
     "int-test-init:ci": "npx playwright install",
-    "clean": "rm -rf dist build node_modules stylesheets"
+    "clean": "rm -rf dist build node_modules stylesheets",
+    "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "engines": {
     "node": "^22",
@@ -100,7 +101,7 @@
     "@ons/design-system": "^73.0.3",
     "@types/jsonwebtoken": "^9.0.10",
     "agentkeepalive": "^4.6.0",
-    "applicationinsights": "^3.7.0",
+    "applicationinsights": "^2.9.8",
     "axios": "^1.13.0",
     "body-parser": "^2.2.0",
     "bunyan": "^1.8.15",
@@ -134,6 +135,7 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.3",
     "@playwright/test": "^1.56.1",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
