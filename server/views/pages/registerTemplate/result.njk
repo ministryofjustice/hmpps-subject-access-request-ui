@@ -7,7 +7,7 @@
 
     <div class="govuk-panel govuk-panel--confirmation" id="confirmation-panel">
         <h1 class="govuk-panel__title">
-            New template version for {{ selectedService.label }} successfully registered
+            New template version for {{ selectedProduct.label }} successfully registered
         </h1>
     </div>
 
@@ -17,8 +17,8 @@
         },
         rows: [
             {
-                key: { text: "Service" },
-                value: { text: selectedService.label }
+                key: { text: "Product" },
+                value: { text: selectedProduct.label }
             },
             {
                 key: { text: "Version" },
@@ -37,10 +37,11 @@
 
     <section id="next-steps">
         <h2 class="govuk-heading-m">What happens next</h2>
-        {% if selectedService.templateMigrated %}
-            <p class="govuk-body">Once the service starts returning this template then it will be used to generate reports.</p>
+        {% if selectedProduct.templateMigrated %}
+            <p class="govuk-body">Once the product starts returning this template, it will be used to generate reports.</p>
         {% else %}
-            <p class="govuk-body">Once the service configuration has been updated to indicate this service is migrated and the service starts returning this template then it will be used to generate reports.</p>
+            <p class="govuk-body">This product has not been configured as having its template migrated.
+                Once this configuration is updated and the product starts returning this template, it will be used to generate reports.</p>
         {% endif %}
 
 

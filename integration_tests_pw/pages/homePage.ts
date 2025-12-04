@@ -13,7 +13,7 @@ export default class HomePage extends AbstractPage {
   readonly registerTemplateLink: Locator
 
   constructor(page: Page) {
-    super(page, 'Subject Access Request Service')
+    super(page, 'Subject Access Request Product')
     this.sarActionCards = this.page.locator('.sar-card-group')
     this.requestReportLink = this.page.locator('#request-a-report')
     this.viewReportsLink = this.page.locator('#view-reports')

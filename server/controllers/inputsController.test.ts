@@ -81,13 +81,13 @@ describe('saveInputs', () => {
   const res: Response = {
     redirect: jest.fn(),
   } as unknown as Response
-  test('persists values to the session and redirects to service selection', () => {
+  test('persists values to the session and redirects to product selection', () => {
     InputsController.saveInputs(baseReq, res)
     expect(baseReq.session.userData.dateFrom).toBe('30/12/2022')
     expect(baseReq.session.userData.dateTo).toBe('30/12/2022')
     expect(baseReq.session.userData.caseReference).toBe('mockedCaseReference')
     expect(res.redirect).toHaveBeenCalled()
-    expect(res.redirect).toHaveBeenCalledWith('/service-selection')
+    expect(res.redirect).toHaveBeenCalledWith('/product-selection')
   })
 
   test('overwrites previous session data if present', () => {
@@ -107,7 +107,7 @@ describe('saveInputs', () => {
     expect(req.session.userData.dateTo).toBe('30/12/2022')
     expect(req.session.userData.caseReference).toBe('mockedCaseReference')
     expect(res.redirect).toHaveBeenCalled()
-    expect(res.redirect).toHaveBeenCalledWith('/service-selection')
+    expect(res.redirect).toHaveBeenCalledWith('/product-selection')
   })
 
   test('redirects to summary if all answers have been provided', () => {

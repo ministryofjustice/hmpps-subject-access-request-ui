@@ -1,18 +1,18 @@
 import type { Request } from 'express'
 import nock from 'nock'
 import config from '../config'
-import serviceConfigsService from './serviceConfigurations'
+import productConfigsService from './productConfigurations'
 
 let sarApiMock: nock.Scope
-let serviceConfigurationList: Service[]
-let serviceConfigurationListWithoutExclusions: Service[]
+let productConfigurationList: Product[]
+let productConfigurationListWithoutExclusions: Product[]
 const requestUser = { token: 'token-abc123', username: '', authSource: '' }
 
 beforeEach(() => {
   sarApiMock = nock(`${config.apis.subjectAccessRequest.url}`, {
     reqheaders: { Authorization: `Bearer ${requestUser.token}` },
   })
-  serviceConfigurationListWithoutExclusions = [
+  productConfigurationListWithoutExclusions = [
     {
       id: 'e46c70cd-a2c3-4692-8a95-95905f06d4bf',
       name: 'hmpps-prisoner-search',
@@ -30,7 +30,7 @@ beforeEach(() => {
       order: 2,
     },
   ]
-  serviceConfigurationList = serviceConfigurationListWithoutExclusions.concat([
+  productConfigurationList = productConfigurationListWithoutExclusions.concat([
     {
       id: 'e46c70cd-a2c3-4692-8a95-95905f06d4bf',
       name: 'G1',
@@ -63,11 +63,11 @@ afterEach(() => {
   nock.cleanAll()
 })
 
-describe('getServiceList', () => {
+describe('getProductList', () => {
   const req: Request = {
     user: requestUser,
-    session: { serviceList: [], selectedList: [] },
-    body: { selectedservices: [] },
+    session: { productList: [], selectedList: [] },
+    body: { selectedproducts: [] },
   } as unknown as Request
 
   test.each([
@@ -77,29 +77,29 @@ describe('getServiceList', () => {
   ])('should return error: "$expected" on status: $status', async ({ status, expected }) => {
     sarApiMock.get('/api/services').reply(status, { message: expected })
 
-    await expect(() => serviceConfigsService.getServiceList(req)).rejects.toThrow(expected)
+    await expect(() => productConfigsService.getProductList(req)).rejects.toThrow(expected)
   })
 
   test('API response with empty list is successful', async () => {
     sarApiMock.get('/api/services').reply(200, [])
 
-    const result = await serviceConfigsService.getServiceList(req)
+    const result = await productConfigsService.getProductList(req)
     expect(result).toStrictEqual([])
   })
 
-  test('returns service list', async () => {
-    sarApiMock.get('/api/services').reply(200, serviceConfigurationList)
+  test('returns product list', async () => {
+    sarApiMock.get('/api/services').reply(200, productConfigurationList)
 
-    const result = await serviceConfigsService.getServiceList(req)
-    expect(result).toStrictEqual(serviceConfigurationList)
+    const result = await productConfigsService.getProductList(req)
+    expect(result).toStrictEqual(productConfigurationList)
   })
 })
 
-describe('getTemplateRegistrationServiceList', () => {
+describe('getTemplateRegistrationProductList', () => {
   const req: Request = {
     user: requestUser,
-    session: { serviceList: [], selectedList: [] },
-    body: { selectedservices: [] },
+    session: { productList: [], selectedList: [] },
+    body: { selectedproducts: [] },
   } as unknown as Request
 
   test.each([
@@ -109,27 +109,27 @@ describe('getTemplateRegistrationServiceList', () => {
   ])('should return error: "$expected" on status: $status', async ({ status, expected }) => {
     sarApiMock.get('/api/services').reply(status, { message: expected })
 
-    await expect(() => serviceConfigsService.getTemplateRegistrationServiceList(req)).rejects.toThrow(expected)
+    await expect(() => productConfigsService.getTemplateRegistrationProductList(req)).rejects.toThrow(expected)
   })
 
   test('API response with empty list is successful', async () => {
     sarApiMock.get('/api/services').reply(200, [])
 
-    const result = await serviceConfigsService.getTemplateRegistrationServiceList(req)
+    const result = await productConfigsService.getTemplateRegistrationProductList(req)
     expect(result).toStrictEqual([])
   })
 
-  test('returns service list', async () => {
-    sarApiMock.get('/api/services').reply(200, serviceConfigurationListWithoutExclusions)
+  test('returns product list', async () => {
+    sarApiMock.get('/api/services').reply(200, productConfigurationListWithoutExclusions)
 
-    const result = await serviceConfigsService.getTemplateRegistrationServiceList(req)
-    expect(result).toStrictEqual(serviceConfigurationListWithoutExclusions)
+    const result = await productConfigsService.getTemplateRegistrationProductList(req)
+    expect(result).toStrictEqual(productConfigurationListWithoutExclusions)
   })
 
-  test('returns service list without excluded services', async () => {
-    sarApiMock.get('/api/services').reply(200, serviceConfigurationList)
+  test('returns product list without excluded products', async () => {
+    sarApiMock.get('/api/services').reply(200, productConfigurationList)
 
-    const result = await serviceConfigsService.getTemplateRegistrationServiceList(req)
-    expect(result).toStrictEqual(serviceConfigurationListWithoutExclusions)
+    const result = await productConfigsService.getTemplateRegistrationProductList(req)
+    expect(result).toStrictEqual(productConfigurationListWithoutExclusions)
   })
 })

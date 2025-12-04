@@ -3,7 +3,7 @@ import tokenVerification from './mockApis/tokenVerification'
 import hmppsAuth, { type UserToken } from './mockApis/hmppsAuth'
 import { resetStubs } from './mockApis/wiremock'
 import AbstractPage from './pages/abstractPage'
-import RegisterTemplateServicePage from './pages/registerTemplateServicePage'
+import RegisterTemplateProductPage from './pages/registerTemplateProductPage'
 import RegisterTemplateUploadPage from './pages/registerTemplateUploadPage'
 import RegisterTemplateConfirmationPage from './pages/registerTemplateConfirmationPage'
 import RequestReportSubjectIdPage from './pages/requestReportSubjectIdPage'
@@ -55,23 +55,23 @@ export const requestReportInputs = async (page: Page) => {
   return verifyOnPage(page, RequestReportInputsPage)
 }
 
-export const registerTemplateUpload = async (page: Page, { serviceId = '1' }) => {
+export const registerTemplateUpload = async (page: Page, { productId = '1' }) => {
   await login(page, { roles: [REGISTER_TEMPLATE_ROLE] })
-  await page.goto('/register-template/select-service')
-  const selectServicePage = await verifyOnPage(page, RegisterTemplateServicePage)
-  await selectServicePage.selectService(serviceId)
-  await selectServicePage.continue()
+  await page.goto('/register-template/select-product')
+  const selectProductPage = await verifyOnPage(page, RegisterTemplateProductPage)
+  await selectProductPage.selectProduct(productId)
+  await selectProductPage.continue()
 }
 
-export const registerTemplateConfirmation = async (page: Page, { serviceId = '1' }) => {
-  await registerTemplateUpload(page, { serviceId })
+export const registerTemplateConfirmation = async (page: Page, { productId = '1' }) => {
+  await registerTemplateUpload(page, { productId })
   const uploadPage = await verifyOnPage(page, RegisterTemplateUploadPage)
   await uploadPage.selectTemplateFile('template.mustache')
   await uploadPage.continue()
 }
 
-export const registerTemplateResult = async (page: Page, { serviceId = '1' }) => {
-  await registerTemplateConfirmation(page, { serviceId })
+export const registerTemplateResult = async (page: Page, { productId = '1' }) => {
+  await registerTemplateConfirmation(page, { productId })
   const confirmationPage = await verifyOnPage(page, RegisterTemplateConfirmationPage)
   await confirmationPage.confirm()
 }

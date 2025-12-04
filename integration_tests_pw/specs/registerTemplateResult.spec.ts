@@ -9,7 +9,7 @@ import HomePage from '../pages/homePage'
 
 test.describe('Register template result', () => {
   test.beforeEach(async () => {
-    await sarApi.stubGetServices()
+    await sarApi.stubGetProducts()
     await sarApi.stubGetTemplateVersions({})
     await sarApi.stubUploadTemplateFile({})
   })
@@ -42,7 +42,7 @@ test.describe('Register template result', () => {
     const templateResultPage = await verifyOnPage(page, RegisterTemplateResultPage)
 
     await expect(templateResultPage.header).toHaveText('New template version for Service One successfully registered')
-    await expect(templateResultPage.serviceSummary).toContainText('Service One')
+    await expect(templateResultPage.productSummary).toContainText('Service One')
     await expect(templateResultPage.versionSummary).toContainText('2')
     await expect(templateResultPage.filehashSummary).toContainText('456def')
     await expect(templateResultPage.statusSummary).toContainText('PENDING')

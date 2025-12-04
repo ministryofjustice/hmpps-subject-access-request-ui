@@ -2,7 +2,7 @@ import type { Request, Response } from 'express'
 import RegisterTemplateUploadController from './registerTemplateUploadController'
 import templateVersionsService from '../services/templateVersions'
 
-const serviceVersions = [
+const productVersions = [
   {
     id: '123',
     serviceName: 'service-one',
@@ -20,7 +20,7 @@ const serviceVersions = [
     status: 'PUBLISHED',
   },
 ]
-const selectedService = {
+const selectedProduct = {
   id: '12345',
   name: 'service-one',
   url: 'http://service-one',
@@ -36,28 +36,28 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('getServiceTemplateVersion', () => {
+describe('getProductTemplateVersion', () => {
   const req: Request = {
-    session: { selectedService },
+    session: { selectedProduct },
   } as unknown as Request
   const res: Response = {
     render: jest.fn(),
   } as unknown as Response
 
-  test('renders upload page after retrieving selected service version', async () => {
-    templateVersionsService.getTemplateVersions = jest.fn().mockReturnValue(serviceVersions)
+  test('renders upload page after retrieving selected product version', async () => {
+    templateVersionsService.getTemplateVersions = jest.fn().mockReturnValue(productVersions)
 
-    await RegisterTemplateUploadController.getServiceTemplateVersion(req, res)
+    await RegisterTemplateUploadController.getProductTemplateVersion(req, res)
 
-    expect(templateVersionsService.getTemplateVersions).toHaveBeenCalledWith(selectedService, req)
+    expect(templateVersionsService.getTemplateVersions).toHaveBeenCalledWith(selectedProduct, req)
     expect(res.render).toHaveBeenCalledWith(
       'pages/registerTemplate/upload',
       expect.objectContaining({
-        versionList: serviceVersions,
-        selectedService,
+        versionList: productVersions,
+        selectedProduct,
       }),
     )
-    expect(req.session.versionList).toEqual(serviceVersions)
+    expect(req.session.versionList).toEqual(productVersions)
   })
 })
 
@@ -71,7 +71,7 @@ describe('uploadTemplate', () => {
 
   beforeEach(() => {
     req = {
-      session: { selectedService, versionList: serviceVersions },
+      session: { selectedProduct, versionList: productVersions },
       file: {},
       body: {},
     } as unknown as Request
@@ -97,8 +97,8 @@ describe('uploadTemplate', () => {
       'pages/registerTemplate/upload',
       expect.objectContaining({
         uploadError: 'Please select template file to upload',
-        versionList: serviceVersions,
-        selectedService,
+        versionList: productVersions,
+        selectedProduct,
       }),
     )
   })
@@ -113,8 +113,8 @@ describe('uploadTemplate', () => {
       'pages/registerTemplate/upload',
       expect.objectContaining({
         uploadError: 'Please ensure a mustache file is selected',
-        versionList: serviceVersions,
-        selectedService,
+        versionList: productVersions,
+        selectedProduct,
       }),
     )
   })

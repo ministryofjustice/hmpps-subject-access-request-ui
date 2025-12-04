@@ -1,4 +1,4 @@
-interface Service {
+interface Product {
   id: string
   name: string
   url: string
@@ -10,7 +10,7 @@ interface Service {
 
 interface Environment {
   environment: string
-  services: Service[]
+  services: Product[]
 }
 
 interface CatalogueData {

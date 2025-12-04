@@ -1,12 +1,12 @@
 import type { Request, Response } from 'express'
-import ServiceSelectionController from './serviceSelectionController'
-import serviceConfigsService from '../services/serviceConfigurations'
+import ProductSelectionController from './productSelectionController'
+import productConfigsService from '../services/productConfigurations'
 
-let serviceConfigurationList: Service[]
+let productConfigurationList: Product[]
 const requestUser = { token: 'token-abc123', username: '', authSource: '' }
 
 beforeEach(() => {
-  serviceConfigurationList = [
+  productConfigurationList = [
     {
       id: 'e46c70cd-a2c3-4692-8a95-95905f06d4bf',
       name: 'hmpps-prisoner-search',
@@ -24,82 +24,82 @@ beforeEach(() => {
       order: 2,
     },
   ]
-  serviceConfigsService.getServiceList = jest.fn().mockReturnValue(serviceConfigurationList)
+  productConfigsService.getProductList = jest.fn().mockReturnValue(productConfigurationList)
 })
 
 afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('getServices', () => {
+describe('getProducts', () => {
   // @ts-expect-error stubbing res.render
   const res: Response = {
     render: jest.fn(),
   }
 
   test('renders a response with default inputs', async () => {
-    serviceConfigsService.getServiceList = jest.fn().mockReturnValue(serviceConfigurationList)
+    productConfigsService.getProductList = jest.fn().mockReturnValue(productConfigurationList)
 
     const req: Request = {
       user: requestUser,
       // @ts-expect-error stubbing session
       session: {
-        serviceList: [],
+        productList: [],
       },
-      body: { selectedservices: [] },
+      body: { selectedproducts: [] },
     }
-    await ServiceSelectionController.getServices(req, res)
+    await ProductSelectionController.getProducts(req, res)
     expect(res.render).toHaveBeenCalled()
     expect(res.render).toHaveBeenCalledWith(
-      'pages/serviceSelection',
+      'pages/productSelection',
       expect.objectContaining({
-        serviceList: expect.anything(),
+        productList: expect.anything(),
       }),
     )
   })
 
   test('renders a response with persisted values from session', async () => {
-    serviceConfigsService.getServiceList = jest.fn().mockReturnValue(serviceConfigurationList)
+    productConfigsService.getProductList = jest.fn().mockReturnValue(productConfigurationList)
 
     const req: Request = {
       user: requestUser,
       // @ts-expect-error stubbing session
-      session: { serviceList: [], selectedList: [{ name: '1' }] },
-      body: { selectedservices: [] },
+      session: { productList: [], selectedList: [{ name: '1' }] },
+      body: { selectedproducts: [] },
     }
-    await ServiceSelectionController.getServices(req, res)
+    await ProductSelectionController.getProducts(req, res)
     expect(res.render).toHaveBeenCalled()
     expect(res.render).toHaveBeenCalledWith(
-      'pages/serviceSelection',
+      'pages/productSelection',
       expect.objectContaining({
-        serviceList: expect.anything(),
+        productList: expect.anything(),
         selectedList: expect.arrayContaining(['1']),
       }),
     )
   })
 
-  test('renders an error if no services found', async () => {
-    serviceConfigsService.getServiceList = jest.fn().mockReturnValue([])
+  test('renders an error if no products found', async () => {
+    productConfigsService.getProductList = jest.fn().mockReturnValue([])
 
     const req: Request = {
       user: requestUser,
       // @ts-expect-error stubbing session
-      session: { serviceList: [], selectedList: [{ name: '1' }] },
-      body: { selectedservices: [] },
+      session: { productList: [], selectedList: [{ name: '1' }] },
+      body: { selectedproducts: [] },
     }
-    await ServiceSelectionController.getServices(req, res)
+    await ProductSelectionController.getProducts(req, res)
     expect(res.render).toHaveBeenCalled()
     expect(res.render).toHaveBeenCalledWith(
-      'pages/serviceSelection',
+      'pages/productSelection',
       expect.objectContaining({
-        serviceList: expect.anything(),
-        selectedServicesError: `No services found. A report cannot be generated.`,
+        productList: expect.anything(),
+        selectedProductsError: `No products found. A report cannot be generated.`,
       }),
     )
   })
 })
 
-describe('selectServices', () => {
+describe('selectProducts', () => {
   // @ts-expect-error stubbing res
   const res: Response = {
     redirect: jest.fn(),
@@ -108,17 +108,17 @@ describe('selectServices', () => {
     const baseReq: Request = {
       // @ts-expect-error stubbing session
       session: {
-        serviceList: [
+        productList: [
           { id: '1', name: 'service-1', label: 'Service 1', url: 'service-1.com', order: 1, enabled: true },
           { id: '2', name: 'service-2', label: 'Service 2', url: 'service-2.com', order: 2, enabled: true },
         ],
         selectedList: [],
       },
       body: {
-        selectedServices: ['service-1'],
+        selectedProducts: ['service-1'],
       },
     }
-    await ServiceSelectionController.selectServices(baseReq, res)
+    await ProductSelectionController.selectProducts(baseReq, res)
     expect(baseReq.session.selectedList[0].name).toBe('service-1')
     expect(baseReq.session.selectedList[0].label).toBe('Service 1')
     expect(res.redirect).toHaveBeenCalled()
@@ -129,7 +129,7 @@ describe('selectServices', () => {
     const req: Request = {
       // @ts-expect-error stubbing session
       session: {
-        serviceList: [
+        productList: [
           { id: '1', name: 'service-1', label: 'Service 1', url: 'service-1.com', order: 1, enabled: true },
           { id: '2', name: 'service-2', label: 'Service 2', url: 'service-2.com', order: 2, enabled: true },
         ],
@@ -138,10 +138,10 @@ describe('selectServices', () => {
         ],
       },
       body: {
-        selectedServices: ['service-2'],
+        selectedProducts: ['service-2'],
       },
     }
-    ServiceSelectionController.selectServices(req, res)
+    ProductSelectionController.selectProducts(req, res)
     expect(req.session.selectedList[0].name).toBe('service-2')
     expect(req.session.selectedList[0].label).toBe('Service 2')
     expect(res.redirect).toHaveBeenCalled()

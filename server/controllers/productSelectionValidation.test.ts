@@ -1,6 +1,6 @@
-import ServiceSelectionValidation from './serviceSelectionValidation'
+import ProductSelectionValidation from './productSelectionValidation'
 
-const serviceList: Service[] = [
+const productList: Product[] = [
   { id: '1', name: 'test1', label: 'Test one', url: 'http://foo.boo', order: 1, enabled: true },
   { id: '2', name: 'test2', label: 'Test two', url: 'http://foo.boo2', order: 2, enabled: true },
   { id: '3', name: 'test3', label: 'Test three', url: 'http://foo.boo3', order: 3, enabled: true },
@@ -8,8 +8,8 @@ const serviceList: Service[] = [
 
 describe('validateSelection', () => {
   const errors = {
-    select: 'At least one service must be selected',
-    invalidSelection: 'Invalid service selection',
+    select: 'At least one product must be selected',
+    invalidSelection: 'Invalid product selection',
   }
   test('checks for no selections correctly', () => {
     const testCases = [
@@ -17,11 +17,11 @@ describe('validateSelection', () => {
       { input: ['test1'], expected: '' },
     ]
     testCases.forEach(testCase => {
-      const selectedServicesError = ServiceSelectionValidation.validateSelection(testCase.input, serviceList)
-      expect(selectedServicesError).toEqual(testCase.expected)
+      const selectedProductsError = ProductSelectionValidation.validateSelection(testCase.input, productList)
+      expect(selectedProductsError).toEqual(testCase.expected)
     })
   })
-  test('checks for invalid service selection', () => {
+  test('checks for invalid product selection', () => {
     const testCases = [
       { input: ['randomId'], expected: errors.invalidSelection },
       { input: ['test1', 'randomId'], expected: errors.invalidSelection },
@@ -30,16 +30,16 @@ describe('validateSelection', () => {
       { input: ['test1', 'test3'], expected: '' },
     ]
     testCases.forEach(testCase => {
-      const selectedServicesError = ServiceSelectionValidation.validateSelection(testCase.input, serviceList)
-      expect(selectedServicesError).toEqual(testCase.expected)
+      const selectedProductsError = ProductSelectionValidation.validateSelection(testCase.input, productList)
+      expect(selectedProductsError).toEqual(testCase.expected)
     })
   })
 })
 
 describe('validateSingleSelection', () => {
   const errors = {
-    select: 'A service must be selected',
-    invalidSelection: 'Invalid service selection',
+    select: 'A product must be selected',
+    invalidSelection: 'Invalid product selection',
   }
   test('checks for no selection correctly', () => {
     const testCases = [
@@ -50,18 +50,18 @@ describe('validateSingleSelection', () => {
       { input: '3', expected: '' },
     ]
     testCases.forEach(testCase => {
-      const selectedServicesError = ServiceSelectionValidation.validateSingleSelection(testCase.input, serviceList)
-      expect(selectedServicesError).toEqual(testCase.expected)
+      const selectedProductsError = ProductSelectionValidation.validateSingleSelection(testCase.input, productList)
+      expect(selectedProductsError).toEqual(testCase.expected)
     })
   })
-  test('checks for invalid service selection', () => {
+  test('checks for invalid product selection', () => {
     const testCases = [
       { input: '999', expected: errors.invalidSelection },
       { input: '1', expected: '' },
     ]
     testCases.forEach(testCase => {
-      const selectedServicesError = ServiceSelectionValidation.validateSingleSelection(testCase.input, serviceList)
-      expect(selectedServicesError).toEqual(testCase.expected)
+      const selectedProductsError = ProductSelectionValidation.validateSingleSelection(testCase.input, productList)
+      expect(selectedProductsError).toEqual(testCase.expected)
     })
   })
 })

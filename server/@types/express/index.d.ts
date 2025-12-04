@@ -11,11 +11,11 @@ export declare module 'express-session' {
     returnTo: string
     nowInMinutes: number
     userData: UserData
-    serviceList: Service[]
-    selectedList: Service[]
-    selectedService: Service
-    versionList: ServiceVersion[]
-    newVersion: ServiceVersion
+    productList: Product[]
+    selectedList: Product[]
+    selectedProduct: Product
+    versionList: ProductVersion[]
+    newVersion: ProductVersion
     templateName: string
     templateFileBase64: string
     subjectAccessRequests: SubjectAccessRequest[]

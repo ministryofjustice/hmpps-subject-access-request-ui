@@ -1,6 +1,6 @@
 import { stubFor } from './wiremock'
 
-const stubGetServicesRequest = responseBody => {
+const stubGetProductsRequest = responseBody => {
   return stubFor({
     request: {
       method: 'GET',
@@ -16,4 +16,4 @@ const stubGetServicesRequest = responseBody => {
   })
 }
 
-export default { stubGetServicesRequest }
+export default { stubGetProductsRequest }

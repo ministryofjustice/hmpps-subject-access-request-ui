@@ -104,7 +104,7 @@ test.describe('Homepage', () => {
     homepage.page.url().match(/admin$/)
   })
 
-  test('Redirects to /register-template/select-service on clicking Register Template link', async ({ page }) => {
+  test('Redirects to /register-template/select-product on clicking Register Template link', async ({ page }) => {
     await login(page)
     await page.goto('/')
     const homepage = await verifyOnPage(page, HomePage)

@@ -13,12 +13,14 @@ export default class RegisterTemplateUploadPage extends AbstractPage {
 
   readonly continueButton: Locator
 
+  readonly warningAlert: Locator
+
   readonly notificationBanner: Locator
 
   readonly errorSummary: Locator
 
   constructor(page: Page) {
-    super(page, 'Upload Template for ')
+    super(page, 'Upload template for ')
     this.backLink = this.page.locator('a', { hasText: 'Back' })
     this.versionTable = this.page.locator('table', {
       hasText: 'Latest registered template (including Pending if exists)',
@@ -26,6 +28,7 @@ export default class RegisterTemplateUploadPage extends AbstractPage {
     this.templateFileInput = this.page.locator('#template-input')
     this.templateFileInputError = this.page.locator('#template-error')
     this.continueButton = this.page.locator('button', { hasText: 'Continue' })
+    this.warningAlert = this.page.locator('.moj-alert--warning')
     this.notificationBanner = this.page.locator('.govuk-notification-banner', { hasText: 'Important' })
     this.errorSummary = this.page.locator('.govuk-error-summary', { hasText: 'There is a problem' })
   }

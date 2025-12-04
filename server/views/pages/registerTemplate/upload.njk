@@ -6,6 +6,7 @@
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
 {% block content %}
 
@@ -27,20 +28,23 @@
 
     {{ govukBackLink({
         text: "Back",
-        href: "/register-template/select-service"
+        href: "/register-template/select-product"
     }) }}
 
-    {% if not selectedService.templateMigrated %}
-        {{ govukNotificationBanner({
-            text: 'This service has not been configured as having its template migrated yet.
-                   A template can still be registered but the configuration will need to be updated before it will be able to be used.'
+    {% if not selectedProduct.templateMigrated %}
+        {{ mojAlert({
+            variant: "warning",
+            title: "This product has not been configured as having its template migrated.",
+            showTitleAsHeading: true,
+            dismissible: false,
+            text: 'A template can still be registered but the configuration will need to be updated before it will be used.'
         }) }}
     {% endif %}
 
     {% if versionList.length > 0 and versionList[0].status == 'PENDING' %}
     {{ govukNotificationBanner({
-        text: 'The latest template version registered for this service has not been activated yet.
-        Registering a new template will override this template version instead of creating a new one.'
+        text: 'The latest template version registered for this product has not been activated.
+        Registering a template will override this inactive version.'
     }) }}
     {% endif %}
 
@@ -49,12 +53,12 @@
         <div class="govuk-form-group">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">
-                    Upload Template for {{ selectedService.label }}
+                    Upload template for {{ selectedProduct.label }}
                 </h1>
             </legend>
 
             {% if versionList.length == 0 %}
-                <div class="govuk-table__caption--m">No current registered template</div>
+                <div class="govuk-table__caption--m">No template currently registered.</div>
             {% else %}
 
                 {% set displayRows = [] %}
@@ -92,9 +96,9 @@
             {% endif %}
 
             <div class="govuk-body">
-                Please provide the template to register by uploading it below.
-                Once confirmed a new version will be generated using the hash of the supplied template file.
-                This will allow that template provided by this service to be used to generate a subject access report.
+                Upload your template file to register it for use in the HMPPS Subject Access Request product.
+                Once uploaded we’ll create a new version using the file’s hash.
+                This version can then be used to generate a subject access report.
             </div>
 
             {{ govukFileUpload({

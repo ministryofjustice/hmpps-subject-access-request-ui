@@ -1,7 +1,7 @@
 import Page from '../pages/page'
 import AuthSignInPage from '../pages/authSignIn'
 import SummaryPage from '../pages/summary'
-import ServiceSelectionPage from '../pages/serviceSelection'
+import ProductSelectionPage from '../pages/productSelection'
 import InputsPage from '../pages/inputs'
 import SubjectIdPage from '../pages/subjectId'
 
@@ -9,7 +9,7 @@ context('Summary', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { roles: ['ROLE_SAR_USER_ACCESS'] })
-    cy.task('stubGetServicesRequest', [
+    cy.task('stubGetProductsRequest', [
       {
         id: 'ae752767-c489-4190-ae5e-811cb0935dfe',
         name: 'create-and-vary-a-licence-api',
@@ -68,11 +68,11 @@ context('Summary', () => {
     summaryPage.reportSummaryBox().contains('Query date range')
   })
 
-  it('Details summarised include selected services', () => {
+  it('Details summarised include selected products', () => {
     cy.signIn()
     cy.visit('/summary')
     const summaryPage = Page.verifyOnPage(SummaryPage)
-    summaryPage.reportSummaryBox().contains('Services selected')
+    summaryPage.reportSummaryBox().contains('Products selected')
   })
 
   it('Subject ID can be edited at /subject-id', () => {
@@ -99,20 +99,20 @@ context('Summary', () => {
     cy.location('pathname').should('eq', '/inputs')
   })
 
-  it('Selected services can be edited at /service-selection', () => {
+  it('Selected products can be edited at /product-selection', () => {
     cy.signIn()
     cy.visit('/summary')
     const summaryPage = Page.verifyOnPage(SummaryPage)
-    summaryPage.reportSummaryBox().get('#change-services').click()
-    cy.location('pathname').should('eq', '/service-selection')
+    summaryPage.reportSummaryBox().get('#change-products').click()
+    cy.location('pathname').should('eq', '/product-selection')
   })
 
-  it('Selected services are carried through from /service-selection', () => {
+  it('Selected products are carried through from /product-selection', () => {
     cy.signIn()
-    cy.visit('/service-selection')
-    const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
-    serviceSelectionPage.checkAllCheckBox().click({ force: true })
-    serviceSelectionPage.submitButton().click()
+    cy.visit('/product-selection')
+    const productSelectionPage = Page.verifyOnPage(ProductSelectionPage)
+    productSelectionPage.checkAllCheckBox().click({ force: true })
+    productSelectionPage.submitButton().click()
     const summaryPage = Page.verifyOnPage(SummaryPage)
     summaryPage.reportSummaryBox().contains('Create and Vary a Licence')
   })
@@ -129,9 +129,9 @@ context('Summary', () => {
     inputsPage.datePickerTo().clear().type('01/01/2021')
     inputsPage.caseReferenceTextbox().clear().type('exampleCaseReference')
     inputsPage.continueButton().click()
-    const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
-    serviceSelectionPage.checkAllCheckBox().click({ force: true })
-    serviceSelectionPage.submitButton().click()
+    const productSelectionPage = Page.verifyOnPage(ProductSelectionPage)
+    productSelectionPage.checkAllCheckBox().click({ force: true })
+    productSelectionPage.submitButton().click()
     const summaryPage = Page.verifyOnPage(SummaryPage)
     summaryPage.reportSummaryBox().contains('exampleCaseReference')
     summaryPage.reportSummaryBox().contains('01/01/2001')
@@ -148,9 +148,9 @@ context('Summary', () => {
     inputsPage.datePickerTo().clear().type('01/01/2021')
     inputsPage.caseReferenceTextbox().clear().type('exampleCaseReference')
     inputsPage.continueButton().click()
-    const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
-    serviceSelectionPage.checkAllCheckBox().click({ force: true })
-    serviceSelectionPage.submitButton().click()
+    const productSelectionPage = Page.verifyOnPage(ProductSelectionPage)
+    productSelectionPage.checkAllCheckBox().click({ force: true })
+    productSelectionPage.submitButton().click()
     const summaryPage = Page.verifyOnPage(SummaryPage)
     summaryPage.reportSummaryBox().contains('A1111AA')
   })
@@ -184,9 +184,9 @@ context('Summary', () => {
       inputsPage.datePickerTo().clear().type('01/01/2021')
       inputsPage.caseReferenceTextbox().clear().type('exampleCaseReference')
       inputsPage.continueButton().click()
-      const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
-      serviceSelectionPage.checkAllCheckBox().click({ force: true })
-      serviceSelectionPage.submitButton().click()
+      const productSelectionPage = Page.verifyOnPage(ProductSelectionPage)
+      productSelectionPage.checkAllCheckBox().click({ force: true })
+      productSelectionPage.submitButton().click()
       Page.verifyOnPage(SummaryPage)
       cy.visit('/subject-id')
       const revisitedSubjectIdPage = Page.verifyOnPage(SubjectIdPage)
@@ -217,9 +217,9 @@ context('Summary', () => {
     inputsPage.datePickerTo().clear().type('01/01/2021')
     inputsPage.caseReferenceTextbox().clear().type('exampleCaseReference')
     inputsPage.continueButton().click()
-    const serviceSelectionPage = Page.verifyOnPage(ServiceSelectionPage)
-    serviceSelectionPage.checkAllCheckBox().click({ force: true })
-    serviceSelectionPage.submitButton().click()
+    const productSelectionPage = Page.verifyOnPage(ProductSelectionPage)
+    productSelectionPage.checkAllCheckBox().click({ force: true })
+    productSelectionPage.submitButton().click()
     const summaryPage = Page.verifyOnPage(SummaryPage)
     summaryPage.acceptConfirmButton().click()
     cy.wait('@postReportDetails')

@@ -43,7 +43,7 @@ test.describe('Request report inputs', () => {
     await expect(inputsPage.errorSummary).not.toBeVisible()
   })
 
-  test('Submits user inputs and redirects to /service-selection', async ({ page }) => {
+  test('Submits user inputs and redirects to /product-selection', async ({ page }) => {
     await requestReportInputs(page)
     const inputsPage = await verifyOnPage(page, RequestReportInputsPage)
 
@@ -59,7 +59,7 @@ test.describe('Request report inputs', () => {
     expect(requestBody).toContain('dateFrom=')
     expect(requestBody).toContain('dateTo=')
     expect(requestBody).toContain('caseReference=')
-    expect(inputsPage.page.url()).toMatch(/service-selection$/)
+    expect(inputsPage.page.url()).toMatch(/product-selection$/)
   })
 
   test('Persists user inputs when returning to inputs page', async ({ page }) => {
