@@ -5,7 +5,7 @@ import { auditService } from '@ministryofjustice/hmpps-audit-client'
 import { appWithAllRoutes, user } from './testutils/appSetup'
 import reportService from '../services/report'
 import adminHealthService from '../services/adminHealth'
-import serviceConfigsService from '../services/serviceConfigurations'
+import productConfigsService from '../services/productConfigurations'
 import templateVersionService from '../services/templateVersions'
 import { HmppsUser } from '../interfaces/hmppsUser'
 
@@ -38,7 +38,7 @@ beforeEach(() => {
   regTemplateUserApp = appWithAllRoutes({
     userSupplier: (): HmppsUser => registerTemplateUser,
   })
-  const serviceConfigs = [
+  const productConfigs = [
     {
       id: 'hmpps-prisoner-search',
       name: 'Prisoner Search',
@@ -52,8 +52,8 @@ beforeEach(() => {
       disabled: false,
     },
   ]
-  serviceConfigsService.getServiceList = jest.fn().mockReturnValue(serviceConfigs)
-  serviceConfigsService.getTemplateRegistrationServiceList = jest.fn().mockReturnValue(serviceConfigs)
+  productConfigsService.getProductList = jest.fn().mockReturnValue(productConfigs)
+  productConfigsService.getTemplateRegistrationProductList = jest.fn().mockReturnValue(productConfigs)
   const templateVersion = {
     createdDate: '2025-11-13T11:34:45Z',
     fileHash: 'abc',
@@ -149,7 +149,7 @@ describe('GET /', () => {
       .get('/')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Subject Access Request Service')
+        expect(res.text).toContain('Subject Access Request Product')
         expect(res.text).toContain('Request a report')
         expect(res.text).toContain('View reports')
         expect(res.text).not.toContain('Admin')
@@ -162,7 +162,7 @@ describe('GET /', () => {
       .get('/')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Subject Access Request Service')
+        expect(res.text).toContain('Subject Access Request Product')
         expect(res.text).not.toContain('Request a report')
         expect(res.text).not.toContain('View reports')
         expect(res.text).toContain('Admin')
@@ -175,7 +175,7 @@ describe('GET /', () => {
       .get('/')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Subject Access Request Service')
+        expect(res.text).toContain('Subject Access Request Product')
         expect(res.text).not.toContain('Request a report')
         expect(res.text).not.toContain('View reports')
         expect(res.text).not.toContain('Admin')
@@ -217,24 +217,24 @@ describe('POST /inputs', () => {
   })
 })
 
-describe('GET /service-selection', () => {
-  it('should render service-selection page', () => {
+describe('GET /product-selection', () => {
+  it('should render product-selection page', () => {
     return request(app)
-      .get('/service-selection')
+      .get('/product-selection')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Select Services')
+        expect(res.text).toContain('Select products')
       })
   })
 })
 
-describe('POST /service-selection', () => {
+describe('POST /product-selection', () => {
   it.skip('should redirect to itself given no data', () => {
     return request(app)
-      .post('/service-selection')
+      .post('/product-selection')
       .expect(res => {
         expect(res.statusCode).toBe(200)
-        expect(res.text).toContain('Select services')
+        expect(res.text).toContain('Select products')
       })
   })
 })
@@ -274,13 +274,13 @@ describe('GET /terms', () => {
   })
 })
 
-describe('GET /register-template/select-service', () => {
-  it('should render register template service page', () => {
+describe('GET /register-template/select-product', () => {
+  it('should render register template product page', () => {
     return request(regTemplateUserApp)
-      .get('/register-template/select-service')
+      .get('/register-template/select-product')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Select Service')
+        expect(res.text).toContain('Select Product')
       })
   })
 })
@@ -291,7 +291,7 @@ describe('GET /register-template/upload', () => {
       .get('/register-template/upload')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Upload Template for')
+        expect(res.text).toContain('Upload template for')
       })
   })
 })
@@ -302,7 +302,7 @@ describe('GET /register-template/confirmation', () => {
       .get('/register-template/confirmation')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Are you sure you want to register?')
+        expect(res.text).toContain('Are you sure you want to register this template?')
       })
   })
 })

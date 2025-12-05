@@ -4,12 +4,12 @@ import sarApi from '../mockApis/sarApi'
 import { ADMIN_ROLE, login, REGISTER_TEMPLATE_ROLE, resetStubs, USER_ROLE, verifyOnPage } from '../testUtils'
 import AuthSignInPage from '../pages/authSignInPage'
 import AuthErrorPage from '../pages/authErrorPage'
-import RegisterTemplateServicePage from '../pages/registerTemplateServicePage'
+import RegisterTemplateProductPage from '../pages/registerTemplateProductPage'
 import HomePage from '../pages/homePage'
 
-test.describe('Register template select service', () => {
+test.describe('Register template select product', () => {
   test.beforeEach(async () => {
-    await sarApi.stubGetServices()
+    await sarApi.stubGetProducts()
   })
 
   test.afterEach(async () => {
@@ -18,7 +18,7 @@ test.describe('Register template select service', () => {
 
   test('Redirects to auth if requested by unauthenticated user', async ({ page }) => {
     await hmppsAuth.stubSignInPage()
-    await page.goto('/register-template/select-service')
+    await page.goto('/register-template/select-product')
 
     await verifyOnPage(page, AuthSignInPage)
   })
@@ -28,7 +28,7 @@ test.describe('Register template select service', () => {
     unauthorisedRoles.forEach(role => {
       test(`redirects to authError for role ${role} `, async ({ page }) => {
         await login(page, { roles: [role] })
-        await page.goto('/register-template/select-service')
+        await page.goto('/register-template/select-product')
 
         await verifyOnPage(page, AuthErrorPage)
       })
@@ -37,55 +37,55 @@ test.describe('Register template select service', () => {
 
   test('Renders for authenticated users', async ({ page }) => {
     await login(page, { roles: [REGISTER_TEMPLATE_ROLE] })
-    await page.goto('/register-template/select-service')
+    await page.goto('/register-template/select-product')
 
-    const selectServicePage = await verifyOnPage(page, RegisterTemplateServicePage)
+    const selectProductPage = await verifyOnPage(page, RegisterTemplateProductPage)
 
-    await expect(selectServicePage.errorSummary).not.toBeVisible()
+    await expect(selectProductPage.errorSummary).not.toBeVisible()
   })
 
-  test('Displays error when no services found', async ({ page }) => {
+  test('Displays error when no products found', async ({ page }) => {
     await login(page, { roles: [REGISTER_TEMPLATE_ROLE] })
-    await sarApi.stubGetServices(200, [])
-    await page.goto('/register-template/select-service')
+    await sarApi.stubGetProducts(200, [])
+    await page.goto('/register-template/select-product')
 
-    const selectServicePage = await verifyOnPage(page, RegisterTemplateServicePage)
+    const selectProductPage = await verifyOnPage(page, RegisterTemplateProductPage)
 
-    await expect(selectServicePage.errorSummary).toContainText('No services found. A template cannot be registered.')
-    await expect(selectServicePage.serviceInputError).toContainText(
-      'No services found. A template cannot be registered.',
+    await expect(selectProductPage.errorSummary).toContainText('No products found. A template cannot be registered.')
+    await expect(selectProductPage.productInputError).toContainText(
+      'No products found. A template cannot be registered.',
     )
   })
 
-  test('Displays error when continue without selecting service', async ({ page }) => {
+  test('Displays error when continue without selecting product', async ({ page }) => {
     await login(page, { roles: [REGISTER_TEMPLATE_ROLE] })
-    await page.goto('/register-template/select-service')
-    const selectServicePage = await verifyOnPage(page, RegisterTemplateServicePage)
+    await page.goto('/register-template/select-product')
+    const selectProductPage = await verifyOnPage(page, RegisterTemplateProductPage)
 
-    await selectServicePage.continue()
+    await selectProductPage.continue()
 
-    await expect(selectServicePage.errorSummary).toContainText('A service must be selected')
-    await expect(selectServicePage.serviceInputError).toContainText('A service must be selected')
+    await expect(selectProductPage.errorSummary).toContainText('A product must be selected')
+    await expect(selectProductPage.productInputError).toContainText('A product must be selected')
   })
 
-  test('Redirects to upload when continue with service selected', async ({ page }) => {
+  test('Redirects to upload when continue with product selected', async ({ page }) => {
     await login(page, { roles: [REGISTER_TEMPLATE_ROLE] })
-    await page.goto('/register-template/select-service')
-    const selectServicePage = await verifyOnPage(page, RegisterTemplateServicePage)
+    await page.goto('/register-template/select-product')
+    const selectProductPage = await verifyOnPage(page, RegisterTemplateProductPage)
 
-    await selectServicePage.selectService('1')
-    await selectServicePage.continue()
+    await selectProductPage.selectProduct('1')
+    await selectProductPage.continue()
 
-    await expect(selectServicePage.errorSummary).not.toBeVisible()
-    expect(selectServicePage.page.url()).toMatch(/register-template\/upload$/)
+    await expect(selectProductPage.errorSummary).not.toBeVisible()
+    expect(selectProductPage.page.url()).toMatch(/register-template\/upload$/)
   })
 
   test('Redirects to homepage when back link clicked', async ({ page }) => {
     await login(page, { roles: [REGISTER_TEMPLATE_ROLE] })
-    await page.goto('/register-template/select-service')
-    const selectServicePage = await verifyOnPage(page, RegisterTemplateServicePage)
+    await page.goto('/register-template/select-product')
+    const selectProductPage = await verifyOnPage(page, RegisterTemplateProductPage)
 
-    await selectServicePage.back()
+    await selectProductPage.back()
 
     await verifyOnPage(page, HomePage)
   })

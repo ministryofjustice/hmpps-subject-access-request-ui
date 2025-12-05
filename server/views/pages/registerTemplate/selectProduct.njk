@@ -7,8 +7,8 @@
 
 {% block content %}
 
-{% if selectedServiceError %}
-  {% set selectedServiceErrorMessage = { text: selectedServiceError } %}
+{% if selectedProductError %}
+  {% set selectedProductErrorMessage = { text: selectedProductError } %}
   {% set showErrors = true %}
 {% endif %}
 
@@ -17,7 +17,7 @@
     titleText: "There is a problem!",
     errorList: [
       {
-        text: selectedServiceError
+        text: selectedProductError
       }
     ]
   }) }}
@@ -28,29 +28,29 @@
   href: "/"
 }) }}
 
-{% set serviceItems = [] %}
-{% for service in serviceList %}
-    {% set item = { "text": service.label, "value": service.id } %}
-    {% set serviceItems = serviceItems.concat([item]) %}
+{% set productItems = [] %}
+{% for product in productList %}
+    {% set item = { "text": product.label, "value": product.id } %}
+    {% set productItems = productItems.concat([item]) %}
 {% endfor %}
 
-<form action="/register-template/select-service" method="post">
+<form action="/register-template/select-product" method="post">
   <input type="hidden" name="_csrf" value="{{ csrfToken }}">
   <div class="govuk-form-group">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
       <h1 class="govuk-fieldset__heading">
-        Select Service
+        Select Product
       </h1>
     </legend>
 
       <div class="govuk-list">
         {{ govukSelect({label: {
-            text: "Select service to register template for"
+            text: "Select product to register template for"
           },
-          id: 'service',
-          name: 'service',
-          items: serviceItems | addBlankOption(),
-          errorMessage: selectedServiceErrorMessage
+          id: 'product',
+          name: 'product',
+          items: productItems | addBlankOption(),
+          errorMessage: selectedProductErrorMessage
         }) }}
       </div>
   </div>

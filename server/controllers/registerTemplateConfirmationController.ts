@@ -4,11 +4,11 @@ import templateVersionsService from '../services/templateVersions'
 
 export default class RegisterTemplateConfirmationController {
   static async registerTemplate(req: Request, res: Response) {
-    const { selectedService, templateName, templateFileBase64 } = req.session
+    const { selectedProduct, templateName, templateFileBase64 } = req.session
 
     try {
       const newVersion = await templateVersionsService.createTemplateVersion(
-        selectedService,
+        selectedProduct,
         templateName,
         Buffer.from(templateFileBase64, 'base64'),
         req,
@@ -17,12 +17,12 @@ export default class RegisterTemplateConfirmationController {
       if (dataAccess().telemetryClient) {
         dataAccess().telemetryClient.trackEvent({
           name: 'templateVersionRegistered',
-          properties: { service: selectedService.name, version: newVersion.version },
+          properties: { product: selectedProduct.name, version: newVersion.version },
         })
       }
     } catch (error) {
       res.render('pages/registerTemplate/confirmation', {
-        selectedService,
+        selectedProduct,
         templateName,
         registerError: error.message,
       })
@@ -37,14 +37,14 @@ export default class RegisterTemplateConfirmationController {
   }
 
   static getResult(req: Request, res: Response) {
-    const { selectedService, newVersion } = req.session
+    const { selectedProduct, newVersion } = req.session
 
     res.render('pages/registerTemplate/result', {
-      selectedService,
+      selectedProduct,
       newVersion,
     })
 
-    req.session.selectedService = {} as Service
-    req.session.newVersion = {} as ServiceVersion
+    req.session.selectedProduct = {} as Product
+    req.session.newVersion = {} as ProductVersion
   }
 }

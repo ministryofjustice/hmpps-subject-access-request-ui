@@ -2,7 +2,7 @@ import type { Request, Response } from 'express'
 import RegisterTemplateConfirmationController from './registerTemplateConfirmationController'
 import templateVersionsService from '../services/templateVersions'
 
-const selectedService = {
+const selectedProduct = {
   id: '12345',
   name: 'service-one',
   url: 'http://service-one',
@@ -11,7 +11,7 @@ const selectedService = {
 }
 const templateFileBase64 = 'dGVzdGZpbGUK'
 const templateName = 'myfile.mustache'
-const newServiceVersion = {
+const newTemplateVersion = {
   id: '159',
   serviceName: 'service-one',
   version: '4',
@@ -30,29 +30,29 @@ afterEach(() => {
 
 describe('registerTemplate', () => {
   const req: Request = {
-    session: { selectedService },
+    session: { selectedProduct },
   } as unknown as Request
   const res: Response = {
     render: jest.fn(),
     redirect: jest.fn(),
   } as unknown as Response
 
-  test('redirects to result page after new service version registered successfully', async () => {
+  test('redirects to result page after new template version registered successfully', async () => {
     req.session.templateName = templateName
     req.session.templateFileBase64 = templateFileBase64
-    templateVersionsService.createTemplateVersion = jest.fn().mockReturnValue(newServiceVersion)
+    templateVersionsService.createTemplateVersion = jest.fn().mockReturnValue(newTemplateVersion)
 
     await RegisterTemplateConfirmationController.registerTemplate(req, res)
 
     const expectedTemplateBuffer = Buffer.from(templateFileBase64, 'base64')
     expect(templateVersionsService.createTemplateVersion).toHaveBeenCalledWith(
-      selectedService,
+      selectedProduct,
       templateName,
       expectedTemplateBuffer,
       req,
     )
     expect(res.redirect).toHaveBeenCalledWith('/register-template/result')
-    expect(req.session.newVersion).toEqual(newServiceVersion)
+    expect(req.session.newVersion).toEqual(newTemplateVersion)
     expect(req.session.templateName).toEqual('')
     expect(req.session.templateFileBase64).toEqual('')
     expect(req.session.versionList).toEqual([])
@@ -69,7 +69,7 @@ describe('registerTemplate', () => {
 
     const expectedTemplateBuffer = Buffer.from(templateFileBase64, 'base64')
     expect(templateVersionsService.createTemplateVersion).toHaveBeenCalledWith(
-      selectedService,
+      selectedProduct,
       templateName,
       expectedTemplateBuffer,
       req,
@@ -77,7 +77,7 @@ describe('registerTemplate', () => {
     expect(res.render).toHaveBeenCalledWith(
       'pages/registerTemplate/confirmation',
       expect.objectContaining({
-        selectedService,
+        selectedProduct,
         templateName,
         registerError: 'test error message',
       }),
@@ -87,7 +87,7 @@ describe('registerTemplate', () => {
 
 describe('getResult', () => {
   const req: Request = {
-    session: { selectedService, newVersion: newServiceVersion },
+    session: { selectedProduct, newVersion: newTemplateVersion },
   } as unknown as Request
   const res: Response = {
     render: jest.fn(),
@@ -100,11 +100,11 @@ describe('getResult', () => {
     expect(res.render).toHaveBeenCalledWith(
       'pages/registerTemplate/result',
       expect.objectContaining({
-        selectedService,
-        newVersion: newServiceVersion,
+        selectedProduct,
+        newVersion: newTemplateVersion,
       }),
     )
-    expect(req.session.selectedService).toEqual({})
+    expect(req.session.selectedProduct).toEqual({})
     expect(req.session.newVersion).toEqual({})
   })
 })

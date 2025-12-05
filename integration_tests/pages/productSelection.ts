@@ -1,8 +1,8 @@
 import Page, { PageElement } from './page'
 
-export default class ServiceSelectionPage extends Page {
+export default class ProductSelectionPage extends Page {
   constructor() {
-    super('Select Services')
+    super('Select Products')
   }
 
   errorSummaryBox = (): PageElement => cy.get('.govuk-error-summary')

@@ -2,7 +2,7 @@ import { Request, type RequestHandler, Response, Router } from 'express'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 import InputsController from '../controllers/inputsController'
-import ServiceSelectionController from '../controllers/serviceSelectionController'
+import ProductSelectionController from '../controllers/productSelectionController'
 import SummaryController from '../controllers/summaryController'
 import ConfirmationController from '../controllers/confirmationController'
 import SubjectIdController from '../controllers/subjectIdController'
@@ -11,7 +11,7 @@ import ReportDownloadController from '../controllers/reportDownloadController'
 import AdminDetailsController from '../controllers/adminDetailsController'
 import AdminHealthController from '../controllers/adminHealthController'
 import AdminReportsController from '../controllers/adminReportsController'
-import RegisterTemplateServiceController from '../controllers/registerTemplateServiceController'
+import RegisterTemplateProductController from '../controllers/registerTemplateProductController'
 import RegisterTemplateUploadController from '../controllers/registerTemplateUploadController'
 import RegisterTemplateConfirmationController from '../controllers/registerTemplateConfirmationController'
 
@@ -39,9 +39,9 @@ export default function routes(service: Services): Router {
   get('/summary', SummaryController.getReportDetails)
   post('/summary', SummaryController.postReportDetail)
 
-  get('/service-selection', ServiceSelectionController.getServices)
+  get('/product-selection', ProductSelectionController.getProducts)
 
-  post('/service-selection', ServiceSelectionController.selectServices)
+  post('/product-selection', ProductSelectionController.selectProducts)
 
   get('/confirmation', ConfirmationController.getConfirmation)
 
@@ -53,15 +53,15 @@ export default function routes(service: Services): Router {
     res.render('pages/terms')
   })
 
-  get('/register-template/select-service', RegisterTemplateServiceController.getServices)
-  post('/register-template/select-service', RegisterTemplateServiceController.selectService)
+  get('/register-template/select-product', RegisterTemplateProductController.getProducts)
+  post('/register-template/select-product', RegisterTemplateProductController.selectProduct)
 
-  get('/register-template/upload', RegisterTemplateUploadController.getServiceTemplateVersion)
+  get('/register-template/upload', RegisterTemplateUploadController.getProductTemplateVersion)
   post('/register-template/upload', RegisterTemplateUploadController.uploadTemplate)
 
   get('/register-template/confirmation', (req: Request, res: Response) =>
     res.render('pages/registerTemplate/confirmation', {
-      selectedService: req.session.selectedService,
+      selectedProduct: req.session.selectedProduct,
       templateName: req.session.templateName,
     }),
   )

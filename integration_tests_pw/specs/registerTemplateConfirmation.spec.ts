@@ -8,7 +8,7 @@ import RegisterTemplateConfirmationPage from '../pages/registerTemplateConfirmat
 
 test.describe('Register template confirmation', () => {
   test.beforeEach(async () => {
-    await sarApi.stubGetServices()
+    await sarApi.stubGetProducts()
     await sarApi.stubGetTemplateVersions({})
     await sarApi.stubUploadTemplateFile({})
   })
@@ -40,7 +40,7 @@ test.describe('Register template confirmation', () => {
     await registerTemplateConfirmation(page, {})
     const confirmationPage = await verifyOnPage(page, RegisterTemplateConfirmationPage)
 
-    await expect(confirmationPage.serviceParagraph).toContainText('Service One')
+    await expect(confirmationPage.productParagraph).toContainText('Service One')
     await expect(confirmationPage.filenameParagraph).toContainText('template.mustache')
   })
 

@@ -8,7 +8,7 @@ import RegisterTemplateUploadPage from '../pages/registerTemplateUploadPage'
 
 test.describe('Register template upload file', () => {
   test.beforeEach(async () => {
-    await sarApi.stubGetServices()
+    await sarApi.stubGetProducts()
     await sarApi.stubGetTemplateVersions({})
   })
 
@@ -39,7 +39,7 @@ test.describe('Register template upload file', () => {
     await registerTemplateUpload(page, {})
     const uploadPage = await verifyOnPage(page, RegisterTemplateUploadPage)
 
-    await expect(uploadPage.header).toHaveText('Upload Template for Service One')
+    await expect(uploadPage.header).toHaveText('Upload template for Service One')
     await expect(uploadPage.errorSummary).not.toBeVisible()
     await expect(uploadPage.notificationBanner).not.toBeVisible()
     await expect(uploadPage.versionTable).toBeVisible()
@@ -58,23 +58,23 @@ test.describe('Register template upload file', () => {
     await registerTemplateUpload(page, {})
     const uploadPage = await verifyOnPage(page, RegisterTemplateUploadPage)
 
-    await expect(uploadPage.header).toHaveText('Upload Template for Service One')
+    await expect(uploadPage.header).toHaveText('Upload template for Service One')
     await expect(uploadPage.errorSummary).not.toBeVisible()
     await expect(uploadPage.notificationBanner).toContainText(
-      'The latest template version registered for this service has not been activated yet. Registering a new template will override this template version instead of creating a new one.',
+      'The latest template version registered for this product has not been activated. Registering a template will override this inactive version.',
     )
     await expect(uploadPage.versionTable).toBeVisible()
   })
 
-  test('Displays notification when service not migrated', async ({ page }) => {
-    await sarApi.stubGetTemplateVersions({ serviceId: '2' })
-    await registerTemplateUpload(page, { serviceId: '2' })
+  test('Displays notification when product not migrated', async ({ page }) => {
+    await sarApi.stubGetTemplateVersions({ productId: '2' })
+    await registerTemplateUpload(page, { productId: '2' })
     const uploadPage = await verifyOnPage(page, RegisterTemplateUploadPage)
 
-    await expect(uploadPage.header).toHaveText('Upload Template for Service Two')
+    await expect(uploadPage.header).toHaveText('Upload template for Service Two')
     await expect(uploadPage.errorSummary).not.toBeVisible()
-    await expect(uploadPage.notificationBanner).toContainText(
-      'This service has not been configured as having its template migrated yet. A template can still be registered but the configuration will need to be updated before it will be able to be used.',
+    await expect(uploadPage.warningAlert).toContainText(
+      'This product has not been configured as having its template migrated. A template can still be registered but the configuration will need to be updated before it will be used.',
     )
     await expect(uploadPage.versionTable).toBeVisible()
   })
@@ -85,7 +85,7 @@ test.describe('Register template upload file', () => {
 
     await uploadPage.continue()
 
-    await expect(uploadPage.header).toHaveText('Upload Template for Service One')
+    await expect(uploadPage.header).toHaveText('Upload template for Service One')
     await expect(uploadPage.errorSummary).toContainText('Please select template file to upload')
     await expect(uploadPage.notificationBanner).not.toBeVisible()
     await expect(uploadPage.templateFileInputError).toContainText('Please select template file to upload')
@@ -99,7 +99,7 @@ test.describe('Register template upload file', () => {
     await uploadPage.selectTemplateFile('template.txt')
     await uploadPage.continue()
 
-    await expect(uploadPage.header).toHaveText('Upload Template for Service One')
+    await expect(uploadPage.header).toHaveText('Upload template for Service One')
     await expect(uploadPage.errorSummary).toContainText('Please ensure a mustache file is selected')
     await expect(uploadPage.notificationBanner).not.toBeVisible()
     await expect(uploadPage.templateFileInputError).toContainText('Please ensure a mustache file is selected')
@@ -117,12 +117,12 @@ test.describe('Register template upload file', () => {
     expect(uploadPage.page.url()).toMatch(/register-template\/confirmation$/)
   })
 
-  test('Redirects to select service when back link clicked', async ({ page }) => {
+  test('Redirects to select product when back link clicked', async ({ page }) => {
     await registerTemplateUpload(page, {})
     const uploadPage = await verifyOnPage(page, RegisterTemplateUploadPage)
 
     await uploadPage.back()
 
-    expect(uploadPage.page.url()).toMatch(/register-template\/select-service/)
+    expect(uploadPage.page.url()).toMatch(/register-template\/select-product/)
   })
 })

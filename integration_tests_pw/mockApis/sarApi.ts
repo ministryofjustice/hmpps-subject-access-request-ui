@@ -15,7 +15,7 @@ export default {
       },
     }),
 
-  stubGetServices: (
+  stubGetProducts: (
     httpStatus = 200,
     body = [
       {
@@ -52,11 +52,11 @@ export default {
 
   stubGetTemplateVersions: ({
     httpStatus = 200,
-    serviceId = '1',
+    productId = '1',
     status = 'PUBLISHED',
     body = [
       {
-        id: serviceId,
+        id: productId,
         serviceName: 'Service One',
         version: 1,
         createdDate: '2025-06-13T12:43:44Z',
@@ -68,7 +68,7 @@ export default {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/templates/service/${serviceId}`,
+        urlPattern: `/api/templates/service/${productId}`,
       },
       response: {
         status: httpStatus,

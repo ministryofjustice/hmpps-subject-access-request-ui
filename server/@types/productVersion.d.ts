@@ -1,4 +1,4 @@
-interface ServiceVersion {
+interface ProductVersion {
   id: string
   serviceName: string
   version: number

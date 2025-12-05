@@ -197,7 +197,7 @@ context('Admin Reports', () => {
     detailsPage.summaryRow().eq(5).contains('user')
     detailsPage.summaryRow().eq(6).contains('Requested date time')
     detailsPage.summaryRow().eq(6).contains('12 March 2024 at 13:52:40 UTC')
-    detailsPage.summaryRow().eq(7).contains('Services selected')
+    detailsPage.summaryRow().eq(7).contains('Products selected')
     detailsPage.summaryRow().eq(7).contains('hmpps-activities-management-api')
     detailsPage.summaryRow().eq(7).contains('keyworker-api')
     detailsPage.summaryRow().eq(7).contains('hmpps-manage-adjudications-api')

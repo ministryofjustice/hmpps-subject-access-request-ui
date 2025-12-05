@@ -8,8 +8,8 @@
 
 {% block content %}
 
-{% if selectedServicesError %}
-  {% set selectedServicesErrorMessage = { text: selectedServicesError } %}
+{% if selectedProductsError %}
+  {% set selectedProductsErrorMessage = { text: selectedProductsError } %}
   {% set showErrors = true %}
 {% endif %}
 
@@ -18,7 +18,7 @@
     titleText: "There is a problem!",
     errorList: [
       {
-        text: selectedServicesError
+        text: selectedProductsError
       }
     ]
   }) }}
@@ -29,25 +29,25 @@
   href: "/inputs"
 }) }}
 
-<form action="/service-selection" method="post">
+<form action="/product-selection" method="post">
   <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
   <div class="govuk-form-group">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
         <h1 class="govuk-fieldset__heading">
-        Select Services
+        Select Products
         </h1>
       </legend>
       <div id="waste-hint" class="govuk-hint">
-        Select services to collect data from.
+        Select products to collect data from.
       </div>
 
       {{ multiSelect({
-          headers: ["Service Name"],
-          itemGroupName: "selectedServices",
-          items: serviceList,
+          headers: ["Product Name"],
+          itemGroupName: "selectedProducts",
+          items: productList,
           selectedItems: selectedList,
-          errorMessage: selectedServicesErrorMessage
+          errorMessage: selectedProductsErrorMessage
       }) }}
   </div>
 

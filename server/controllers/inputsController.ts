@@ -61,7 +61,7 @@ export default class InputsController {
         res.redirect('/summary')
         return
       }
-      res.redirect('/service-selection')
+      res.redirect('/product-selection')
     }
   }
 }

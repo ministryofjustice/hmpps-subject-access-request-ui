@@ -20,7 +20,7 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
         {% call interruptionCard({
-            heading: "Are you sure you want to register?",
+            heading: "Are you sure you want to register this template?",
             primaryAction: {
                 text: "Confirm"
             },
@@ -29,11 +29,11 @@
                 href: "/register-template/upload"
             }
         }) -%}
-            <p>You've chosen to register the template below, this means the new template will be used for the service to generate reports.</p>
-            <p><strong>Service: {{ selectedService.label }}</strong></p>
-            <p><strong>Filename: {{ templateName }}</strong></p>
-
-            <p>By selecting confirm you are agreeing that this template has been signed off by the Offender SAR team, if it has not then please select cancel.</p>
+            <p>You’ve chosen to register a new SAR template. This template will be used to generate reports for the following product:</p>
+            <p><strong>Product name: {{ selectedProduct.label }}</strong></p>
+            <p><strong>Template file name: {{ templateName }}</strong></p>
+            <p>When you select Confirm, you verify that this template has been signed off by the Offender Subject Access Request (OSAR) team.</p>
+            <p>If the template has not been signed off please select Cancel and refer to the SAR change control processes for template sign off.</p>
         {%- endcall %}
     </form>
 

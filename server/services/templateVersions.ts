@@ -4,12 +4,12 @@ import config from '../config'
 import getUserToken from '../utils/userTokenHelper'
 import { formatDateTime } from '../utils/dateHelpers'
 
-const getTemplateVersions = async (selectedService: Service, req: Request) => {
+const getTemplateVersions = async (selectedProduct: Product, req: Request) => {
   const response = await superagent
-    .get(`${config.apis.subjectAccessRequest.url}/api/templates/service/${selectedService.id}`)
+    .get(`${config.apis.subjectAccessRequest.url}/api/templates/service/${selectedProduct.id}`)
     .set('Authorization', `Bearer ${getUserToken(req)}`)
 
-  let versionList: ServiceVersion[] = response.body
+  let versionList: ProductVersion[] = response.body
   versionList = versionList
     .sort((a, b) => b.version - a.version)
     .map(v => ({ ...v, createdDate: formatDateTime(v.createdDate) }))
@@ -20,13 +20,13 @@ const getTemplateVersions = async (selectedService: Service, req: Request) => {
 }
 
 const createTemplateVersion = async (
-  selectedService: Service,
+  selectedProduct: Product,
   name: string,
   buffer: Buffer<ArrayBufferLike>,
   req: Request,
-): Promise<ServiceVersion> => {
+): Promise<ProductVersion> => {
   const response = await superagent
-    .post(`${config.apis.subjectAccessRequest.url}/api/templates/service/${selectedService.id}`)
+    .post(`${config.apis.subjectAccessRequest.url}/api/templates/service/${selectedProduct.id}`)
     .set('Authorization', `Bearer ${getUserToken(req)}`)
     .attach('file', buffer, name)
 
