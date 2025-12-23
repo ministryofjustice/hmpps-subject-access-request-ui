@@ -14,6 +14,7 @@ beforeEach(() => {
       url: 'https://prisoner-search-dev.prison.service.justice.gov.uk',
       enabled: true,
       order: 1,
+      category: 'PRISON',
     },
     {
       id: '76fd9b66-2e57-41f0-8084-e0c6e2660e2c',
@@ -22,6 +23,16 @@ beforeEach(() => {
       url: 'https://book-move-dev.prison.service.justice.gov.uk',
       enabled: true,
       order: 2,
+      category: 'PRISON',
+    },
+    {
+      id: 'd48a72c7-a8fa-4803-a83d-8c1f2b934273',
+      name: 'hmpps-approved-premises-api',
+      label: 'Community accommodation services',
+      url: 'https://approved-premises-api-dev.hmpps.service.justice.gov.uk',
+      enabled: true,
+      order: 3,
+      category: 'PROBATION',
     },
   ]
   productConfigsService.getProductList = jest.fn().mockReturnValue(productConfigurationList)
@@ -53,7 +64,10 @@ describe('getProducts', () => {
     expect(res.render).toHaveBeenCalledWith(
       'pages/productSelection',
       expect.objectContaining({
-        productList: expect.anything(),
+        categorisedProducts: [
+          { name: 'PRISON', items: [productConfigurationList[0], productConfigurationList[1]] },
+          { name: 'PROBATION', items: [productConfigurationList[2]] },
+        ],
       }),
     )
   })
@@ -72,7 +86,10 @@ describe('getProducts', () => {
     expect(res.render).toHaveBeenCalledWith(
       'pages/productSelection',
       expect.objectContaining({
-        productList: expect.anything(),
+        categorisedProducts: [
+          { name: 'PRISON', items: [productConfigurationList[0], productConfigurationList[1]] },
+          { name: 'PROBATION', items: [productConfigurationList[2]] },
+        ],
         selectedList: expect.arrayContaining(['1']),
       }),
     )
@@ -92,7 +109,7 @@ describe('getProducts', () => {
     expect(res.render).toHaveBeenCalledWith(
       'pages/productSelection',
       expect.objectContaining({
-        productList: expect.anything(),
+        categorisedProducts: [],
         selectedProductsError: `No products found. A report cannot be generated.`,
       }),
     )
@@ -109,8 +126,8 @@ describe('selectProducts', () => {
       // @ts-expect-error stubbing session
       session: {
         productList: [
-          { id: '1', name: 'service-1', label: 'Service 1', url: 'service-1.com', order: 1, enabled: true },
-          { id: '2', name: 'service-2', label: 'Service 2', url: 'service-2.com', order: 2, enabled: true },
+          { id: '1', name: 'service-1', label: 'Svc 1', url: 'svc-1.com', order: 1, enabled: true, category: 'PRISON' },
+          { id: '2', name: 'service-2', label: 'Svc 2', url: 'svc-2.com', order: 2, enabled: true, category: 'PRISON' },
         ],
         selectedList: [],
       },
@@ -120,7 +137,7 @@ describe('selectProducts', () => {
     }
     await ProductSelectionController.selectProducts(baseReq, res)
     expect(baseReq.session.selectedList[0].name).toBe('service-1')
-    expect(baseReq.session.selectedList[0].label).toBe('Service 1')
+    expect(baseReq.session.selectedList[0].label).toBe('Svc 1')
     expect(res.redirect).toHaveBeenCalled()
     expect(res.redirect).toHaveBeenCalledWith('/summary')
   })
@@ -130,11 +147,11 @@ describe('selectProducts', () => {
       // @ts-expect-error stubbing session
       session: {
         productList: [
-          { id: '1', name: 'service-1', label: 'Service 1', url: 'service-1.com', order: 1, enabled: true },
-          { id: '2', name: 'service-2', label: 'Service 2', url: 'service-2.com', order: 2, enabled: true },
+          { id: '1', name: 'service-1', label: 'Svc 1', url: 'svc-1.com', order: 1, enabled: true, category: 'PRISON' },
+          { id: '2', name: 'service-2', label: 'Svc 2', url: 'svc-2.com', order: 2, enabled: true, category: 'PRISON' },
         ],
         selectedList: [
-          { id: '1', name: 'service-1', label: 'Service 1', url: 'service-1.com', order: 1, enabled: true },
+          { id: '1', name: 'service-1', label: 'Svc 1', url: 'svc-1.com', order: 1, enabled: true, category: 'PRISON' },
         ],
       },
       body: {
@@ -143,7 +160,7 @@ describe('selectProducts', () => {
     }
     ProductSelectionController.selectProducts(req, res)
     expect(req.session.selectedList[0].name).toBe('service-2')
-    expect(req.session.selectedList[0].label).toBe('Service 2')
+    expect(req.session.selectedList[0].label).toBe('Svc 2')
     expect(res.redirect).toHaveBeenCalled()
     expect(res.redirect).toHaveBeenCalledWith('/summary')
   })

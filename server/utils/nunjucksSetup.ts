@@ -53,4 +53,6 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   )
 
   njkEnv.addFilter('addBlankOption', (values, text = '') => [{ text, value: '' }].concat(values))
+
+  njkEnv.addFilter('capitalizeFirst', text => (!text ? '' : text.charAt(0).toUpperCase() + text.slice(1)))
 }

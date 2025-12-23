@@ -11,6 +11,7 @@ const product: Product = {
   url: 'http://service-one',
   label: 'Service One',
   order: 1,
+  category: 'PRISON',
 }
 const v1Pending: ProductVersion = {
   createdDate: '2025-11-13T11:34:45Z',
