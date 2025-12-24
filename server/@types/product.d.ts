@@ -6,6 +6,7 @@ interface Product {
   order: number
   enabled?: boolean
   templateMigrated?: boolean
+  category: ProductCategory
 }
 
 interface Environment {

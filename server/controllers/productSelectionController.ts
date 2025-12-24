@@ -2,15 +2,17 @@ import { Request, Response } from 'express'
 import ProductSelectionValidation from './productSelectionValidation'
 import { dataAccess } from '../data'
 import productConfigsService from '../services/productConfigurations'
+import ProductCategory from '../@types/productCategory'
 
 export default class ProductSelectionController {
   static async getProducts(req: Request, res: Response) {
     const productList = await productConfigsService.getProductList(req)
+    const categorisedProducts = ProductSelectionController.categoriseProducts(productList)
 
     if (productList.length === 0) {
       res.render('pages/productSelection', {
         selectedProductsError: `No products found. A report cannot be generated.`,
-        productList,
+        categorisedProducts,
         buttonText: 'Confirm',
       })
       return
@@ -21,7 +23,7 @@ export default class ProductSelectionController {
     const hasAllAnswers = req.session.selectedList && req.session.selectedList.length !== 0
     if (hasAllAnswers) {
       res.render('pages/productSelection', {
-        productList,
+        categorisedProducts,
         selectedList: selectedList.map(x => x.name),
         buttonText: 'Confirm and return to summary page',
       })
@@ -29,7 +31,7 @@ export default class ProductSelectionController {
     }
 
     res.render('pages/productSelection', {
-      productList,
+      categorisedProducts,
       selectedList: selectedList.map(x => x.name),
       buttonText: 'Confirm',
     })
@@ -49,10 +51,11 @@ export default class ProductSelectionController {
       else if (req.body.selectedProducts) selectedList.push(req.body.selectedProducts)
 
       const selectedProductsError = ProductSelectionValidation.validateSelection(selectedList, productList)
+      const categorisedProducts = ProductSelectionController.categoriseProducts(productList)
       if (selectedProductsError) {
         res.render('pages/productSelection', {
           selectedProductsError,
-          productList,
+          categorisedProducts,
           buttonText: 'Confirm',
         })
         return
@@ -60,5 +63,16 @@ export default class ProductSelectionController {
       req.session.selectedList = productList.filter(x => selectedList.includes(x.name.toString()))
       res.redirect('/summary')
     }
+  }
+
+  private static categoriseProducts(productList: Product[]) {
+    const map = new Map<ProductCategory, Product[]>()
+    productList.forEach(product => {
+      if (!map.has(product.category)) {
+        map.set(product.category, [])
+      }
+      map.get(product.category)!.push(product)
+    })
+    return Array.from(map, ([name, groupItems]) => ({ name, items: groupItems }))
   }
 }

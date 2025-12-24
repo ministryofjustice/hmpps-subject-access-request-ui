@@ -13,7 +13,10 @@
     </tr>
   </thead>
   <tbody class="govuk-table__body">
-     {% for item in params.items %}
+  {% for category in params.categorisedItems %}
+    <tr><td><h4>{{ category.name | lower | capitalizeFirst }}</h4></td></tr>
+
+    {% for item in category.items %}
     <tr class="govuk-table__row govuk-table__row--selected">        
 
         {% if not item.enabled %}
@@ -46,6 +49,8 @@
         {% endif %}
     </tr>   
      {% endfor %}
+
+  {% endfor %}
   </tbody>
 </table>
 {% endmacro %}

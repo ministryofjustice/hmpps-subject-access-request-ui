@@ -20,6 +20,7 @@ beforeEach(() => {
       url: 'https://prisoner-search-dev.prison.service.justice.gov.uk',
       enabled: true,
       order: 1,
+      category: 'PRISON',
     },
     {
       id: '76fd9b66-2e57-41f0-8084-e0c6e2660e2c',
@@ -28,6 +29,7 @@ beforeEach(() => {
       url: 'https://book-move-dev.prison.service.justice.gov.uk',
       enabled: true,
       order: 2,
+      category: 'PRISON',
     },
   ]
   productConfigurationList = productConfigurationListWithoutExclusions.concat([
@@ -38,6 +40,7 @@ beforeEach(() => {
       url: 'https://excluded-one-dev.prison.service.justice.gov.uk',
       enabled: true,
       order: 3,
+      category: 'PRISON',
     },
     {
       id: '76fd9b66-2e57-41f0-8084-e0c6e2660e2c',
@@ -46,6 +49,7 @@ beforeEach(() => {
       url: 'https://excluded-two-dev.prison.service.justice.gov.uk',
       enabled: true,
       order: 4,
+      category: 'PRISON',
     },
     {
       id: '76fd9b66-2e57-41f0-8084-e0c6e2660e2c',
@@ -54,6 +58,7 @@ beforeEach(() => {
       url: 'https://excluded-three-dev.prison.service.justice.gov.uk',
       enabled: true,
       order: 5,
+      category: 'PRISON',
     },
   ])
 })
