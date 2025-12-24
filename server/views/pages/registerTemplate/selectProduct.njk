@@ -30,7 +30,7 @@
 
 {% set productItems = [] %}
 {% for product in productList %}
-    {% set item = { "text": product.label, "value": product.id } %}
+    {% set item = { "text": product.label + " (" + product.name + ")", "value": product.id } %}
     {% set productItems = productItems.concat([item]) %}
 {% endfor %}
 
