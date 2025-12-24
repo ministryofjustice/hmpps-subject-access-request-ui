@@ -53,8 +53,8 @@ describe('registerTemplate', () => {
     )
     expect(res.redirect).toHaveBeenCalledWith('/register-template/result')
     expect(req.session.newVersion).toEqual(newTemplateVersion)
-    expect(req.session.templateName).toEqual('')
-    expect(req.session.templateFileBase64).toEqual('')
+    expect(req.session.templateName).toBeNull()
+    expect(req.session.templateFileBase64).toBeNull()
     expect(req.session.versionList).toEqual([])
   })
 
@@ -83,6 +83,32 @@ describe('registerTemplate', () => {
       }),
     )
   })
+
+  test.each([
+    [null, templateName, templateFileBase64, 'No product selected for template registration'],
+    [selectedProduct, null, templateFileBase64, 'No template name selected for template registration'],
+    [selectedProduct, templateName, null, 'No template data provided for template registration'],
+    [null, null, null, 'No product selected for template registration'],
+  ])(
+    'renders confirmation page with error when missing session values: selectedProduct="%s" "templateName=%s" templateFileBase64Value="%s"',
+    async (selectedProductValue, templateNameValue, templateFileBase64Value, expectedMessage) => {
+      req.session.selectedProduct = selectedProductValue
+      req.session.templateName = templateNameValue
+      req.session.templateFileBase64 = templateFileBase64Value
+
+      await RegisterTemplateConfirmationController.registerTemplate(req, res)
+
+      expect(templateVersionsService.createTemplateVersion).not.toHaveBeenCalledWith(expect.anything())
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/registerTemplate/confirmation',
+        expect.objectContaining({
+          selectedProduct: selectedProductValue,
+          templateName: templateNameValue,
+          registerError: expectedMessage,
+        }),
+      )
+    },
+  )
 })
 
 describe('getResult', () => {
@@ -104,7 +130,7 @@ describe('getResult', () => {
         newVersion: newTemplateVersion,
       }),
     )
-    expect(req.session.selectedProduct).toEqual({})
-    expect(req.session.newVersion).toEqual({})
+    expect(req.session.selectedProduct).toBeNull()
+    expect(req.session.newVersion).toBeNull()
   })
 })

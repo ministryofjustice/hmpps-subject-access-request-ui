@@ -5,6 +5,14 @@ export default class RegisterTemplateUploadController {
   static async getProductTemplateVersion(req: Request, res: Response) {
     const { selectedProduct } = req.session
 
+    if (!selectedProduct) {
+      res.render('pages/registerTemplate/upload', {
+        selectedProduct,
+        uploadError: 'No product selected',
+      })
+      return
+    }
+
     const versionList = await templateVersionsService.getTemplateVersions(selectedProduct, req)
     req.session.versionList = versionList
 
@@ -16,6 +24,14 @@ export default class RegisterTemplateUploadController {
 
   static async uploadTemplate(req: Request, res: Response) {
     const { selectedProduct, versionList } = req.session
+
+    if (!selectedProduct) {
+      res.render('pages/registerTemplate/upload', {
+        selectedProduct,
+        uploadError: 'No product selected',
+      })
+      return
+    }
 
     if (!req.file) {
       res.render('pages/registerTemplate/upload', {

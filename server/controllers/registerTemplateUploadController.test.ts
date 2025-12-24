@@ -26,6 +26,7 @@ const selectedProduct = {
   url: 'http://service-one',
   label: 'Service One',
   order: 1,
+  category: 'PRISON',
 }
 
 beforeEach(() => {
@@ -38,13 +39,14 @@ afterEach(() => {
 
 describe('getProductTemplateVersion', () => {
   const req: Request = {
-    session: { selectedProduct },
+    session: {},
   } as unknown as Request
   const res: Response = {
     render: jest.fn(),
   } as unknown as Response
 
   test('renders upload page after retrieving selected product version', async () => {
+    req.session.selectedProduct = selectedProduct
     templateVersionsService.getTemplateVersions = jest.fn().mockReturnValue(productVersions)
 
     await RegisterTemplateUploadController.getProductTemplateVersion(req, res)
@@ -55,6 +57,20 @@ describe('getProductTemplateVersion', () => {
       expect.objectContaining({
         versionList: productVersions,
         selectedProduct,
+      }),
+    )
+    expect(req.session.versionList).toEqual(productVersions)
+  })
+
+  test('renders upload page with error when no selected product in session', async () => {
+    req.session.selectedProduct = null
+    await RegisterTemplateUploadController.getProductTemplateVersion(req, res)
+
+    expect(templateVersionsService.getTemplateVersions).not.toHaveBeenCalledWith(expect.anything)
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/registerTemplate/upload',
+      expect.objectContaining({
+        uploadError: 'No product selected',
       }),
     )
     expect(req.session.versionList).toEqual(productVersions)
@@ -115,6 +131,19 @@ describe('uploadTemplate', () => {
         uploadError: 'Please ensure a mustache file is selected',
         versionList: productVersions,
         selectedProduct,
+      }),
+    )
+  })
+
+  test('renders upload page with error when no selected product in session', async () => {
+    req.session.selectedProduct = null
+
+    await RegisterTemplateUploadController.uploadTemplate(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/registerTemplate/upload',
+      expect.objectContaining({
+        uploadError: 'No product selected',
       }),
     )
   })
