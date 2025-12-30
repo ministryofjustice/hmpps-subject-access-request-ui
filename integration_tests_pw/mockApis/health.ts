@@ -1,13 +1,10 @@
-import Page from '../pages/page'
-import AuthSignInPage from '../pages/authSignIn'
-import AuthErrorPage from '../pages/authError'
-import AdminHealthPage from '../pages/adminHealth'
+import type { SuperAgentRequest } from 'superagent'
+import { stubFor } from './wiremock'
 
-context('Admin Health', () => {
-  beforeEach(() => {
-    cy.task('reset')
-    cy.task('stubSignIn', { roles: ['ROLE_SAR_ADMIN_ACCESS'] })
-    cy.task('stubGetHealth', {
+export default {
+  stubGetHealth: (
+    httpStatus = 200,
+    body = {
       components: {
         'hmpps-document-management-api': {
           status: 'UP',
@@ -94,68 +91,17 @@ context('Admin Health', () => {
           },
         },
       },
-    })
-  })
-
-  it('Redirects to auth if requested by unauthenticated user', () => {
-    cy.visit('/admin/health')
-    Page.verifyOnPage(AuthSignInPage)
-  })
-
-  it('Redirects to authError if requested by user without appropriate role', () => {
-    cy.task('stubSignIn', { roles: ['ROLE_SAR_USER_ACCESS'] })
-    cy.signIn()
-    cy.visit('/admin/health', { failOnStatusCode: false })
-    Page.verifyOnPage(AuthErrorPage)
-  })
-
-  it('Renders for authenticated users', () => {
-    cy.signIn()
-    cy.visit('/admin/health')
-    Page.verifyOnPage(AdminHealthPage)
-  })
-
-  it('Displays document store health', () => {
-    cy.signIn()
-    cy.visit('/admin/health')
-    const healthPage = Page.verifyOnPage(AdminHealthPage)
-    healthPage.documentStoreHealthTable().should('exist').contains('Document store')
-    healthPage.documentStoreRow(0).contains('Document store')
-    healthPage.documentStoreRow(0).contains('UP').should('have.class', 'health-table__cell_UP')
-  })
-
-  it('Displays lookup services health', () => {
-    cy.signIn()
-    cy.visit('/admin/health')
-    const healthPage = Page.verifyOnPage(AdminHealthPage)
-    healthPage.lookupServicesHealthTable().should('exist').contains('Lookup services')
-    healthPage.lookupServicesRow(0).contains('Prison')
-    healthPage.lookupServicesRow(0).contains('UP').should('have.class', 'health-table__cell_UP')
-    healthPage.lookupServicesRow(1).contains('External User')
-    healthPage.lookupServicesRow(1).contains('UP').should('have.class', 'health-table__cell_UP')
-    healthPage.lookupServicesRow(2).contains('Nomis User')
-    healthPage.lookupServicesRow(2).contains('DOWN').should('have.class', 'health-table__cell_DOWN')
-    healthPage.lookupServicesRow(3).contains('Probation User')
-    healthPage.lookupServicesRow(3).contains('UP').should('have.class', 'health-table__cell_UP')
-    healthPage.lookupServicesRow(4).contains('Locations')
-    healthPage.lookupServicesRow(4).contains('UP').should('have.class', 'health-table__cell_UP')
-    healthPage.lookupServicesRow(5).contains('Locations Nomis Mappings')
-    healthPage.lookupServicesRow(5).contains('UP').should('have.class', 'health-table__cell_UP')
-  })
-
-  it('Displays SAR services health', () => {
-    cy.signIn()
-    cy.visit('/admin/health')
-    const healthPage = Page.verifyOnPage(AdminHealthPage)
-    healthPage.sarServicesHealthTable().should('exist').contains('SAR services')
-    healthPage.sarServicesRow(0).contains('G1')
-    healthPage.sarServicesRow(0).contains('DOWN').should('have.class', 'health-table__cell_DOWN')
-    healthPage.sarServicesRow(1).contains('G2')
-    healthPage.sarServicesRow(1).contains('UP').should('have.class', 'health-table__cell_UP')
-    healthPage.sarServicesRow(2).contains('hmpps-book-secure-move-api')
-    healthPage.sarServicesRow(2).contains('UP').should('have.class', 'health-table__cell_UP')
-    healthPage.sarServicesRow(3).contains('hmpps-offender-categorisation-api')
-    healthPage.sarServicesRow(3).contains('DOWN').should('have.class', 'health-table__cell_DOWN')
-    healthPage.sarServicesRow(3).contains('some error')
-  })
-})
+    },
+  ): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/health',
+      },
+      response: {
+        status: httpStatus,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: body,
+      },
+    }),
+}
