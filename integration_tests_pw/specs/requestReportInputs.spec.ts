@@ -6,7 +6,7 @@ import AuthErrorPage from '../pages/authErrorPage'
 import RequestReportInputsPage from '../pages/requestReportInputsPage'
 import RequestReportSubjectIdPage from '../pages/requestReportSubjectIdPage'
 
-test.describe('Request report inputs', () => {
+test.describe('Request report - Inputs', () => {
   test.beforeEach(async () => {})
 
   test.afterEach(async () => {
@@ -39,7 +39,7 @@ test.describe('Request report inputs', () => {
     await expect(inputsPage.datePickerTo).toHaveValue(new Date().toLocaleDateString('en-gb', { dateStyle: 'short' }))
     await expect(inputsPage.caseReferenceTextbox).toBeVisible()
     await expect(inputsPage.caseReferenceTextbox).toHaveValue('')
-    await expect(inputsPage.continueButton).toBeVisible()
+    await expect(inputsPage.confirmButton).toBeVisible()
     await expect(inputsPage.errorSummary).not.toBeVisible()
   })
 

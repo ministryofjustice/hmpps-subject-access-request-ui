@@ -10,7 +10,7 @@ export default class RequestReportInputsPage extends AbstractPage {
 
   readonly backLink: Locator
 
-  readonly continueButton: Locator
+  readonly confirmButton: Locator
 
   readonly errorSummary: Locator
 
@@ -20,7 +20,7 @@ export default class RequestReportInputsPage extends AbstractPage {
     this.datePickerTo = this.page.locator('#input-dateTo')
     this.caseReferenceTextbox = this.page.locator('#input-caseReference')
     this.backLink = this.page.locator('a', { hasText: 'Back' })
-    this.continueButton = this.page.locator('button', { hasText: 'Confirm' })
+    this.confirmButton = this.page.locator('button', { hasText: 'Confirm' })
     this.errorSummary = this.page.locator('.govuk-error-summary', { hasText: 'There is a problem' })
   }
 
@@ -41,5 +41,5 @@ export default class RequestReportInputsPage extends AbstractPage {
 
   back = () => this.backLink.click()
 
-  continue = () => this.continueButton.click()
+  continue = () => this.confirmButton.click()
 }
