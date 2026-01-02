@@ -8,6 +8,8 @@ import RegisterTemplateUploadPage from './pages/registerTemplateUploadPage'
 import RegisterTemplateConfirmationPage from './pages/registerTemplateConfirmationPage'
 import RequestReportSubjectIdPage from './pages/requestReportSubjectIdPage'
 import RequestReportInputsPage from './pages/requestReportInputsPage'
+import RequestReportProductsPage from './pages/requestReportProductsPage'
+import RequestReportSummaryPage from './pages/requestReportSummaryPage'
 
 export { resetStubs }
 
@@ -46,13 +48,31 @@ export const verifyOnPage = async <T extends AbstractPage>(
   return pageInstance
 }
 
-export const requestReportInputs = async (page: Page) => {
+export const requestReportSubjectId = async (page: Page) => {
   await login(page, { roles: [USER_ROLE] })
   await page.goto('/subject-id')
-  const subjectIdPage = await verifyOnPage(page, RequestReportSubjectIdPage)
+  return verifyOnPage(page, RequestReportSubjectIdPage)
+}
+
+export const requestReportInputs = async (page: Page) => {
+  const subjectIdPage = await requestReportSubjectId(page)
   await subjectIdPage.inputSubjectId('A1111AA')
   await subjectIdPage.continue()
   return verifyOnPage(page, RequestReportInputsPage)
+}
+
+export const requestReportProductSelection = async (page: Page) => {
+  const inputsPage = await requestReportInputs(page)
+  await inputsPage.inputCaseReference('Test123')
+  await inputsPage.continue()
+  return verifyOnPage(page, RequestReportProductsPage)
+}
+
+export const requestReportSummary = async (page: Page) => {
+  const productsPage = await requestReportProductSelection(page)
+  await productsPage.selectAll()
+  await productsPage.continue()
+  return verifyOnPage(page, RequestReportSummaryPage)
 }
 
 export const registerTemplateUpload = async (page: Page, { productId = '1' }) => {

@@ -50,6 +50,17 @@ export default {
       },
     }),
 
+  stubSubjectAccessRequest: ({ httpStatus = 201 }): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/api/subjectAccessRequest',
+      },
+      response: {
+        status: httpStatus,
+      },
+    }),
+
   stubGetTemplateVersions: ({
     httpStatus = 200,
     productId = '1',

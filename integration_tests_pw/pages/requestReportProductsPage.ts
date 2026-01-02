@@ -1,12 +1,10 @@
 import { type Locator, type Page } from '@playwright/test'
 import AbstractPage from './abstractPage'
 
-export default class RequestReportSubjectIdPage extends AbstractPage {
-  readonly idInput: Locator
+export default class RequestReportProductsPage extends AbstractPage {
+  readonly checkAllCheckBox: Locator
 
-  readonly idHint: Locator
-
-  readonly additionalInformation: Locator
+  readonly checkAllLabel: Locator
 
   readonly backLink: Locator
 
@@ -15,19 +13,19 @@ export default class RequestReportSubjectIdPage extends AbstractPage {
   readonly errorSummary: Locator
 
   constructor(page: Page) {
-    super(page, 'Enter a HMPPS ID for the subject')
-    this.idInput = this.page.locator('#subject-id')
-    this.idHint = this.page.locator('#subject-id-hint')
-    this.additionalInformation = this.page.locator('#additional-information')
+    super(page, 'Select Products')
+    this.checkAllCheckBox = this.page.locator('#checkboxes-all')
+    this.checkAllLabel = this.page.getByLabel('Select all')
     this.backLink = this.page.locator('a', { hasText: 'Back' })
     this.confirmButton = this.page.locator('button', { hasText: 'Confirm' })
     this.errorSummary = this.page.locator('.govuk-error-summary', { hasText: 'There is a problem' })
   }
 
-  inputSubjectId = async (value: string) => {
-    await this.idInput.clear()
-    await this.idInput.fill(value)
-  }
+  selectAll = () => this.checkAllCheckBox.click({ force: true })
+
+  serviceCheckbox = (service: string) => this.page.locator(`#${service}`)
+
+  selectService = (service: string) => this.serviceCheckbox(service).click({ force: true })
 
   back = () => this.backLink.click()
 
