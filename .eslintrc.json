@@ -92,10 +92,9 @@
           "**/*.test.js",
           "**/*.test.ts",
           "**/testutils/**",
-          "cypress.config.ts",
           "esbuild/**/*",
           "playwright.config.ts",
-          "integration_tests_pw/**/*"
+          "integration_tests/**/*"
         ]
       }
     ],

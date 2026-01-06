@@ -21,9 +21,8 @@
     "node_modules",
     "assets/**/*.js",
     "integration_tests",
-    "integration_tests_pw",
+    "integration_tests",
     "dist",
-    "cypress.config.ts",
     "playwright.config.ts",
     "test_results"
   ],

@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, Request } from '@playwright/test'
 import hmppsAuth from '../mockApis/hmppsAuth'
 
 import { USER_ROLE, login, resetStubs, verifyOnPage, requestReportSubjectId } from '../testUtils'
@@ -97,6 +97,6 @@ test.describe('Request Report - SubjectId', () => {
     await verifyOnPage(page, HomePage)
   })
 
-  const saveSubjectIdRequest = () => req =>
+  const saveSubjectIdRequest = () => (req: Request) =>
     req.method() === 'POST' && new URL(req.url()).pathname.endsWith('/subject-id')
 })

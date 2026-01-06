@@ -23,8 +23,6 @@
     "test": "jest",
     "test:ci": "jest --runInBand",
     "security_audit": "npx audit-ci --config audit-ci.json",
-    "legacy-int-test": "cypress run --config video=false",
-    "legacy-int-test-ui": "cypress open",
     "int-test": "npx playwright test",
     "int-test-ui": "npx playwright test --ui",
     "int-test-init:ci": "npx playwright install",
@@ -80,8 +78,7 @@
       "migrations/*",
       "node_modules/*",
       "test/*",
-      "integration_tests/*",
-      "integration_tests_pw/*"
+      "integration_tests/*"
     ],
     "delay": 2500,
     "ext": "js,json,html,njk"
@@ -137,6 +134,7 @@
   "devDependencies": {
     "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.3",
     "@playwright/test": "^1.56.1",
+    "@tsconfig/node24": "24.0.3",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
     "@types/compression": "^1.8.1",
@@ -162,14 +160,11 @@
     "audit-ci": "^7.1.0",
     "concurrently": "^9.2.1",
     "cookie-session": "^2.1.1",
-    "cypress": "^15.5.0",
-    "cypress-multi-reporters": "^2.0.5",
     "dotenv": "^17.2.3",
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
-    "eslint-plugin-cypress": "^3.6.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-no-only-tests": "^3.3.0",
     "eslint-plugin-prettier": "^5.5.4",
