@@ -41,16 +41,6 @@ jobs:
     secrets: inherit
     with:
       redis_tag: "7.2"
-  # Once legacy cypress tests have been migrated to playwright then this job can be removed
-  node_integration_tests_legacy:
-    name: node integration tests (legacy)
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_integration_tests.yml@v2  # WORKFLOW_VERSION
-    needs: [ node_build ]
-    secrets: inherit
-    with:
-      npm_script: 'legacy-int-test'
-      test_results_artifact_name: 'npm_integration_test_artifacts_legacy'
-      redis_tag: "7.2"
   helm_lint:
     strategy:
       matrix:
@@ -66,7 +56,6 @@ jobs:
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v2 # WORKFLOW_VERSION
     needs:
       - node_integration_tests
-      - node_integration_tests_legacy
       - node_unit_tests
     with:
       docker_registry: 'ghcr.io'
