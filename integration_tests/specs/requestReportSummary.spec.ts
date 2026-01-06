@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, Request } from '@playwright/test'
 import hmppsAuth from '../mockApis/hmppsAuth'
 
 import { login, requestReportInputs, requestReportSummary, resetStubs, USER_ROLE, verifyOnPage } from '../testUtils'
@@ -214,6 +214,6 @@ test.describe('Request Report - Summary', () => {
     expect(summaryPage.page.url()).toMatch(/confirmation$/)
   })
 
-  const postReportDetailsRequest = () => req =>
+  const postReportDetailsRequest = () => (req: Request) =>
     req.method() === 'POST' && new URL(req.url()).pathname.endsWith('/summary')
 })

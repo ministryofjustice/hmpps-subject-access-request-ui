@@ -111,17 +111,6 @@ Or run tests with the UI:
 
 `npm run int-test-ui`
 
-#### Legacy integration tests
-
-The old cypress tests have not been migrated to playwright yet. 
-After running the server in test mode as above, they can be run in headless mode with:
-
-`npm run legacy-int-test`
-
-Or run tests with the UI:
-
-`npm run legacy-int-test-ui`
-
 ## Changelog
 
 A changelog for the service is available [here](./CHANGELOG.md)

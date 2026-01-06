@@ -1,6 +1,13 @@
 import type { SuperAgentRequest } from 'superagent'
 import { getMatchingRequests, stubFor } from './wiremock'
 
+type StubGetTemplateVersionsArgs = {
+  httpStatus?: number
+  productId?: string
+  status?: string
+  body?: object
+}
+
 export default {
   stubPing: (httpStatus = 200): SuperAgentRequest =>
     stubFor({
@@ -166,7 +173,7 @@ export default {
         status,
       },
     ],
-  }): SuperAgentRequest =>
+  }: StubGetTemplateVersionsArgs): SuperAgentRequest =>
     stubFor({
       request: {
         method: 'GET',
