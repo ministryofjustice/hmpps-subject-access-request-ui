@@ -23,7 +23,7 @@ export default class AdminHealthController {
     ]
     const sarServiceComponents = health.components.sarServiceApis.details
     const sarServiceHealthRows = Object.keys(health.components.sarServiceApis.details).map(item =>
-      AdminHealthController.getHealthRow(item, sarServiceComponents[item]),
+      AdminHealthController.getHealthRow(item, sarServiceComponents[item], true),
     )
 
     res.render('pages/adminHealth', {
@@ -33,13 +33,32 @@ export default class AdminHealthController {
     })
   }
 
-  static getHealthRow(name: string, component: ServiceHealthComponent): Array<object> {
-    return [
+  static getHealthRow(name: string, component: ServiceHealthComponent, templateHealth: boolean = false): Array<object> {
+    const row = []
+    row.push(
       { text: name },
       { html: component.details && `<a href="${component.details.healthUrl}">Health</a>` },
       { text: component.status, classes: `health-table__cell_${component.status}` },
       { text: component.details && component.details.error },
-      { html: component.details && `<a href="${component.details.portalUrl}">Dev Portal</a>` },
-    ]
+    )
+    if (templateHealth) {
+      row.push({
+        text: component.details && component.details.templateHealthStatus,
+        classes: AdminHealthController.getTemplateHealthClass(component),
+      })
+    }
+    row.push({ html: component.details && `<a href="${component.details.portalUrl}">Dev Portal</a>` })
+    return row
+  }
+
+  static getTemplateHealthClass(component: ServiceHealthComponent): string {
+    switch (component.details && component.details.templateHealthStatus) {
+      case 'HEALTHY':
+        return 'health-table__cell_UP'
+      case 'UNHEALTHY':
+        return 'health-table__cell_DOWN'
+      default:
+        return ''
+    }
   }
 }

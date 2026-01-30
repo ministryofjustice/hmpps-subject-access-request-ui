@@ -85,7 +85,28 @@ export default {
                 healthUrl: 'https://hmpps-offender-categorisation-api-dev.hmpps.service.justice.gov.uk/health',
                 portalUrl:
                   'https://developer-portal.hmpps.service.justice.gov.uk/components/hmpps-offender-categorisation-api/environment/dev',
+                templateHealthStatus: 'HEALTHY',
                 error: 'some error',
+              },
+            },
+            'hmpps-service-three-api': {
+              status: 'DOWN',
+              details: {
+                healthUrl: 'https://hmpps-service-three-api-dev.hmpps.service.justice.gov.uk/health',
+                portalUrl:
+                  'https://developer-portal.hmpps.service.justice.gov.uk/components/hmpps-service-three-api/environment/dev',
+                templateHealthStatus: 'UNHEALTHY',
+                error: 'some error two',
+              },
+            },
+            'hmpps-service-four-api': {
+              status: 'DOWN',
+              details: {
+                healthUrl: 'https://hmpps-service-four-api-dev.hmpps.service.justice.gov.uk/health',
+                portalUrl:
+                  'https://developer-portal.hmpps.service.justice.gov.uk/components/hmpps-service-four-api/environment/dev',
+                templateHealthStatus: 'NOT_MIGRATED',
+                error: 'some error three',
               },
             },
           },
