@@ -76,12 +76,32 @@ test.describe('Admin Health', () => {
     await expectRowStatus(healthPage.sarServicesRow('G2'), 'UP')
     await expectRowStatus(healthPage.sarServicesRow('hmpps-book-secure-move-api'), 'UP')
     await expectRowStatus(healthPage.sarServicesRow('hmpps-offender-categorisation-api'), 'DOWN')
+    await expectRowStatus(healthPage.sarServicesRow('hmpps-service-three-api'), 'DOWN')
+    await expectRowStatus(healthPage.sarServicesRow('hmpps-service-four-api'), 'DOWN')
     await expect(healthPage.sarServicesRow('hmpps-offender-categorisation-api')).toContainText('some error')
+    await expect(healthPage.sarServicesRow('hmpps-service-three-api')).toContainText('some error two')
+    await expect(healthPage.sarServicesRow('hmpps-service-four-api')).toContainText('some error three')
+    await expectTemplateStatus(healthPage.sarServicesRow('hmpps-offender-categorisation-api'), 'HEALTHY', 'UP')
+    await expectTemplateStatus(healthPage.sarServicesRow('hmpps-service-three-api'), 'UNHEALTHY', 'DOWN')
+    await expectTemplateStatusNoClass(healthPage.sarServicesRow('hmpps-service-four-api'), 'NOT_MIGRATED')
   })
 
   async function expectRowStatus(row: Locator, status: string) {
     await expect(row).toBeVisible()
     await expect(row).toContainText(status)
     await expect(row.locator('td', { hasText: status })).toContainClass(`health-table__cell_${status}`)
+  }
+
+  async function expectTemplateStatus(row: Locator, status: string, cellClass: string) {
+    await expect(row).toBeVisible()
+    await expect(row).toContainText(status)
+    await expect(row.locator('td', { hasText: status })).toContainClass(`health-table__cell_${cellClass}`)
+  }
+
+  async function expectTemplateStatusNoClass(row: Locator, status: string) {
+    await expect(row).toBeVisible()
+    await expect(row).toContainText(status)
+    await expect(row.locator('td', { hasText: status })).not.toContainClass('health-table__cell_UP')
+    await expect(row.locator('td', { hasText: status })).not.toContainClass('health-table__cell_DOWN')
   }
 })

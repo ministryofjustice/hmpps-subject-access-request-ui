@@ -29,5 +29,6 @@ export interface ServiceHealthComponent {
 interface ServiceHealthDetails {
   healthUrl: string
   portalUrl: string
+  templateHealthStatus?: string
   error?: string
 }

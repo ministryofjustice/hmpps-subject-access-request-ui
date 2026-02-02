@@ -77,6 +77,25 @@ const healthResponse: HealthResponse = {
             healthUrl: 'https://hmpps-offender-categorisation-api-dev.hmpps.service.justice.gov.uk/health',
             portalUrl:
               'https://developer-portal.hmpps.service.justice.gov.uk/components/hmpps-offender-categorisation-api/environment/dev',
+            templateHealthStatus: 'HEALTHY',
+          },
+        },
+        'hmpps-service-three-api': {
+          status: 'UP',
+          details: {
+            healthUrl: 'https://hmpps-service-three-api-dev.hmpps.service.justice.gov.uk/health',
+            portalUrl:
+              'https://developer-portal.hmpps.service.justice.gov.uk/components/hmpps-service-three-api/environment/dev',
+            templateHealthStatus: 'UNHEALTHY',
+          },
+        },
+        'hmpps-service-four-api': {
+          status: 'UP',
+          details: {
+            healthUrl: 'https://hmpps-service-four-api-dev.hmpps.service.justice.gov.uk/health',
+            portalUrl:
+              'https://developer-portal.hmpps.service.justice.gov.uk/components/hmpps-service-four-api/environment/dev',
+            templateHealthStatus: 'NOT_MIGRATED',
           },
         },
       },
@@ -189,6 +208,7 @@ describe('getHealth', () => {
             { html: undefined },
             { text: 'DOWN', classes: `health-table__cell_DOWN` },
             { text: undefined },
+            { text: undefined, classes: '' },
             { html: undefined },
           ],
           [
@@ -196,6 +216,7 @@ describe('getHealth', () => {
             { html: undefined },
             { text: 'UP', classes: `health-table__cell_UP` },
             { text: undefined },
+            { text: undefined, classes: '' },
             { html: undefined },
           ],
           [
@@ -205,6 +226,7 @@ describe('getHealth', () => {
             },
             { text: 'UP', classes: `health-table__cell_UP` },
             { text: undefined },
+            { text: undefined, classes: '' },
             {
               html: '<a href="https://developer-portal.hmpps.service.justice.gov.uk/components/hmpps-book-secure-move-api/environment/dev">Dev Portal</a>',
             },
@@ -216,8 +238,33 @@ describe('getHealth', () => {
             },
             { text: 'DOWN', classes: `health-table__cell_DOWN` },
             { text: undefined },
+            { text: 'HEALTHY', classes: 'health-table__cell_UP' },
             {
               html: '<a href="https://developer-portal.hmpps.service.justice.gov.uk/components/hmpps-offender-categorisation-api/environment/dev">Dev Portal</a>',
+            },
+          ],
+          [
+            { text: 'hmpps-service-three-api' },
+            {
+              html: '<a href="https://hmpps-service-three-api-dev.hmpps.service.justice.gov.uk/health">Health</a>',
+            },
+            { text: 'UP', classes: `health-table__cell_UP` },
+            { text: undefined },
+            { text: 'UNHEALTHY', classes: 'health-table__cell_DOWN' },
+            {
+              html: '<a href="https://developer-portal.hmpps.service.justice.gov.uk/components/hmpps-service-three-api/environment/dev">Dev Portal</a>',
+            },
+          ],
+          [
+            { text: 'hmpps-service-four-api' },
+            {
+              html: '<a href="https://hmpps-service-four-api-dev.hmpps.service.justice.gov.uk/health">Health</a>',
+            },
+            { text: 'UP', classes: `health-table__cell_UP` },
+            { text: undefined },
+            { text: 'NOT_MIGRATED', classes: '' },
+            {
+              html: '<a href="https://developer-portal.hmpps.service.justice.gov.uk/components/hmpps-service-four-api/environment/dev">Dev Portal</a>',
             },
           ],
         ],
