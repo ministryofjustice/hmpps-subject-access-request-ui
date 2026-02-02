@@ -52,7 +52,11 @@ export default class AdminHealthController {
   }
 
   static getTemplateHealthClass(component: ServiceHealthComponent): string {
-    switch (component.details && component.details.templateHealthStatus) {
+    switch (
+      component.details &&
+      component.details.templateHealthStatus &&
+      component.details.templateHealthStatus.toUpperCase()
+    ) {
       case 'HEALTHY':
         return 'health-table__cell_UP'
       case 'UNHEALTHY':

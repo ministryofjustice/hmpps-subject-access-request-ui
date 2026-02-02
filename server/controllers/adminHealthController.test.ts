@@ -77,7 +77,7 @@ const healthResponse: HealthResponse = {
             healthUrl: 'https://hmpps-offender-categorisation-api-dev.hmpps.service.justice.gov.uk/health',
             portalUrl:
               'https://developer-portal.hmpps.service.justice.gov.uk/components/hmpps-offender-categorisation-api/environment/dev',
-            templateHealthStatus: 'HEALTHY',
+            templateHealthStatus: 'Healthy',
           },
         },
         'hmpps-service-three-api': {
@@ -238,7 +238,7 @@ describe('getHealth', () => {
             },
             { text: 'DOWN', classes: `health-table__cell_DOWN` },
             { text: undefined },
-            { text: 'HEALTHY', classes: 'health-table__cell_UP' },
+            { text: 'Healthy', classes: 'health-table__cell_UP' },
             {
               html: '<a href="https://developer-portal.hmpps.service.justice.gov.uk/components/hmpps-offender-categorisation-api/environment/dev">Dev Portal</a>',
             },
