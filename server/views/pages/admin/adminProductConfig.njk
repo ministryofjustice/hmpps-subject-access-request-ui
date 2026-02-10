@@ -1,0 +1,46 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
+{%- from "moj/components/search/macro.njk" import mojSearch -%}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{%- from "moj/components/filter/macro.njk" import mojFilter -%}
+{%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
+{%- from "govuk/components/input/macro.njk" import govukInput -%}
+{%- from "govuk/components/tag/macro.njk" import govukTag -%}
+
+{% block content %}
+
+{{ govukBackLink({
+    text: "Back",
+    href: "/admin"
+}) }}
+
+  <h1 class="govuk-heading-l">Product Configurations</h1>
+
+    <table class="govuk-table status-table" data-module="moj-sortable-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header" aria-sort="ascending">Name</th>
+          <th scope="col" class="govuk-table__header">Label</th>
+          <th scope="col" class="govuk-table__header">Url</th>
+          <th scope="col" class="govuk-table__header">Category</th>
+          <th scope="col" class="govuk-table__header">Enabled</th>
+          <th scope="col" class="govuk-table__header">Template migrated</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for product in products %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{product.name}}</td>
+            <td class="govuk-table__cell">{{product.label}}</td>
+            <td class="govuk-table__cell">{{product.url}}</td>
+            <td class="govuk-table__cell">{{product.category}}</td>
+            <td class="govuk-table__cell">{{product.enabled}}</td>
+            <td class="govuk-table__cell">{{product.templateMigrated}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+{% endblock %}

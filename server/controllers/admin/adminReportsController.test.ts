@@ -1,10 +1,10 @@
 import type { Request, Response } from 'express'
 import { auditService } from '@ministryofjustice/hmpps-audit-client'
-import type { AdminSubjectAccessRequest } from '../@types/subjectAccessRequest'
-import { auditAction } from '../utils/testUtils'
-import { AuditEvent } from '../audit'
+import type { AdminSubjectAccessRequest } from '../../@types/subjectAccessRequest'
+import { auditAction } from '../../utils/testUtils'
+import { AuditEvent } from '../../audit'
 import AdminReportsController from './adminReportsController'
-import reportService from '../services/report'
+import reportService from '../../services/report'
 
 const subjectAccessRequests: AdminSubjectAccessRequest[] = [
   {
@@ -128,7 +128,7 @@ describe('getAdminSummary', () => {
       req.query = queryParams
       await AdminReportsController.getAdminSummary(req, res)
       expect(res.render).toHaveBeenCalledWith(
-        'pages/adminReports',
+        'pages/admin/adminReports',
         expect.objectContaining({
           reportList: [
             {
@@ -179,7 +179,7 @@ describe('getAdminSummary', () => {
     test('when the current page is the first page', async () => {
       await AdminReportsController.getAdminSummary(req, res)
       expect(res.render).toHaveBeenCalledWith(
-        'pages/adminReports',
+        'pages/admin/adminReports',
         expect.objectContaining({
           previous: 0,
           next: 2,
@@ -197,7 +197,7 @@ describe('getAdminSummary', () => {
       } as unknown as Request
       await AdminReportsController.getAdminSummary(req, res)
       expect(res.render).toHaveBeenCalledWith(
-        'pages/adminReports',
+        'pages/admin/adminReports',
         expect.objectContaining({
           previous: 4,
           next: 0,
@@ -219,7 +219,7 @@ describe('getAdminSummary', () => {
       } as unknown as Request
       await AdminReportsController.getAdminSummary(req, res)
       expect(res.render).toHaveBeenCalledWith(
-        'pages/adminReports',
+        'pages/admin/adminReports',
         expect.objectContaining({
           previous: 2,
           next: 4,

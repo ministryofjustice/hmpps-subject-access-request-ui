@@ -1,9 +1,9 @@
 import type { Request, Response } from 'express'
-import type { AdminReport } from '../@types/report'
-import type { AdminSubjectAccessRequest } from '../@types/subjectAccessRequest'
-import { audit, AuditEvent } from '../audit'
-import { formatDateTime } from '../utils/dateHelpers'
-import reportService from '../services/report'
+import type { AdminReport } from '../../@types/report'
+import type { AdminSubjectAccessRequest } from '../../@types/subjectAccessRequest'
+import { audit, AuditEvent } from '../../audit'
+import { formatDateTime } from '../../utils/dateHelpers'
+import reportService from '../../services/report'
 
 export const RESULTS_PER_PAGE = 50
 
@@ -36,7 +36,7 @@ export default class AdminReportsController {
 
     const reportList = AdminReportsController.getSarSummaryList(subjectAccessRequests)
 
-    res.render('pages/adminReports', {
+    res.render('pages/admin/adminReports', {
       reportList,
       pageLinks,
       previous,

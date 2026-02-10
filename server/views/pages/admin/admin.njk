@@ -1,0 +1,44 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% block content %}
+
+  {{ govukBackLink({
+    text: "Back",
+    href: "/"
+  }) }}
+
+  <h1 class="govuk-heading-l">Subject Access Request Admin</h1>
+
+  <div class="body-cards">
+
+    <div class="govuk-grid-row sar-card-group">
+      <div class="govuk-grid-column-one-third sar-card-group__item">
+        <div class="sar-card">
+          <h3 class="govuk-heading-m">
+            <a class="govuk-link" id="admin-health" href="/admin/health">Health</a>
+          </h3>
+          <p class="govuk-body auth-card__description">View health details of SAR related services.</p>
+        </div>
+      </div>
+      <div class="govuk-grid-column-one-third sar-card-group__item">
+        <div class="sar-card">
+          <h3 class="govuk-heading-m">
+            <a class="govuk-link" id="admin-reports" href="/admin/reports?status=completed&status=errored&status=overdue&status=pending">SAR reports</a>
+          </h3>
+          <p class="govuk-body">Admin view of previously requested SAR reports.</p>
+        </div>
+      </div>
+      <div class="govuk-grid-column-one-third sar-card-group__item">
+        <div class="sar-card">
+          <h3 class="govuk-heading-m">
+            <a class="govuk-link" id="admin-service-config" href="/admin/product-config">Product Configuration</a>
+          </h3>
+          <p class="govuk-body auth-card__description">View existing product configurations.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+{% endblock %}
