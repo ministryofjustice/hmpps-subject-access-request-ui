@@ -1,8 +1,8 @@
 import type { Request, Response } from 'express'
-import type { SubjectAccessRequest } from '../@types/subjectAccessRequest'
-import { formatDate, formatDateTime } from '../utils/dateHelpers'
-import { audit, AuditEvent } from '../audit'
-import reportService from '../services/report'
+import type { SubjectAccessRequest } from '../../@types/subjectAccessRequest'
+import { formatDate, formatDateTime } from '../../utils/dateHelpers'
+import { audit, AuditEvent } from '../../audit'
+import reportService from '../../services/report'
 import { RESULTS_PER_PAGE } from './adminReportsController'
 
 export default class AdminDetailsController {
@@ -16,7 +16,7 @@ export default class AdminDetailsController {
     const subjectAccessRequest = AdminDetailsController.getFormattedSar(subjectAccessRequests, sarId)
     const searchParamsString = AdminDetailsController.getSearchParamsString(req.session.searchOptions)
 
-    res.render('pages/adminDetails', { subjectAccessRequest, searchParamsString })
+    res.render('pages/admin/adminDetails', { subjectAccessRequest, searchParamsString })
   }
 
   static async restartRequest(req: Request, res: Response) {
@@ -37,7 +37,7 @@ export default class AdminDetailsController {
     const subjectAccessRequest = AdminDetailsController.getFormattedSar(subjectAccessRequests, sarId)
     const searchParamsString = AdminDetailsController.getSearchParamsString(req.session.searchOptions)
 
-    res.render('pages/adminDetails', { subjectAccessRequest, searchParamsString, restartDetails })
+    res.render('pages/admin/adminDetails', { subjectAccessRequest, searchParamsString, restartDetails })
   }
 
   private static getSearchParamsString(searchOptions: SearchOptions) {

@@ -1,10 +1,10 @@
 import type { Request, Response } from 'express'
 import { auditService } from '@ministryofjustice/hmpps-audit-client'
-import { AdminSubjectAccessRequest } from '../@types/subjectAccessRequest'
-import { auditAction } from '../utils/testUtils'
-import { AuditEvent } from '../audit'
+import { AdminSubjectAccessRequest } from '../../@types/subjectAccessRequest'
+import { auditAction } from '../../utils/testUtils'
+import { AuditEvent } from '../../audit'
 import AdminDetailsController from './adminDetailsController'
-import reportService from '../services/report'
+import reportService from '../../services/report'
 
 const subjectAccessRequests: AdminSubjectAccessRequest[] = [
   {
@@ -134,7 +134,7 @@ describe('getAdminDetails', () => {
     await AdminDetailsController.getAdminDetail(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
-      'pages/adminDetails',
+      'pages/admin/adminDetails',
       expect.objectContaining({
         subjectAccessRequest: expectedSubjectAccessRequest,
         searchParamsString: '',
@@ -161,7 +161,7 @@ describe('getAdminDetails', () => {
       await AdminDetailsController.getAdminDetail(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
-        'pages/adminDetails',
+        'pages/admin/adminDetails',
         expect.objectContaining({
           subjectAccessRequest: expectedSubjectAccessRequest,
           searchParamsString: expectedSearchParams,
@@ -220,7 +220,7 @@ describe('restartRequest', () => {
     await AdminDetailsController.restartRequest(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
-      'pages/adminDetails',
+      'pages/admin/adminDetails',
       expect.objectContaining({
         subjectAccessRequest: expectedSubjectAccessRequest,
         searchParamsString: '',
@@ -250,7 +250,7 @@ describe('restartRequest', () => {
       await AdminDetailsController.restartRequest(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
-        'pages/adminDetails',
+        'pages/admin/adminDetails',
         expect.objectContaining({
           subjectAccessRequest: expectedSubjectAccessRequest,
           searchParamsString: expectedSearchParams,

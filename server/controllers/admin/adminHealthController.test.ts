@@ -1,9 +1,9 @@
 import type { Request, Response } from 'express'
 import { auditService } from '@ministryofjustice/hmpps-audit-client'
-import { auditAction } from '../utils/testUtils'
-import { AuditEvent } from '../audit'
-import adminHealthService from '../services/adminHealth'
-import { HealthResponse } from '../@types/health'
+import { auditAction } from '../../utils/testUtils'
+import { AuditEvent } from '../../audit'
+import adminHealthService from '../../services/adminHealth'
+import { HealthResponse } from '../../@types/health'
 import AdminHealthController from './adminHealthController'
 
 const healthResponse: HealthResponse = {
@@ -127,7 +127,7 @@ describe('getHealth', () => {
   test('renders a response with health details', async () => {
     await AdminHealthController.getHealth(req, res)
     expect(res.render).toHaveBeenCalledWith(
-      'pages/adminHealth',
+      'pages/admin/adminHealth',
       expect.objectContaining({
         documentStoreHealthRows: [
           [

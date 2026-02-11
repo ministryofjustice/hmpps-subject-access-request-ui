@@ -385,3 +385,14 @@ describe('POST /admin/restart', () => {
       })
   })
 })
+
+describe('GET /admin/product-config', () => {
+  it('should render admin view product config page', () => {
+    return request(adminUserApp)
+      .get('/admin/product-config')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Product Configurations')
+      })
+  })
+})

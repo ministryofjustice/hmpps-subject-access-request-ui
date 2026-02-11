@@ -8,12 +8,13 @@ import ConfirmationController from '../controllers/confirmationController'
 import SubjectIdController from '../controllers/subjectIdController'
 import ReportsController from '../controllers/reportsController'
 import ReportDownloadController from '../controllers/reportDownloadController'
-import AdminDetailsController from '../controllers/adminDetailsController'
-import AdminHealthController from '../controllers/adminHealthController'
-import AdminReportsController from '../controllers/adminReportsController'
+import AdminDetailsController from '../controllers/admin/adminDetailsController'
+import AdminHealthController from '../controllers/admin/adminHealthController'
+import AdminReportsController from '../controllers/admin/adminReportsController'
 import RegisterTemplateProductController from '../controllers/registerTemplateProductController'
 import RegisterTemplateUploadController from '../controllers/registerTemplateUploadController'
 import RegisterTemplateConfirmationController from '../controllers/registerTemplateConfirmationController'
+import AdminProductConfigController from '../controllers/admin/adminProductConfigController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes(service: Services): Router {
@@ -70,7 +71,7 @@ export default function routes(service: Services): Router {
   get('/register-template/result', RegisterTemplateConfirmationController.getResult)
 
   get('/admin', (req, res, next) => {
-    res.render('pages/admin')
+    res.render('pages/admin/admin')
   })
   get('/admin/reports', AdminReportsController.getAdminSummary)
   get('/admin/details', AdminDetailsController.getAdminDetail)
@@ -80,6 +81,7 @@ export default function routes(service: Services): Router {
     res.redirect(`/admin/details?${searchParams.toString()}`)
   })
   post('/admin/restart', AdminDetailsController.restartRequest)
+  get('/admin/product-config', AdminProductConfigController.getProductConfigSummary)
 
   return router
 }

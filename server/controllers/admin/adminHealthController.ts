@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
-import { audit, AuditEvent } from '../audit'
-import adminHealthService from '../services/adminHealth'
-import { ServiceHealthComponent } from '../@types/health'
+import { audit, AuditEvent } from '../../audit'
+import adminHealthService from '../../services/adminHealth'
+import { ServiceHealthComponent } from '../../@types/health'
 
 export default class AdminHealthController {
   static async getHealth(req: Request, res: Response) {
@@ -26,7 +26,7 @@ export default class AdminHealthController {
       AdminHealthController.getHealthRow(item, sarServiceComponents[item], true),
     )
 
-    res.render('pages/adminHealth', {
+    res.render('pages/admin/adminHealth', {
       documentStoreHealthRows,
       lookupServiceHealthRows,
       sarServiceHealthRows,
