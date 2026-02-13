@@ -7,7 +7,6 @@ const selectedProduct = {
   name: 'service-one',
   url: 'http://service-one',
   label: 'Service One',
-  order: 1,
 }
 const templateFileBase64 = 'dGVzdGZpbGUK'
 const templateName = 'myfile.mustache'

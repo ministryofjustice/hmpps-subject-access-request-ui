@@ -25,7 +25,6 @@ const selectedProduct = {
   name: 'service-one',
   url: 'http://service-one',
   label: 'Service One',
-  order: 1,
   category: 'PRISON',
 }
 

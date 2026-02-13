@@ -13,7 +13,6 @@ beforeEach(() => {
       label: 'Prisoner Search',
       url: 'https://prisoner-search-dev.prison.service.justice.gov.uk',
       enabled: true,
-      order: 1,
       category: 'PRISON',
     },
     {
@@ -22,7 +21,6 @@ beforeEach(() => {
       label: 'Book Secure Move API',
       url: 'https://book-move-dev.prison.service.justice.gov.uk',
       enabled: true,
-      order: 2,
       category: 'PRISON',
     },
     {
@@ -31,7 +29,6 @@ beforeEach(() => {
       label: 'Community accommodation services',
       url: 'https://approved-premises-api-dev.hmpps.service.justice.gov.uk',
       enabled: true,
-      order: 3,
       category: 'PROBATION',
     },
   ]
@@ -126,8 +123,8 @@ describe('selectProducts', () => {
       // @ts-expect-error stubbing session
       session: {
         productList: [
-          { id: '1', name: 'service-1', label: 'Svc 1', url: 'svc-1.com', order: 1, enabled: true, category: 'PRISON' },
-          { id: '2', name: 'service-2', label: 'Svc 2', url: 'svc-2.com', order: 2, enabled: true, category: 'PRISON' },
+          { id: '1', name: 'service-1', label: 'Svc 1', url: 'svc-1.com', enabled: true, category: 'PRISON' },
+          { id: '2', name: 'service-2', label: 'Svc 2', url: 'svc-2.com', enabled: true, category: 'PRISON' },
         ],
         selectedList: [],
       },
@@ -147,11 +144,11 @@ describe('selectProducts', () => {
       // @ts-expect-error stubbing session
       session: {
         productList: [
-          { id: '1', name: 'service-1', label: 'Svc 1', url: 'svc-1.com', order: 1, enabled: true, category: 'PRISON' },
-          { id: '2', name: 'service-2', label: 'Svc 2', url: 'svc-2.com', order: 2, enabled: true, category: 'PRISON' },
+          { id: '1', name: 'service-1', label: 'Svc 1', url: 'svc-1.com', enabled: true, category: 'PRISON' },
+          { id: '2', name: 'service-2', label: 'Svc 2', url: 'svc-2.com', enabled: true, category: 'PRISON' },
         ],
         selectedList: [
-          { id: '1', name: 'service-1', label: 'Svc 1', url: 'svc-1.com', order: 1, enabled: true, category: 'PRISON' },
+          { id: '1', name: 'service-1', label: 'Svc 1', url: 'svc-1.com', enabled: true, category: 'PRISON' },
         ],
       },
       body: {
