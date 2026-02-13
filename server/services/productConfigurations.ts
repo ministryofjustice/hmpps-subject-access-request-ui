@@ -3,13 +3,12 @@ import superagent from 'superagent'
 import config from '../config'
 import getUserToken from '../utils/userTokenHelper'
 
-const getProductList = async (req: Request) => {
+const getProductList = async (req: Request): Promise<Product[]> => {
   const response = await superagent
     .get(`${config.apis.subjectAccessRequest.url}/api/services`)
     .set('Authorization', `Bearer ${getUserToken(req)}`)
 
-  const productList: Product[] = response.body
-  return productList.sort((a, b) => a.order - b.order)
+  return response.body
 }
 
 const getTemplateRegistrationProductList = async (req: Request) =>

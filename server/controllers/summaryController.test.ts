@@ -33,9 +33,7 @@ describe('getReportDetails', () => {
           dateTo: '25/12/2022',
           caseReference: 'mockedCaseReference',
         },
-        selectedList: [
-          { name: 'service-one', label: 'Service One', order: 1, url: 'hmpps-service-one.com', disabled: false },
-        ],
+        selectedList: [{ name: 'service-one', label: 'Service One', url: 'hmpps-service-one.com', disabled: false }],
       },
     } as unknown as Request
     SummaryController.getReportDetails(req, res)
@@ -73,9 +71,7 @@ describe('postReportDetails', () => {
           caseReference: 'mockedCaseReference',
           subjectId: 'A1111AA',
         },
-        selectedList: [
-          { name: 'service-one', label: 'service1', url: 'hmpps-service-one.com', disabled: false, order: 1 },
-        ],
+        selectedList: [{ name: 'service-one', label: 'service1', url: 'hmpps-service-one.com', disabled: false }],
       },
       user: {
         token: 'fakeUserToken',
@@ -105,9 +101,7 @@ describe('postReportDetails', () => {
           caseReference: 'mockedCaseReference',
           subjectId: '',
         },
-        selectedList: [
-          { name: 'service-one', label: 'service1', url: 'hmpps-service-one.com', disabled: false, order: 1 },
-        ],
+        selectedList: [{ name: 'service-one', label: 'service1', url: 'hmpps-service-one.com', disabled: false }],
       },
       user: {
         token: 'fakeUserToken',
@@ -143,9 +137,7 @@ describe('postReportDetails', () => {
           caseReference: 'mockedCaseReference',
           subjectId: 'A1111AA',
         },
-        selectedList: [
-          { name: 'service-one', label: 'service1', url: 'hmpps-service-one.com', disabled: false, order: 1 },
-        ],
+        selectedList: [{ name: 'service-one', label: 'service1', url: 'hmpps-service-one.com', disabled: false }],
       },
       user: {
         token: 'fakeUserToken',
@@ -169,9 +161,7 @@ describe('postReportDetails', () => {
           caseReference: 'mockedCaseReference',
           subjectId: 'a1111aa',
         },
-        selectedList: [
-          { name: 'service-one', label: 'service1', url: 'hmpps-service-one.com', disabled: false, order: 1 },
-        ],
+        selectedList: [{ name: 'service-one', label: 'service1', url: 'hmpps-service-one.com', disabled: false }],
       },
       user: {
         token: 'fakeUserToken',

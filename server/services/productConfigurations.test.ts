@@ -19,7 +19,6 @@ beforeEach(() => {
       label: 'Prisoner Search',
       url: 'https://prisoner-search-dev.prison.service.justice.gov.uk',
       enabled: true,
-      order: 1,
       category: 'PRISON',
     },
     {
@@ -28,7 +27,6 @@ beforeEach(() => {
       label: 'Book Secure Move API',
       url: 'https://book-move-dev.prison.service.justice.gov.uk',
       enabled: true,
-      order: 2,
       category: 'PRISON',
     },
   ]
@@ -39,7 +37,6 @@ beforeEach(() => {
       label: 'Excluded Service One',
       url: 'https://excluded-one-dev.prison.service.justice.gov.uk',
       enabled: true,
-      order: 3,
       category: 'PRISON',
     },
     {
@@ -48,7 +45,6 @@ beforeEach(() => {
       label: 'Excluded Service Two',
       url: 'https://excluded-two-dev.prison.service.justice.gov.uk',
       enabled: true,
-      order: 4,
       category: 'PRISON',
     },
     {
@@ -57,7 +53,6 @@ beforeEach(() => {
       label: 'Excluded Service Three',
       url: 'https://excluded-three-dev.prison.service.justice.gov.uk',
       enabled: true,
-      order: 5,
       category: 'PRISON',
     },
   ])

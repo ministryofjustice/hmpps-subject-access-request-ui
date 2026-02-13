@@ -3,7 +3,6 @@ interface Product {
   name: string
   url: string
   label: string
-  order: number
   enabled?: boolean
   templateMigrated?: boolean
   category: ProductCategory

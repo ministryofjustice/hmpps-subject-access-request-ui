@@ -8,14 +8,12 @@ const productList = [
     name: 'service-one',
     url: 'http://service-one',
     label: 'Service One',
-    order: 1,
   },
   {
     id: '67890',
     name: 'service-two',
     url: 'http://service-two',
     label: 'Service Two',
-    order: 2,
   },
 ]
 

@@ -10,7 +10,6 @@ const product: Product = {
   name: 'service-one',
   url: 'http://service-one',
   label: 'Service One',
-  order: 1,
   category: 'PRISON',
 }
 const v1Pending: ProductVersion = {
