@@ -53,9 +53,10 @@ export default class AdminProductConfigController {
       const sendAudit = audit(res.locals.user.username, { name: req.session.newProduct.name })
       await sendAudit(AuditEvent.CREATE_PRODUCT_CONFIG_FAILURE)
 
+      const createError = (error.response && error.response.body && error.response.body.userMessage) || error.message
       res.render('pages/admin/confirmProductConfig', {
         productDetails: req.session.newProduct,
-        createError: error.message,
+        createError,
       })
       return
     }
