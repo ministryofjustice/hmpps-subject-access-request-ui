@@ -1,0 +1,154 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% block content %}
+
+  {{ govukBackLink({
+    text: "Back",
+    href: "/admin/create-product-config"
+  }) }}
+
+  {% if productDetails.enabled %}
+    {% set enabledTag = govukTag({text: "Enabled", classes: "govuk-tag--green"}) %}
+  {% else %}
+    {% set enabledTag = govukTag({text: "Disabled", classes: "govuk-tag--red"}) %}
+  {% endif %}
+
+  {% if productDetails.templateMigrated %}
+    {% set templateMigratedTag = govukTag({text: "Migrated", classes: "govuk-tag--green"}) %}
+  {% else %}
+    {% set templateMigratedTag = govukTag({text: "Not migrated", classes: "govuk-tag--red"}) %}
+  {% endif %}
+
+  {% if createError %}
+    {{ govukErrorSummary({
+      titleText: "Problem creating product configuration",
+      errorList: [
+        {
+          text: createError
+        }
+      ]
+    }) }}
+  {% endif %}
+
+  <h1 class="govuk-heading-l">Confirm Product Configuration Details</h1>
+
+  <form action="/admin/confirm-product-config" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+    {{ govukSummaryList({
+      attributes: {
+        "id": "product-config-summary"
+      },
+
+      rows: [
+        {
+          key: { text: "Name" },
+          value: { text: productDetails.name },
+          actions: {
+            items: [
+              {
+                attributes: { "id": "change-name" },
+                href: "/admin/create-product-config",
+                text: "Change",
+                visuallyHiddenText: "name"
+              }
+            ]
+          }
+        },
+        {
+          key: { text: "Label" },
+          value: { text: productDetails.label },
+          actions: {
+            items: [
+              {
+                attributes: { "id": "change-label" },
+                href: "/admin/create-product-config",
+                text: "Change",
+                visuallyHiddenText: "label"
+              }
+            ]
+          }
+        },
+        {
+          key: { text: "Url" },
+          value: { text: productDetails.url },
+          actions: {
+            items: [
+              {
+                attributes: { "id": "change-url" },
+                href: "/admin/create-product-config",
+                text: "Change",
+                visuallyHiddenText: "url"
+              }
+            ]
+          }
+        },
+        {
+          key: { text: "Category" },
+          value: { text: productDetails.category },
+          actions: {
+            items: [
+              {
+                attributes: { "id": "change-category" },
+                href: "/admin/create-product-config",
+                text: "Change",
+                visuallyHiddenText: "category"
+              }
+            ]
+          }
+        },
+        {
+          key: { text: "Enabled" },
+          value: { html: enabledTag },
+          actions: {
+            items: [
+              {
+                attributes: { "id": "change-enabled" },
+                href: "/admin/create-product-config",
+                text: "Change",
+                visuallyHiddenText: "enabled"
+              }
+            ]
+          }
+        },
+        {
+          key: { text: "Template migrated" },
+          value: { html: templateMigratedTag },
+          actions: {
+            items: [
+              {
+                attributes: { "id": "change-template-migrated" },
+                href: "/admin/create-product-config",
+                text: "Change",
+                visuallyHiddenText: "templateMigrated"
+              }
+            ]
+          }
+        }
+      ]
+    }) }}
+
+    <div class="govuk-button-group">
+    {{ govukButton({
+      text: "Accept and create",
+      id: "accept-confirm",
+      preventDoubleClick: true
+    }) }}
+
+    {{ govukButton({
+      text: "Cancel",
+      id: "cancel",
+      href: "/admin/cancel-product-config",
+      classes: "govuk-button--secondary",
+      preventDoubleClick: true
+    }) }}
+    </div>
+
+  </form>
+
+{% endblock %}

@@ -16,7 +16,15 @@ const getTemplateRegistrationProductList = async (req: Request) =>
     productList.filter(product => !config.templateRegistrationExcludedProducts.includes(product.name)),
   )
 
+const createProduct = async (product: NewProduct, req: Request) => {
+  await superagent
+    .post(`${config.apis.subjectAccessRequest.url}/api/services`)
+    .send(product)
+    .set('Authorization', `Bearer ${getUserToken(req)}`)
+}
+
 export default {
   getProductList,
   getTemplateRegistrationProductList,
+  createProduct,
 }

@@ -6,6 +6,7 @@ import AuthSignInPage from '../pages/authSignInPage'
 import AuthErrorPage from '../pages/authErrorPage'
 import sarApi from '../mockApis/sarApi'
 import AdminProductConfigPage from '../pages/adminProductConfigPage'
+import AdminCreateProductConfigPage from '../pages/adminCreateProductConfigPage'
 
 test.describe('Admin Product Configurations', () => {
   test.beforeEach(async () => {
@@ -66,15 +67,35 @@ test.describe('Admin Product Configurations', () => {
     await expect(productConfigPage.productsTableCell(0, 1)).toContainText('Service One')
     await expect(productConfigPage.productsTableCell(0, 2)).toContainText('http://service-one')
     await expect(productConfigPage.productsTableCell(0, 3)).toContainText('PRISON')
-    await expect(productConfigPage.productsTableCell(0, 4)).toContainText('true')
-    await expect(productConfigPage.productsTableCell(0, 5)).toContainText('true')
+    await expect(productConfigPage.productsTableCell(0, 4)).toContainText('Enabled')
+    await expect(productConfigPage.productsTableCell(0, 5)).toContainText('Migrated')
 
     await expect(productConfigPage.productsTableRow(1)).toBeVisible()
-    await expect(productConfigPage.productsTableCell(1, 0)).toContainText('service-two')
-    await expect(productConfigPage.productsTableCell(1, 1)).toContainText('Service Two')
-    await expect(productConfigPage.productsTableCell(1, 2)).toContainText('http://service-two')
-    await expect(productConfigPage.productsTableCell(1, 3)).toContainText('PROBATION')
-    await expect(productConfigPage.productsTableCell(1, 4)).toContainText('true')
-    await expect(productConfigPage.productsTableCell(1, 5)).toContainText('false')
+    await expect(productConfigPage.productsTableCell(1, 0)).toContainText('service-three')
+    await expect(productConfigPage.productsTableCell(1, 1)).toContainText('Service Three')
+    await expect(productConfigPage.productsTableCell(1, 2)).toContainText('http://service-three')
+    await expect(productConfigPage.productsTableCell(1, 3)).toContainText('PRISON')
+    await expect(productConfigPage.productsTableCell(1, 4)).toContainText('Disabled')
+    await expect(productConfigPage.productsTableCell(1, 5)).toContainText('Not migrated')
+
+    await expect(productConfigPage.productsTableRow(2)).toBeVisible()
+    await expect(productConfigPage.productsTableCell(2, 0)).toContainText('service-two')
+    await expect(productConfigPage.productsTableCell(2, 1)).toContainText('Service Two')
+    await expect(productConfigPage.productsTableCell(2, 2)).toContainText('http://service-two')
+    await expect(productConfigPage.productsTableCell(2, 3)).toContainText('PROBATION')
+    await expect(productConfigPage.productsTableCell(2, 4)).toContainText('Enabled')
+    await expect(productConfigPage.productsTableCell(2, 5)).toContainText('Not migrated')
+  })
+
+  test('Displays create product config button which redirects to create page', async ({ page }) => {
+    await login(page, { roles: [ADMIN_ROLE] })
+    await page.goto('/admin/product-config')
+    const productConfigPage = await verifyOnPage(page, AdminProductConfigPage)
+
+    await expect(productConfigPage.createProductConfigButton).toBeVisible()
+    await productConfigPage.createProductConfig()
+
+    const createPage = await verifyOnPage(page, AdminCreateProductConfigPage)
+    expect(createPage.page.url()).toMatch(/admin\/create-product-config$/)
   })
 })
