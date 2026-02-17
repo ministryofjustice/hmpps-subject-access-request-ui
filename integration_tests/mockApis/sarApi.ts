@@ -43,6 +43,15 @@ export default {
         enabled: true,
         templateMigrated: false,
       },
+      {
+        id: '3',
+        name: 'service-three',
+        url: 'http://service-three',
+        label: 'Service Three',
+        category: 'PRISON',
+        enabled: false,
+        templateMigrated: false,
+      },
     ],
   ): SuperAgentRequest =>
     stubFor({
@@ -54,6 +63,17 @@ export default {
         status: httpStatus,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: body,
+      },
+    }),
+
+  stubCreateProduct: (httpStatus = 201): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/api/services',
+      },
+      response: {
+        status: httpStatus,
       },
     }),
 

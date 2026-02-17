@@ -1,4 +1,4 @@
-import type { Express } from 'express'
+import { Express } from 'express'
 import request from 'supertest'
 import requestSession from 'supertest-session'
 import { auditService } from '@ministryofjustice/hmpps-audit-client'
@@ -54,6 +54,7 @@ beforeEach(() => {
   ]
   productConfigsService.getProductList = jest.fn().mockReturnValue(productConfigs)
   productConfigsService.getTemplateRegistrationProductList = jest.fn().mockReturnValue(productConfigs)
+  productConfigsService.createProduct = jest.fn()
   const templateVersion = {
     createdDate: '2025-11-13T11:34:45Z',
     fileHash: 'abc',
@@ -393,6 +394,61 @@ describe('GET /admin/product-config', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Product Configurations')
+      })
+  })
+})
+
+describe('GET /admin/create-product-config', () => {
+  it('should render admin create product config page', () => {
+    return request(adminUserApp)
+      .get('/admin/create-product-config')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Create Product Configuration')
+      })
+  })
+})
+
+describe('POST /admin/create-product-config', () => {
+  it('should redirect to itself given no data', () => {
+    return request(adminUserApp)
+      .post('/admin/create-product-config')
+      .expect(res => {
+        expect(res.statusCode).toBe(200)
+        expect(res.text).toContain('Create Product Configuration')
+      })
+  })
+})
+
+describe('GET /admin/confirm-product-config', () => {
+  it('should render admin confirm product config page', () => {
+    return request(adminUserApp)
+      .get('/admin/confirm-product-config')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Confirm Product Configuration Details')
+      })
+  })
+})
+
+describe('POST /admin/confirm-product-config', () => {
+  it('should redirect to admin view product config page', () => {
+    return request(adminUserApp)
+      .post('/admin/confirm-product-config')
+      .expect(res => {
+        expect(res.statusCode).toBe(302)
+        expect(res.text).toContain('Redirecting to /admin/product-config')
+      })
+  })
+})
+
+describe('GET /admin/cancel-product-config', () => {
+  it('should redirect to admin view product config page', () => {
+    return request(adminUserApp)
+      .get('/admin/cancel-product-config')
+      .expect(res => {
+        expect(res.statusCode).toBe(302)
+        expect(res.text).toContain('Redirecting to /admin/product-config')
       })
   })
 })

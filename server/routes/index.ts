@@ -82,6 +82,17 @@ export default function routes(service: Services): Router {
   })
   post('/admin/restart', AdminDetailsController.restartRequest)
   get('/admin/product-config', AdminProductConfigController.getProductConfigSummary)
+  get('/admin/create-product-config', (req: Request, res: Response) =>
+    res.render('pages/admin/productConfigDetails', { productDetails: req.session.newProduct }),
+  )
+  post('/admin/create-product-config', AdminProductConfigController.saveNewProductConfig)
+  get('/admin/confirm-product-config', (req: Request, res: Response) =>
+    res.render('pages/admin/confirmProductConfig', {
+      productDetails: req.session.newProduct,
+    }),
+  )
+  post('/admin/confirm-product-config', AdminProductConfigController.confirmNewProductConfig)
+  get('/admin/cancel-product-config', AdminProductConfigController.cancelNewProductConfig)
 
   return router
 }
