@@ -1,0 +1,20 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% block content %}
+
+  {{ govukBackLink({
+    text: "Back",
+    href: "/admin/cancel-create-product-config"
+  }) }}
+
+  <h1 class="govuk-heading-l">Create Product Configuration</h1>
+
+  <form action="/admin/create-product-config" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+    {% include "../../partials/productDetailsInput.njk" %}
+
+  </form>
+
+{% endblock %}

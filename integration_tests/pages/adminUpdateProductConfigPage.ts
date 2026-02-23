@@ -1,8 +1,8 @@
 import { type Page } from '@playwright/test'
 import AdminProductConfigInputPage from './adminProductConfigInputPage'
 
-export default class AdminCreateProductConfigPage extends AdminProductConfigInputPage {
+export default class AdminUpdateProductConfigPage extends AdminProductConfigInputPage {
   constructor(page: Page) {
-    super(page, 'Create Product Configuration')
+    super(page, 'Update Product Configuration')
   }
 }

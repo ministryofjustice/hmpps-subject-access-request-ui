@@ -139,7 +139,8 @@ describe('createProduct', () => {
   const req: Request = {
     user: requestUser,
   } as unknown as Request
-  const newProduct: NewProduct = {
+  const newProduct: Product = {
+    id: null,
     name: 'my-prod-one',
     label: 'Product One',
     url: 'http://product-one',
@@ -164,6 +165,60 @@ describe('createProduct', () => {
     sarApiMock.post('/api/services', { ...newProduct }).reply(201)
 
     await productConfigsService.createProduct(newProduct, req)
+
+    expect(nock.isDone()).toBe(true)
+  })
+})
+
+describe('updateProduct', () => {
+  const req: Request = {
+    user: requestUser,
+  } as unknown as Request
+  const id = '10dde7a8-7c75-4c16-aceb-3311a57a311d'
+  const product: Product = {
+    id,
+    name: 'my-prod-one',
+    label: 'Product One',
+    url: 'http://product-one',
+    category: ProductCategory.PRISON,
+    enabled: true,
+    templateMigrated: true,
+  }
+
+  test.each([
+    { status: 401, expected: 'Unauthorized' },
+    { status: 403, expected: 'Forbidden' },
+    { status: 500, expected: 'Internal Server Error' },
+  ])('should return error: "$expected" on status: $status', async ({ status, expected }) => {
+    sarApiMock
+      .put(`/api/services/${id}`, {
+        name: product.name,
+        label: product.label,
+        url: product.url,
+        category: product.category,
+        enabled: product.enabled,
+        templateMigrated: product.templateMigrated,
+      })
+      .reply(status, { message: expected })
+
+    await expect(() => productConfigsService.updateProduct(product, req)).rejects.toThrow(expected)
+
+    expect(nock.isDone()).toBe(true)
+  })
+
+  test('API response is successful', async () => {
+    sarApiMock
+      .put(`/api/services/${id}`, {
+        name: product.name,
+        label: product.label,
+        url: product.url,
+        category: product.category,
+        enabled: product.enabled,
+        templateMigrated: product.templateMigrated,
+      })
+      .reply(200)
+
+    await productConfigsService.updateProduct(product, req)
 
     expect(nock.isDone()).toBe(true)
   })

@@ -35,7 +35,17 @@ const productConfigs: Product[] = [
     category: ProductCategory.PROBATION,
   },
 ]
-const newProduct: NewProduct = {
+const newProduct: Product = {
+  id: null,
+  name: 'my-prod-one',
+  label: 'Product One',
+  url: 'http://product-one',
+  category: 'PRISON',
+  enabled: true,
+  templateMigrated: true,
+}
+const updatedProduct: Product = {
+  id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
   name: 'my-prod-one',
   label: 'Product One',
   url: 'http://product-one',
@@ -49,6 +59,7 @@ beforeEach(() => {
   jest.spyOn(auditService, 'sendAuditMessage').mockResolvedValue()
   productService.getProductList = jest.fn().mockReturnValue(productConfigs)
   productService.createProduct = jest.fn()
+  productService.updateProduct = jest.fn()
 })
 
 afterEach(() => {
@@ -86,6 +97,69 @@ describe('getProductConfigSummary', () => {
       }),
     )
     expect(req.session.productList).toEqual(productConfigs)
+  })
+})
+
+describe('getProductConfigDetails', () => {
+  const req: Request = {
+    session: { productList: productConfigs },
+    query: {},
+    user: {
+      token: 'fakeUserToken',
+      authSource: 'auth',
+      username: 'username',
+    },
+  } as unknown as Request
+  const res: Response = {
+    render: jest.fn(),
+    set: jest.fn(),
+    send: jest.fn(),
+    locals: {
+      user: {
+        token: 'fakeUserToken',
+        authSource: 'auth',
+        username: 'username',
+      },
+    },
+  } as unknown as Response
+  test('renders details of product configuration when exists', async () => {
+    req.query.id = 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34'
+    await AdminProductConfigController.getProductConfigDetails(req, res)
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/admin/productConfigDetails',
+      expect.objectContaining({
+        productDetails: productConfigs[1],
+      }),
+    )
+    expect(req.session.updatedProduct).toEqual(productConfigs[1])
+    expect(productService.getProductList).not.toHaveBeenCalled()
+  })
+
+  test('renders error for product configuration when not exists', async () => {
+    req.query.id = '123456'
+    await AdminProductConfigController.getProductConfigDetails(req, res)
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/admin/productConfigDetails',
+      expect.objectContaining({
+        productDetails: undefined,
+        error: 'No product found with id 123456',
+      }),
+    )
+    expect(productService.getProductList).not.toHaveBeenCalled()
+  })
+
+  test('refetches product list when none exists in session', async () => {
+    req.session.productList = null
+    req.query.id = 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34'
+    await AdminProductConfigController.getProductConfigDetails(req, res)
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/admin/productConfigDetails',
+      expect.objectContaining({
+        productDetails: productConfigs[2],
+      }),
+    )
+    expect(req.session.updatedProduct).toEqual(productConfigs[2])
+    expect(productService.getProductList).toHaveBeenCalled()
   })
 })
 
@@ -137,7 +211,7 @@ describe('saveNewProductConfig', () => {
 
     await AdminProductConfigController.saveNewProductConfig(req, res)
 
-    expect(res.redirect).toHaveBeenCalledWith('/admin/confirm-product-config')
+    expect(res.redirect).toHaveBeenCalledWith('/admin/confirm-create-product-config')
     expect(req.session.newProduct).toEqual(expectedNewProduct)
     expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.CREATE_PRODUCT_CONFIG_ATTEMPT))
   })
@@ -178,13 +252,10 @@ describe('saveNewProductConfig', () => {
       await AdminProductConfigController.saveNewProductConfig(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
-        'pages/admin/productConfigDetails',
+        'pages/admin/createProductConfig',
         expect.objectContaining({
           productDetails: expectedNewProduct,
-          nameError,
-          labelError,
-          urlError,
-          categoryError,
+          errors: { nameError, labelError, urlError, categoryError, hasError: true },
         }),
       )
       expect(req.session.newProduct).toEqual(expectedNewProduct)
@@ -193,10 +264,123 @@ describe('saveNewProductConfig', () => {
   )
 })
 
-describe('confirmNewProductConfig', () => {
+describe('saveUpdatedProductConfig', () => {
   const req: Request = {
-    session: {},
+    session: { updatedProduct },
+    query: {},
+    body: {},
+    user: {
+      token: 'fakeUserToken',
+      authSource: 'auth',
+      username: 'username',
+    },
   } as unknown as Request
+  const res: Response = {
+    render: jest.fn(),
+    redirect: jest.fn(),
+    set: jest.fn(),
+    send: jest.fn(),
+    locals: {
+      user: {
+        token: 'fakeUserToken',
+        authSource: 'auth',
+        username: 'username',
+      },
+    },
+  } as unknown as Response
+  const productBody = {
+    name: newProduct.name,
+    label: newProduct.label,
+    url: newProduct.url,
+    category: 'PRISON',
+    enabled: 'enabled',
+    templateMigrated: 'templateMigrated',
+  }
+
+  test.each([
+    [productBody, updatedProduct],
+    [
+      { ...productBody, category: 'PROBATION', enabled: '' },
+      { ...updatedProduct, category: 'PROBATION', enabled: false, templateMigrated: true },
+    ],
+    [
+      { ...productBody, enabled: '', templateMigrated: '' },
+      { ...updatedProduct, enabled: false, templateMigrated: false },
+    ],
+  ])('details successfully stored in session and redirects to confirm page', async (body, expectedUpdatedProduct) => {
+    req.body = body
+
+    await AdminProductConfigController.saveUpdatedProductConfig(req, res)
+
+    expect(res.redirect).toHaveBeenCalledWith('/admin/confirm-update-product-config')
+    expect(req.session.updatedProduct).toEqual(expectedUpdatedProduct)
+    expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.UPDATE_PRODUCT_CONFIG_ATTEMPT))
+  })
+
+  test.each([
+    [{ ...productBody, name: '' }, { ...updatedProduct, name: '' }, 'name must be provided', '', '', ''],
+    [{ ...productBody, name: null }, { ...updatedProduct, name: null }, 'name must be provided', '', '', ''],
+    [{ ...productBody, name: undefined }, { ...updatedProduct, name: undefined }, 'name must be provided', '', '', ''],
+    [{ ...productBody, label: '' }, { ...updatedProduct, label: '' }, '', 'label must be provided', '', ''],
+    [{ ...productBody, label: null }, { ...updatedProduct, label: null }, '', 'label must be provided', '', ''],
+    [
+      { ...productBody, label: undefined },
+      { ...updatedProduct, label: undefined },
+      '',
+      'label must be provided',
+      '',
+      '',
+    ],
+    [{ ...productBody, url: '' }, { ...updatedProduct, url: '' }, '', '', 'url must be provided', ''],
+    [{ ...productBody, url: null }, { ...updatedProduct, url: null }, '', '', 'url must be provided', ''],
+    [{ ...productBody, url: undefined }, { ...updatedProduct, url: undefined }, '', '', 'url must be provided', ''],
+    [{ ...productBody, category: '' }, { ...updatedProduct, category: '' }, '', '', '', 'category must be provided'],
+    [
+      { ...productBody, category: null },
+      { ...updatedProduct, category: null },
+      '',
+      '',
+      '',
+      'category must be provided',
+    ],
+    [
+      { ...productBody, category: undefined },
+      { ...updatedProduct, category: undefined },
+      '',
+      '',
+      '',
+      'category must be provided',
+    ],
+    [
+      { ...productBody, name: '', label: null, url: undefined, category: '' },
+      { ...updatedProduct, name: '', label: null, url: undefined, category: '' },
+      'name must be provided',
+      'label must be provided',
+      'url must be provided',
+      'category must be provided',
+    ],
+  ])(
+    'details submitted fail validation and renders error',
+    async (body, expectedUpdatedProduct, nameError, labelError, urlError, categoryError) => {
+      req.body = body
+
+      await AdminProductConfigController.saveUpdatedProductConfig(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/admin/updateProductConfig',
+        expect.objectContaining({
+          productDetails: expectedUpdatedProduct,
+          errors: { nameError, labelError, urlError, categoryError, hasError: true },
+        }),
+      )
+      expect(req.session.updatedProduct).toEqual(expectedUpdatedProduct)
+      expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.UPDATE_PRODUCT_CONFIG_ATTEMPT))
+    },
+  )
+})
+
+describe('confirmNewProductConfig', () => {
+  const req: Request = { session: {} } as unknown as Request
   const res: Response = {
     render: jest.fn(),
     redirect: jest.fn(),
@@ -227,7 +411,7 @@ describe('confirmNewProductConfig', () => {
 
     expect(productService.createProduct).toHaveBeenCalledWith(newProduct, req)
     expect(res.render).toHaveBeenCalledWith(
-      'pages/admin/confirmProductConfig',
+      'pages/admin/confirmCreateProductConfig',
       expect.objectContaining({
         productDetails: newProduct,
         createError: 'Internal error',
@@ -238,18 +422,55 @@ describe('confirmNewProductConfig', () => {
   })
 })
 
-describe('cancelNewProductConfig', () => {
-  const req: Request = {
-    session: {},
-    user: {
-      token: 'fakeUserToken',
-      authSource: 'auth',
-      username: 'username',
-    },
-  } as unknown as Request
+describe('confirmUpdateProductConfig', () => {
+  const req: Request = { session: {} } as unknown as Request
   const res: Response = {
+    render: jest.fn(),
     redirect: jest.fn(),
+    locals: {
+      user: {
+        username: 'username',
+      },
+    },
   } as unknown as Response
+
+  beforeEach(() => {
+    req.session.productList = productConfigs
+    req.session.updatedProduct = updatedProduct
+  })
+
+  test('api called successfully and redirects to product config details page', async () => {
+    await AdminProductConfigController.confirmUpdateProductConfig(req, res)
+
+    expect(productService.updateProduct).toHaveBeenCalledWith(updatedProduct, req)
+    expect(res.redirect).toHaveBeenCalledWith('/admin/product-config-details?id=aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34')
+    expect(req.session.productList).toBeNull()
+    expect(req.session.updatedProduct).toBeNull()
+  })
+
+  test('api returns error and renders config details with error', async () => {
+    const updateProductMock = productService.updateProduct as jest.Mock
+    updateProductMock.mockRejectedValueOnce(new Error('Internal error'))
+
+    await AdminProductConfigController.confirmUpdateProductConfig(req, res)
+
+    expect(productService.updateProduct).toHaveBeenCalledWith(updatedProduct, req)
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/admin/confirmUpdateProductConfig',
+      expect.objectContaining({
+        productDetails: updatedProduct,
+        updateError: 'Internal error',
+      }),
+    )
+    expect(req.session.productList).toEqual(productConfigs)
+    expect(req.session.updatedProduct).toEqual(updatedProduct)
+    expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.UPDATE_PRODUCT_CONFIG_FAILURE))
+  })
+})
+
+describe('cancelNewProductConfig', () => {
+  const req: Request = { session: {} } as unknown as Request
+  const res: Response = { redirect: jest.fn() } as unknown as Response
 
   beforeEach(() => {
     req.session.newProduct = newProduct
@@ -260,5 +481,21 @@ describe('cancelNewProductConfig', () => {
 
     expect(res.redirect).toHaveBeenCalledWith('/admin/product-config')
     expect(req.session.newProduct).toBeNull()
+  })
+})
+
+describe('cancelUpdateProductConfig', () => {
+  const req: Request = { session: {} } as unknown as Request
+  const res: Response = { redirect: jest.fn() } as unknown as Response
+
+  beforeEach(() => {
+    req.session.updatedProduct = updatedProduct
+  })
+
+  test('clears session and redirects to product config summary', async () => {
+    await AdminProductConfigController.cancelUpdateProductConfig(req, res)
+
+    expect(res.redirect).toHaveBeenCalledWith('/admin/product-config-details?id=aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34')
+    expect(req.session.updatedProduct).toBeNull()
   })
 })

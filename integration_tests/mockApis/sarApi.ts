@@ -77,6 +77,17 @@ export default {
       },
     }),
 
+  stubUpdateProduct: (httpStatus = 200, id = 1): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/api/services/${id}`,
+      },
+      response: {
+        status: httpStatus,
+      },
+    }),
+
   stubSubjectAccessRequest: ({ httpStatus = 201 }): SuperAgentRequest =>
     stubFor({
       request: {

@@ -3,14 +3,14 @@ import hmppsAuth from '../mockApis/hmppsAuth'
 
 import {
   ADMIN_ROLE,
+  login,
+  productConfigExpectAllInputsFilled,
   productConfigExpectAllInputsToBeEmpty,
   productConfigInputAllValues,
-  login,
   REGISTER_TEMPLATE_ROLE,
   resetStubs,
   USER_ROLE,
   verifyOnPage,
-  productConfigExpectAllInputsFilled,
 } from '../testUtils'
 import AuthSignInPage from '../pages/authSignInPage'
 import AuthErrorPage from '../pages/authErrorPage'
@@ -21,7 +21,6 @@ import AdminProductConfigPage from '../pages/adminProductConfigPage'
 test.describe('Admin Create Product Configuration', () => {
   test.beforeEach(async () => {
     await sarApi.stubGetProducts()
-    await sarApi.stubCreateProduct()
   })
 
   test.afterEach(async () => {
@@ -64,7 +63,7 @@ test.describe('Admin Create Product Configuration', () => {
     await productConfigExpectAllInputsToBeEmpty(createPage)
   })
 
-  test('Submits product config details and redirects to /admin/confirm-product-config', async ({ page }) => {
+  test('Submits product config details and redirects to /admin/confirm-create-product-config', async ({ page }) => {
     await login(page, { roles: [ADMIN_ROLE] })
     await page.goto('/admin/create-product-config')
     const createPage = await verifyOnPage(page, AdminCreateProductConfigPage)
@@ -82,7 +81,7 @@ test.describe('Admin Create Product Configuration', () => {
     expect(requestBody).toContain('category=PRISON')
     expect(requestBody).toContain('enabled=enabled')
     expect(requestBody).toContain('templateMigrated=templateMigrated')
-    expect(createPage.page.url()).toMatch(/admin\/confirm-product-config$/)
+    expect(createPage.page.url()).toMatch(/admin\/confirm-create-product-config$/)
   })
 
   test('Persists product config details when returning to create product config page', async ({ page }) => {

@@ -14,7 +14,8 @@ export declare module 'express-session' {
     productList: Product[]
     selectedList: Product[]
     selectedProduct: Product
-    newProduct: NewProduct
+    newProduct: Product
+    updatedProduct: Product
     versionList: ProductVersion[]
     newVersion: ProductVersion
     templateName: string

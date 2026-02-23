@@ -1,0 +1,164 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% if errors.nameError %}
+  {% set nameErrorMessage = { text: errors.nameError } %}
+{% endif %}
+
+{% if errors.labelError %}
+  {% set labelErrorMessage = { text: errors.labelError } %}
+{% endif %}
+
+{% if errors.urlError %}
+  {% set urlErrorMessage = { text: errors.urlError } %}
+{% endif %}
+
+{% if errors.categoryError %}
+  {% set categoryErrorMessage = { text: errors.categoryError } %}
+{% endif %}
+
+{% if errors.hasError %}
+  {{ govukErrorSummary({
+    titleText: "There is a problem!",
+    errorList: [
+      {
+        text: errors.nameError,
+        href: "#name"
+      },
+      {
+        text: errors.labelError,
+        href: "#label"
+      },
+      {
+        text: errors.urlError,
+        href: "#url"
+      },
+      {
+        text: errors.categoryError,
+        href: "#category"
+      }
+    ]
+  }) }}
+{% endif %}
+
+{{ govukInput({
+  label: {
+    text: "Name",
+    classes: "govuk-label--s"
+  },
+  id: "name",
+  name: "name",
+  classes: "govuk-input--width-30",
+  hint: {
+    html: "The name which should match the component name in the <a href='https://developer-portal.hmpps.service.justice.gov.uk/components'>developer portal</a>."
+  },
+  value: productDetails.name,
+  errorMessage: nameErrorMessage
+}) }}
+
+{{ govukInput({
+  label: {
+    text: "Label",
+    classes: "govuk-label--s"
+  },
+  id: "label",
+  name: "label",
+  classes: "govuk-input--width-30",
+  hint: {
+    html: "The label which should match the product name in the <a href='https://developer-portal.hmpps.service.justice.gov.uk/products'>developer portal</a>."
+  },
+  value: productDetails.label,
+  errorMessage: labelErrorMessage
+}) }}
+
+{{ govukInput({
+  label: {
+    text: "Url",
+    classes: "govuk-label--s"
+  },
+  id: "url",
+  name: "url",
+  classes: "govuk-input--width-30",
+  hint: {
+    html: "The url for the product, this should be the url listed for the component in the <a href='https://developer-portal.hmpps.service.justice.gov.uk/components'>developer portal</a> for the relevant environment."
+  },
+  value: productDetails.url,
+  errorMessage: urlErrorMessage
+}) }}
+
+{{ govukRadios({
+  name: "category",
+  fieldset: {
+    legend: {
+      text: "Category",
+      classes: "govuk-fieldset__legend--s"
+    }
+  },
+  hint: {
+    html: "The category within HMPPS the product comes under, this should be the portfolio value of component in the <a href='https://developer-portal.hmpps.service.justice.gov.uk/components'>developer portal</a>."
+  },
+  items: [
+    {
+      value: "PRISON",
+      text: "Prison"
+    },
+    {
+      value: "PROBATION",
+      text: "Probation"
+    }
+  ],
+  value: productDetails.category,
+  errorMessage: categoryErrorMessage
+}) }}
+
+{{ govukCheckboxes({
+  idPrefix: "enabled",
+  name: "enabled",
+  fieldset: {
+    legend: {
+      text: "Product enabled",
+      classes: "govuk-fieldset__legend--s"
+    }
+  },
+  hint: {
+    text: "Whether this product is enabled or not, when enabled the product will be selectable for requesting a SAR report"
+  },
+  items: [
+    {
+      value: "enabled",
+      text: "Enabled",
+      checked: productDetails.enabled
+    }
+  ]
+}) }}
+
+{{ govukCheckboxes({
+  idPrefix: "templateMigrated",
+  name: "templateMigrated",
+  fieldset: {
+    legend: {
+      text: "Template migrated",
+      classes: "govuk-fieldset__legend--s"
+    }
+  },
+  hint: {
+    text: "Whether this product has had it's template migrated to ownership by it's product team, when enabled the template will be attempted to be retrieved from the product itself via an API call"
+  },
+  items: [
+    {
+      value: "templateMigrated",
+      text: "Template migrated",
+      checked: productDetails.templateMigrated
+    }
+  ]
+}) }}
+
+{{ govukButton({
+  text: "Continue",
+  id: "input-submit",
+  type: "submit",
+  preventDoubleClick: true
+}) }}
