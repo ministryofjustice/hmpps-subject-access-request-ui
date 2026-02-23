@@ -11,6 +11,11 @@ import RequestReportInputsPage from './pages/requestReportInputsPage'
 import RequestReportProductsPage from './pages/requestReportProductsPage'
 import RequestReportSummaryPage from './pages/requestReportSummaryPage'
 import AdminCreateProductConfigPage from './pages/adminCreateProductConfigPage'
+import AdminProductConfigPage from './pages/adminProductConfigPage'
+import AdminProductConfigDetailsPage from './pages/adminProductConfigDetailsPage'
+import AdminUpdateProductConfigPage from './pages/adminUpdateProductConfigPage'
+import AdminConfirmProductConfigPage from './pages/adminConfirmProductConfigPage'
+import AdminProductConfigInputPage from './pages/adminProductConfigInputPage'
 
 export { resetStubs }
 
@@ -91,16 +96,38 @@ export const registerTemplateConfirmation = async (page: Page, { productId = '1'
   await uploadPage.continue()
 }
 
-export const adminConfirmProductConfigWithAllDetails = async (
+export const adminConfirmCreateProductConfigWithAllDetails = async (
   page: Page,
   enabledChecked = true,
   migratedChecked = true,
 ) => {
   await login(page, { roles: [ADMIN_ROLE] })
   await page.goto('/admin/create-product-config')
-  const createProductConfigPage = await verifyOnPage(page, AdminCreateProductConfigPage)
-  await productConfigInputAllValues(createProductConfigPage, enabledChecked, migratedChecked)
-  await createProductConfigPage.continue()
+  const createPage = await verifyOnPage(page, AdminCreateProductConfigPage)
+  await productConfigInputAllValues(createPage, enabledChecked, migratedChecked)
+  await createPage.continue()
+  return verifyOnPage(page, AdminConfirmProductConfigPage)
+}
+
+export const adminViewProductConfigDetails = async (page: Page, row = 0) => {
+  await login(page, { roles: [ADMIN_ROLE] })
+  await page.goto('/admin/product-config')
+  const productConfigPage = await verifyOnPage(page, AdminProductConfigPage)
+  await productConfigPage.selectProduct(row)
+  return verifyOnPage(page, AdminProductConfigDetailsPage)
+}
+
+export const adminUpdateProductConfig = async (page: Page) => {
+  const detailsPage = await adminViewProductConfigDetails(page)
+  await detailsPage.edit()
+  return verifyOnPage(page, AdminUpdateProductConfigPage)
+}
+
+export const adminConfirmUpdateProductConfig = async (page: Page, enabled = true, migrated = true) => {
+  const updatePage = await adminUpdateProductConfig(page)
+  await productConfigInputDifferentValues(updatePage, enabled, migrated)
+  await updatePage.continue()
+  return verifyOnPage(page, AdminConfirmProductConfigPage)
 }
 
 export const registerTemplateResult = async (page: Page, { productId = '1' }) => {
@@ -110,34 +137,74 @@ export const registerTemplateResult = async (page: Page, { productId = '1' }) =>
 }
 
 export const productConfigInputAllValues = async (
-  createPage: AdminCreateProductConfigPage,
+  inputPage: AdminProductConfigInputPage,
   enabledChecked = true,
   migratedChecked = true,
 ) => {
-  await createPage.inputName('service-one')
-  await createPage.inputLabel('My Service One')
-  await createPage.inputUrl('https://my-service-one')
-  await createPage.prisonCategoryRadio.check()
-  await createPage.enabledCheckbox.setChecked(enabledChecked)
-  await createPage.migratedCheckbox.setChecked(migratedChecked)
+  await inputPage.inputName('service-one')
+  await inputPage.inputLabel('My Service One')
+  await inputPage.inputUrl('https://my-service-one')
+  await inputPage.prisonCategoryRadio.check()
+  await inputPage.enabledCheckbox.setChecked(enabledChecked)
+  await inputPage.migratedCheckbox.setChecked(migratedChecked)
 }
 
-export const productConfigExpectAllInputsToBeEmpty = async (createPage: AdminCreateProductConfigPage) => {
-  await expect(createPage.nameTextbox).toHaveValue('')
-  await expect(createPage.labelTextbox).toHaveValue('')
-  await expect(createPage.urlTextbox).toHaveValue('')
-  await expect(createPage.prisonCategoryRadio).not.toBeChecked()
-  await expect(createPage.probationCategoryRadio).not.toBeChecked()
-  await expect(createPage.enabledCheckbox).not.toBeChecked()
-  await expect(createPage.migratedCheckbox).not.toBeChecked()
+export const productConfigInputDifferentValues = async (
+  inputPage: AdminProductConfigInputPage,
+  enabled = false,
+  migrated = false,
+) => {
+  await inputPage.inputName('service-two')
+  await inputPage.inputLabel('My Service Two')
+  await inputPage.inputUrl('https://my-service-two')
+  await inputPage.probationCategoryRadio.check()
+  await inputPage.enabledCheckbox.setChecked(enabled)
+  await inputPage.migratedCheckbox.setChecked(migrated)
 }
 
-export const productConfigExpectAllInputsFilled = async (createPage: AdminCreateProductConfigPage) => {
-  await expect(createPage.nameTextbox).toHaveValue('service-one')
-  await expect(createPage.labelTextbox).toHaveValue('My Service One')
-  await expect(createPage.urlTextbox).toHaveValue('https://my-service-one')
-  await expect(createPage.prisonCategoryRadio).toBeChecked()
-  await expect(createPage.probationCategoryRadio).not.toBeChecked()
-  await expect(createPage.enabledCheckbox).toBeChecked()
-  await expect(createPage.migratedCheckbox).toBeChecked()
+export const productConfigClearAllValues = async (inputPage: AdminProductConfigInputPage) => {
+  await inputPage.inputName('')
+  await inputPage.inputLabel('')
+  await inputPage.inputUrl('')
+  await inputPage.enabledCheckbox.uncheck()
+  await inputPage.migratedCheckbox.uncheck()
+}
+
+export const productConfigExpectAllInputsToBeEmpty = async (inputPage: AdminProductConfigInputPage) => {
+  await expect(inputPage.nameTextbox).toHaveValue('')
+  await expect(inputPage.labelTextbox).toHaveValue('')
+  await expect(inputPage.urlTextbox).toHaveValue('')
+  await expect(inputPage.prisonCategoryRadio).not.toBeChecked()
+  await expect(inputPage.probationCategoryRadio).not.toBeChecked()
+  await expect(inputPage.enabledCheckbox).not.toBeChecked()
+  await expect(inputPage.migratedCheckbox).not.toBeChecked()
+}
+
+export const productConfigExpectAllInputsFilled = async (inputPage: AdminProductConfigInputPage) => {
+  await expect(inputPage.nameTextbox).toHaveValue('service-one')
+  await expect(inputPage.labelTextbox).toHaveValue('My Service One')
+  await expect(inputPage.urlTextbox).toHaveValue('https://my-service-one')
+  await expect(inputPage.prisonCategoryRadio).toBeChecked()
+  await expect(inputPage.probationCategoryRadio).not.toBeChecked()
+  await expect(inputPage.enabledCheckbox).toBeChecked()
+  await expect(inputPage.migratedCheckbox).toBeChecked()
+}
+
+export const productConfigExpectAllInputsFilledDifferent = async (inputPage: AdminProductConfigInputPage) => {
+  await expect(inputPage.nameTextbox).toHaveValue('service-two')
+  await expect(inputPage.labelTextbox).toHaveValue('My Service Two')
+  await expect(inputPage.urlTextbox).toHaveValue('https://my-service-two')
+  await expect(inputPage.prisonCategoryRadio).not.toBeChecked()
+  await expect(inputPage.probationCategoryRadio).toBeChecked()
+  await expect(inputPage.enabledCheckbox).not.toBeChecked()
+  await expect(inputPage.migratedCheckbox).not.toBeChecked()
+}
+
+export const productConfigDetailsExpectAllSummary = async (detailsPage: AdminProductConfigDetailsPage) => {
+  await expect(detailsPage.productConfigSummary).toContainText('service-one')
+  await expect(detailsPage.productConfigSummary).toContainText('Service One')
+  await expect(detailsPage.productConfigSummary).toContainText('http://service-one')
+  await expect(detailsPage.productConfigSummary).toContainText('PRISON')
+  await expect(detailsPage.productConfigSummary).toContainText('Enabled')
+  await expect(detailsPage.productConfigSummary).toContainText('Migrated')
 }

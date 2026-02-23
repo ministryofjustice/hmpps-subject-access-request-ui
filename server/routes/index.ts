@@ -81,18 +81,33 @@ export default function routes(service: Services): Router {
     res.redirect(`/admin/details?${searchParams.toString()}`)
   })
   post('/admin/restart', AdminDetailsController.restartRequest)
+
   get('/admin/product-config', AdminProductConfigController.getProductConfigSummary)
+  get('/admin/product-config-details', AdminProductConfigController.getProductConfigDetails)
+
   get('/admin/create-product-config', (req: Request, res: Response) =>
-    res.render('pages/admin/productConfigDetails', { productDetails: req.session.newProduct }),
+    res.render('pages/admin/createProductConfig', { productDetails: req.session.newProduct }),
   )
   post('/admin/create-product-config', AdminProductConfigController.saveNewProductConfig)
-  get('/admin/confirm-product-config', (req: Request, res: Response) =>
-    res.render('pages/admin/confirmProductConfig', {
+  get('/admin/confirm-create-product-config', (req: Request, res: Response) =>
+    res.render('pages/admin/confirmCreateProductConfig', {
       productDetails: req.session.newProduct,
     }),
   )
-  post('/admin/confirm-product-config', AdminProductConfigController.confirmNewProductConfig)
-  get('/admin/cancel-product-config', AdminProductConfigController.cancelNewProductConfig)
+  post('/admin/confirm-create-product-config', AdminProductConfigController.confirmNewProductConfig)
+  get('/admin/cancel-create-product-config', AdminProductConfigController.cancelNewProductConfig)
+
+  get('/admin/update-product-config', (req: Request, res: Response) =>
+    res.render('pages/admin/updateProductConfig', { productDetails: req.session.updatedProduct }),
+  )
+  post('/admin/update-product-config', AdminProductConfigController.saveUpdatedProductConfig)
+  get('/admin/confirm-update-product-config', (req: Request, res: Response) =>
+    res.render('pages/admin/confirmUpdateProductConfig', {
+      productDetails: req.session.updatedProduct,
+    }),
+  )
+  post('/admin/confirm-update-product-config', AdminProductConfigController.confirmUpdateProductConfig)
+  get('/admin/cancel-update-product-config', AdminProductConfigController.cancelUpdateProductConfig)
 
   return router
 }

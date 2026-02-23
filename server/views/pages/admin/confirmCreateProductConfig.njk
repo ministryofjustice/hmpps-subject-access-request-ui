@@ -37,98 +37,52 @@
 
   <h1 class="govuk-heading-l">Confirm Product Configuration Details</h1>
 
-  <form action="/admin/confirm-product-config" method="post">
+  <form action="/admin/confirm-create-product-config" method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
     {{ govukSummaryList({
       attributes: {
         "id": "product-config-summary"
       },
-
+      card: {
+        title: {
+          text: "Product details"
+        },
+        actions: {
+          items: [
+            {
+              attributes: { "id": "change-details" },
+              href: "/admin/create-product-config",
+              text: "Change",
+              visuallyHiddenText: "change-details"
+            }
+          ]
+        }
+      },
       rows: [
         {
           key: { text: "Name" },
-          value: { text: productDetails.name },
-          actions: {
-            items: [
-              {
-                attributes: { "id": "change-name" },
-                href: "/admin/create-product-config",
-                text: "Change",
-                visuallyHiddenText: "name"
-              }
-            ]
-          }
+          value: { text: productDetails.name }
         },
         {
           key: { text: "Label" },
-          value: { text: productDetails.label },
-          actions: {
-            items: [
-              {
-                attributes: { "id": "change-label" },
-                href: "/admin/create-product-config",
-                text: "Change",
-                visuallyHiddenText: "label"
-              }
-            ]
-          }
+          value: { text: productDetails.label }
         },
         {
           key: { text: "Url" },
-          value: { text: productDetails.url },
-          actions: {
-            items: [
-              {
-                attributes: { "id": "change-url" },
-                href: "/admin/create-product-config",
-                text: "Change",
-                visuallyHiddenText: "url"
-              }
-            ]
-          }
+          value: { text: productDetails.url }
         },
         {
           key: { text: "Category" },
-          value: { text: productDetails.category },
-          actions: {
-            items: [
-              {
-                attributes: { "id": "change-category" },
-                href: "/admin/create-product-config",
-                text: "Change",
-                visuallyHiddenText: "category"
-              }
-            ]
-          }
+          value: { text: productDetails.category }
         },
         {
           key: { text: "Enabled" },
-          value: { html: enabledTag },
-          actions: {
-            items: [
-              {
-                attributes: { "id": "change-enabled" },
-                href: "/admin/create-product-config",
-                text: "Change",
-                visuallyHiddenText: "enabled"
-              }
-            ]
-          }
+          value: { html: enabledTag }
         },
         {
           key: { text: "Template migrated" },
-          value: { html: templateMigratedTag },
-          actions: {
-            items: [
-              {
-                attributes: { "id": "change-template-migrated" },
-                href: "/admin/create-product-config",
-                text: "Change",
-                visuallyHiddenText: "templateMigrated"
-              }
-            ]
-          }
+          value: { html: templateMigratedTag }
         }
       ]
     }) }}
@@ -143,7 +97,7 @@
     {{ govukButton({
       text: "Cancel",
       id: "cancel",
-      href: "/admin/cancel-product-config",
+      href: "/admin/cancel-create-product-config",
       classes: "govuk-button--secondary",
       preventDoubleClick: true
     }) }}

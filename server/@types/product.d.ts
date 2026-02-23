@@ -1,14 +1,11 @@
-interface NewProduct {
+interface Product extends NewProduct {
+  id: string
   name: string
   url: string
   label: string
   enabled?: boolean
   templateMigrated?: boolean
   category: ProductCategory
-}
-
-interface Product extends NewProduct {
-  id: string
 }
 
 interface Environment {

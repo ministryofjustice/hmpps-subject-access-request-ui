@@ -20,4 +20,6 @@ export default class AdminProductConfigPage extends AbstractPage {
     this.productsTableRow(rowIndex).locator('td').nth(cellIndex)
 
   createProductConfig = () => this.createProductConfigButton.click()
+
+  selectProduct = (rowIndex: number = 0) => this.productsTableCell(rowIndex, 0).locator('a').click()
 }

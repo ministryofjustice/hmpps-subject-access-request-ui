@@ -55,6 +55,7 @@ beforeEach(() => {
   productConfigsService.getProductList = jest.fn().mockReturnValue(productConfigs)
   productConfigsService.getTemplateRegistrationProductList = jest.fn().mockReturnValue(productConfigs)
   productConfigsService.createProduct = jest.fn()
+  productConfigsService.updateProduct = jest.fn()
   const templateVersion = {
     createdDate: '2025-11-13T11:34:45Z',
     fileHash: 'abc',
@@ -398,6 +399,17 @@ describe('GET /admin/product-config', () => {
   })
 })
 
+describe('GET /admin/product-config-details', () => {
+  it('should render admin view product config details page', () => {
+    return request(adminUserApp)
+      .get('/admin/product-config-details')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Product Configuration Details')
+      })
+  })
+})
+
 describe('GET /admin/create-product-config', () => {
   it('should render admin create product config page', () => {
     return request(adminUserApp)
@@ -420,10 +432,10 @@ describe('POST /admin/create-product-config', () => {
   })
 })
 
-describe('GET /admin/confirm-product-config', () => {
-  it('should render admin confirm product config page', () => {
+describe('GET /admin/confirm-create-product-config', () => {
+  it('should render admin confirm create product config page', () => {
     return request(adminUserApp)
-      .get('/admin/confirm-product-config')
+      .get('/admin/confirm-create-product-config')
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Confirm Product Configuration Details')
@@ -431,10 +443,10 @@ describe('GET /admin/confirm-product-config', () => {
   })
 })
 
-describe('POST /admin/confirm-product-config', () => {
+describe('POST /admin/confirm-create-product-config', () => {
   it('should redirect to admin view product config page', () => {
     return request(adminUserApp)
-      .post('/admin/confirm-product-config')
+      .post('/admin/confirm-create-product-config')
       .expect(res => {
         expect(res.statusCode).toBe(302)
         expect(res.text).toContain('Redirecting to /admin/product-config')
@@ -442,13 +454,77 @@ describe('POST /admin/confirm-product-config', () => {
   })
 })
 
-describe('GET /admin/cancel-product-config', () => {
+describe('GET /admin/cancel-create-product-config', () => {
   it('should redirect to admin view product config page', () => {
     return request(adminUserApp)
-      .get('/admin/cancel-product-config')
+      .get('/admin/cancel-create-product-config')
       .expect(res => {
         expect(res.statusCode).toBe(302)
         expect(res.text).toContain('Redirecting to /admin/product-config')
+      })
+  })
+})
+
+describe('GET /admin/update-product-config', () => {
+  it('should render admin update product config page', () => {
+    return request(adminUserApp)
+      .get('/admin/update-product-config')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Update Product Configuration')
+      })
+  })
+})
+
+describe('POST /admin/update-product-config', () => {
+  it('should redirect to itself given no data', async () => {
+    const sessionBasedRequest = requestSession(adminUserApp)
+    await sessionBasedRequest.get('/admin/product-config')
+    await sessionBasedRequest.get('/admin/product-config-details?id=hmpps-prisoner-search')
+    return sessionBasedRequest
+      .post('/admin/update-product-config')
+      .expect((res: { text: string; statusCode: number }) => {
+        expect(res.statusCode).toBe(200)
+        expect(res.text).toContain('Update Product Configuration')
+      })
+  })
+})
+
+describe('GET /admin/confirm-update-product-config', () => {
+  it('should render admin confirm update product config page', () => {
+    return request(adminUserApp)
+      .get('/admin/confirm-update-product-config')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Confirm Product Configuration Details')
+      })
+  })
+})
+
+describe('POST /admin/confirm-update-product-config', () => {
+  it('should redirect to admin view product config details page', async () => {
+    const sessionBasedRequest = requestSession(adminUserApp)
+    await sessionBasedRequest.get('/admin/product-config')
+    await sessionBasedRequest.get('/admin/product-config-details?id=hmpps-prisoner-search')
+    return sessionBasedRequest
+      .post('/admin/confirm-update-product-config')
+      .expect((res: { text: string; statusCode: number }) => {
+        expect(res.statusCode).toBe(302)
+        expect(res.text).toContain('Redirecting to /admin/product-config-details')
+      })
+  })
+})
+
+describe('GET /admin/cancel-update-product-config', () => {
+  it('should redirect to admin view product config details page', async () => {
+    const sessionBasedRequest = requestSession(adminUserApp)
+    await sessionBasedRequest.get('/admin/product-config')
+    await sessionBasedRequest.get('/admin/product-config-details?id=hmpps-prisoner-search')
+    return sessionBasedRequest
+      .get('/admin/cancel-update-product-config')
+      .expect((res: { text: string; statusCode: number }) => {
+        expect(res.statusCode).toBe(302)
+        expect(res.text).toContain('Redirecting to /admin/product-config-details')
       })
   })
 })

@@ -1,0 +1,117 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
+
+{% block content %}
+
+  {{ govukBackLink({
+    text: "Back",
+    href: "/admin/update-product-config"
+  }) }}
+
+  {% if productDetails.enabled %}
+    {% set enabledTag = govukTag({text: "Enabled", classes: "govuk-tag--green"}) %}
+  {% else %}
+    {% set enabledTag = govukTag({text: "Disabled", classes: "govuk-tag--red"}) %}
+  {% endif %}
+
+  {% if productDetails.templateMigrated %}
+    {% set templateMigratedTag = govukTag({text: "Migrated", classes: "govuk-tag--green"}) %}
+  {% else %}
+    {% set templateMigratedTag = govukTag({text: "Not migrated", classes: "govuk-tag--red"}) %}
+  {% endif %}
+
+  {% if updateError %}
+    {{ govukErrorSummary({
+      titleText: "Problem updating product configuration",
+      errorList: [
+        {
+          text: updateError
+        }
+      ]
+    }) }}
+  {% endif %}
+
+  <h1 class="govuk-heading-l">Confirm Product Configuration Details</h1>
+
+  {{ mojAlert({
+    variant: "warning",
+    title: "Changes can affect subject access requests in progress.",
+    showTitleAsHeading: true,
+    dismissible: false,
+    text: 'Any changes made to the product configuration could adversely impact any subject access requests which include this product currently in progress. Only continue if you are aware of the impact and are sure any changes are necessary.'
+  }) }}
+
+  <form action="/admin/confirm-update-product-config" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+    {{ govukSummaryList({
+      attributes: {
+        "id": "product-config-summary"
+      },
+      card: {
+        title: {
+          text: "Product details"
+        },
+        actions: {
+          items: [
+            {
+              attributes: { "id": "change-details" },
+              href: "/admin/update-product-config",
+              text: "Change",
+              visuallyHiddenText: "change-details"
+            }
+          ]
+        }
+      },
+      rows: [
+        {
+          key: { text: "Name" },
+          value: { text: productDetails.name }
+        },
+        {
+          key: { text: "Label" },
+          value: { text: productDetails.label }
+        },
+        {
+          key: { text: "Url" },
+          value: { text: productDetails.url }
+        },
+        {
+          key: { text: "Category" },
+          value: { text: productDetails.category }
+        },
+        {
+          key: { text: "Enabled" },
+          value: { html: enabledTag }
+        },
+        {
+          key: { text: "Template migrated" },
+          value: { html: templateMigratedTag }
+        }
+      ]
+    }) }}
+
+    <div class="govuk-button-group">
+    {{ govukButton({
+      text: "Accept and update",
+      id: "accept-confirm",
+      preventDoubleClick: true
+    }) }}
+
+    {{ govukButton({
+      text: "Cancel",
+      id: "cancel",
+      href: "/admin/cancel-update-product-config",
+      classes: "govuk-button--secondary",
+      preventDoubleClick: true
+    }) }}
+    </div>
+
+  </form>
+
+{% endblock %}
