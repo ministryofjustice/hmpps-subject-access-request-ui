@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { AuditEvent } from '../audit'
 
-// eslint-disable-next-line import/prefer-default-export, @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const auditAction = (action: AuditEvent): any => expect.objectContaining({ action })
 
 export function createUserToken(authorities: string[]) {
