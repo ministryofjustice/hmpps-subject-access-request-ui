@@ -22,7 +22,7 @@
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header" aria-sort="ascending">Name</th>
-          <th scope="col" class="govuk-table__header">Label</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none">Label</th>
           <th scope="col" class="govuk-table__header">Url</th>
           <th scope="col" class="govuk-table__header">Category</th>
           <th scope="col" class="govuk-table__header">Enabled</th>
@@ -32,8 +32,8 @@
       <tbody class="govuk-table__body">
         {% for product in products %}
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell"><a href="/admin/product-config-details?id={{product.id}}">{{product.name}}</a></td>
-            <td class="govuk-table__cell">{{product.label}}</td>
+            <td class="govuk-table__cell" data-sort-value="{{ product.name }}"><a href="/admin/product-config-details?id={{product.id}}">{{product.name}}</a></td>
+            <td class="govuk-table__cell" data-sort-value="{{ product.label }}">{{product.label}}</td>
             <td class="govuk-table__cell">{{product.url}}</td>
             <td class="govuk-table__cell">{{product.category}}</td>
             <td class="govuk-table__cell">
