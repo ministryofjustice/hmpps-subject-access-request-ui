@@ -24,7 +24,8 @@
     "integration_tests",
     "dist",
     "playwright.config.ts",
-    "test_results"
+    "test_results",
+    "eslint.config.mjs"
   ],
   "include": ["**/*.js", "**/*.ts"]
 }

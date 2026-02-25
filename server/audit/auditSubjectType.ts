@@ -1,4 +1,4 @@
-// eslint-disable-next-line no-shadow,import/prefer-default-export
+// eslint-disable-next-line import/prefer-default-export
 export enum AuditSubjectType {
   USER_ID = 'USER_ID',
   ROLE_CODE = 'ROLE_CODE',

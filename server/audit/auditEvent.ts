@@ -1,4 +1,4 @@
-// eslint-disable-next-line no-shadow,import/prefer-default-export
+// eslint-disable-next-line import/prefer-default-export
 export enum AuditEvent {
   VIEW_REPORT_LIST_ATTEMPT = 'VIEW_REPORT_LIST_ATTEMPT',
   VIEW_REPORT_LIST_FAILURE = 'VIEW_REPORT_LIST_FAILURE',
