@@ -65,7 +65,7 @@ test.describe('Admin Product Configuration Details', () => {
   })
 
   test('Renders product config details when checkboxes not selected', async ({ page }) => {
-    const detailsPage = await adminViewProductConfigDetails(page, 2)
+    const detailsPage = await adminViewProductConfigDetails(page, 1)
 
     await expect(detailsPage.productConfigSummary).toContainText('service-three')
     await expect(detailsPage.productConfigSummary).toContainText('Service Three')
