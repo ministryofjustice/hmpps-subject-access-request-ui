@@ -13,8 +13,18 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     dateFrom: '2024-03-01',
     dateTo: '2024-03-12',
     sarCaseReferenceNumber: 'caseRef1',
-    services:
-      'hmpps-activities-management-api, https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api, https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api, https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk',
+    services: [
+      { serviceName: 'hmpps-activities-management-api', renderStatus: 'PENDING' },
+      {
+        serviceName: 'https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api',
+        renderStatus: 'PENDING',
+      },
+      {
+        serviceName: 'https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api',
+        renderStatus: 'PENDING',
+      },
+      { serviceName: 'https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk', renderStatus: 'PENDING' },
+    ],
     nomisId: '',
     ndeliusCaseReferenceId: 'A123456',
     requestedBy: 'user',
@@ -30,8 +40,18 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     dateFrom: '2023-03-01',
     dateTo: '2023-03-12',
     sarCaseReferenceNumber: 'caseRef2',
-    services:
-      'hmpps-activities-management-api, https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api, https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api, https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk',
+    services: [
+      { serviceName: 'hmpps-activities-management-api', renderStatus: 'PENDING' },
+      {
+        serviceName: 'https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api',
+        renderStatus: 'PENDING',
+      },
+      {
+        serviceName: 'https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api',
+        renderStatus: 'PENDING',
+      },
+      { serviceName: 'https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk', renderStatus: 'PENDING' },
+    ],
     nomisId: '',
     ndeliusCaseReferenceId: 'A123456',
     requestedBy: 'user',
@@ -47,8 +67,18 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     dateFrom: '2022-03-01',
     dateTo: '2022-03-12',
     sarCaseReferenceNumber: 'caseRef3',
-    services:
-      'hmpps-activities-management-api, https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api, https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api, https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk',
+    services: [
+      { serviceName: 'hmpps-activities-management-api', renderStatus: 'PENDING' },
+      {
+        serviceName: 'https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api',
+        renderStatus: 'PENDING',
+      },
+      {
+        serviceName: 'https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api',
+        renderStatus: 'PENDING',
+      },
+      { serviceName: 'https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk', renderStatus: 'PENDING' },
+    ],
     nomisId: '',
     ndeliusCaseReferenceId: 'A123456',
     requestedBy: 'user',

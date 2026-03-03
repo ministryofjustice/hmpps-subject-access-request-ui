@@ -45,7 +45,7 @@ export default class SummaryController {
       dateFrom: userData.dateFrom,
       dateTo: userData.dateTo,
       sarCaseReferenceNumber: userData.caseReference,
-      services: serviceList.toString(),
+      services: serviceList,
       nomisId,
       ndeliusId,
     }

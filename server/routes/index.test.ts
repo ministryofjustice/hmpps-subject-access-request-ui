@@ -73,8 +73,7 @@ beforeEach(() => {
       dateFrom: '2024-03-01',
       dateTo: '2024-03-12',
       sarCaseReferenceNumber: 'caseRef1',
-      services:
-        'hmpps-prisoner-search, https://prisoner-search-dev.prison.service.justice.gov.uk, hmpps-book-secure-move-api, https://book-move-dev.prison.service.justice.gov.uk',
+      services: [{ serviceName: 'hmpps-prisoner-search' }, { serviceName: 'hmpps-book-secure-move-api' }],
       nomisId: '',
       ndeliusCaseReferenceId: 'A123456',
       requestedBy: 'user',
@@ -89,8 +88,7 @@ beforeEach(() => {
       dateFrom: '2023-03-01',
       dateTo: '2023-03-12',
       sarCaseReferenceNumber: 'caseRef2',
-      services:
-        'hmpps-prisoner-search, https://prisoner-search-dev.prison.service.justice.gov.uk, hmpps-book-secure-move-api, https://book-move-dev.prison.service.justice.gov.uk',
+      services: [{ serviceName: 'hmpps-prisoner-search' }, { serviceName: 'hmpps-book-secure-move-api' }],
       nomisId: '',
       ndeliusCaseReferenceId: 'A123456',
       requestedBy: 'user',
@@ -105,8 +103,7 @@ beforeEach(() => {
       dateFrom: '2022-03-01',
       dateTo: '2022-03-12',
       sarCaseReferenceNumber: 'caseRef3',
-      services:
-        'hmpps-prisoner-search, https://prisoner-search-dev.prison.service.justice.gov.uk, hmpps-book-secure-move-api, https://book-move-dev.prison.service.justice.gov.uk',
+      services: [{ serviceName: 'hmpps-prisoner-search' }, { serviceName: 'hmpps-book-secure-move-api' }],
       nomisId: '',
       ndeliusCaseReferenceId: 'A123456',
       requestedBy: 'user',

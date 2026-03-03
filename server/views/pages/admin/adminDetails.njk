@@ -104,7 +104,7 @@
           text: "Products selected"
         },
         value: {
-          html: subjectAccessRequest.services | replace (",", "<br>")
+          html: subjectAccessRequest.services | join('<br>')
         }
       },
       {
