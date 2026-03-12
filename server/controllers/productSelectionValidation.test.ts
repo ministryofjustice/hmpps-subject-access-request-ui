@@ -1,9 +1,36 @@
 import ProductSelectionValidation from './productSelectionValidation'
 
 const productList: Product[] = [
-  { id: '1', name: 'test1', label: 'Test one', url: 'http://foo.boo', enabled: true, category: 'PRISON' },
-  { id: '2', name: 'test2', label: 'Test two', url: 'http://foo.boo2', enabled: true, category: 'PRISON' },
-  { id: '3', name: 'test3', label: 'Test three', url: 'http://foo.boo3', enabled: true, category: 'PRISON' },
+  {
+    id: '1',
+    name: 'test1',
+    label: 'Test one',
+    url: 'http://foo.boo',
+    enabled: true,
+    category: 'PRISON',
+    suspended: false,
+    suspendedAt: null,
+  },
+  {
+    id: '2',
+    name: 'test2',
+    label: 'Test two',
+    url: 'http://foo.boo2',
+    enabled: true,
+    category: 'PRISON',
+    suspended: false,
+    suspendedAt: null,
+  },
+  {
+    id: '3',
+    name: 'test3',
+    label: 'Test three',
+    url: 'http://foo.boo3',
+    enabled: true,
+    category: 'PRISON',
+    suspended: false,
+    suspendedAt: null,
+  },
 ]
 
 describe('validateSelection', () => {

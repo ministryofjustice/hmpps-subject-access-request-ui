@@ -26,6 +26,8 @@ const selectedProduct = {
   url: 'http://service-one',
   label: 'Service One',
   category: 'PRISON',
+  suspended: false,
+  suspendedAt: null,
 }
 
 beforeEach(() => {

@@ -5,6 +5,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "../components/multiselect.njk" import multiSelect %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
 {% block content %}
 
@@ -22,6 +23,24 @@
       }
     ]
   }) }}
+{% endif %}
+
+{% if suspendedProductsList %}
+    {% set suspendedProductsBulletList %}
+    <ul class="govuk-list govuk-list--bullet" id="suspended-services-alert-list">
+      {% for item in suspendedProductsList %}
+        <li>{{ item.label }}</li>
+      {% endfor %}
+    </ul>
+    {% endset %}
+
+    {{ mojAlert({
+        variant: "warning",
+        title: "One or more products are currently Suspended:",
+        showTitleAsHeading: true,
+        dismissible: false,
+        html: suspendedProductsBulletList ~ '<p>You can still submit your request however the report will <b>NOT</b> complete until all products you have selected are Active</p>'
+    }) }}
 {% endif %}
 
 {{ govukBackLink({
@@ -43,7 +62,7 @@
       </div>
 
       {{ multiSelect({
-          headers: ["Product Name"],
+          headers: ["Product Name", "Service Status"],
           itemGroupName: "selectedProducts",
           categorisedItems: categorisedProducts,
           selectedItems: selectedList,

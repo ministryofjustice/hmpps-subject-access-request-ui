@@ -16,14 +16,14 @@ const getTemplateRegistrationProductList = async (req: Request) =>
     productList.filter(product => !config.templateRegistrationExcludedProducts.includes(product.name)),
   )
 
-const createProduct = async (product: Product, req: Request) => {
+const createProduct = async (product: NewProduct, req: Request) => {
   await superagent
     .post(`${config.apis.subjectAccessRequest.url}/api/services`)
     .send(product)
     .set('Authorization', `Bearer ${getUserToken(req)}`)
 }
 
-const updateProduct = async (product: Product, req: Request) => {
+const updateProduct = async (product: NewProduct, req: Request) => {
   await superagent
     .put(`${config.apis.subjectAccessRequest.url}/api/services/${product.id}`)
     .send({

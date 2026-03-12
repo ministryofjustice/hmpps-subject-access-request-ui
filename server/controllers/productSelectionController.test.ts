@@ -14,6 +14,8 @@ beforeEach(() => {
       url: 'https://prisoner-search-dev.prison.service.justice.gov.uk',
       enabled: true,
       category: 'PRISON',
+      suspended: false,
+      suspendedAt: null,
     },
     {
       id: '76fd9b66-2e57-41f0-8084-e0c6e2660e2c',
@@ -22,6 +24,8 @@ beforeEach(() => {
       url: 'https://book-move-dev.prison.service.justice.gov.uk',
       enabled: true,
       category: 'PRISON',
+      suspended: false,
+      suspendedAt: null,
     },
     {
       id: 'd48a72c7-a8fa-4803-a83d-8c1f2b934273',
@@ -30,6 +34,8 @@ beforeEach(() => {
       url: 'https://approved-premises-api-dev.hmpps.service.justice.gov.uk',
       enabled: true,
       category: 'PROBATION',
+      suspended: false,
+      suspendedAt: null,
     },
   ]
   productConfigsService.getProductList = jest.fn().mockReturnValue(productConfigurationList)
@@ -123,8 +129,26 @@ describe('selectProducts', () => {
       // @ts-expect-error stubbing session
       session: {
         productList: [
-          { id: '1', name: 'service-1', label: 'Svc 1', url: 'svc-1.com', enabled: true, category: 'PRISON' },
-          { id: '2', name: 'service-2', label: 'Svc 2', url: 'svc-2.com', enabled: true, category: 'PRISON' },
+          {
+            id: '1',
+            name: 'service-1',
+            label: 'Svc 1',
+            url: 'svc-1.com',
+            enabled: true,
+            category: 'PRISON',
+            suspended: false,
+            suspendedAt: null,
+          },
+          {
+            id: '2',
+            name: 'service-2',
+            label: 'Svc 2',
+            url: 'svc-2.com',
+            enabled: true,
+            category: 'PRISON',
+            suspended: false,
+            suspendedAt: null,
+          },
         ],
         selectedList: [],
       },
@@ -144,11 +168,38 @@ describe('selectProducts', () => {
       // @ts-expect-error stubbing session
       session: {
         productList: [
-          { id: '1', name: 'service-1', label: 'Svc 1', url: 'svc-1.com', enabled: true, category: 'PRISON' },
-          { id: '2', name: 'service-2', label: 'Svc 2', url: 'svc-2.com', enabled: true, category: 'PRISON' },
+          {
+            id: '1',
+            name: 'service-1',
+            label: 'Svc 1',
+            url: 'svc-1.com',
+            enabled: true,
+            category: 'PRISON',
+            suspended: false,
+            suspendedAt: null,
+          },
+          {
+            id: '2',
+            name: 'service-2',
+            label: 'Svc 2',
+            url: 'svc-2.com',
+            enabled: true,
+            category: 'PRISON',
+            suspended: false,
+            suspendedAt: null,
+          },
         ],
         selectedList: [
-          { id: '1', name: 'service-1', label: 'Svc 1', url: 'svc-1.com', enabled: true, category: 'PRISON' },
+          {
+            id: '1',
+            name: 'service-1',
+            label: 'Svc 1',
+            url: 'svc-1.com',
+            enabled: true,
+            category: 'PRISON',
+            suspended: false,
+            suspendedAt: null,
+          },
         ],
       },
       body: {

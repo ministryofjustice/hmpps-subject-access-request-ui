@@ -33,6 +33,8 @@ export default {
         category: 'PRISON',
         enabled: true,
         templateMigrated: true,
+        suspended: false,
+        suspendedAt: null,
       },
       {
         id: '2',
@@ -42,6 +44,8 @@ export default {
         category: 'PROBATION',
         enabled: true,
         templateMigrated: false,
+        suspended: false,
+        suspendedAt: null,
       },
       {
         id: '3',
@@ -51,6 +55,19 @@ export default {
         category: 'PRISON',
         enabled: false,
         templateMigrated: false,
+        suspended: false,
+        suspendedAt: null,
+      },
+      {
+        id: '4',
+        name: 'x-service',
+        url: 'http://service-X',
+        label: 'X Service',
+        category: 'PROBATION',
+        enabled: true,
+        templateMigrated: true,
+        suspended: true,
+        suspendedAt: '10/03/2026 15:50:53',
       },
     ],
   ): SuperAgentRequest =>

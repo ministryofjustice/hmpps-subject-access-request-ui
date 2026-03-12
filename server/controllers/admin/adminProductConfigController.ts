@@ -117,7 +117,7 @@ export default class AdminProductConfigController {
     res.redirect(`/admin/product-config-details?id=${id}`)
   }
 
-  private static productDetailsFromBody(req: Request): Product {
+  private static productDetailsFromBody(req: Request): NewProduct {
     const body = req.body || {}
     return {
       id: null,
@@ -130,7 +130,7 @@ export default class AdminProductConfigController {
     }
   }
 
-  private static validateInputs(inputs: Product) {
+  private static validateInputs(inputs: NewProduct) {
     const nameError = this.validateField(inputs.name, 'name')
     const labelError = this.validateField(inputs.label, 'label')
     const urlError = this.validateField(inputs.url, 'url')
