@@ -51,9 +51,7 @@ test.describe('Request Report - ProductSelection', () => {
     await expect(productSelectionPage.checkAllCheckBox).toBeVisible()
     await expect(productSelectionPage.confirmButton).toBeVisible()
     await expect(productSelectionPage.suspendedProductsAlert).toBeVisible()
-    await expect(productSelectionPage.suspendedProductsAlert).toContainText(
-      'One or more products are currently Suspended:',
-    )
+    await expect(productSelectionPage.suspendedProductsAlert).toContainText('Product Suspended')
     await expect(productSelectionPage.suspendedProductsAlertList.locator('li')).toHaveCount(1)
     await expect(productSelectionPage.suspendedProductsAlertList).toContainText('X Service')
 

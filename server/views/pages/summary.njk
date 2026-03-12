@@ -2,9 +2,36 @@
 
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
 {% block content %}
+
+{% if suspendedList | length > 0 %}
+    {% set suspendedProductsBulletList %}
+    <ul class="govuk-list govuk-list--bullet" id="suspended-services-alert-list">
+      {% for item in suspendedList %}
+        <li>{{ item.label }}</li>
+      {% endfor %}
+    </ul>
+    {% endset %}
+
+    {% if suspendedList | length > 1 %}
+        {% set warningTitle = "Suspended Products Selected" %}
+        {% set warningDesc = '<p>The following selected products are currently Suspended</p>' ~ suspendedProductsBulletList ~ '<p>You can still submit your request however the report will <b>NOT</b> complete until all selected products have been unsuspended.</p>' %}
+    {% else %}
+        {% set warningTitle = "Suspended product selected" %}
+        {% set warningDesc = '<p>The following selected products are currently Suspended</p>' ~ suspendedProductsBulletList ~ '<p>You can still submit your request however the report will <b>NOT</b> complete until the product is unsuspended.</p>' %}
+    {% endif %}
+
+    {{ mojAlert({
+        variant: "warning",
+        title: warningTitle,
+        showTitleAsHeading: true,
+        dismissible: false,
+        html: warningDesc
+    }) }}
+{% endif %}
+
   <form action="/summary" method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -102,7 +129,6 @@
   ]
 }) }}
 <p>By accepting these details you are confirming that, to the best of your knowledge, these details are correct.</p>
-
 
   {{ govukButton({
     text: "Accept and create report",

@@ -132,6 +132,7 @@ test.describe('Request Report - Summary', () => {
 
     await expect(summaryPage.reportSummary).toContainText('Service One')
     await expect(summaryPage.reportSummary).toContainText('Service Two')
+    await expect(summaryPage.reportSummary).toContainText('X Service')
   })
 
   test('Details are carried through from /inputs', async ({ page }) => {
@@ -166,6 +167,49 @@ test.describe('Request Report - Summary', () => {
         'By accepting these details you are confirming that, to the best of your knowledge, these details are correct.',
       ),
     ).toBeVisible()
+  })
+
+  test('Suspended products warning is not displayed when no suspended products are selected', async ({ page }) => {
+    const inputsPage = await requestReportInputs(page)
+    await inputsPage.inputDateFrom('01/01/2001')
+    await inputsPage.inputDateTo('01/01/2021')
+    await inputsPage.inputCaseReference('exampleCaseReference')
+    await inputsPage.continue()
+    const productsPage = await verifyOnPage(page, RequestReportProductsPage)
+    await productsPage.selectService('service-one')
+    await productsPage.continue()
+    const summaryPage = await verifyOnPage(page, RequestReportSummaryPage)
+
+    await expect(summaryPage.reportSummary).toContainText('A1111AA')
+    await expect(summaryPage.reportSummary).toContainText('exampleCaseReference')
+    await expect(summaryPage.reportSummary).toContainText('01/01/2001')
+    await expect(summaryPage.reportSummary).toContainText('01/01/2021')
+    await expect(summaryPage.reportSummary).toContainText('Service One')
+    await expect(summaryPage.suspendedProductsAlert).toHaveCount(0)
+    await expect(summaryPage.suspendedProductsAlertList).toHaveCount(0)
+  })
+
+  test('Suspended products warning is displayed when suspended product is selected', async ({ page }) => {
+    const inputsPage = await requestReportInputs(page)
+    await inputsPage.inputDateFrom('01/01/2001')
+    await inputsPage.inputDateTo('01/01/2021')
+    await inputsPage.inputCaseReference('exampleCaseReference')
+    await inputsPage.continue()
+    const productsPage = await verifyOnPage(page, RequestReportProductsPage)
+    await productsPage.selectService('x-service')
+    await productsPage.continue()
+    const summaryPage = await verifyOnPage(page, RequestReportSummaryPage)
+
+    await expect(summaryPage.reportSummary).toContainText('A1111AA')
+    await expect(summaryPage.reportSummary).toContainText('exampleCaseReference')
+    await expect(summaryPage.reportSummary).toContainText('01/01/2001')
+    await expect(summaryPage.reportSummary).toContainText('01/01/2021')
+    await expect(summaryPage.reportSummary).toContainText('X Service')
+    await expect(summaryPage.suspendedProductsAlert).toBeVisible()
+    await expect(summaryPage.suspendedProductsAlert).toContainText('Suspended product selected')
+    await expect(summaryPage.suspendedProductsAlertList).toBeVisible()
+    await expect(summaryPage.suspendedProductsAlertList.locator('li')).toHaveCount(1)
+    await expect(summaryPage.suspendedProductsAlertList).toContainText('X Service')
   })
 
   test('Redirects to /summary if info not present', async ({ page }) => {
