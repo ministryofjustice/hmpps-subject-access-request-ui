@@ -82,7 +82,7 @@ describe('postReportDetails', () => {
     fakeApi
       .post(
         '/api/subjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service-one","nomisId":"A1111AA","ndeliusId":null}',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":["service-one"],"nomisId":"A1111AA","ndeliusId":null}',
       )
       .reply(200)
 
@@ -111,7 +111,7 @@ describe('postReportDetails', () => {
     nock(config.apis.subjectAccessRequest.url)
       .post(
         '/api/subjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service-one","nomisId":null,"ndeliusId":null}',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":["service-one"],"nomisId":null,"ndeliusId":null}',
       )
       .reply(400)
     await expect(SummaryController.postReportDetailsAndReturnResponse(req, res)).rejects.toThrow('Bad Request')
@@ -125,7 +125,7 @@ describe('postReportDetails', () => {
     })
       .post(
         '/api/subjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service-one","nomisId":"A1111AA","ndeliusId":null}',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":["service-one"],"nomisId":"A1111AA","ndeliusId":null}',
       )
       .reply(200)
 
@@ -172,7 +172,7 @@ describe('postReportDetails', () => {
     fakeApi
       .post(
         '/api/subjectAccessRequest',
-        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":"service-one","nomisId":"A1111AA","ndeliusId":null}',
+        '{"dateFrom":"01/01/2001","dateTo":"25/12/2022","sarCaseReferenceNumber":"mockedCaseReference","services":["service-one"],"nomisId":"A1111AA","ndeliusId":null}',
       )
       .reply(200)
 
