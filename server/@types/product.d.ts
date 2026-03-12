@@ -10,7 +10,7 @@ interface NewProduct {
 
 interface Product extends NewProduct {
   suspended: boolean
-  suspendedAt: string
+  suspendedAt: string | null
 }
 
 interface Environment {

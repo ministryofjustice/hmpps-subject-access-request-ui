@@ -27,7 +27,7 @@ const selectedProduct = {
   label: 'Service One',
   category: 'PRISON',
   suspended: false,
-  suspendedAt: null,
+  suspendedAt: null as string,
 }
 
 beforeEach(() => {
