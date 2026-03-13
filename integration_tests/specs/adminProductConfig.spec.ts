@@ -64,7 +64,7 @@ test.describe('Admin Product Configurations', () => {
     await expect(productConfigPage.productsTable).toContainText('Category')
     await expect(productConfigPage.productsTable).toContainText('Enabled')
     await expect(productConfigPage.productsTable).toContainText('Template migrated')
-    await expect(productConfigPage.productsTable).toContainText('Service Status')
+    await expect(productConfigPage.productsTable).toContainText('Product Status')
   })
 
   test('Displays product configuration details', async ({ page }) => {

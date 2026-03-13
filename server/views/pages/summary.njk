@@ -16,11 +16,11 @@
     {% endset %}
 
     {% if suspendedList | length > 1 %}
-        {% set warningTitle = "Suspended Products Selected" %}
+        {% set warningTitle = "Suspended products selected" %}
         {% set warningDesc = '<p>The following selected products are currently Suspended</p>' ~ suspendedProductsBulletList ~ '<p>You can still submit your request however the report will <b>NOT</b> complete until all selected products have been unsuspended.</p>' %}
     {% else %}
         {% set warningTitle = "Suspended product selected" %}
-        {% set warningDesc = '<p>The following selected products are currently Suspended</p>' ~ suspendedProductsBulletList ~ '<p>You can still submit your request however the report will <b>NOT</b> complete until the product is unsuspended.</p>' %}
+        {% set warningDesc = '<p>The following selected product is currently Suspended</p>' ~ suspendedProductsBulletList ~ '<p>You can still submit your request however the report will <b>NOT</b> complete until the product is unsuspended.</p>' %}
     {% endif %}
 
     {{ mojAlert({
