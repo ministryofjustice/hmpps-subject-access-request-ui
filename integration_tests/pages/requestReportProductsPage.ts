@@ -12,6 +12,12 @@ export default class RequestReportProductsPage extends AbstractPage {
 
   readonly errorSummary: Locator
 
+  readonly suspendedProductsAlert: Locator
+
+  readonly suspendedProductsAlertList
+
+  readonly productsTableCells: Locator
+
   constructor(page: Page) {
     super(page, 'Select Products')
     this.checkAllCheckBox = this.page.locator('#checkboxes-all')
@@ -19,6 +25,9 @@ export default class RequestReportProductsPage extends AbstractPage {
     this.backLink = this.page.locator('a', { hasText: 'Back' })
     this.confirmButton = this.page.locator('button', { hasText: 'Confirm' })
     this.errorSummary = this.page.locator('.govuk-error-summary', { hasText: 'There is a problem' })
+    this.suspendedProductsAlert = this.page.locator('.moj-alert__heading')
+    this.suspendedProductsAlertList = this.page.locator('#suspended-services-alert-list')
+    this.productsTableCells = this.page.locator('.govuk-table__cell')
   }
 
   selectAll = () => this.checkAllCheckBox.click({ force: true })

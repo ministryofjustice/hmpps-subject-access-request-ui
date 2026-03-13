@@ -1,5 +1,6 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{%- from "moj/components/badge/macro.njk" import mojBadge -%}
 
 {% macro multiSelect(params) %}
 
@@ -46,6 +47,14 @@
           </div>
       </td>
           <td class="govuk-table__cell">{{item.label}} </td>
+
+          {% if item.suspended %}
+            {% set serviceStatusLabel = mojBadge({ text: "Suspended", classes: "moj-badge--red" }) %}
+          {% else %}
+            {% set serviceStatusLabel = mojBadge({ text: "Active", classes: "moj-badge--green"}) %}
+          {% endif %}
+
+           <td class="govuk-table__cell">{{serviceStatusLabel}} </td>
         {% endif %}
     </tr>   
      {% endfor %}

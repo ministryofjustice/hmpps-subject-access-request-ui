@@ -64,6 +64,7 @@ test.describe('Admin Product Configurations', () => {
     await expect(productConfigPage.productsTable).toContainText('Category')
     await expect(productConfigPage.productsTable).toContainText('Enabled')
     await expect(productConfigPage.productsTable).toContainText('Template migrated')
+    await expect(productConfigPage.productsTable).toContainText('Product Status')
   })
 
   test('Displays product configuration details', async ({ page }) => {
@@ -78,6 +79,7 @@ test.describe('Admin Product Configurations', () => {
     await expect(productConfigPage.productsTableCell(0, 3)).toContainText('PRISON')
     await expect(productConfigPage.productsTableCell(0, 4)).toContainText('Enabled')
     await expect(productConfigPage.productsTableCell(0, 5)).toContainText('Migrated')
+    await expect(productConfigPage.productsTableCell(0, 6)).toContainText('Active')
 
     await expect(productConfigPage.productsTableRow(1)).toBeVisible()
     await expect(productConfigPage.productsTableCell(1, 0)).toContainText('service-three')
@@ -86,6 +88,7 @@ test.describe('Admin Product Configurations', () => {
     await expect(productConfigPage.productsTableCell(1, 3)).toContainText('PRISON')
     await expect(productConfigPage.productsTableCell(1, 4)).toContainText('Disabled')
     await expect(productConfigPage.productsTableCell(1, 5)).toContainText('Not migrated')
+    await expect(productConfigPage.productsTableCell(1, 6)).toContainText('Active')
 
     await expect(productConfigPage.productsTableRow(2)).toBeVisible()
     await expect(productConfigPage.productsTableCell(2, 0)).toContainText('service-two')
@@ -94,6 +97,16 @@ test.describe('Admin Product Configurations', () => {
     await expect(productConfigPage.productsTableCell(2, 3)).toContainText('PROBATION')
     await expect(productConfigPage.productsTableCell(2, 4)).toContainText('Enabled')
     await expect(productConfigPage.productsTableCell(2, 5)).toContainText('Not migrated')
+    await expect(productConfigPage.productsTableCell(2, 6)).toContainText('Active')
+
+    await expect(productConfigPage.productsTableRow(3)).toBeVisible()
+    await expect(productConfigPage.productsTableCell(3, 0)).toContainText('x-service')
+    await expect(productConfigPage.productsTableCell(3, 1)).toContainText('X Service')
+    await expect(productConfigPage.productsTableCell(3, 2)).toContainText('http://service-X')
+    await expect(productConfigPage.productsTableCell(3, 3)).toContainText('PROBATION')
+    await expect(productConfigPage.productsTableCell(3, 4)).toContainText('Enabled')
+    await expect(productConfigPage.productsTableCell(3, 5)).toContainText('Migrated')
+    await expect(productConfigPage.productsTableCell(3, 6)).toContainText('Suspended')
   })
 
   test('Displays create product config button which redirects to create page', async ({ page }) => {

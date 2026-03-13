@@ -1,4 +1,4 @@
-interface Product extends NewProduct {
+interface NewProduct {
   id: string
   name: string
   url: string
@@ -6,6 +6,11 @@ interface Product extends NewProduct {
   enabled?: boolean
   templateMigrated?: boolean
   category: ProductCategory
+}
+
+interface Product extends NewProduct {
+  suspended: boolean
+  suspendedAt: string | null
 }
 
 interface Environment {

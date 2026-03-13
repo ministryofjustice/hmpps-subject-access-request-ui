@@ -6,6 +6,7 @@ import {
   adminViewProductConfigDetails,
   login,
   productConfigDetailsExpectAllSummary,
+  productSuspendedConfigDetailsExpectAllSummary,
   REGISTER_TEMPLATE_ROLE,
   resetStubs,
   USER_ROLE,
@@ -62,6 +63,12 @@ test.describe('Admin Product Configuration Details', () => {
     const detailsPage = await adminViewProductConfigDetails(page)
 
     await productConfigDetailsExpectAllSummary(detailsPage)
+  })
+
+  test('Renders product config details for suspended service', async ({ page }) => {
+    const detailsPage = await adminViewProductConfigDetails(page, 3)
+
+    await productSuspendedConfigDetailsExpectAllSummary(detailsPage)
   })
 
   test('Renders product config details when checkboxes not selected', async ({ page }) => {

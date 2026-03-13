@@ -10,6 +10,7 @@ import { UserData } from '../@types/userdata'
 export default class SummaryController {
   static getReportDetails(req: Request, res: Response) {
     const selectedList = req.session.selectedList ?? []
+    const suspendedList = selectedList.filter(p => p.suspended)
     const orderedList = selectedList.sort((a, b) => a.label.localeCompare(b.label))
     const userData = req.session.userData ?? ({} as UserData)
 
@@ -22,6 +23,7 @@ export default class SummaryController {
       selectedList: orderedList.map(x => x.label).toString(),
       dateRange,
       caseReference: userData.caseReference,
+      suspendedList,
     })
   }
 

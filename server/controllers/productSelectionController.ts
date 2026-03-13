@@ -25,6 +25,7 @@ export default class ProductSelectionController {
       res.render('pages/productSelection', {
         categorisedProducts,
         selectedList: selectedList.map(x => x.name),
+        suspendedProductsList: productList.filter((p: Product) => p.suspended),
         buttonText: 'Confirm and return to summary page',
       })
       return
@@ -33,6 +34,7 @@ export default class ProductSelectionController {
     res.render('pages/productSelection', {
       categorisedProducts,
       selectedList: selectedList.map(x => x.name),
+      suspendedProductsList: productList.filter((p: Product) => p.suspended),
       buttonText: 'Confirm',
     })
   }

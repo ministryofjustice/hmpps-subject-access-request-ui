@@ -4,6 +4,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{%- from "moj/components/badge/macro.njk" import mojBadge -%}
 
 {% block content %}
 
@@ -22,6 +23,14 @@
     {% set templateMigratedTag = govukTag({text: "Migrated", classes: "govuk-tag--green"}) %}
   {% else %}
     {% set templateMigratedTag = govukTag({text: "Not migrated", classes: "govuk-tag--red"}) %}
+  {% endif %}
+
+  {% if productDetails.suspended %}
+    {% set serviceSuspendedTag = mojBadge({ text: "Suspended", classes: "moj-badge--red" }) %}
+    {% set serviceSuspendedAtTag = mojBadge({ text: productDetails.suspendedAt, classes: "moj-badge--red" }) %}
+  {% else %}
+    {% set serviceSuspendedTag = mojBadge({ text: "Active", classes: "moj-badge--green" }) %}
+    {% set serviceSuspendedAtTag = "N/A" %}
   {% endif %}
 
   {% if error %}
@@ -80,6 +89,14 @@
       {
         key: { text: "Template migrated" },
         value: { html: templateMigratedTag }
+      },
+      {
+        key: { text: "Product status" },
+        value: { html: serviceSuspendedTag }
+      },
+      {
+        key: { text: "Suspended at" },
+        value: { html: serviceSuspendedAtTag }
       }
     ]
   }) }}

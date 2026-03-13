@@ -15,6 +15,8 @@ const productConfigs: Product[] = [
     enabled: true,
     templateMigrated: true,
     category: ProductCategory.PRISON,
+    suspended: false,
+    suspendedAt: null,
   },
   {
     id: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
@@ -24,6 +26,8 @@ const productConfigs: Product[] = [
     enabled: true,
     templateMigrated: false,
     category: ProductCategory.PRISON,
+    suspended: false,
+    suspendedAt: null,
   },
   {
     id: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
@@ -33,9 +37,11 @@ const productConfigs: Product[] = [
     enabled: false,
     templateMigrated: false,
     category: ProductCategory.PROBATION,
+    suspended: false,
+    suspendedAt: null,
   },
 ]
-const newProduct: Product = {
+const newProduct: NewProduct = {
   id: null,
   name: 'my-prod-one',
   label: 'Product One',
@@ -44,7 +50,7 @@ const newProduct: Product = {
   enabled: true,
   templateMigrated: true,
 }
-const updatedProduct: Product = {
+const updatedProduct: NewProduct = {
   id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
   name: 'my-prod-one',
   label: 'Product One',

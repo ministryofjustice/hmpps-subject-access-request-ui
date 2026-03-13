@@ -14,6 +14,10 @@ export default class RequestReportSummaryPage extends AbstractPage {
 
   readonly changeProductsLink: Locator
 
+  readonly suspendedProductsAlert: Locator
+
+  readonly suspendedProductsAlertList: Locator
+
   constructor(page: Page) {
     super(page, 'Please confirm report details')
     this.acceptConfirmButton = this.page.locator('button', { hasText: 'Accept and create report' })
@@ -22,6 +26,8 @@ export default class RequestReportSummaryPage extends AbstractPage {
     this.changeCaseIdLink = this.page.locator('#change-case-id')
     this.changeDatesLink = this.page.locator('#change-date-range')
     this.changeProductsLink = this.page.locator('#change-products')
+    this.suspendedProductsAlert = this.page.locator('.moj-alert__heading')
+    this.suspendedProductsAlertList = this.page.locator('#suspended-services-alert-list')
   }
 
   continue = () => this.acceptConfirmButton.click()

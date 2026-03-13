@@ -45,6 +45,27 @@ test.describe('Request Report - ProductSelection', () => {
     await expect(productSelectionPage.confirmButton).toBeVisible()
   })
 
+  test('Contains suspended warning banner when one or more services is suspended', async ({ page }) => {
+    const productSelectionPage = await requestReportProductSelection(page)
+
+    await expect(productSelectionPage.checkAllCheckBox).toBeVisible()
+    await expect(productSelectionPage.confirmButton).toBeVisible()
+    await expect(productSelectionPage.suspendedProductsAlert).toBeVisible()
+    await expect(productSelectionPage.suspendedProductsAlert).toContainText('Product Suspended')
+    await expect(productSelectionPage.suspendedProductsAlertList.locator('li')).toHaveCount(1)
+    await expect(productSelectionPage.suspendedProductsAlertList).toContainText('X Service')
+
+    await expect(productSelectionPage.productsTableCells).toHaveCount(11)
+    await expect(productSelectionPage.productsTableCells.nth(1)).toContainText('Service One')
+    await expect(productSelectionPage.productsTableCells.nth(2)).toContainText('Active')
+
+    await expect(productSelectionPage.productsTableCells.nth(6)).toContainText('Service Two')
+    await expect(productSelectionPage.productsTableCells.nth(7)).toContainText('Active')
+
+    await expect(productSelectionPage.productsTableCells.nth(9)).toContainText('X Service')
+    await expect(productSelectionPage.productsTableCells.nth(10)).toContainText('Suspended')
+  })
+
   test('Does not allow none product selected', async ({ page }) => {
     const productSelectionPage = await requestReportProductSelection(page)
     await productSelectionPage.continue()

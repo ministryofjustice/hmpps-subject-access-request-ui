@@ -21,6 +21,8 @@ beforeEach(() => {
       url: 'https://prisoner-search-dev.prison.service.justice.gov.uk',
       enabled: true,
       category: 'PRISON',
+      suspended: false,
+      suspendedAt: null,
     },
     {
       id: '76fd9b66-2e57-41f0-8084-e0c6e2660e2c',
@@ -29,6 +31,8 @@ beforeEach(() => {
       url: 'https://book-move-dev.prison.service.justice.gov.uk',
       enabled: true,
       category: 'PRISON',
+      suspended: false,
+      suspendedAt: null,
     },
   ]
   productConfigurationList = productConfigurationListWithoutExclusions.concat([
@@ -39,6 +43,8 @@ beforeEach(() => {
       url: 'https://excluded-one-dev.prison.service.justice.gov.uk',
       enabled: true,
       category: 'PRISON',
+      suspended: false,
+      suspendedAt: null,
     },
     {
       id: '76fd9b66-2e57-41f0-8084-e0c6e2660e2c',
@@ -47,6 +53,8 @@ beforeEach(() => {
       url: 'https://excluded-two-dev.prison.service.justice.gov.uk',
       enabled: true,
       category: 'PRISON',
+      suspended: false,
+      suspendedAt: null,
     },
     {
       id: '76fd9b66-2e57-41f0-8084-e0c6e2660e2c',
@@ -55,6 +63,8 @@ beforeEach(() => {
       url: 'https://excluded-three-dev.prison.service.justice.gov.uk',
       enabled: true,
       category: 'PRISON',
+      suspended: false,
+      suspendedAt: null,
     },
   ])
 })
@@ -139,7 +149,7 @@ describe('createProduct', () => {
   const req: Request = {
     user: requestUser,
   } as unknown as Request
-  const newProduct: Product = {
+  const newProduct: NewProduct = {
     id: null,
     name: 'my-prod-one',
     label: 'Product One',
@@ -183,6 +193,8 @@ describe('updateProduct', () => {
     category: ProductCategory.PRISON,
     enabled: true,
     templateMigrated: true,
+    suspended: false,
+    suspendedAt: null,
   }
 
   test.each([

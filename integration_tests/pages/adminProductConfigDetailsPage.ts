@@ -10,6 +10,10 @@ export default class AdminProductConfigDetailsPage extends AbstractPage {
 
   readonly errorSummary: Locator
 
+  readonly serviceSummaryColumn: Locator
+
+  readonly suspendedAtColumn: Locator
+
   constructor(page: Page) {
     super(page, 'Product Configuration Details')
     this.productConfigSummary = this.page.locator('#product-config-summary')
@@ -18,6 +22,11 @@ export default class AdminProductConfigDetailsPage extends AbstractPage {
     this.errorSummary = this.page.locator('.govuk-error-summary', {
       hasText: 'Problem retrieving product configuration',
     })
+    this.serviceSummaryColumn = this.page
+      .locator('#product-config-summary')
+      .locator('.govuk-summary-list__value')
+      .nth(6)
+    this.suspendedAtColumn = this.page.locator('#product-config-summary').locator('.govuk-summary-list__value').nth(7)
   }
 
   edit = () => this.editLink.click()
