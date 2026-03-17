@@ -15,6 +15,7 @@ import RegisterTemplateProductController from '../controllers/registerTemplatePr
 import RegisterTemplateUploadController from '../controllers/registerTemplateUploadController'
 import RegisterTemplateConfirmationController from '../controllers/registerTemplateConfirmationController'
 import AdminProductConfigController from '../controllers/admin/adminProductConfigController'
+import AdminSuspendProductController from '../controllers/admin/adminSuspendProductController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes(service: Services): Router {
@@ -108,6 +109,9 @@ export default function routes(service: Services): Router {
   )
   post('/admin/confirm-update-product-config', AdminProductConfigController.confirmUpdateProductConfig)
   get('/admin/cancel-update-product-config', AdminProductConfigController.cancelUpdateProductConfig)
+
+  get('/admin/confirm-product-suspended-status', AdminSuspendProductController.confirmSuspendedStatusUpdate)
+  post('/admin/update-product-suspended-status', AdminSuspendProductController.updatedSuspendedStatus)
 
   return router
 }

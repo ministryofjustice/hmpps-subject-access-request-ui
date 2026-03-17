@@ -26,9 +26,11 @@
   {% endif %}
 
   {% if productDetails.suspended %}
+    {% set changeLabel = 'Unsuspend' %}
     {% set serviceSuspendedTag = mojBadge({ text: "Suspended", classes: "moj-badge--red" }) %}
     {% set serviceSuspendedAtTag = mojBadge({ text: productDetails.suspendedAt, classes: "moj-badge--red" }) %}
   {% else %}
+    {% set changeLabel = 'Suspend' %}
     {% set serviceSuspendedTag = mojBadge({ text: "Active", classes: "moj-badge--green" }) %}
     {% set serviceSuspendedAtTag = "N/A" %}
   {% endif %}
@@ -37,6 +39,12 @@
     {{ govukErrorSummary({
       titleText: "Problem retrieving product configuration",
       errorList: [{ text: error }]
+    }) }}
+    {% set cardAction = {} %}
+  {% elseif suspendErrors %}
+    {{ govukErrorSummary({
+      titleText: "Problem updating product status",
+      errorList: [{ text: suspendErrors }]
     }) }}
     {% set cardAction = {} %}
   {% else %}
@@ -92,7 +100,16 @@
       },
       {
         key: { text: "Product status" },
-        value: { html: serviceSuspendedTag }
+        value: { html: serviceSuspendedTag },
+        actions: {
+          items: [
+            {
+              href: "/admin/confirm-product-suspended-status",
+              text: changeLabel,
+              visuallyHiddenText: changeLabel
+            }
+          ]
+        }
       },
       {
         key: { text: "Suspended at" },

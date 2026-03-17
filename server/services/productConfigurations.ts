@@ -37,9 +37,18 @@ const updateProduct = async (product: NewProduct, req: Request) => {
     .set('Authorization', `Bearer ${getUserToken(req)}`)
 }
 
+const updateProductSuspendedStatus = async (id: string, suspended: boolean, req: Request): Promise<Product> => {
+  const response = await superagent
+    .patch(`${config.apis.subjectAccessRequest.url}/api/services/${id}/suspend?suspended=${suspended}`)
+    .set('Authorization', `Bearer ${getUserToken(req)}`)
+
+  return response.body
+}
+
 export default {
   getProductList,
   getTemplateRegistrationProductList,
   createProduct,
   updateProduct,
+  updateProductSuspendedStatus,
 }

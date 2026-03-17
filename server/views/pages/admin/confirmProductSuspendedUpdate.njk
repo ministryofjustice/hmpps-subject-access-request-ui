@@ -1,0 +1,59 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{%- from "moj/components/interruption-card/macro.njk" import interruptionCard -%}
+
+{% block content %}
+
+  {{ govukBackLink({
+    text: "Back",
+    href: "/admin/product-config-details?id=" + productDetails.id
+  }) }}
+
+{% if productDetails.suspended %}
+    {% set suspendedValue = false %}
+    {% set confirmationMessage = 'Are you sure you want to unsuspend the ' ~ productDetails.label ~ ' product?' %}
+
+    {% set warningDesc %}
+    <p>Unsuspending <b>{{productDetails.label}}</b> will allow the SAR service to resume requesting subject data from this product.</p>
+    <p>You should <b>not</b> unsuspend <b>{{productDetails.label}}</b> until the Service/Offender SAR teams have confirmed each of the following:</p>
+    <ul class="govuk-list govuk-list--bullet" id="unsuspend-checklist">
+        <li>The <b>{{productDetails.label}}</b> SAR API is up to date and is returning all SARable data held by the product.</li>
+        <li>The <b>{{productDetails.label}}</b> SAR template is up to date and in sync with the product's SAR API.</li>
+        <li>All API/Template changes since the product's suspension have been approved and signed off by the Offender SAR team.</li>
+        <li>The latest SAR Template has been registered with the SAR service.</li>
+    </ul>
+    <p>You should leave the product suspended if you unsure or unable to confirm any of the above.</p>
+    {% endset %}
+{% else %}
+    {% set suspendedValue = true %}
+    {% set confirmationMessage = 'Are you sure you want to suspend the ' ~ productDetails.label ~ ' product?' %}
+
+    {% set warningDesc %}
+    <ul>
+        <li>Suspending a product directly impacts the Offender SAR team.</li>
+        <li>All SAR requests to <b>{{productDetails.label}}</b> will be blocked until it is manually unsuspended.</li>
+        <li>Suspending a product may affect existing requests.</li>
+    </ul>
+    <p>You should get confirmation from both the Service/Offender SAR teams that this action has been agreed before suspending the product.</p>
+    {% endset %}
+{% endif %}
+
+  <form action="/admin/update-product-suspended-status" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    <input type="hidden" name="suspended" value="{{ suspendedValue }}">
+
+    {% call interruptionCard({
+        heading: confirmationMessage,
+        primaryAction: {
+            text: "Confirm"
+        },
+        secondaryAction: {
+            text: "Cancel",
+            href: "/admin/product-config-details?id=" + productDetails.id
+        }
+    }) -%}
+        {{warningDesc | safe }}
+    {%- endcall %}
+  </form>
+
+{% endblock %}
