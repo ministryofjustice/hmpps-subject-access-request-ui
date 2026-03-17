@@ -66,8 +66,10 @@ test.describe('Admin Product Configuration Details', () => {
   })
 
   test('Renders product config details for suspended service', async ({ page }) => {
-    const detailsPage = await adminViewProductConfigDetails(page, 3)
+    await resetStubs()
+    await sarApi.stubGetProductsSuspended()
 
+    const detailsPage = await adminViewProductConfigDetails(page, 0)
     await productSuspendedConfigDetailsExpectAllSummary(detailsPage)
   })
 

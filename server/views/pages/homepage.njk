@@ -4,12 +4,26 @@
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
+{% from "../components/suspendedProductsWarning.njk" import warning %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 
 {% block content %}
 
 <div class="homepage-content">
   <h1>Subject Access Request Product</h1>
+
+  {% if error %}
+      {{ govukErrorSummary({
+        titleText: "Internal server error",
+        errorList: [{ text: error }]
+      }) }}
+  {% endif %}
+
+  {% if suspendedProducts | length > 0 %}
+    {{ warning({ suspendedList: suspendedProducts }) }}
+  {% endif %}
 
   <div class="body-cards">
 

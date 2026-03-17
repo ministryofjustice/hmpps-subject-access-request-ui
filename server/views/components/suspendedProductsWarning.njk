@@ -1,0 +1,29 @@
+{% extends "../partials/layout.njk" %}
+{% set mainClasses = "app-container govuk-body" %}
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
+
+{% macro warning(params) %}
+    {% set suspendedProductsBulletList %}
+    <ul class="govuk-list govuk-list--bullet" id="suspended-services-alert-list">
+      {% for item in params.suspendedList %}
+        <li>{{ item.label }}</li>
+      {% endfor %}
+    </ul>
+    {% endset %}
+
+    {% if params.suspendedList | length > 1 %}
+        {% set suspendedWarningTitle = 'Products Suspended' %}
+        {% set suspendedWarningDesc = '<p>The following products are currently Suspended</p>' ~ suspendedProductsBulletList ~ '<p>You can continue to submit requests however reports including these products will <b>NOT</b> complete until their status is updated to Active. Please note this may also impact previously submitted requests.</p>' %}
+    {% else %}
+        {% set suspendedWarningTitle = 'Product Suspended' %}
+        {% set suspendedWarningDesc = '<p>The following products are currently Suspended</p>' ~ suspendedProductsBulletList ~ '<p>You can continue submit requests however reports including this product will <b>NOT</b> complete until the product status is updated to Active. Please note this may also impact previously submitted requests.</p>' %}
+    {% endif %}
+
+    {{ mojAlert({
+        variant: "warning",
+        title: suspendedWarningTitle,
+        showTitleAsHeading: true,
+        dismissible: false,
+        html: suspendedWarningDesc
+    }) }}
+{% endmacro %}

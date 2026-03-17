@@ -16,6 +16,7 @@ import RegisterTemplateUploadController from '../controllers/registerTemplateUpl
 import RegisterTemplateConfirmationController from '../controllers/registerTemplateConfirmationController'
 import AdminProductConfigController from '../controllers/admin/adminProductConfigController'
 import AdminSuspendProductController from '../controllers/admin/adminSuspendProductController'
+import HomepageController from '../controllers/homepageController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes(service: Services): Router {
@@ -24,13 +25,7 @@ export default function routes(service: Services): Router {
   const post = (path: string | string[], ...handlers: RequestHandler[]) =>
     router.post(path, ...handlers.map(handler => asyncMiddleware(handler)))
 
-  get('/', (req, res, next) => {
-    res.render('pages/homepage', {
-      hasSarUserRole: res.locals.user.userRoles.includes('SAR_USER_ACCESS'),
-      hasAdminRole: res.locals.user.userRoles.includes('SAR_ADMIN_ACCESS'),
-      hasRegisterTemplateRole: res.locals.user.userRoles.includes('SAR_REGISTER_TEMPLATE'),
-    })
-  })
+  get('/', HomepageController.getHomepage)
 
   get('/subject-id', SubjectIdController.getSubjectId)
   post('/subject-id', SubjectIdController.saveSubjectId)

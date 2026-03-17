@@ -16,6 +16,8 @@ export default class RequestReportSummaryPage extends AbstractPage {
 
   readonly suspendedProductsAlert: Locator
 
+  readonly suspendedProductsAlertContent: Locator
+
   readonly suspendedProductsAlertList: Locator
 
   constructor(page: Page) {
@@ -27,6 +29,7 @@ export default class RequestReportSummaryPage extends AbstractPage {
     this.changeDatesLink = this.page.locator('#change-date-range')
     this.changeProductsLink = this.page.locator('#change-products')
     this.suspendedProductsAlert = this.page.locator('.moj-alert__heading')
+    this.suspendedProductsAlertContent = this.page.locator('.moj-alert__content')
     this.suspendedProductsAlertList = this.page.locator('#suspended-services-alert-list')
   }
 

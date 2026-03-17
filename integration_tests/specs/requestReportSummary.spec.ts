@@ -132,7 +132,7 @@ test.describe('Request Report - Summary', () => {
 
     await expect(summaryPage.reportSummary).toContainText('Service One')
     await expect(summaryPage.reportSummary).toContainText('Service Two')
-    await expect(summaryPage.reportSummary).toContainText('X Service')
+    await expect(summaryPage.reportSummary).not.toContainText('Service Three')
   })
 
   test('Details are carried through from /inputs', async ({ page }) => {
@@ -190,13 +190,16 @@ test.describe('Request Report - Summary', () => {
   })
 
   test('Suspended products warning is displayed when suspended product is selected', async ({ page }) => {
+    await resetStubs()
+    await sarApi.stubGetProductsSuspended()
+
     const inputsPage = await requestReportInputs(page)
     await inputsPage.inputDateFrom('01/01/2001')
     await inputsPage.inputDateTo('01/01/2021')
     await inputsPage.inputCaseReference('exampleCaseReference')
     await inputsPage.continue()
     const productsPage = await verifyOnPage(page, RequestReportProductsPage)
-    await productsPage.selectService('x-service')
+    await productsPage.selectService('service-ninety-nine')
     await productsPage.continue()
     const summaryPage = await verifyOnPage(page, RequestReportSummaryPage)
 
@@ -204,12 +207,16 @@ test.describe('Request Report - Summary', () => {
     await expect(summaryPage.reportSummary).toContainText('exampleCaseReference')
     await expect(summaryPage.reportSummary).toContainText('01/01/2001')
     await expect(summaryPage.reportSummary).toContainText('01/01/2021')
-    await expect(summaryPage.reportSummary).toContainText('X Service')
+    await expect(summaryPage.reportSummary).toContainText('Service Ninety Nine')
     await expect(summaryPage.suspendedProductsAlert).toBeVisible()
-    await expect(summaryPage.suspendedProductsAlert).toContainText('Suspended product selected')
+    await expect(summaryPage.suspendedProductsAlert).toContainText('Product Suspended')
+    await expect(summaryPage.suspendedProductsAlertContent).toBeVisible()
+    await expect(summaryPage.suspendedProductsAlertContent).toContainText(
+      'The following products are currently Suspended',
+    )
     await expect(summaryPage.suspendedProductsAlertList).toBeVisible()
     await expect(summaryPage.suspendedProductsAlertList.locator('li')).toHaveCount(1)
-    await expect(summaryPage.suspendedProductsAlertList).toContainText('X Service')
+    await expect(summaryPage.suspendedProductsAlertList).toContainText('Service Ninety Nine')
   })
 
   test('Redirects to /summary if info not present', async ({ page }) => {
