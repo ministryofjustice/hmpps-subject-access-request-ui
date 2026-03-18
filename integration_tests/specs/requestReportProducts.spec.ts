@@ -46,6 +46,9 @@ test.describe('Request Report - ProductSelection', () => {
   })
 
   test('Contains suspended warning banner when one or more services is suspended', async ({ page }) => {
+    await resetStubs()
+    await sarApi.stubGetProductsSuspended()
+
     const productSelectionPage = await requestReportProductSelection(page)
 
     await expect(productSelectionPage.checkAllCheckBox).toBeVisible()
@@ -53,17 +56,17 @@ test.describe('Request Report - ProductSelection', () => {
     await expect(productSelectionPage.suspendedProductsAlert).toBeVisible()
     await expect(productSelectionPage.suspendedProductsAlert).toContainText('Product Suspended')
     await expect(productSelectionPage.suspendedProductsAlertList.locator('li')).toHaveCount(1)
-    await expect(productSelectionPage.suspendedProductsAlertList).toContainText('X Service')
+    await expect(productSelectionPage.suspendedProductsAlertList).toContainText('Service Ninety Nine')
 
-    await expect(productSelectionPage.productsTableCells).toHaveCount(11)
+    await expect(productSelectionPage.productsTableCells).toHaveCount(9)
     await expect(productSelectionPage.productsTableCells.nth(1)).toContainText('Service One')
     await expect(productSelectionPage.productsTableCells.nth(2)).toContainText('Active')
 
-    await expect(productSelectionPage.productsTableCells.nth(6)).toContainText('Service Two')
-    await expect(productSelectionPage.productsTableCells.nth(7)).toContainText('Active')
+    await expect(productSelectionPage.productsTableCells.nth(4)).toContainText('Service Two')
+    await expect(productSelectionPage.productsTableCells.nth(5)).toContainText('Active')
 
-    await expect(productSelectionPage.productsTableCells.nth(9)).toContainText('X Service')
-    await expect(productSelectionPage.productsTableCells.nth(10)).toContainText('Suspended')
+    await expect(productSelectionPage.productsTableCells.nth(7)).toContainText('Service Ninety Nine')
+    await expect(productSelectionPage.productsTableCells.nth(8)).toContainText('Suspended')
   })
 
   test('Does not allow none product selected', async ({ page }) => {

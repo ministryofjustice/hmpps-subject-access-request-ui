@@ -212,12 +212,12 @@ export const productConfigDetailsExpectAllSummary = async (detailsPage: AdminPro
 }
 
 export const productSuspendedConfigDetailsExpectAllSummary = async (detailsPage: AdminProductConfigDetailsPage) => {
-  await expect(detailsPage.productConfigSummary).toContainText('x-service')
-  await expect(detailsPage.productConfigSummary).toContainText('X Service')
-  await expect(detailsPage.productConfigSummary).toContainText('http://service-X')
+  await expect(detailsPage.productConfigSummary).toContainText('service-ninety-nine')
+  await expect(detailsPage.productConfigSummary).toContainText('Service Ninety Nine')
+  await expect(detailsPage.productConfigSummary).toContainText('http://service-ninety-nine')
   await expect(detailsPage.productConfigSummary).toContainText('PROBATION')
   await expect(detailsPage.productConfigSummary).toContainText('Enabled')
-  await expect(detailsPage.productConfigSummary).toContainText('Migrated')
+  await expect(detailsPage.productConfigSummary).toContainText('Not migrated')
   await expect(detailsPage.serviceSummaryColumn).toContainText('Suspended')
   await expect(detailsPage.suspendedAtColumn).toContainText('10/03/2026 15:50:53')
 }

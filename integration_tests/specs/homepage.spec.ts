@@ -3,9 +3,12 @@ import hmppsAuth from '../mockApis/hmppsAuth'
 import { ADMIN_ROLE, login, REGISTER_TEMPLATE_ROLE, resetStubs, USER_ROLE, verifyOnPage } from '../testUtils'
 import HomePage from '../pages/homePage'
 import AuthSignInPage from '../pages/authSignInPage'
+import sarApi from '../mockApis/sarApi'
 
 test.describe('Homepage', () => {
-  test.beforeEach(async () => {})
+  test.beforeEach(async () => {
+    await sarApi.stubGetProducts()
+  })
 
   test.afterEach(async () => {
     await resetStubs()
@@ -36,6 +39,7 @@ test.describe('Homepage', () => {
     await expect(homepage.viewReportsLink).toBeVisible()
     await expect(homepage.adminLink).not.toBeVisible()
     await expect(homepage.registerTemplateLink).not.toBeVisible()
+    await expect(homepage.errorSummaryBox).not.toBeVisible()
   })
 
   test('Displays SAR action cards when admin', async ({ page }) => {
@@ -49,6 +53,7 @@ test.describe('Homepage', () => {
     await expect(homepage.viewReportsLink).not.toBeVisible()
     await expect(homepage.adminLink).toBeVisible()
     await expect(homepage.registerTemplateLink).not.toBeVisible()
+    await expect(homepage.errorSummaryBox).not.toBeVisible()
   })
 
   test('Displays SAR action cards when register template', async ({ page }) => {
@@ -62,6 +67,63 @@ test.describe('Homepage', () => {
     await expect(homepage.viewReportsLink).not.toBeVisible()
     await expect(homepage.adminLink).not.toBeVisible()
     await expect(homepage.registerTemplateLink).toBeVisible()
+    await expect(homepage.errorSummaryBox).not.toBeVisible()
+  })
+
+  test('Displays error summary when unable to get product list', async ({ page }) => {
+    await resetStubs()
+    await sarApi.stubGetProductsError()
+
+    await login(page, { roles: ['ROLE_SAR_USER_ACCESS'] })
+    await page.goto('/')
+
+    const homepage = await verifyOnPage(page, HomePage)
+
+    await expect(homepage.sarActionCards).toBeVisible()
+    await expect(homepage.requestReportLink).toBeVisible()
+    await expect(homepage.viewReportsLink).toBeVisible()
+    await expect(homepage.adminLink).not.toBeVisible()
+    await expect(homepage.registerTemplateLink).not.toBeVisible()
+    await expect(homepage.errorSummaryBox).toBeVisible()
+    await expect(homepage.errorSummaryBox).toContainText('Internal server error')
+    await expect(homepage.errorSummaryBox).toContainText('Unexpected error getting products list from API')
+  })
+
+  test('Does not display product suspended warning no products have status suspended', async ({ page }) => {
+    await login(page, { roles: ['ROLE_SAR_USER_ACCESS'] })
+    await page.goto('/')
+
+    const homepage = await verifyOnPage(page, HomePage)
+
+    await expect(homepage.sarActionCards).toBeVisible()
+    await expect(homepage.requestReportLink).toBeVisible()
+    await expect(homepage.viewReportsLink).toBeVisible()
+    await expect(homepage.adminLink).not.toBeVisible()
+    await expect(homepage.registerTemplateLink).not.toBeVisible()
+    await expect(homepage.errorSummaryBox).not.toBeVisible()
+    await expect(homepage.productsSuspendedAlertContent).not.toBeVisible()
+  })
+
+  test('Displays product suspended warning when 1 or more services has status suspended', async ({ page }) => {
+    await resetStubs()
+    await sarApi.stubGetProductsSuspended()
+
+    await login(page, { roles: ['ROLE_SAR_USER_ACCESS'] })
+    await page.goto('/')
+
+    const homepage = await verifyOnPage(page, HomePage)
+
+    await expect(homepage.sarActionCards).toBeVisible()
+    await expect(homepage.requestReportLink).toBeVisible()
+    await expect(homepage.viewReportsLink).toBeVisible()
+    await expect(homepage.adminLink).not.toBeVisible()
+    await expect(homepage.registerTemplateLink).not.toBeVisible()
+    await expect(homepage.errorSummaryBox).not.toBeVisible()
+    await expect(homepage.productsSuspendedAlertContent).toBeVisible()
+    await expect(homepage.productsSuspendedAlertContent).toContainText('Product Suspended')
+    await expect(homepage.suspendedProductsAlertList).toBeVisible()
+    await expect(homepage.suspendedProductsAlertList).toHaveCount(1)
+    await expect(homepage.suspendedProductsAlertList.nth(0)).toHaveText('Service Ninety Nine')
   })
 
   test('Displays SAR action cards when all SAR roles', async ({ page }) => {
@@ -75,6 +137,7 @@ test.describe('Homepage', () => {
     await expect(homepage.viewReportsLink).toBeVisible()
     await expect(homepage.adminLink).toBeVisible()
     await expect(homepage.registerTemplateLink).toBeVisible()
+    await expect(homepage.errorSummaryBox).not.toBeVisible()
   })
 
   test('Redirects to /subject-id on clicking Request a report link', async ({ page }) => {

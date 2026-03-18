@@ -58,19 +58,71 @@ export default {
         suspended: false,
         suspendedAt: null,
       },
+    ],
+  ): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/services',
+      },
+      response: {
+        status: httpStatus,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: body,
+      },
+    }),
+
+  stubGetProductsSuspended: (
+    httpStatus = 200,
+    body = [
       {
-        id: '4',
-        name: 'x-service',
-        url: 'http://service-X',
-        label: 'X Service',
-        category: 'PROBATION',
+        id: '1',
+        name: 'service-one',
+        url: 'http://service-one',
+        label: 'Service One',
+        category: 'PRISON',
         enabled: true,
         templateMigrated: true,
+        suspended: false,
+        suspendedAt: null,
+      },
+      {
+        id: '2',
+        name: 'service-two',
+        url: 'http://service-two',
+        label: 'Service Two',
+        category: 'PROBATION',
+        enabled: true,
+        templateMigrated: false,
+        suspended: false,
+        suspendedAt: null,
+      },
+      {
+        id: '99',
+        name: 'service-ninety-nine',
+        url: 'http://service-ninety-nine',
+        label: 'Service Ninety Nine',
+        category: 'PROBATION',
+        enabled: true,
+        templateMigrated: false,
         suspended: true,
         suspendedAt: '10/03/2026 15:50:53',
       },
     ],
   ): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/services',
+      },
+      response: {
+        status: httpStatus,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: body,
+      },
+    }),
+
+  stubGetProductsError: (httpStatus = 500, body = { error: 'something went wrong' }): SuperAgentRequest =>
     stubFor({
       request: {
         method: 'GET',

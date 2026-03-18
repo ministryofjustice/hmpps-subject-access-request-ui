@@ -12,6 +12,12 @@ export default class HomePage extends AbstractPage {
 
   readonly registerTemplateLink: Locator
 
+  readonly errorSummaryBox: Locator
+
+  readonly productsSuspendedAlertContent: Locator
+
+  readonly suspendedProductsAlertList: Locator
+
   constructor(page: Page) {
     super(page, 'Subject Access Request Product')
     this.sarActionCards = this.page.locator('.sar-card-group')
@@ -19,6 +25,9 @@ export default class HomePage extends AbstractPage {
     this.viewReportsLink = this.page.locator('#view-reports')
     this.adminLink = this.page.locator('#admin')
     this.registerTemplateLink = this.page.locator('#register-template')
+    this.errorSummaryBox = this.page.locator('.govuk-error-summary')
+    this.productsSuspendedAlertContent = this.page.locator('.moj-alert__content')
+    this.suspendedProductsAlertList = this.page.locator('#suspended-services-alert-list')
   }
 
   requestReport = () => this.requestReportLink.click()
