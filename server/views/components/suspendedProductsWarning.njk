@@ -13,10 +13,10 @@
 
     {% if params.suspendedList | length > 1 %}
         {% set suspendedWarningTitle = 'Products Suspended' %}
-        {% set suspendedWarningDesc = '<p>The following products are currently Suspended</p>' ~ suspendedProductsBulletList ~ '<p>You can continue to submit requests however reports including these products will <b>NOT</b> complete until their status is updated to Active. Please note this may also impact previously submitted requests.</p>' %}
+        {% set suspendedWarningDesc = '<p>The following products are currently suspended</p>' ~ suspendedProductsBulletList ~ '<p>You can continue to submit requests however reports including these products will <b>NOT</b> complete until their status is updated to active. Please note this may also impact previously submitted requests.</p>' %}
     {% else %}
         {% set suspendedWarningTitle = 'Product Suspended' %}
-        {% set suspendedWarningDesc = '<p>The following products are currently Suspended</p>' ~ suspendedProductsBulletList ~ '<p>You can continue submit requests however reports including this product will <b>NOT</b> complete until the product status is updated to Active. Please note this may also impact previously submitted requests.</p>' %}
+        {% set suspendedWarningDesc = '<p>The following products are currently suspended</p>' ~ suspendedProductsBulletList ~ '<p>You can continue to submit requests however reports including this product will <b>NOT</b> complete until the product status is updated to active. Please note this may also impact previously submitted requests.</p>' %}
     {% endif %}
 
     {{ mojAlert({
