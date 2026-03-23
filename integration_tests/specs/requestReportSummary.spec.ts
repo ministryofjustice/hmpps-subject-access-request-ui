@@ -212,7 +212,7 @@ test.describe('Request Report - Summary', () => {
     await expect(summaryPage.suspendedProductsAlert).toContainText('Product Suspended')
     await expect(summaryPage.suspendedProductsAlertContent).toBeVisible()
     await expect(summaryPage.suspendedProductsAlertContent).toContainText(
-      'The following products are currently Suspended',
+      'The following products are currently suspended',
     )
     await expect(summaryPage.suspendedProductsAlertList).toBeVisible()
     await expect(summaryPage.suspendedProductsAlertList.locator('li')).toHaveCount(1)

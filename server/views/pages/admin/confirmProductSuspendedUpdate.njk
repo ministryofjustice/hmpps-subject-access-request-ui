@@ -14,15 +14,15 @@
     {% set confirmationMessage = 'Are you sure you want to unsuspend the ' ~ productDetails.label ~ ' product?' %}
 
     {% set warningDesc %}
-    <p>Unsuspending <b>{{productDetails.label}}</b> will allow the SAR service to resume requesting subject data from this product.</p>
-    <p>You should <b>not</b> unsuspend <b>{{productDetails.label}}</b> until the Service/Offender SAR teams have confirmed each of the following:</p>
+    <p>Unsuspending <b>{{productDetails.label}}</b> will allow the SAR service to resume requesting data from this product.</p>
+    <p>You should <b>not</b> unsuspend <b>{{productDetails.label}}</b> until the Product team have confirmed each of the following:</p>
     <ul class="govuk-list govuk-list--bullet" id="unsuspend-checklist">
-        <li>The <b>{{productDetails.label}}</b> SAR API is up to date and is returning all SARable data held by the product.</li>
-        <li>The <b>{{productDetails.label}}</b> SAR template is up to date and in sync with the product's SAR API.</li>
-        <li>All API/Template changes since the product's suspension have been approved and signed off by the Offender SAR team.</li>
-        <li>The latest SAR Template has been registered with the SAR service.</li>
+        <li>The <b>{{productDetails.label}}</b> SAR API is up-to-date and is returning all SAR-able data held by the product.</li>
+        <li>The <b>{{productDetails.label}}</b> SAR template is up-to-date and in sync with the product's SAR API.</li>
+        <li>All API/template changes since the product's suspension have been approved and signed off by the Offender SAR team.</li>
+        <li>The latest SAR template has been registered with the SAR service.</li>
     </ul>
-    <p>You should leave the product suspended if you unsure or unable to confirm any of the above.</p>
+    <p>You should leave the product suspended if you unsure or unable to confirm the above.</p>
     {% endset %}
 {% else %}
     {% set suspendedValue = true %}
