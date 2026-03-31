@@ -17,6 +17,7 @@ import RegisterTemplateConfirmationController from '../controllers/registerTempl
 import AdminProductConfigController from '../controllers/admin/adminProductConfigController'
 import AdminSuspendProductController from '../controllers/admin/adminSuspendProductController'
 import HomepageController from '../controllers/homepageController'
+import ReportDetailsController from '../controllers/reportDetailsController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes(service: Services): Router {
@@ -43,6 +44,8 @@ export default function routes(service: Services): Router {
   get('/confirmation', ConfirmationController.getConfirmation)
 
   get('/reports', ReportsController.getReports)
+
+  get('/details', ReportDetailsController.getReportDetails)
 
   get('/download-report/report', ReportDownloadController.getReport)
 

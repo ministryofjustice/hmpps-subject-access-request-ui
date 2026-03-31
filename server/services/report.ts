@@ -2,11 +2,12 @@ import type { NextFunction, Request, Response } from 'express'
 import proxy from 'express-http-proxy'
 import superagent from 'superagent'
 import config from '../config'
-import type { AdminSubjectAccessRequest, SubjectAccessRequest } from '../@types/subjectAccessRequest'
+import { AdminSubjectAccessRequest, RequestService, SubjectAccessRequest } from '../@types/subjectAccessRequest'
 import getUserToken from '../utils/userTokenHelper'
 import getPageLinks from '../utils/paginationHelper'
 import logger from '../../logger'
 import getSanitisedError from '../sanitisedError'
+import { formatDate, formatDateTime } from '../utils/dateHelpers'
 
 const getReport = (req: Request, res: Response, next: NextFunction, fileId: string) =>
   proxy(config.apis.subjectAccessRequest.url, {
@@ -54,6 +55,25 @@ const getSubjectAccessRequestList = async (
   const numberOfReports = numberOfReportsResponse.text
 
   return { subjectAccessRequests, numberOfReports }
+}
+
+const getSubjectAccessRequestFormatted = async (req: Request, id: string): Promise<SubjectAccessRequest> => {
+  const token = getUserToken(req)
+  const response = await superagent
+    .get(`${config.apis.subjectAccessRequest.url}/api/subjectAccessRequest/${id}`)
+    .set('Authorization', `Bearer ${token}`)
+  const subjectAccessRequest = response.body
+  return {
+    ...subjectAccessRequest,
+    services: subjectAccessRequest.services.sort((first: RequestService, second: RequestService) =>
+      first.serviceLabel.localeCompare(second.serviceLabel),
+    ),
+    requestDateTime: formatDateTime(subjectAccessRequest.requestDateTime),
+    dateFrom: formatDate(subjectAccessRequest.dateFrom),
+    dateTo: formatDate(subjectAccessRequest.dateTo),
+    claimDateTime: formatDateTime(subjectAccessRequest.claimDateTime),
+    lastDownloaded: formatDateTime(subjectAccessRequest.lastDownloaded),
+  }
 }
 
 const getAdminSubjectAccessRequestDetails = async (
@@ -123,6 +143,7 @@ const getPaginationInformation = (
 export default {
   getReport,
   getSubjectAccessRequestList,
+  getSubjectAccessRequestFormatted,
   getAdminSubjectAccessRequestDetails,
   getPaginationInformation,
   restartSubjectAccessRequest,

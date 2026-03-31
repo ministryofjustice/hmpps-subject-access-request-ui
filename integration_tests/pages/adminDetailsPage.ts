@@ -59,4 +59,9 @@ export default class AdminDetailsPage extends AbstractPage {
   back = () => this.backLink.click()
 
   restart = () => this.restartButton.click()
+
+  selectedProductItem = (rowIndex: number = 0): Locator => this.productsSummaryRow.locator('tbody tr').nth(rowIndex)
+
+  selectedProductItemStatus = (rowIndex: number = 0): Locator =>
+    this.selectedProductItem(rowIndex).locator('.moj-badge')
 }

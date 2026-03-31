@@ -14,16 +14,9 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     dateTo: '2024-03-12',
     sarCaseReferenceNumber: 'caseRef1',
     services: [
-      { serviceName: 'hmpps-activities-management-api', renderStatus: 'PENDING' },
-      {
-        serviceName: 'https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api',
-        renderStatus: 'PENDING',
-      },
-      {
-        serviceName: 'https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api',
-        renderStatus: 'PENDING',
-      },
-      { serviceName: 'https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk', renderStatus: 'PENDING' },
+      { serviceName: 'hmpps-activities-management-api', serviceLabel: 'Activities', renderStatus: 'PENDING' },
+      { serviceName: 'keyworker-api', serviceLabel: 'Keyworker', renderStatus: 'PENDING' },
+      { serviceName: 'hmpps-manage-adjudications-api', serviceLabel: 'Adjudications', renderStatus: 'PENDING' },
     ],
     nomisId: '',
     ndeliusCaseReferenceId: 'A123456',
@@ -41,16 +34,9 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     dateTo: '2023-03-12',
     sarCaseReferenceNumber: 'caseRef2',
     services: [
-      { serviceName: 'hmpps-activities-management-api', renderStatus: 'PENDING' },
-      {
-        serviceName: 'https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api',
-        renderStatus: 'PENDING',
-      },
-      {
-        serviceName: 'https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api',
-        renderStatus: 'PENDING',
-      },
-      { serviceName: 'https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk', renderStatus: 'PENDING' },
+      { serviceName: 'hmpps-activities-management-api', serviceLabel: 'Activities', renderStatus: 'PENDING' },
+      { serviceName: 'keyworker-api', serviceLabel: 'Keyworker', renderStatus: 'PENDING' },
+      { serviceName: 'hmpps-manage-adjudications-api', serviceLabel: 'Adjudications', renderStatus: 'PENDING' },
     ],
     nomisId: '',
     ndeliusCaseReferenceId: 'A123456',
@@ -68,16 +54,9 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     dateTo: '2022-03-12',
     sarCaseReferenceNumber: 'caseRef3',
     services: [
-      { serviceName: 'hmpps-activities-management-api', renderStatus: 'PENDING' },
-      {
-        serviceName: 'https://activities-api-dev.prison.service.justice.gov.uk,keyworker-api',
-        renderStatus: 'PENDING',
-      },
-      {
-        serviceName: 'https://keyworker-api-dev.prison.service.justice.gov.uk,hmpps-manage-adjudications-api',
-        renderStatus: 'PENDING',
-      },
-      { serviceName: 'https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk', renderStatus: 'PENDING' },
+      { serviceName: 'hmpps-activities-management-api', serviceLabel: 'Activities', renderStatus: 'PENDING' },
+      { serviceName: 'keyworker-api', serviceLabel: 'Keyworker', renderStatus: 'PENDING' },
+      { serviceName: 'hmpps-manage-adjudications-api', serviceLabel: 'Adjudications', renderStatus: 'PENDING' },
     ],
     nomisId: '',
     ndeliusCaseReferenceId: 'A123456',
@@ -89,7 +68,8 @@ const subjectAccessRequests: SubjectAccessRequest[] = [
     lastDownloaded: null,
   },
 ]
-
+let req: Request
+let res: Response
 beforeEach(() => {
   jest.resetAllMocks()
   jest.spyOn(auditService, 'sendAuditMessage').mockResolvedValue()
@@ -97,14 +77,7 @@ beforeEach(() => {
     subjectAccessRequests,
     numberOfReports: 3,
   })
-})
-
-afterEach(() => {
-  jest.resetAllMocks()
-})
-
-describe('getReports', () => {
-  let req: Request = {
+  req = {
     session: {},
     query: {},
     user: {
@@ -113,7 +86,7 @@ describe('getReports', () => {
       username: 'username',
     },
   } as unknown as Request
-  const res: Response = {
+  res = {
     render: jest.fn(),
     set: jest.fn(),
     send: jest.fn(),
@@ -125,7 +98,15 @@ describe('getReports', () => {
       },
     },
   } as unknown as Response
+})
+
+afterEach(() => {
+  jest.resetAllMocks()
+})
+
+describe('getReports', () => {
   test('renders a response with list of SAR reports', async () => {
+    req.query.keyword = 'mycase123'
     await ReportsController.getReports(req, res)
     expect(res.render).toHaveBeenCalledWith(
       'pages/reports',
@@ -159,6 +140,7 @@ describe('getReports', () => {
       }),
     )
     expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.VIEW_REPORT_LIST_ATTEMPT))
+    expect(req.session.searchOptions).toEqual({ searchTerm: 'mycase123' })
   })
 
   describe('pagination', () => {
@@ -180,6 +162,7 @@ describe('getReports', () => {
           numberOfReports: 240,
         }),
       )
+      expect(req.session.searchOptions).toEqual({ searchTerm: '' })
     })
 
     test('when the current page is the fifth page', async () => {
@@ -198,6 +181,7 @@ describe('getReports', () => {
           numberOfReports: 240,
         }),
       )
+      expect(req.session.searchOptions).toEqual({ searchTerm: '' })
     })
 
     test('when the current page is the third page', async () => {
@@ -220,6 +204,7 @@ describe('getReports', () => {
           numberOfReports: 240,
         }),
       )
+      expect(req.session.searchOptions).toEqual({ searchTerm: '' })
     })
   })
 

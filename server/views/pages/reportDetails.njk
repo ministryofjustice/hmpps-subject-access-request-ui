@@ -1,36 +1,23 @@
-{% extends "../../partials/layout.njk" %}
+{% extends "../partials/layout.njk" %}
 
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
-{% from "../../components/selectedProducts.njk" import selectedProducts %}
+{% from "../components/suspendedProductsWarning.njk" import warning %}
+{% from "../components/selectedProducts.njk" import selectedProducts %}
 
 {% block content %}
 
+  {% if suspendedProductsList | length > 0 %}
+    {{ warning({ suspendedList: suspendedProductsList }) }}
+  {% endif %}
+
   {{ govukBackLink({
     text: "Back",
-    href: "/admin/reports?" + searchParamsString
+    href: "/reports?" + searchParamsString
   }) }}
-
-  {% if restartDetails.success %}
-    {{ govukPanel({
-      titleText: "Request restarted successfully",
-      html: "Status is now <strong>" + subjectAccessRequest.status + "</strong> and requested date time <strong>" + subjectAccessRequest.requestDateTime + "</strong>"
-    }) }}
-  {% endif %}
-
-  {% if restartDetails.success == false %}
-    {{ govukErrorSummary({
-      titleText: "There was a problem restarting the subject access request:",
-      errorList: [
-        {
-          text: restartDetails.message
-        }
-      ]
-    }) }}
-  {% endif %}
 
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
     <h1 class="govuk-fieldset__heading">
@@ -46,14 +33,6 @@
     rows: [
       {
         key: {
-        text: "ID"
-      },
-        value: {
-        text: subjectAccessRequest.id
-      }
-      },
-      {
-        key: {
           text: "Subject ID"
         },
         value: {
@@ -62,7 +41,7 @@
       },
       {
         key: {
-          text: "Case ID"
+          text: "Case reference number"
         },
         value: {
           text: subjectAccessRequest.sarCaseReferenceNumber
@@ -70,15 +49,15 @@
       },
       {
         key: {
-          text: "Query date from"
+          text: "Date from"
         },
         value: {
-          text: subjectAccessRequest.dateFrom
+          text: subjectAccessRequest.dateFrom or "Start of record"
         }
       },
       {
         key: {
-          text: "Query date to"
+          text: "Date to"
         },
         value: {
           text: subjectAccessRequest.dateTo
@@ -94,7 +73,7 @@
       },
       {
         key: {
-          text: "Requested date time"
+          text: "Requested date/time"
         },
         value: {
           text: subjectAccessRequest.requestDateTime
@@ -110,22 +89,6 @@
       },
       {
         key: {
-          text: "Claim date time"
-        },
-        value: {
-          text: subjectAccessRequest.claimDateTime
-        }
-      },
-      {
-        key: {
-          text: "Claim attempts"
-        },
-        value: {
-          text: subjectAccessRequest.claimAttempts
-        }
-      },
-      {
-        key: {
           text: "Last downloaded"
         },
         value: {
@@ -137,22 +100,10 @@
         text: "Products selected"
       },
         value: {
-        html: selectedProducts({ products: subjectAccessRequest.services, includeAdditionalFields: true })
+        html: selectedProducts({ products: subjectAccessRequest.services })
       }
       }
     ]
   }) }}
-
-
-  {% if (subjectAccessRequest.status == "Errored") %}
-  <form action="/admin/restart?id={{ subjectAccessRequest.id }}" method="post">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-    {{ govukButton({
-      text: "Restart",
-      id: "input-restart",
-      preventDoubleClick: true
-    }) }}
-  </form>
-  {% endif %}
 
 {% endblock %}
