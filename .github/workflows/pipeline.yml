@@ -23,15 +23,13 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && github.sha || github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 jobs:
-  SLSA:
-    name: SLSA
-    uses: ministryofjustice/devsecops-actions/sca/slsa@4cd163be7859cd130800d6719d925318826038ea #v1
   node_build:
     name: node build
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_build.yml@v2 # WORKFLOW_VERSION
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_build.yml@e0df5e27317a668198e45584b2d132b195c8f638 # WORKFLOW_VERSION
     secrets: inherit
     with:
       install_command: 'npm run setup'
+      enable_slsa_action: true
   node_unit_tests:
     name: node unit tests
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@v2 # WORKFLOW_VERSION
