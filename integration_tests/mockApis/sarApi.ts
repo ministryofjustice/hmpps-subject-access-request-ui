@@ -249,6 +249,60 @@ export default {
       },
     }),
 
+  stubGetSubjectAccessRequest: ({
+    body = {
+      id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
+      status: 'Pending',
+      dateFrom: '2024-03-01',
+      dateTo: '2024-03-12',
+      sarCaseReferenceNumber: 'caseRef1',
+      services: [
+        {
+          serviceName: 'hmpps-activities-management-api',
+          serviceLabel: 'Manage activities and appointments',
+          renderStatus: 'PENDING',
+          templateVersion: 3,
+          renderedAt: '2026-03-30T11:25:10.150Z',
+        },
+        {
+          serviceName: 'keyworker-api',
+          serviceLabel: 'Allocate Keyworkers and Personal Officers',
+          renderStatus: 'ERRORED',
+          templateVersion: 5,
+          renderedAt: '2026-03-29T15:08:45.123Z',
+        },
+        {
+          serviceName: 'hmpps-manage-adjudications-api',
+          serviceLabel: 'Adjudications',
+          renderStatus: 'COMPLETE',
+          templateVersion: 6,
+          renderedAt: '2026-03-30T08:03:56.986Z',
+        },
+      ],
+      nomisId: '',
+      ndeliusCaseReferenceId: 'A123456',
+      requestedBy: 'user',
+      requestDateTime: '2025-03-07T13:52:40.14177',
+      claimDateTime: '2025-03-07T14:49:08.67033',
+      claimAttempts: 1,
+      objectUrl: null,
+      lastDownloaded: '2024-03-28T16:33:27.493Z',
+    },
+  }): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPath: `/api/subjectAccessRequest/${body.id}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;',
+        },
+        jsonBody: body,
+      },
+    }),
+
   getSubjectAccessRequestsWithSearchValue: (searchValue: string): Promise<string> =>
     getMatchingRequests({
       method: 'GET',

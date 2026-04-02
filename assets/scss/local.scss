@@ -11,3 +11,8 @@
 .disabled-text {
   color: $govuk-border-colour;
 }
+
+.govuk-table__cell-no-border {
+  @extend .govuk-table__cell;
+  border-bottom: none;
+}

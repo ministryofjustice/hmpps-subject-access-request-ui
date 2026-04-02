@@ -27,4 +27,7 @@ export default class ReportsPage extends AbstractPage {
     await this.searchBox.fill(searchText)
     await this.searchButton.click()
   }
+
+  followReportDetailsLink = (rowIndex: number = 0) =>
+    this.reportsTableRow(rowIndex).locator('a', { hasText: 'Report details' }).click()
 }

@@ -18,12 +18,16 @@ export default class ReportsController {
       currentPage,
       RESULTS_PER_PAGE,
     )
-    const searchTerm = String(req.query.keyword || '')
+    req.session.subjectAccessRequests = subjectAccessRequests
+    const searchOptions = {
+      searchTerm: String(req.query.keyword || ''),
+    }
+    req.session.searchOptions = searchOptions
 
     const { pageLinks, previous, next, from, to } = reportService.getPaginationInformation(
       numberOfReports,
       currentPage,
-      searchTerm,
+      searchOptions.searchTerm,
       RESULTS_PER_PAGE,
     )
 
@@ -37,7 +41,7 @@ export default class ReportsController {
       from,
       to,
       numberOfReports,
-      searchTerm,
+      searchTerm: searchOptions.searchTerm,
     })
   }
 

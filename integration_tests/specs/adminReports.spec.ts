@@ -7,10 +7,92 @@ import AuthErrorPage from '../pages/authErrorPage'
 import AdminReportsPage from '../pages/adminReportsPage'
 import AdminDetailsPage from '../pages/adminDetailsPage'
 import sarAdminApi from '../mockApis/sarAdmin'
+import sarApi from '../mockApis/sarApi'
 
 test.describe('Admin Reports', () => {
   test.beforeEach(async () => {
     await sarAdminApi.stubGetSubjectAccessRequestAdminSummary()
+    await sarApi.stubGetSubjectAccessRequest({})
+    await sarApi.stubGetSubjectAccessRequest({
+      body: {
+        id: 'bbbbbbbb-cb77-4c0e-a4de-1efc0e86ff34',
+        status: 'Completed',
+        dateFrom: '2023-03-01',
+        dateTo: '2023-03-12',
+        sarCaseReferenceNumber: 'caseRef2',
+        services: [
+          {
+            serviceName: 'hmpps-activities-management-api',
+            serviceLabel: 'Manage activities and appointments',
+            renderStatus: 'PENDING',
+            templateVersion: 3,
+            renderedAt: '2026-03-30T11:25:10.150Z',
+          },
+          {
+            serviceName: 'keyworker-api',
+            serviceLabel: 'Allocate Keyworkers and Personal Officers',
+            renderStatus: 'ERRORED',
+            templateVersion: 5,
+            renderedAt: '2026-03-29T15:08:45.123Z',
+          },
+          {
+            serviceName: 'hmpps-manage-adjudications-api',
+            serviceLabel: 'Adjudications',
+            renderStatus: 'COMPLETE',
+            templateVersion: 6,
+            renderedAt: '2026-03-30T08:03:56.986Z',
+          },
+        ],
+        nomisId: '',
+        ndeliusCaseReferenceId: 'A123456',
+        requestedBy: 'user',
+        requestDateTime: '2023-01-10T13:56:40.14177',
+        claimDateTime: '2023-01-10T14:49:08.67033',
+        claimAttempts: 1,
+        objectUrl: null,
+        lastDownloaded: '',
+      },
+    })
+    await sarApi.stubGetSubjectAccessRequest({
+      body: {
+        id: 'cccccccc-cb77-4c0e-a4de-1efc0e86ff34',
+        status: 'Errored',
+        dateFrom: '2022-03-01',
+        dateTo: '2022-03-12',
+        sarCaseReferenceNumber: 'caseRef3',
+        services: [
+          {
+            serviceName: 'hmpps-activities-management-api',
+            serviceLabel: 'Manage activities and appointments',
+            renderStatus: 'PENDING',
+            templateVersion: 3,
+            renderedAt: '2026-03-30T11:25:10.150Z',
+          },
+          {
+            serviceName: 'keyworker-api',
+            serviceLabel: 'Allocate Keyworkers and Personal Officers',
+            renderStatus: 'ERRORED',
+            templateVersion: 5,
+            renderedAt: '2026-03-29T15:08:45.123Z',
+          },
+          {
+            serviceName: 'hmpps-manage-adjudications-api',
+            serviceLabel: 'Adjudications',
+            renderStatus: 'COMPLETE',
+            templateVersion: 6,
+            renderedAt: '2026-03-30T08:03:56.986Z',
+          },
+        ],
+        nomisId: '',
+        ndeliusCaseReferenceId: 'A123456',
+        requestedBy: 'user',
+        requestDateTime: '2022-03-07T12:53:40.14177',
+        claimDateTime: '2022-03-07T14:49:08.67033',
+        claimAttempts: 1,
+        objectUrl: null,
+        lastDownloaded: '',
+      },
+    })
   })
 
   test.afterEach(async () => {
@@ -156,21 +238,33 @@ test.describe('Admin Reports', () => {
     await expect(detailsPage.reqBySummaryRow).toBeVisible()
     await expect(detailsPage.reqBySummaryRow).toContainText('user')
     await expect(detailsPage.reqDateTimeSummaryRow).toBeVisible()
-    await expect(detailsPage.reqDateTimeSummaryRow).toContainText('12 March 2024 at 13:52:40 UTC')
-    await expect(detailsPage.productsSummaryRow).toBeVisible()
-    await expect(detailsPage.productsSummaryRow).toContainText('hmpps-activities-management-api')
-    await expect(detailsPage.productsSummaryRow).toContainText('keyworker-api')
-    await expect(detailsPage.productsSummaryRow).toContainText('hmpps-manage-adjudications-api')
+    await expect(detailsPage.reqDateTimeSummaryRow).toContainText('7 March 2025 at 13:52:40 UTC')
     await expect(detailsPage.statusSummaryRow).toBeVisible()
     await expect(detailsPage.statusSummaryRow).toContainText('Pending')
     await expect(detailsPage.claimDateTimeSummaryRow).toBeVisible()
-    await expect(detailsPage.claimDateTimeSummaryRow).toContainText('27 March 2024 at 14:49:08 UTC')
+    await expect(detailsPage.claimDateTimeSummaryRow).toContainText('7 March 2025 at 14:49:08 UTC')
     await expect(detailsPage.claimAttemptsSummaryRow).toBeVisible()
     await expect(detailsPage.claimAttemptsSummaryRow).toContainText('1')
     await expect(detailsPage.lastDownloadedSummaryRow).toBeVisible()
     await expect(detailsPage.lastDownloadedSummaryRow).toContainText('28 March 2024 at 16:33:27 UTC')
     await expect(detailsPage.successPanel).not.toBeVisible()
     await expect(detailsPage.errorSummary).not.toBeVisible()
+    await expect(detailsPage.productsSummaryRow).toBeVisible()
+    await expect(detailsPage.selectedProductItem(0)).toContainText('Adjudications')
+    await expect(detailsPage.selectedProductItemStatus(0)).toContainText('COMPLETE')
+    await expect(detailsPage.selectedProductItemStatus(0)).toContainClass('moj-badge--green')
+    await expect(detailsPage.selectedProductItem(0)).toContainText('Template version 6')
+    await expect(detailsPage.selectedProductItem(0)).toContainText('Rendered at 2026-03-30T08:03:56.986Z')
+    await expect(detailsPage.selectedProductItem(1)).toContainText('Allocate Keyworkers and Personal Officers')
+    await expect(detailsPage.selectedProductItemStatus(1)).toContainText('ERRORED')
+    await expect(detailsPage.selectedProductItemStatus(1)).toContainClass('moj-badge--red')
+    await expect(detailsPage.selectedProductItem(1)).toContainText('Template version 5')
+    await expect(detailsPage.selectedProductItem(1)).toContainText('Rendered at 2026-03-29T15:08:45.123Z')
+    await expect(detailsPage.selectedProductItem(2)).toContainText('Manage activities and appointments')
+    await expect(detailsPage.selectedProductItemStatus(2)).toContainText('PENDING')
+    await expect(detailsPage.selectedProductItemStatus(2)).toContainClass('moj-badge--grey')
+    await expect(detailsPage.selectedProductItem(2)).toContainText('Template version 3')
+    await expect(detailsPage.selectedProductItem(2)).toContainText('Rendered at 2026-03-30T11:25:10.150Z')
   })
 
   test('Displays restart button for errored request only', async ({ page }) => {

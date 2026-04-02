@@ -28,18 +28,18 @@ const subjectAccessRequests: AdminSubjectAccessRequest[] = [
     dateTo: '2024-03-12',
     sarCaseReferenceNumber: 'caseRef1',
     services: [
-      { serviceName: 'hmpps-activities-management-api', renderStatus: 'PENDING' },
-      { serviceName: 'keyworker-api', renderStatus: 'PENDING' },
-      { serviceName: 'hmpps-manage-adjudications-api', renderStatus: 'PENDING' },
+      { serviceName: 'hmpps-activities-management-api', serviceLabel: 'Activities', renderStatus: 'PENDING' },
+      { serviceName: 'keyworker-api', serviceLabel: 'Keyworker', renderStatus: 'PENDING' },
+      { serviceName: 'hmpps-manage-adjudications-api', serviceLabel: 'Adjudications', renderStatus: 'PENDING' },
     ],
     nomisId: '',
     ndeliusCaseReferenceId: 'A123456',
     requestedBy: 'user',
-    requestDateTime: '2024-03-12T13:52:40.14177',
-    claimDateTime: '2024-03-27T14:49:08.67033',
+    requestDateTime: '2024-03-12T13:52:40.14177Z',
+    claimDateTime: '2024-03-27T14:49:08.67033Z',
     claimAttempts: 1,
     objectUrl: null,
-    lastDownloaded: null,
+    lastDownloaded: '2022-04-08T09:22:34.83765Z',
     durationHumanReadable: '1d',
     appInsightsEventsUrl: 'appInsights',
   },
@@ -50,15 +50,15 @@ const subjectAccessRequests: AdminSubjectAccessRequest[] = [
     dateTo: '2023-03-12',
     sarCaseReferenceNumber: 'caseRef2',
     services: [
-      { serviceName: 'hmpps-activities-management-api', renderStatus: 'PENDING' },
-      { serviceName: 'keyworker-api', renderStatus: 'PENDING' },
-      { serviceName: 'hmpps-manage-adjudications-api', renderStatus: 'PENDING' },
+      { serviceName: 'hmpps-activities-management-api', serviceLabel: 'Activities', renderStatus: 'PENDING' },
+      { serviceName: 'keyworker-api', serviceLabel: 'Keyworker', renderStatus: 'PENDING' },
+      { serviceName: 'hmpps-manage-adjudications-api', serviceLabel: 'Adjudications', renderStatus: 'PENDING' },
     ],
     nomisId: '',
     ndeliusCaseReferenceId: 'A123456',
     requestedBy: 'user',
-    requestDateTime: '2023-03-12T13:52:40.14177',
-    claimDateTime: '2023-03-27T14:49:08.67033',
+    requestDateTime: '2023-03-12T13:52:40.14177Z',
+    claimDateTime: '2023-03-27T14:49:08.67033Z',
     claimAttempts: 1,
     objectUrl: null,
     lastDownloaded: null,
@@ -72,15 +72,15 @@ const subjectAccessRequests: AdminSubjectAccessRequest[] = [
     dateTo: '2022-03-12',
     sarCaseReferenceNumber: 'caseRef3',
     services: [
-      { serviceName: 'hmpps-activities-management-api', renderStatus: 'PENDING' },
-      { serviceName: 'keyworker-api', renderStatus: 'PENDING' },
-      { serviceName: 'hmpps-manage-adjudications-api', renderStatus: 'PENDING' },
+      { serviceName: 'hmpps-activities-management-api', serviceLabel: 'Activities', renderStatus: 'PENDING' },
+      { serviceName: 'keyworker-api', serviceLabel: 'Keyworker', renderStatus: 'PENDING' },
+      { serviceName: 'hmpps-manage-adjudications-api', serviceLabel: 'Adjudications', renderStatus: 'PENDING' },
     ],
     nomisId: '',
     ndeliusCaseReferenceId: 'A123456',
     requestedBy: 'user',
-    requestDateTime: '2022-03-12T13:52:40.14177',
-    claimDateTime: '2022-03-27T14:49:08.67033',
+    requestDateTime: '2022-03-12T13:52:40.14177Z',
+    claimDateTime: '2022-03-27T14:49:08.67033Z',
     claimAttempts: 1,
     objectUrl: null,
     lastDownloaded: null,
@@ -138,6 +138,37 @@ describe('report', () => {
 
       expect(response.subjectAccessRequests).toEqual(subjectAccessRequests)
       expect(response.numberOfReports).toEqual('3')
+    })
+  })
+
+  describe('getSubjectAccessRequestFormatted', () => {
+    test('getSubjectAccessRequestFormatted gets correct response', async () => {
+      fakeApi.get('/api/subjectAccessRequest/566').reply(200, subjectAccessRequests[0])
+
+      const response = await reportService.getSubjectAccessRequestFormatted(req, '566')
+
+      expect(response).toEqual({
+        id: 'aaaaaaaa-cb77-4c0e-a4de-1efc0e86ff34',
+        status: 'Pending',
+        dateFrom: '1 March 2024',
+        dateTo: '12 March 2024',
+        sarCaseReferenceNumber: 'caseRef1',
+        services: [
+          { serviceName: 'hmpps-activities-management-api', serviceLabel: 'Activities', renderStatus: 'PENDING' },
+          { serviceName: 'hmpps-manage-adjudications-api', serviceLabel: 'Adjudications', renderStatus: 'PENDING' },
+          { serviceName: 'keyworker-api', serviceLabel: 'Keyworker', renderStatus: 'PENDING' },
+        ],
+        nomisId: '',
+        ndeliusCaseReferenceId: 'A123456',
+        requestedBy: 'user',
+        requestDateTime: '12 March 2024 at 13:52:40 UTC',
+        claimDateTime: '27 March 2024 at 14:49:08 UTC',
+        claimAttempts: 1,
+        objectUrl: null,
+        lastDownloaded: '8 April 2022 at 09:22:34 UTC',
+        durationHumanReadable: '1d',
+        appInsightsEventsUrl: 'appInsights',
+      })
     })
   })
 

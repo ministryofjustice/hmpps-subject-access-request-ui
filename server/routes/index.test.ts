@@ -117,6 +117,7 @@ beforeEach(() => {
     subjectAccessRequests,
     numberOfReports: 3,
   })
+  reportService.getSubjectAccessRequestFormatted = jest.fn().mockReturnValue(subjectAccessRequests[0])
   reportService.getAdminSubjectAccessRequestDetails = jest.fn().mockReturnValue({
     subjectAccessRequests,
     numberOfReports: 3,
@@ -256,6 +257,17 @@ describe('GET /reports', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Subject Access Request Reports')
+      })
+  })
+})
+
+describe('GET /details', () => {
+  it('should render details page', () => {
+    return request(app)
+      .get('/details')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Subject Access Request Details')
       })
   })
 })

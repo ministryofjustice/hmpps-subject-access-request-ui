@@ -17,6 +17,7 @@ export interface SubjectAccessRequest {
 
 export interface RequestService {
   serviceName: string
+  serviceLabel: string
   renderStatus: string
   templateVersion?: string
   renderedAt?: string

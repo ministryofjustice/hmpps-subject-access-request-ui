@@ -1,0 +1,34 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{%- from "moj/components/badge/macro.njk" import mojBadge -%}
+
+{% macro selectedProducts(params) %}
+
+<table class="govuk-table">
+  <tbody class="govuk-table__body">
+  {% for product in params.products %}
+    {% set cellClass = "govuk-table__cell" if not loop.last else "govuk-table__cell-no-border" %}
+    <tr>
+      <td class="{{ cellClass }}">{{ product.serviceLabel }}</td>
+        {% if product.renderStatus == "ERRORED" %}
+          {% set serviceStatusClass = "moj-badge--red" %}
+        {% elseif product.renderStatus == "COMPLETE" %}
+          {% set serviceStatusClass = "moj-badge--green" %}
+        {% elseif product.renderStatus == "PENDING"%}
+          {% set serviceStatusClass = "moj-badge--grey" %}
+        {% endif %}
+      <td class="{{ cellClass }}">{{ mojBadge({ text: product.renderStatus, classes: serviceStatusClass }) }}</td>
+      <td class="{{ cellClass }}">
+        {% if params.includeAdditionalFields and product.templateVersion %}
+          Template version {{ product.templateVersion }}
+        {% endif %}
+      </td>
+      <td class="{{ cellClass }}">
+        {% if params.includeAdditionalFields and product.renderedAt %}
+          Rendered at {{ product.renderedAt }}
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endmacro %}
