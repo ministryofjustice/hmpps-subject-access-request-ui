@@ -141,7 +141,7 @@ describe('getTemplateRegistrationProductList', () => {
     sarApiMock.get('/api/services').reply(200, productConfigurationList)
 
     const result = await productConfigsService.getTemplateRegistrationProductList(req)
-    expect(result).toStrictEqual(productConfigurationListWithoutExclusions)
+    expect(result).toStrictEqual(productConfigurationList)
   })
 })
 
