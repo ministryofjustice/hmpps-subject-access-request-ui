@@ -1,5 +1,6 @@
 import type { Request } from 'express'
 import superagent from 'superagent'
+import Mustache from 'mustache'
 import config from '../config'
 import getUserToken from '../utils/userTokenHelper'
 import { formatDateTime } from '../utils/dateHelpers'
@@ -33,7 +34,17 @@ const createTemplateVersion = async (
   return response.body
 }
 
+const validateTemplateBody = (template: string): Error | null => {
+  try {
+    Mustache.parse(template)
+    return null
+  } catch (err) {
+    return err
+  }
+}
+
 export default {
   getTemplateVersions,
   createTemplateVersion,
+  validateTemplateBody,
 }

@@ -128,3 +128,50 @@ describe('createTemplateVersion', () => {
     expect(result).toStrictEqual(v1Pending)
   })
 })
+
+describe('validateTemplateBody', () => {
+  test('should return error when template body is invalid mustache syntax', async () => {
+    // no closing {{/uploads}} tag
+    const invalidTemplate = `
+      <h1 class="title">Wiremock Test Service</h1>
+      <h2>Uploads</h2>
+      {{#uploads}}
+          <table class="summary-list">
+              <tr><td>Attachment reference</td><td>{{ optionalValue attachmentRef }}</td></tr>
+              <tr><td>Filename</td><td>{{ optionalValue filename }}</td></tr>
+              <tr><td>File type</td><td>{{ optionalValue fileType }}</td></tr>
+              <tr><td>File size</td><td>{{ optionalValue fileSize }}</td></tr>
+              <tr><td>Description</td><td>{{ optionalValue description }}</td></tr>
+          </table>
+          <br/>
+      {{^uploads}}
+          <p>No Data Held</p>
+      {{/uploads}}
+    `
+
+    const result = templateVersionsService.validateTemplateBody(invalidTemplate)
+    expect(result).not.toBeNull()
+    expect(result.message).toContain('Unclosed section "uploads" at 655')
+  })
+
+  test('should return null when template body is valid  mustache syntax', async () => {
+    const validTemplate = `
+      <h1 class="title">Wiremock Test Service</h1>
+      <h2>Uploads</h2>
+      {{#uploads}}
+          <table class="summary-list">
+              <tr><td>Attachment reference</td><td>{{ optionalValue attachmentRef }}</td></tr>
+              <tr><td>Filename</td><td>{{ optionalValue filename }}</td></tr>
+              <tr><td>File type</td><td>{{ optionalValue fileType }}</td></tr>
+              <tr><td>File size</td><td>{{ optionalValue fileSize }}</td></tr>
+              <tr><td>Description</td><td>{{ optionalValue description }}</td></tr>
+          </table>
+          <br/>
+      {{/uploads}}
+      {{^uploads}}
+          <p>No Data Held</p>
+      {{/uploads}}
+    `
+    expect(templateVersionsService.validateTemplateBody(validTemplate)).toBeNull()
+  })
+})

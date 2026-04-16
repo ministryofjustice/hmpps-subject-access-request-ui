@@ -94,12 +94,15 @@ describe('uploadTemplate', () => {
     } as unknown as Request
   })
 
+  templateVersionsService.validateTemplateBody = jest.fn().mockReturnValue(null)
+
   test('redirects to confirmation page when file uploaded successfully', async () => {
     req.file.buffer = Buffer.from(templateBase64, 'base64')
     req.file.originalname = 'myfile.mustache'
 
     await RegisterTemplateUploadController.uploadTemplate(req, res)
 
+    expect(templateVersionsService.validateTemplateBody).toHaveBeenCalledWith('testfile\n')
     expect(res.redirect).toHaveBeenCalledWith('/register-template/confirmation')
     expect(req.session.templateName).toEqual('myfile.mustache')
     expect(req.session.templateFileBase64).toEqual(templateBase64)
@@ -145,6 +148,27 @@ describe('uploadTemplate', () => {
       'pages/registerTemplate/upload',
       expect.objectContaining({
         uploadError: 'No product selected',
+      }),
+    )
+  })
+
+  test('renders upload page with error when file uploaded is not valid mustache file', async () => {
+    templateVersionsService.validateTemplateBody = jest.fn().mockReturnValue(Error('<mustache error descrition here>'))
+
+    const invalidTemplate = 'Hello {{#name}}'
+    const encoded = Buffer.from(invalidTemplate, 'utf-8').toString('base64')
+
+    req.file.buffer = Buffer.from(encoded, 'base64')
+    req.file.originalname = 'myfile.mustache'
+
+    await RegisterTemplateUploadController.uploadTemplate(req, res)
+
+    expect(templateVersionsService.validateTemplateBody).toHaveBeenCalledWith(invalidTemplate)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/registerTemplate/upload',
+      expect.objectContaining({
+        uploadError: 'Invalid mustache template: <mustache error descrition here>',
       }),
     )
   })

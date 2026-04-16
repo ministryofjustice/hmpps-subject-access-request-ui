@@ -55,6 +55,22 @@ export default class RegisterTemplateUploadController {
       return
     }
 
+    const validationErr = templateVersionsService.validateTemplateBody(
+      RegisterTemplateUploadController.getTemplateBody(req),
+    )
+    if (validationErr != null) {
+      res.render('pages/registerTemplate/upload', {
+        versionList,
+        selectedProduct,
+        uploadError: `Invalid mustache template: ${validationErr.message}`,
+      })
+      return
+    }
+
     res.redirect('/register-template/confirmation')
+  }
+
+  private static getTemplateBody(req: Request): string {
+    return Buffer.from(req.session.templateFileBase64, 'base64').toString('utf-8')
   }
 }
