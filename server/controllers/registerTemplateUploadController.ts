@@ -53,17 +53,18 @@ export default class RegisterTemplateUploadController {
       return
     }
 
-    const validationErr = templateVersionsService.validateTemplateBody(
-      RegisterTemplateUploadController.getTemplateBody(buffer),
-    )
-    if (validationErr != null) {
-      res.render('pages/registerTemplate/upload', {
-        versionList,
-        selectedProduct,
-        uploadError: `Invalid mustache template: ${validationErr.message.trim()}`,
-      })
-      return
-    }
+    // TODO TEMP ROLLBACK.
+    // const validationErr = templateVersionsService.validateTemplateBody(
+    //   RegisterTemplateUploadController.getTemplateBody(buffer),
+    // )
+    // if (validationErr != null) {
+    //   res.render('pages/registerTemplate/upload', {
+    //     versionList,
+    //     selectedProduct,
+    //     uploadError: `Invalid mustache template: ${validationErr.message.trim()}`,
+    //   })
+    //   return
+    // }
 
     req.session.templateName = originalname
     req.session.templateFileBase64 = buffer.toString('base64')

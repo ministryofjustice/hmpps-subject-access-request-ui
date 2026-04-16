@@ -106,21 +106,22 @@ test.describe('Register template upload file', () => {
     await expect(uploadPage.versionTable).toBeVisible()
   })
 
-  test('Displays error when template file is not valid mustache syntax', async ({ page }) => {
-    await registerTemplateUpload(page, {})
-    const uploadPage = await verifyOnPage(page, RegisterTemplateUploadPage)
-
-    await uploadPage.selectTemplateFile('invalid-template.mustache')
-    await uploadPage.continue()
-
-    await expect(uploadPage.header).toHaveText('Upload template for Service One')
-    await expect(uploadPage.errorSummary).toContainText('Invalid mustache template:')
-    await expect(uploadPage.errorSummary).toContainText('Unopened section "uploads" at')
-    await expect(uploadPage.notificationBanner).not.toBeVisible()
-    await expect(uploadPage.templateFileInputError).toContainText('Invalid mustache template:')
-    await expect(uploadPage.templateFileInputError).toContainText('Unopened section "uploads" at')
-    await expect(uploadPage.versionTable).toBeVisible()
-  })
+  // TODO TEMP ROLLBACK
+  // test('Displays error when template file is not valid mustache syntax', async ({ page }) => {
+  //   await registerTemplateUpload(page, {})
+  //   const uploadPage = await verifyOnPage(page, RegisterTemplateUploadPage)
+  //
+  //   await uploadPage.selectTemplateFile('invalid-template.mustache')
+  //   await uploadPage.continue()
+  //
+  //   await expect(uploadPage.header).toHaveText('Upload template for Service One')
+  //   await expect(uploadPage.errorSummary).toContainText('Invalid mustache template:')
+  //   await expect(uploadPage.errorSummary).toContainText('Unopened section "uploads" at')
+  //   await expect(uploadPage.notificationBanner).not.toBeVisible()
+  //   await expect(uploadPage.templateFileInputError).toContainText('Invalid mustache template:')
+  //   await expect(uploadPage.templateFileInputError).toContainText('Unopened section "uploads" at')
+  //   await expect(uploadPage.versionTable).toBeVisible()
+  // })
 
   test('Redirects to confirmation when continue with file selected', async ({ page }) => {
     await registerTemplateUpload(page, {})
