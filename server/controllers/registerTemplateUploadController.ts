@@ -71,6 +71,6 @@ export default class RegisterTemplateUploadController {
   }
 
   private static getTemplateBody(buffer: Buffer): string {
-    return Buffer.from(buffer.toString('utf-8')).toString()
+    return buffer.toString('utf-8')
   }
 }
