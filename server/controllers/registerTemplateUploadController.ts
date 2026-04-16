@@ -43,10 +43,8 @@ export default class RegisterTemplateUploadController {
     }
 
     const { buffer, originalname } = req.file
-    req.session.templateName = originalname
-    req.session.templateFileBase64 = buffer.toString('base64')
 
-    if (!req.session.templateName.toLowerCase().endsWith('.mustache')) {
+    if (!originalname.toLowerCase().endsWith('.mustache')) {
       res.render('pages/registerTemplate/upload', {
         versionList,
         selectedProduct,
@@ -55,6 +53,24 @@ export default class RegisterTemplateUploadController {
       return
     }
 
+    const validationErr = templateVersionsService.validateTemplateBody(
+      RegisterTemplateUploadController.getTemplateBody(buffer),
+    )
+    if (validationErr != null) {
+      res.render('pages/registerTemplate/upload', {
+        versionList,
+        selectedProduct,
+        uploadError: `Invalid mustache template: ${validationErr.message.trim()}`,
+      })
+      return
+    }
+
+    req.session.templateName = originalname
+    req.session.templateFileBase64 = buffer.toString('base64')
     res.redirect('/register-template/confirmation')
+  }
+
+  private static getTemplateBody(buffer: Buffer): string {
+    return buffer.toString('utf-8')
   }
 }
