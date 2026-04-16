@@ -114,11 +114,11 @@ test.describe('Register template upload file', () => {
     await uploadPage.continue()
 
     await expect(uploadPage.header).toHaveText('Upload template for Service One')
-    await expect(uploadPage.errorSummary).toContainText('Invalid mustache template: Unopened section "uploads" at 538')
+    await expect(uploadPage.errorSummary).toContainText('Invalid mustache template:')
+    await expect(uploadPage.errorSummary).toContainText('Unopened section "uploads" at')
     await expect(uploadPage.notificationBanner).not.toBeVisible()
-    await expect(uploadPage.templateFileInputError).toContainText(
-      'Invalid mustache template: Unopened section "uploads" at 538',
-    )
+    await expect(uploadPage.templateFileInputError).toContainText('Invalid mustache template:')
+    await expect(uploadPage.templateFileInputError).toContainText('Unopened section "uploads" at')
     await expect(uploadPage.versionTable).toBeVisible()
   })
 

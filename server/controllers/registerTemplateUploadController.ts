@@ -43,10 +43,8 @@ export default class RegisterTemplateUploadController {
     }
 
     const { buffer, originalname } = req.file
-    req.session.templateName = originalname
-    req.session.templateFileBase64 = buffer.toString('base64')
 
-    if (!req.session.templateName.toLowerCase().endsWith('.mustache')) {
+    if (!originalname.toLowerCase().endsWith('.mustache')) {
       res.render('pages/registerTemplate/upload', {
         versionList,
         selectedProduct,
@@ -56,7 +54,7 @@ export default class RegisterTemplateUploadController {
     }
 
     const validationErr = templateVersionsService.validateTemplateBody(
-      RegisterTemplateUploadController.getTemplateBody(req),
+      RegisterTemplateUploadController.getTemplateBody(buffer),
     )
     if (validationErr != null) {
       res.render('pages/registerTemplate/upload', {
@@ -67,10 +65,12 @@ export default class RegisterTemplateUploadController {
       return
     }
 
+    req.session.templateName = originalname
+    req.session.templateFileBase64 = buffer.toString('base64')
     res.redirect('/register-template/confirmation')
   }
 
-  private static getTemplateBody(req: Request): string {
-    return Buffer.from(req.session.templateFileBase64, 'base64').toString('utf-8')
+  private static getTemplateBody(buffer: Buffer): string {
+    return Buffer.from(buffer.toString('utf-8')).toString()
   }
 }

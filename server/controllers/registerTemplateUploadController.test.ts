@@ -153,7 +153,7 @@ describe('uploadTemplate', () => {
   })
 
   test('renders upload page with error when file uploaded is not valid mustache file', async () => {
-    templateVersionsService.validateTemplateBody = jest.fn().mockReturnValue(Error('<mustache error descrition here>'))
+    templateVersionsService.validateTemplateBody = jest.fn().mockReturnValue(Error('<mustache error description here>'))
 
     const invalidTemplate = 'Hello {{#name}}'
     const encoded = Buffer.from(invalidTemplate, 'utf-8').toString('base64')
@@ -168,7 +168,7 @@ describe('uploadTemplate', () => {
     expect(res.render).toHaveBeenCalledWith(
       'pages/registerTemplate/upload',
       expect.objectContaining({
-        uploadError: 'Invalid mustache template: <mustache error descrition here>',
+        uploadError: 'Invalid mustache template: <mustache error description here>',
       }),
     )
   })
