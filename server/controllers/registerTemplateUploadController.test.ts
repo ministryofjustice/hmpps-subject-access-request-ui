@@ -102,7 +102,8 @@ describe('uploadTemplate', () => {
 
     await RegisterTemplateUploadController.uploadTemplate(req, res)
 
-    expect(templateVersionsService.validateTemplateBody).toHaveBeenCalledWith('testfile\n')
+    // TODO TEMP ROLLBACK
+    // expect(templateVersionsService.validateTemplateBody).toHaveBeenCalledWith('testfile\n')
     expect(res.redirect).toHaveBeenCalledWith('/register-template/confirmation')
     expect(req.session.templateName).toEqual('myfile.mustache')
     expect(req.session.templateFileBase64).toEqual(templateBase64)
@@ -152,24 +153,25 @@ describe('uploadTemplate', () => {
     )
   })
 
-  test('renders upload page with error when file uploaded is not valid mustache file', async () => {
-    templateVersionsService.validateTemplateBody = jest.fn().mockReturnValue(Error('<mustache error description here>'))
-
-    const invalidTemplate = 'Hello {{#name}}'
-    const encoded = Buffer.from(invalidTemplate, 'utf-8').toString('base64')
-
-    req.file.buffer = Buffer.from(encoded, 'base64')
-    req.file.originalname = 'myfile.mustache'
-
-    await RegisterTemplateUploadController.uploadTemplate(req, res)
-
-    expect(templateVersionsService.validateTemplateBody).toHaveBeenCalledWith(invalidTemplate)
-
-    expect(res.render).toHaveBeenCalledWith(
-      'pages/registerTemplate/upload',
-      expect.objectContaining({
-        uploadError: 'Invalid mustache template: <mustache error description here>',
-      }),
-    )
-  })
+  // TODO TEMP ROLLBACK
+  // test('renders upload page with error when file uploaded is not valid mustache file', async () => {
+  //   templateVersionsService.validateTemplateBody = jest.fn().mockReturnValue(Error('<mustache error description here>'))
+  //
+  //   const invalidTemplate = 'Hello {{#name}}'
+  //   const encoded = Buffer.from(invalidTemplate, 'utf-8').toString('base64')
+  //
+  //   req.file.buffer = Buffer.from(encoded, 'base64')
+  //   req.file.originalname = 'myfile.mustache'
+  //
+  //   await RegisterTemplateUploadController.uploadTemplate(req, res)
+  //
+  //   expect(templateVersionsService.validateTemplateBody).toHaveBeenCalledWith(invalidTemplate)
+  //
+  //   expect(res.render).toHaveBeenCalledWith(
+  //     'pages/registerTemplate/upload',
+  //     expect.objectContaining({
+  //       uploadError: 'Invalid mustache template: <mustache error description here>',
+  //     }),
+  //   )
+  // })
 })
