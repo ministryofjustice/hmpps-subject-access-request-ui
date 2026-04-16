@@ -62,7 +62,7 @@ export default class RegisterTemplateUploadController {
       res.render('pages/registerTemplate/upload', {
         versionList,
         selectedProduct,
-        uploadError: `Invalid mustache template: ${validationErr.message}`,
+        uploadError: `Invalid mustache template: ${validationErr.message.trim()}`,
       })
       return
     }
