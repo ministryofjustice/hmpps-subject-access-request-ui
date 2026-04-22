@@ -10,6 +10,7 @@ test.describe('Register template upload file', () => {
   test.beforeEach(async () => {
     await sarApi.stubGetProducts()
     await sarApi.stubGetTemplateVersions({})
+    await sarApi.stubValidateTemplateSuccess()
   })
 
   test.afterEach(async () => {
@@ -106,22 +107,37 @@ test.describe('Register template upload file', () => {
     await expect(uploadPage.versionTable).toBeVisible()
   })
 
-  // TODO TEMP ROLLBACK
-  // test('Displays error when template file is not valid mustache syntax', async ({ page }) => {
-  //   await registerTemplateUpload(page, {})
-  //   const uploadPage = await verifyOnPage(page, RegisterTemplateUploadPage)
-  //
-  //   await uploadPage.selectTemplateFile('invalid-template.mustache')
-  //   await uploadPage.continue()
-  //
-  //   await expect(uploadPage.header).toHaveText('Upload template for Service One')
-  //   await expect(uploadPage.errorSummary).toContainText('Invalid mustache template:')
-  //   await expect(uploadPage.errorSummary).toContainText('Unopened section "uploads" at')
-  //   await expect(uploadPage.notificationBanner).not.toBeVisible()
-  //   await expect(uploadPage.templateFileInputError).toContainText('Invalid mustache template:')
-  //   await expect(uploadPage.templateFileInputError).toContainText('Unopened section "uploads" at')
-  //   await expect(uploadPage.versionTable).toBeVisible()
-  // })
+  test('Displays error when template file is not valid mustache syntax', async ({ page }) => {
+    await sarApi.stubValidateTemplateFailure()
+
+    await registerTemplateUpload(page, {})
+    const uploadPage = await verifyOnPage(page, RegisterTemplateUploadPage)
+
+    await uploadPage.selectTemplateFile('invalid-template.mustache')
+    await uploadPage.continue()
+
+    await expect(uploadPage.header).toHaveText('Upload template for Service One')
+    await expect(uploadPage.errorSummary).toContainText('Invalid template syntax')
+    await expect(uploadPage.notificationBanner).not.toBeVisible()
+    await expect(uploadPage.templateFileInputError).toContainText('Invalid template syntax')
+    await expect(uploadPage.versionTable).toBeVisible()
+  })
+
+  test('Displays error when there is an unexpected error in template validation request', async ({ page }) => {
+    await sarApi.stubValidateTemplateFault()
+
+    await registerTemplateUpload(page, {})
+    const uploadPage = await verifyOnPage(page, RegisterTemplateUploadPage)
+
+    await uploadPage.selectTemplateFile('template.mustache')
+    await uploadPage.continue()
+
+    await expect(uploadPage.header).toHaveText('Upload template for Service One')
+    await expect(uploadPage.errorSummary).toContainText('Unexpected Error')
+    await expect(uploadPage.notificationBanner).not.toBeVisible()
+    await expect(uploadPage.templateFileInputError).toContainText('Unexpected Error')
+    await expect(uploadPage.versionTable).toBeVisible()
+  })
 
   test('Redirects to confirmation when continue with file selected', async ({ page }) => {
     await registerTemplateUpload(page, {})

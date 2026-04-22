@@ -11,6 +11,7 @@ test.describe('Register template result', () => {
   test.beforeEach(async () => {
     await sarApi.stubGetProducts()
     await sarApi.stubGetTemplateVersions({})
+    await sarApi.stubValidateTemplateSuccess()
     await sarApi.stubUploadTemplateFile({})
   })
 
