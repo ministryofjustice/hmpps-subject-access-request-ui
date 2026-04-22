@@ -117,11 +117,9 @@ test.describe('Register template upload file', () => {
     await uploadPage.continue()
 
     await expect(uploadPage.header).toHaveText('Upload template for Service One')
-    await expect(uploadPage.errorSummary).toContainText('Invalid mustache template:')
-    await expect(uploadPage.errorSummary).toContainText('invalid template syntax')
+    await expect(uploadPage.errorSummary).toContainText('Invalid template syntax')
     await expect(uploadPage.notificationBanner).not.toBeVisible()
-    await expect(uploadPage.templateFileInputError).toContainText('Invalid mustache template:')
-    await expect(uploadPage.templateFileInputError).toContainText('invalid template syntax')
+    await expect(uploadPage.templateFileInputError).toContainText('Invalid template syntax')
     await expect(uploadPage.versionTable).toBeVisible()
   })
 
@@ -135,10 +133,8 @@ test.describe('Register template upload file', () => {
     await uploadPage.continue()
 
     await expect(uploadPage.header).toHaveText('Upload template for Service One')
-    await expect(uploadPage.errorSummary).toContainText('Invalid mustache template:')
     await expect(uploadPage.errorSummary).toContainText('Unexpected Error')
     await expect(uploadPage.notificationBanner).not.toBeVisible()
-    await expect(uploadPage.templateFileInputError).toContainText('Invalid mustache template:')
     await expect(uploadPage.templateFileInputError).toContainText('Unexpected Error')
     await expect(uploadPage.versionTable).toBeVisible()
   })

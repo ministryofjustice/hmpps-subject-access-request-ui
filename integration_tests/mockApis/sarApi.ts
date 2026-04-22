@@ -388,7 +388,7 @@ export default {
 
   stubValidateTemplateFailure: (
     httpStatus = 400,
-    body = { userMessage: 'invalid template syntax' },
+    body = { userMessage: 'Invalid template syntax' },
   ): SuperAgentRequest =>
     stubFor({
       request: {

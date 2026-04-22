@@ -173,7 +173,7 @@ describe('uploadTemplate', () => {
     expect(res.render).toHaveBeenCalledWith(
       'pages/registerTemplate/upload',
       expect.objectContaining({
-        uploadError: 'Invalid mustache template: <mustache error description here>',
+        uploadError: '<mustache error description here>',
       }),
     )
   })

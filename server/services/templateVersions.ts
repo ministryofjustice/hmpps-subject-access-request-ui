@@ -50,7 +50,7 @@ const validateTemplate = async (buffer: Buffer<ArrayBufferLike>, filename: strin
         return Promise.reject(err.response.body?.userMessage || 'Unexpected Error')
       default:
         logger.error(`template validation for ${filename} failed with unexpected error ${err.message}`)
-        return Promise.reject(Error('Unexpected Error'))
+        return Promise.reject(Error('Unexpected Error validating template'))
     }
   }
 }
