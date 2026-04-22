@@ -152,7 +152,7 @@ describe('validateTemplate', () => {
   ])('returns expected error for http response status: $status', async ({ status, expected }) => {
     sarApiMock.post('/api/templates/validate', () => true).reply(status, { userMessage: expected })
 
-    await expect(templateVersionsService.validateTemplate(buffer, 'filename', req)).rejects.toEqual(expected)
+    await expect(templateVersionsService.validateTemplate(buffer, 'filename', req)).rejects.toEqual(Error(expected))
   })
 
   test('returns expected error for non http response error', async () => {

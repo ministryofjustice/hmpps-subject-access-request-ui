@@ -40,14 +40,14 @@ const validateTemplate = async (buffer: Buffer<ArrayBufferLike>, filename: strin
       .post(`${config.apis.subjectAccessRequest.url}/api/templates/validate`)
       .set('Authorization', `Bearer ${getUserToken(req)}`)
       .attach('file', buffer, filename)
-    return Promise.resolve('OK')
+    return 'OK'
   } catch (err) {
     logger.error('caught template validation error', err)
 
     // Network/Connection Errors
     if (!err.response) {
       logger.error(`Network error validating template ${filename}`, err)
-      return Promise.reject(Error('Unexpected Error validating template'))
+      throw Error('Unexpected Error validating template')
     }
 
     // HTTP errors
@@ -56,10 +56,10 @@ const validateTemplate = async (buffer: Buffer<ArrayBufferLike>, filename: strin
       case 401:
       case 403:
       case 500:
-        return Promise.reject(err.response.body?.userMessage || 'Unexpected Error')
+        throw Error(err.response.body?.userMessage) || Error('Unexpected Error')
       default:
         logger.error(`template validation for ${filename} failed with unexpected error ${err.message}`)
-        return Promise.reject(Error('Unexpected Error validating template'))
+        throw Error('Unexpected Error validating template')
     }
   }
 }
