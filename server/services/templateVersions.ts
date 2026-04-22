@@ -47,7 +47,7 @@ const validateTemplate = async (buffer: Buffer<ArrayBufferLike>, filename: strin
     // Network/Connection Errors
     if (!err.response) {
       logger.error(`Network error validating template ${filename}`, err)
-      throw new Error('Unexpected Error validating template')
+      return Promise.reject(Error('Unexpected Error validating template'))
     }
 
     // HTTP errors
