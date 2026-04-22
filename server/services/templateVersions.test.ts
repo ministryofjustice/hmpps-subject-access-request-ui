@@ -129,38 +129,37 @@ describe('createTemplateVersion', () => {
   })
 })
 
-// TODO
-// describe('validateTemplate', () => {
-//   const req: Request = {
-//     user: requestUser,
-//     session: { productList: [], selectedList: [] },
-//     body: {},
-//   } as unknown as Request
-//
-//   const buffer = Buffer.from('some template', 'base64')
-//
-//   test('returns promise resolved for successful validation', async () => {
-//     sarApiMock.post('/api/templates/validate', () => true).reply(200)
-//
-//     await expect(templateVersionsService.validateTemplate(buffer, 'filename', req)).resolves.toEqual('OK')
-//   })
-//
-//   test.each([
-//     { status: 400, expected: 'template invalid' },
-//     { status: 401, expected: 'Unauthorized' },
-//     { status: 403, expected: 'Forbidden' },
-//     { status: 500, expected: 'Internal Server Error' },
-//   ])('returns expected error for http response status: $status', async ({ status, expected }) => {
-//     sarApiMock.post('/api/templates/validate', () => true).reply(status, { userMessage: expected })
-//
-//     await expect(templateVersionsService.validateTemplate(buffer, 'filename', req)).rejects.toEqual(expected)
-//   })
-//
-//   test('returns expected error for non http response error', async () => {
-//     sarApiMock.post('/api/templates/validate', () => true).replyWithError('Connection refused')
-//
-//     await expect(templateVersionsService.validateTemplate(buffer, 'filename', req)).rejects.toEqual(
-//       Error('Unexpected Error validating template'),
-//     )
-//   })
-// })
+describe('validateTemplate', () => {
+  const req: Request = {
+    user: requestUser,
+    session: { productList: [], selectedList: [] },
+    body: {},
+  } as unknown as Request
+
+  const buffer = Buffer.from('some template', 'base64')
+
+  test('returns promise resolved for successful validation', async () => {
+    sarApiMock.post('/api/templates/validate', () => true).reply(200)
+
+    await expect(templateVersionsService.validateTemplate(buffer, 'filename', req)).resolves.toEqual('OK')
+  })
+
+  // test.each([
+  //   { status: 400, expected: 'template invalid' },
+  //   { status: 401, expected: 'Unauthorized' },
+  //   { status: 403, expected: 'Forbidden' },
+  //   { status: 500, expected: 'Internal Server Error' },
+  // ])('returns expected error for http response status: $status', async ({ status, expected }) => {
+  //   sarApiMock.post('/api/templates/validate', () => true).reply(status, { userMessage: expected })
+  //
+  //   await expect(templateVersionsService.validateTemplate(buffer, 'filename', req)).rejects.toEqual(expected)
+  // })
+  //
+  // test('returns expected error for non http response error', async () => {
+  //   sarApiMock.post('/api/templates/validate', () => true).replyWithError('Connection refused')
+  //
+  //   await expect(templateVersionsService.validateTemplate(buffer, 'filename', req)).rejects.toEqual(
+  //     Error('Unexpected Error validating template'),
+  //   )
+  // })
+})
