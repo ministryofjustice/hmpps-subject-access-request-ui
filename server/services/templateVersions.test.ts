@@ -156,7 +156,7 @@ describe('validateTemplate', () => {
   })
 
   test('returns expected error for non http response error', async () => {
-    sarApiMock.post('/api/templates/validate', () => true).replyWithError('Connection refused')
+    sarApiMock.post('/api/templates/validate', () => true).reply(503, { userMessage: 'borked' })
 
     await expect(templateVersionsService.validateTemplate(buffer, 'filename', req)).rejects.toEqual(
       Error('Unexpected Error validating template'),
