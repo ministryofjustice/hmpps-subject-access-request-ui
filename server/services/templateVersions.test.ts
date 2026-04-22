@@ -129,7 +129,7 @@ describe('createTemplateVersion', () => {
   })
 })
 
-describe('validateTemplateBody', () => {
+describe('validateTemplate', () => {
   const req: Request = {
     user: requestUser,
     session: { productList: [], selectedList: [] },

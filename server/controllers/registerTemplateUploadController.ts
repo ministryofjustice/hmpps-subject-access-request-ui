@@ -59,7 +59,7 @@ export default class RegisterTemplateUploadController {
       res.render('pages/registerTemplate/upload', {
         versionList,
         selectedProduct,
-        uploadError: err,
+        uploadError: err instanceof Error ? err.message : err,
       })
       return
     }

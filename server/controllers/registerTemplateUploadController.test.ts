@@ -94,7 +94,7 @@ describe('uploadTemplate', () => {
     } as unknown as Request
   })
 
-  templateVersionsService.validateTemplate = jest.fn().mockReturnValue(null)
+  templateVersionsService.validateTemplate = jest.fn().mockResolvedValue(undefined)
 
   test('redirects to confirmation page when file uploaded successfully', async () => {
     const buffer = Buffer.from(templateBase64, 'base64')
