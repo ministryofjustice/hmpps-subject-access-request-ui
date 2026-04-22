@@ -154,12 +154,12 @@ describe('validateTemplate', () => {
 
     await expect(templateVersionsService.validateTemplate(buffer, 'filename', req)).rejects.toEqual(expected)
   })
-  //
-  // test('returns expected error for non http response error', async () => {
-  //   sarApiMock.post('/api/templates/validate', () => true).replyWithError('Connection refused')
-  //
-  //   await expect(templateVersionsService.validateTemplate(buffer, 'filename', req)).rejects.toEqual(
-  //     Error('Unexpected Error validating template'),
-  //   )
-  // })
+
+  test('returns expected error for non http response error', async () => {
+    sarApiMock.post('/api/templates/validate', () => true).replyWithError('Connection refused')
+
+    await expect(templateVersionsService.validateTemplate(buffer, 'filename', req)).rejects.toEqual(
+      Error('Unexpected Error validating template'),
+    )
+  })
 })

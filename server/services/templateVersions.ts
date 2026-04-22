@@ -42,6 +42,8 @@ const validateTemplate = async (buffer: Buffer<ArrayBufferLike>, filename: strin
       .attach('file', buffer, filename)
     return Promise.resolve('OK')
   } catch (err) {
+    logger.info('caught validation error', err)
+
     switch (err.status) {
       case 400:
       case 401:
