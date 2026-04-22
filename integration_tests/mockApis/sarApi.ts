@@ -374,4 +374,42 @@ export default {
         jsonBody: body,
       },
     }),
+
+  stubValidateTemplateSuccess: (): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPath: `/api/templates/validate`,
+      },
+      response: {
+        status: 200,
+      },
+    }),
+
+  stubValidateTemplateFailure: (
+    httpStatus = 400,
+    body = { userMessage: 'invalid template syntax' },
+  ): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPath: `/api/templates/validate`,
+      },
+      response: {
+        status: httpStatus,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: body,
+      },
+    }),
+
+  stubValidateTemplateFault: (): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPath: `/api/templates/validate`,
+      },
+      response: {
+        fault: 'RANDOM_DATA_THEN_CLOSE',
+      },
+    }),
 }

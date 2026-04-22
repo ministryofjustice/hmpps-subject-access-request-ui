@@ -130,48 +130,36 @@ describe('createTemplateVersion', () => {
 })
 
 describe('validateTemplateBody', () => {
-  test('should return error when template body is invalid mustache syntax', async () => {
-    // no closing {{/uploads}} tag
-    const invalidTemplate = `
-      <h1 class="title">Wiremock Test Service</h1>
-      <h2>Uploads</h2>
-      {{#uploads}}
-          <table class="summary-list">
-              <tr><td>Attachment reference</td><td>{{ optionalValue attachmentRef }}</td></tr>
-              <tr><td>Filename</td><td>{{ optionalValue filename }}</td></tr>
-              <tr><td>File type</td><td>{{ optionalValue fileType }}</td></tr>
-              <tr><td>File size</td><td>{{ optionalValue fileSize }}</td></tr>
-              <tr><td>Description</td><td>{{ optionalValue description }}</td></tr>
-          </table>
-          <br/>
-      {{^uploads}}
-          <p>No Data Held</p>
-      {{/uploads}}
-    `
+  const req: Request = {
+    user: requestUser,
+    session: { productList: [], selectedList: [] },
+    body: {},
+  } as unknown as Request
 
-    const result = templateVersionsService.validateTemplateBody(invalidTemplate)
-    expect(result).not.toBeNull()
-    expect(result.message).toContain('Unclosed section "uploads" at 655')
+  const buffer = Buffer.from('some template', 'base64')
+
+  test('returns promise resolved for successful validation', async () => {
+    sarApiMock.post('/api/templates/validate', () => true).reply(200)
+
+    await expect(templateVersionsService.validateTemplate(buffer, 'filename', req)).resolves.toEqual('OK')
   })
 
-  test('should return null when template body is valid  mustache syntax', async () => {
-    const validTemplate = `
-      <h1 class="title">Wiremock Test Service</h1>
-      <h2>Uploads</h2>
-      {{#uploads}}
-          <table class="summary-list">
-              <tr><td>Attachment reference</td><td>{{ optionalValue attachmentRef }}</td></tr>
-              <tr><td>Filename</td><td>{{ optionalValue filename }}</td></tr>
-              <tr><td>File type</td><td>{{ optionalValue fileType }}</td></tr>
-              <tr><td>File size</td><td>{{ optionalValue fileSize }}</td></tr>
-              <tr><td>Description</td><td>{{ optionalValue description }}</td></tr>
-          </table>
-          <br/>
-      {{/uploads}}
-      {{^uploads}}
-          <p>No Data Held</p>
-      {{/uploads}}
-    `
-    expect(templateVersionsService.validateTemplateBody(validTemplate)).toBeNull()
+  test.each([
+    { status: 400, expected: 'template invalid' },
+    { status: 401, expected: 'Unauthorized' },
+    { status: 403, expected: 'Forbidden' },
+    { status: 500, expected: 'Internal Server Error' },
+  ])('returns expected error for http response status: $status', async ({ status, expected }) => {
+    sarApiMock.post('/api/templates/validate', () => true).reply(status, { userMessage: expected })
+
+    await expect(templateVersionsService.validateTemplate(buffer, 'filename', req)).rejects.toEqual(expected)
+  })
+
+  test('returns expected error for non http response error', async () => {
+    sarApiMock.post('/api/templates/validate', () => true).replyWithError('Connection refused')
+
+    await expect(templateVersionsService.validateTemplate(buffer, 'filename', req)).rejects.toEqual(
+      Error('Unexpected Error'),
+    )
   })
 })

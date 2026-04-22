@@ -1,7 +1,7 @@
 import type { Request } from 'express'
 import superagent from 'superagent'
-import Mustache from 'mustache'
 import config from '../config'
+import logger from '../../logger'
 import getUserToken from '../utils/userTokenHelper'
 import { formatDateTime } from '../utils/dateHelpers'
 
@@ -34,17 +34,29 @@ const createTemplateVersion = async (
   return response.body
 }
 
-const validateTemplateBody = (template: string): Error | null => {
+const validateTemplate = async (buffer: Buffer<ArrayBufferLike>, filename: string, req: Request): Promise<string> => {
   try {
-    Mustache.parse(template)
-    return null
+    await superagent
+      .post(`${config.apis.subjectAccessRequest.url}/api/templates/validate`)
+      .set('Authorization', `Bearer ${getUserToken(req)}`)
+      .attach('file', buffer, filename)
+    return Promise.resolve('OK')
   } catch (err) {
-    return err
+    switch (err.status) {
+      case 400:
+      case 401:
+      case 403:
+      case 500:
+        return Promise.reject(err.response.body?.userMessage || 'Unexpected Error')
+      default:
+        logger.error(`template validation for ${filename} failed with unexpected error ${err.message}`)
+        return Promise.reject(Error('Unexpected Error'))
+    }
   }
 }
 
 export default {
   getTemplateVersions,
   createTemplateVersion,
-  validateTemplateBody,
+  validateTemplate,
 }
