@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid'
+import { randomUUID } from 'node:crypto'
 import { auditService } from '@ministryofjustice/hmpps-audit-client'
 import config from '../config'
 import logger from '../../logger'
@@ -30,7 +30,7 @@ const sendAuditMessage = async (
 }
 
 export const audit = (username: string, details?: Record<string, unknown>): AuditFunction => {
-  const correlationId = uuidv4()
+  const correlationId = randomUUID()
   return async (auditEvent: AuditEvent) => {
     await sendAuditMessage(auditEvent, username, null, null, details, correlationId)
   }
@@ -42,7 +42,7 @@ export const auditWithSubject = (
   subjectType: AuditSubjectType,
   details?: Record<string, unknown>,
 ): AuditFunction => {
-  const correlationId = uuidv4()
+  const correlationId = randomUUID()
   return async (auditEvent: AuditEvent) => {
     await sendAuditMessage(auditEvent, username, subjectId, subjectType, details, correlationId)
   }

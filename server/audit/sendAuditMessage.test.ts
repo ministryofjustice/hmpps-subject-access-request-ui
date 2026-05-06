@@ -10,8 +10,8 @@ jest.mock('@ministryofjustice/hmpps-audit-client', () => ({
   },
 }))
 
-jest.mock('uuid', () => ({
-  v4: () => 'correlationId',
+jest.mock('crypto', () => ({
+  randomUUID: () => 'correlationId',
 }))
 
 describe('audit function', () => {
