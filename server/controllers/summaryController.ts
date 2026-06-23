@@ -37,7 +37,7 @@ export default class SummaryController {
     const { selectedList } = req.session
 
     if (dataAccess().telemetryClient) {
-      dataAccess().telemetryClient.trackEvent({ name: 'postReportDetails', properties: { id: userData.subjectId } })
+      dataAccess().telemetryClient.trackEvent('postReportDetails', { id: userData.subjectId })
     }
 
     const serviceList = selectedList.map(service => `${service.name}`)
