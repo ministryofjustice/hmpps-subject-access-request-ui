@@ -32,9 +32,9 @@ export default class RegisterTemplateConfirmationController {
       )
       req.session.newVersion = newVersion
       if (dataAccess().telemetryClient) {
-        dataAccess().telemetryClient.trackEvent({
-          name: 'templateVersionRegistered',
-          properties: { product: selectedProduct.name, version: newVersion.version },
+        dataAccess().telemetryClient.trackEvent('templateVersionRegistered', {
+          product: selectedProduct.name,
+          version: newVersion.version,
         })
       }
     } catch (error) {

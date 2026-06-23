@@ -35,10 +35,7 @@ export default class InputsController {
     const caseReferenceError = InputsValidation.validateCaseReference(caseReference)
     const hasAllAnswers = req.session.selectedList && req.session.selectedList.length !== 0
     if (dataAccess().telemetryClient) {
-      dataAccess().telemetryClient.trackEvent({
-        name: 'saveInputs',
-        properties: { id: req.session.userData.caseReference },
-      })
+      dataAccess().telemetryClient.trackEvent('saveInputs', { id: req.session.userData.caseReference })
     }
     if ([dateFromError, dateToError, caseReferenceError].some(item => !!item)) {
       const today = formatDate(new Date().toISOString(), 'short')

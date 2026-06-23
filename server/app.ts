@@ -23,8 +23,7 @@ import type { Services } from './services'
 export default function createApp(services: Services): express.Application {
   const app = express()
 
-  app.set('json spaces', 2)
-  app.set('trust proxy', true)
+  app.set('json spaces', 2).set('trust proxy', true)
   app.set('port', process.env.PORT || 3000)
 
   app.use(metricsMiddleware)

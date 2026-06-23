@@ -29,10 +29,7 @@ export default class SubjectIdController {
     const subjectIdError = SubjectIdValidation.validateSubjectId(subjectId)
     const hasAllAnswers = req.session.selectedList && req.session.selectedList.length !== 0
     if (dataAccess().telemetryClient) {
-      dataAccess().telemetryClient.trackEvent({
-        name: 'saveSubjectId',
-        properties: { id: req.session.userData.subjectId },
-      })
+      dataAccess().telemetryClient.trackEvent('saveSubjectId', { id: req.session.userData.subjectId })
     }
     if (subjectIdError) {
       res.render('pages/subjectid', {
