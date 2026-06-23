@@ -43,7 +43,9 @@ export default class ProductSelectionController {
     const { productList } = req.session
     const selectedList: string[] = []
     if (dataAccess().telemetryClient) {
-      dataAccess().telemetryClient.trackEvent('selectProducts', { products: req.session.selectedList.join(',') })
+      dataAccess().telemetryClient.trackEvent('selectProducts', {
+        products: (req.session.selectedList || []).join(','),
+      })
     }
     if (productList) {
       if (Array.isArray(req.body.selectedProducts)) selectedList.push(...req.body.selectedProducts)
