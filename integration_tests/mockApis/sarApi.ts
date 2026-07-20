@@ -108,6 +108,17 @@ export default {
         suspended: true,
         suspendedAt: '10/03/2026 15:50:53',
       },
+      {
+        id: '101',
+        name: 'service-one-oh-one',
+        url: 'http://service-one-oh-one',
+        label: 'Service 101',
+        category: 'PROBATION',
+        enabled: false,
+        templateMigrated: false,
+        suspended: false,
+        suspendedAt: '10/03/2026 15:50:53',
+      },
     ],
   ): SuperAgentRequest =>
     stubFor({

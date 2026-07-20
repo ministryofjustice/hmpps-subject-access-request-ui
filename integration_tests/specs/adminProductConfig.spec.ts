@@ -127,13 +127,22 @@ test.describe('Admin Product Configurations', () => {
     await expect(productConfigPage.productsTableCell(1, 6)).toContainText('Active')
 
     await expect(productConfigPage.productsTableRow(2)).toBeVisible()
-    await expect(productConfigPage.productsTableCell(2, 0)).toContainText('service-two')
-    await expect(productConfigPage.productsTableCell(2, 1)).toContainText('Service Two')
-    await expect(productConfigPage.productsTableCell(2, 2)).toContainText('http://service-two')
+    await expect(productConfigPage.productsTableCell(2, 0)).toContainText('service-one-oh-one')
+    await expect(productConfigPage.productsTableCell(2, 1)).toContainText('Service 101')
+    await expect(productConfigPage.productsTableCell(2, 2)).toContainText('http://service-one-oh-one')
     await expect(productConfigPage.productsTableCell(2, 3)).toContainText('PROBATION')
-    await expect(productConfigPage.productsTableCell(2, 4)).toContainText('Enabled')
+    await expect(productConfigPage.productsTableCell(2, 4)).toContainText('Disabled')
     await expect(productConfigPage.productsTableCell(2, 5)).toContainText('Not migrated')
     await expect(productConfigPage.productsTableCell(2, 6)).toContainText('Active')
+
+    await expect(productConfigPage.productsTableRow(3)).toBeVisible()
+    await expect(productConfigPage.productsTableCell(3, 0)).toContainText('service-two')
+    await expect(productConfigPage.productsTableCell(3, 1)).toContainText('Service Two')
+    await expect(productConfigPage.productsTableCell(3, 2)).toContainText('http://service-two')
+    await expect(productConfigPage.productsTableCell(3, 3)).toContainText('PROBATION')
+    await expect(productConfigPage.productsTableCell(3, 4)).toContainText('Enabled')
+    await expect(productConfigPage.productsTableCell(3, 5)).toContainText('Not migrated')
+    await expect(productConfigPage.productsTableCell(3, 6)).toContainText('Active')
   })
 
   test('Displays create product config button which redirects to create page', async ({ page }) => {

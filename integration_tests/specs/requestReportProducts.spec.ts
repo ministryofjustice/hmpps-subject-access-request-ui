@@ -58,7 +58,7 @@ test.describe('Request Report - ProductSelection', () => {
     await expect(productSelectionPage.suspendedProductsAlertList.locator('li')).toHaveCount(1)
     await expect(productSelectionPage.suspendedProductsAlertList).toContainText('Service Ninety Nine')
 
-    await expect(productSelectionPage.productsTableCells).toHaveCount(9)
+    await expect(productSelectionPage.productsTableCells).toHaveCount(12)
     await expect(productSelectionPage.productsTableCells.nth(1)).toContainText('Service One')
     await expect(productSelectionPage.productsTableCells.nth(2)).toContainText('Active')
 
@@ -67,6 +67,22 @@ test.describe('Request Report - ProductSelection', () => {
 
     await expect(productSelectionPage.productsTableCells.nth(7)).toContainText('Service Ninety Nine')
     await expect(productSelectionPage.productsTableCells.nth(8)).toContainText('Suspended')
+  })
+
+  test('A disabled service is not selectable and displays the Disabled label', async ({ page }) => {
+    await resetStubs()
+    await sarApi.stubGetProductsSuspended()
+
+    const productSelectionPage = await requestReportProductSelection(page)
+
+    await expect(productSelectionPage.checkAllCheckBox).toBeVisible()
+    await expect(productSelectionPage.confirmButton).toBeVisible()
+    await expect(productSelectionPage.suspendedProductsAlert).toBeVisible()
+
+    await expect(productSelectionPage.productsTableCells).toHaveCount(12)
+    await expect(productSelectionPage.productsTableCells.nth(9).locator('input[type="checkbox"]')).toBeDisabled()
+    await expect(productSelectionPage.productsTableCells.nth(10)).toContainText('Service 101')
+    await expect(productSelectionPage.productsTableCells.nth(11)).toContainText('Disabled')
   })
 
   test('Does not allow none product selected', async ({ page }) => {

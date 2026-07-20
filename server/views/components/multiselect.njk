@@ -20,7 +20,7 @@
     {% for item in category.items %}
     <tr class="govuk-table__row govuk-table__row--selected">        
 
-        {% if not item.enabled %}
+    {% if not item.enabled %}
       <td class="govuk-table__cell">
           <div class="govuk-checkboxes__item govuk-checkboxes--small">
             <input type="checkbox" class="disabled-govuk-checkboxes__input"
@@ -31,8 +31,10 @@
             </label>
           </div>
       </td>
-          <td class="govuk-table__cell"><span class='disabled-text'>{{item.name}}</span></td>
-        {% else %}
+        <td class="govuk-table__cell"><span class='disabled-text'>{{item.label}}</span></td>
+        {% set serviceStatusLabel = mojBadge({ text: "Disabled", classes: "moj-badge--grey"}) %}
+        <td class="govuk-table__cell">{{ serviceStatusLabel }}</td>
+    {% else %}
       <td class="govuk-table__cell">
           {% set isChecked = (item.enabled) and (params.selectedItems or []).indexOf(item.name) > -1 %}
           <div class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox">
