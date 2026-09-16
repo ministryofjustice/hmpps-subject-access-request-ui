@@ -25,8 +25,8 @@ export default class AdminProductConfigDetailsPage extends AbstractPage {
     this.serviceSummaryColumn = this.page
       .locator('#product-config-summary')
       .locator('.govuk-summary-list__value')
-      .nth(6)
-    this.suspendedAtColumn = this.page.locator('#product-config-summary').locator('.govuk-summary-list__value').nth(7)
+      .nth(7)
+    this.suspendedAtColumn = this.page.locator('#product-config-summary').locator('.govuk-summary-list__value').nth(8)
   }
 
   edit = () => this.editLink.click()

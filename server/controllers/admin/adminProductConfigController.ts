@@ -124,6 +124,7 @@ export default class AdminProductConfigController {
       name: body.name,
       label: body.label,
       url: body.url,
+      teamSlackChannelId: body.teamSlackChannelId?.trim() || null,
       category: body.category,
       enabled: body.enabled === 'enabled',
       templateMigrated: body.templateMigrated === 'templateMigrated',

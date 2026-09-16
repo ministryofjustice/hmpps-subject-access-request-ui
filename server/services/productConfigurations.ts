@@ -30,6 +30,7 @@ const updateProduct = async (product: NewProduct, req: Request) => {
       name: product.name,
       url: product.url,
       label: product.label,
+      teamSlackChannelId: product.teamSlackChannelId ?? null,
       category: product.category,
       enabled: product.enabled,
       templateMigrated: product.templateMigrated,
