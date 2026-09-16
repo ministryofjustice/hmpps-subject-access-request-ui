@@ -219,6 +219,10 @@ describe('saveNewProductConfig', () => {
       { ...productBody, teamSlackChannelId: '' },
       { ...newProduct, teamSlackChannelId: null },
     ],
+    [
+      { ...productBody, teamSlackChannelId: ['C1234567890'] },
+      { ...newProduct, teamSlackChannelId: null },
+    ],
   ])('details successfully stored in session and redirects to confirm page', async (body, expectedNewProduct) => {
     req.body = body
 
@@ -323,6 +327,10 @@ describe('saveUpdatedProductConfig', () => {
     ],
     [
       { ...productBody, teamSlackChannelId: '' },
+      { ...updatedProduct, teamSlackChannelId: null },
+    ],
+    [
+      { ...productBody, teamSlackChannelId: ['C1234567890'] },
       { ...updatedProduct, teamSlackChannelId: null },
     ],
   ])('details successfully stored in session and redirects to confirm page', async (body, expectedUpdatedProduct) => {

@@ -119,12 +119,14 @@ export default class AdminProductConfigController {
 
   private static productDetailsFromBody(req: Request): NewProduct {
     const body = req.body || {}
+    const teamSlackChannelId =
+      typeof body.teamSlackChannelId === 'string' ? body.teamSlackChannelId.trim() || null : null
     return {
       id: null,
       name: body.name,
       label: body.label,
       url: body.url,
-      teamSlackChannelId: body.teamSlackChannelId?.trim() || null,
+      teamSlackChannelId,
       category: body.category,
       enabled: body.enabled === 'enabled',
       templateMigrated: body.templateMigrated === 'templateMigrated',
