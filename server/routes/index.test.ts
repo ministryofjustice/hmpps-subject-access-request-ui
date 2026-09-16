@@ -426,6 +426,7 @@ describe('GET /admin/create-product-config', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Create Product Configuration')
+        expect(res.text).toContain('Team Slack channel ID (optional)')
       })
   })
 })
@@ -481,6 +482,7 @@ describe('GET /admin/update-product-config', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Update Product Configuration')
+        expect(res.text).toContain('Team Slack channel ID (optional)')
       })
   })
 })

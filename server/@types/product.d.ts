@@ -3,6 +3,7 @@ interface NewProduct {
   name: string
   url: string
   label: string
+  teamSlackChannelId?: string | null
   enabled?: boolean
   templateMigrated?: boolean
   category: ProductCategory
