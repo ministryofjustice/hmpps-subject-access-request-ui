@@ -22,7 +22,6 @@ export default class AbstractPage {
     this.phaseBanner = page.getByTestId('header-phase-banner')
     this.usersName = page.getByTestId('header-user-name')
     this.signoutLink = page.getByText('Sign out')
-    this.manageUserDetails = page.getByTestId('manageDetails')
     this.header = page.locator('h1', { hasText: title })
   }
 
