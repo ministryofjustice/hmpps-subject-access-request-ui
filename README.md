@@ -1,6 +1,7 @@
 # hmpps-subject-access-request-ui
-[![repo standards badge](https://img.shields.io/badge/dynamic/json?color=blue&style=flat&logo=github&label=MoJ%20Compliant&query=%24.result&url=https%3A%2F%2Foperations-engineering-reports.cloud-platform.service.justice.gov.uk%2Fapi%2Fv1%2Fcompliant_public_repositories%2Fhmpps-subject-access-request-ui)](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/public-github-repositories.html#hmpps-subject-access-request-ui "Link to report")
-[![CircleCI](https://circleci.com/gh/ministryofjustice/hmpps-subject-access-request-ui/tree/main.svg?style=svg)](https://circleci.com/gh/ministryofjustice/hmpps-subject-access-request-ui)
+[![Ministry of Justice Repository Compliance Badge](https://github-community.service.justice.gov.uk/repository-standards/api/hmpps-subject-access-request-ui/badge?style=flat)](https://github-community.service.justice.gov.uk/repository-standards/hmpps-subject-access-request-ui)
+[![Docker Repository on ghcr](https://img.shields.io/badge/ghcr.io-repository-2496ED.svg?logo=docker)](https://ghcr.io/ministryofjustice/hmpps-subject-access-request-ui)
+[![Pipeline [test -> build -> deploy]](https://github.com/ministryofjustice/hmpps-subject-access-request-ui/actions/workflows/pipeline.yml/badge.svg?branch=main)](https://github.com/ministryofjustice/hmpps-subject-access-request-ui/actions/workflows/pipeline.yml)
 
 UI for Subject Access Requests. The other components of this service are the [hmpps-subject-access-request-api](https://github.com/ministryofjustice/hmpps-subject-access-request-api) and the [hmpps-subject-access-request-worker](https://github.com/ministryofjustice/hmpps-subject-access-request-worker). The Confluence documentation for the service can be found [here](https://dsdmoj.atlassian.net/wiki/spaces/SARS/pages/4771479564/Overview).
 
