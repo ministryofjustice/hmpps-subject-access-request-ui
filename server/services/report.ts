@@ -135,7 +135,13 @@ const getPaginationInformation = (
   const from = (currentPageInt - 1) * resultsPerPage + 1
   const to = Math.min(currentPageInt * resultsPerPage, numberOfReportsInt)
 
-  const pageLinks = getPageLinks({ visiblePageLinks, numberOfPages, currentPage: currentPageInt, searchTerm })
+  const pageLinks = getPageLinks({
+    visiblePageLinks,
+    numberOfPages,
+    currentPage: currentPageInt,
+    searchTerm,
+    isAdmin: true,
+  })
 
   return { pageLinks, previous, next, from, to }
 }
