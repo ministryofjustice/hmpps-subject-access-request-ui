@@ -3,11 +3,13 @@ const getPageLinks = ({
   numberOfPages = 1,
   currentPage = 1,
   searchTerm,
+  isAdmin = false,
 }: {
   visiblePageLinks: number
   numberOfPages: number
   currentPage: number
   searchTerm: string
+  isAdmin: boolean
 }): Array<{ text: string; href: string; selected: boolean }> => {
   let pageStartNumber = 1
   let pageEndNumber = visiblePageLinks
@@ -30,15 +32,18 @@ const getPageLinks = ({
     }
   }
 
+  const basePath = isAdmin ? '/admin/reports' : '/reports'
+
   for (let pageIndex = pageStartNumber; pageIndex <= pageEndNumber; pageIndex += 1) {
     pageLinks.push({
       text: pageIndex.toString(),
       // TODO: Genericise pagination helper - pass in URL
-      href: `/reports?page=${pageIndex}&keyword=${searchTerm}`,
+      href: `${basePath}?page=${pageIndex}&keyword=${searchTerm}`,
       selected: pageIndex === currentPage,
     })
   }
 
   return pageLinks
 }
+
 export default getPageLinks
