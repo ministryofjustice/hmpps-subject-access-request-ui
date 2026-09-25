@@ -140,7 +140,13 @@ describe('getReports', () => {
       }),
     )
     expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.VIEW_REPORT_LIST_ATTEMPT))
-    expect(req.session.searchOptions).toEqual({ searchTerm: 'mycase123' })
+    expect(req.session.searchOptions).toEqual({
+      searchTerm: 'mycase123',
+      pending: false,
+      completed: false,
+      errored: false,
+      overdue: false,
+    })
   })
 
   describe('pagination', () => {
@@ -162,7 +168,13 @@ describe('getReports', () => {
           numberOfReports: 240,
         }),
       )
-      expect(req.session.searchOptions).toEqual({ searchTerm: '' })
+      expect(req.session.searchOptions).toEqual({
+        searchTerm: '',
+        pending: false,
+        completed: false,
+        errored: false,
+        overdue: false,
+      })
     })
 
     test('when the current page is the fifth page', async () => {
@@ -181,7 +193,13 @@ describe('getReports', () => {
           numberOfReports: 240,
         }),
       )
-      expect(req.session.searchOptions).toEqual({ searchTerm: '' })
+      expect(req.session.searchOptions).toEqual({
+        searchTerm: '',
+        pending: false,
+        completed: false,
+        errored: false,
+        overdue: false,
+      })
     })
 
     test('when the current page is the third page', async () => {
@@ -204,7 +222,13 @@ describe('getReports', () => {
           numberOfReports: 240,
         }),
       )
-      expect(req.session.searchOptions).toEqual({ searchTerm: '' })
+      expect(req.session.searchOptions).toEqual({
+        searchTerm: '',
+        pending: false,
+        completed: false,
+        errored: false,
+        overdue: false,
+      })
     })
   })
 
