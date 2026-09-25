@@ -30,8 +30,9 @@ export default class AdminReportsController {
     const { pageLinks, previous, next, from, to } = reportService.getPaginationInformation(
       numberOfReports,
       currentPage,
-      searchOptions.searchTerm,
       RESULTS_PER_PAGE,
+      true,
+      searchOptions,
     )
 
     const reportList = AdminReportsController.getSarSummaryList(subjectAccessRequests)

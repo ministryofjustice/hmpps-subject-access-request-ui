@@ -21,14 +21,19 @@ export default class ReportsController {
     req.session.subjectAccessRequests = subjectAccessRequests
     const searchOptions = {
       searchTerm: String(req.query.keyword || ''),
+      pending: Boolean(req.query.pending),
+      completed: Boolean(req.query.completed),
+      errored: Boolean(req.query.errored),
+      overdue: Boolean(req.query.overdue),
     }
     req.session.searchOptions = searchOptions
 
     const { pageLinks, previous, next, from, to } = reportService.getPaginationInformation(
       numberOfReports,
       currentPage,
-      searchOptions.searchTerm,
       RESULTS_PER_PAGE,
+      false,
+      searchOptions,
     )
 
     const reportList = ReportsController.getCondensedSarList(subjectAccessRequests)
