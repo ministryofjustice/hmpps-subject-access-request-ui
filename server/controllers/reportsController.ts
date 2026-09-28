@@ -41,12 +41,12 @@ export default class ReportsController {
     res.render('pages/reports', {
       reportList,
       pageLinks,
-      previous,
-      next,
       from,
       to,
       numberOfReports,
       searchTerm: searchOptions.searchTerm,
+      nextLink: ReportsController.generatePaginationLink(next, searchOptions),
+      previousLink: ReportsController.generatePaginationLink(previous, searchOptions),
     })
   }
 
@@ -59,5 +59,27 @@ export default class ReportsController {
       status: subjectAccessRequest.status.toString(),
       lastDownloaded: subjectAccessRequest.lastDownloaded || '',
     }))
+  }
+
+  static generatePaginationLink(pageIndex: number, searchOptions: SearchOptions) {
+    const params = new URLSearchParams()
+    params.append('page', String(pageIndex))
+
+    if (searchOptions.searchTerm) {
+      params.append('keyword', searchOptions.searchTerm)
+    }
+    if (searchOptions.completed) {
+      params.append('status', 'completed')
+    }
+    if (searchOptions.pending) {
+      params.append('status', 'pending')
+    }
+    if (searchOptions.errored) {
+      params.append('status', 'errored')
+    }
+    if (searchOptions.overdue) {
+      params.append('status', 'overdue')
+    }
+    return `/reports?${params.toString()}`
   }
 }

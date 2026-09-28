@@ -193,11 +193,11 @@ describe('getAdminSummary', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/admin/adminReports',
         expect.objectContaining({
-          previous: 0,
-          next: 2,
           from: 1,
           to: 50,
           numberOfReports: 240,
+          nextLink: '/admin/reports?page=2',
+          previousLink: '/admin/reports?page=0',
         }),
       )
     })
@@ -211,11 +211,11 @@ describe('getAdminSummary', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/admin/adminReports',
         expect.objectContaining({
-          previous: 4,
-          next: 0,
           from: 201,
           to: 240,
           numberOfReports: 240,
+          nextLink: '/admin/reports?page=0',
+          previousLink: '/admin/reports?page=4',
         }),
       )
     })
@@ -233,11 +233,42 @@ describe('getAdminSummary', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/admin/adminReports',
         expect.objectContaining({
-          previous: 2,
-          next: 4,
           from: 101,
           to: 150,
           numberOfReports: 240,
+          nextLink: '/admin/reports?page=4',
+          previousLink: '/admin/reports?page=2',
+        }),
+      )
+    })
+
+    test.each([
+      { statuses: ['completed'] },
+      { statuses: ['completed', 'pending'] },
+      { statuses: ['completed', 'pending', 'errored'] },
+      { statuses: ['completed', 'pending', 'errored', 'overdue'] },
+    ])('the expected status params are to next and previous links', async ({ statuses }) => {
+      const statusParams = statuses.join('&status=')
+      const expectedNext = `/admin/reports?page=4&status=${statusParams}`
+      const expectedPrevious = `/admin/reports?page=2&status=${statusParams}`
+
+      req = {
+        session: {},
+        query: { page: '3', id: 'df936446-719a-4463-acb6-9b13eea1f495', status: statuses },
+        user: {
+          token: 'fakeUserToken',
+          authSource: 'auth',
+        },
+      } as unknown as Request
+      await AdminReportsController.getAdminSummary(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/admin/adminReports',
+        expect.objectContaining({
+          from: 101,
+          to: 150,
+          numberOfReports: 240,
+          nextLink: expectedNext,
+          previousLink: expectedPrevious,
         }),
       )
     })

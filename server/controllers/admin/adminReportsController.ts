@@ -40,13 +40,13 @@ export default class AdminReportsController {
     res.render('pages/admin/adminReports', {
       reportList,
       pageLinks,
-      previous,
-      next,
       from,
       to,
       numberOfReports,
       searchOptions,
       countSummary,
+      nextLink: AdminReportsController.generatePaginationLink(next, searchOptions),
+      previousLink: AdminReportsController.generatePaginationLink(previous, searchOptions),
     })
   }
 
@@ -60,5 +60,27 @@ export default class AdminReportsController {
       durationHumanReadable: subjectAccessRequest.durationHumanReadable,
       appInsightsEventsUrl: subjectAccessRequest.appInsightsEventsUrl,
     }))
+  }
+
+  static generatePaginationLink(pageIndex: number, searchOptions: SearchOptions) {
+    const params = new URLSearchParams()
+    params.append('page', String(pageIndex))
+
+    if (searchOptions.searchTerm) {
+      params.append('keyword', searchOptions.searchTerm)
+    }
+    if (searchOptions.completed) {
+      params.append('status', 'completed')
+    }
+    if (searchOptions.pending) {
+      params.append('status', 'pending')
+    }
+    if (searchOptions.errored) {
+      params.append('status', 'errored')
+    }
+    if (searchOptions.overdue) {
+      params.append('status', 'overdue')
+    }
+    return `/admin/reports?${params.toString()}`
   }
 }

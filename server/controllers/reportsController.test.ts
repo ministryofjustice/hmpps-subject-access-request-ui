@@ -161,11 +161,11 @@ describe('getReports', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/reports',
         expect.objectContaining({
-          previous: 0,
-          next: 2,
           from: 1,
           to: 50,
           numberOfReports: 240,
+          nextLink: `/reports?page=2`,
+          previousLink: `/reports?page=0`,
         }),
       )
       expect(req.session.searchOptions).toEqual({
@@ -186,11 +186,11 @@ describe('getReports', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/reports',
         expect.objectContaining({
-          previous: 4,
-          next: 0,
           from: 201,
           to: 240,
           numberOfReports: 240,
+          nextLink: `/reports?page=0`,
+          previousLink: `/reports?page=4`,
         }),
       )
       expect(req.session.searchOptions).toEqual({
@@ -215,11 +215,11 @@ describe('getReports', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/reports',
         expect.objectContaining({
-          previous: 2,
-          next: 4,
           from: 101,
           to: 150,
           numberOfReports: 240,
+          nextLink: `/reports?page=4`,
+          previousLink: `/reports?page=2`,
         }),
       )
       expect(req.session.searchOptions).toEqual({
