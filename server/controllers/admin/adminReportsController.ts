@@ -47,6 +47,8 @@ export default class AdminReportsController {
       countSummary,
       nextLink: AdminReportsController.generatePaginationLink(next, searchOptions),
       previousLink: AdminReportsController.generatePaginationLink(previous, searchOptions),
+      next,
+      previous,
     })
   }
 

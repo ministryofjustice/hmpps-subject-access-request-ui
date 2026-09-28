@@ -198,6 +198,8 @@ describe('getAdminSummary', () => {
           numberOfReports: 240,
           nextLink: '/admin/reports?page=2',
           previousLink: '/admin/reports?page=0',
+          next: 2,
+          previous: 0,
         }),
       )
     })
@@ -216,6 +218,8 @@ describe('getAdminSummary', () => {
           numberOfReports: 240,
           nextLink: '/admin/reports?page=0',
           previousLink: '/admin/reports?page=4',
+          next: 0,
+          previous: 4,
         }),
       )
     })
@@ -238,6 +242,8 @@ describe('getAdminSummary', () => {
           numberOfReports: 240,
           nextLink: '/admin/reports?page=4',
           previousLink: '/admin/reports?page=2',
+          next: 4,
+          previous: 2,
         }),
       )
     })
@@ -269,6 +275,8 @@ describe('getAdminSummary', () => {
           numberOfReports: 240,
           nextLink: expectedNext,
           previousLink: expectedPrevious,
+          next: 4,
+          previous: 2,
         }),
       )
     })

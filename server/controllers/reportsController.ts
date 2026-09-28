@@ -47,6 +47,8 @@ export default class ReportsController {
       searchTerm: searchOptions.searchTerm,
       nextLink: ReportsController.generatePaginationLink(next, searchOptions),
       previousLink: ReportsController.generatePaginationLink(previous, searchOptions),
+      next,
+      previous,
     })
   }
 

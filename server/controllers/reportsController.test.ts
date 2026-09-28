@@ -166,6 +166,8 @@ describe('getReports', () => {
           numberOfReports: 240,
           nextLink: `/reports?page=2`,
           previousLink: `/reports?page=0`,
+          next: 2,
+          previous: 0,
         }),
       )
       expect(req.session.searchOptions).toEqual({
@@ -191,6 +193,8 @@ describe('getReports', () => {
           numberOfReports: 240,
           nextLink: `/reports?page=0`,
           previousLink: `/reports?page=4`,
+          next: 0,
+          previous: 4,
         }),
       )
       expect(req.session.searchOptions).toEqual({
@@ -220,6 +224,8 @@ describe('getReports', () => {
           numberOfReports: 240,
           nextLink: `/reports?page=4`,
           previousLink: `/reports?page=2`,
+          next: 4,
+          previous: 2,
         }),
       )
       expect(req.session.searchOptions).toEqual({
