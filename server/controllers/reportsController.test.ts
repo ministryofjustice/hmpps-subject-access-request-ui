@@ -140,7 +140,13 @@ describe('getReports', () => {
       }),
     )
     expect(auditService.sendAuditMessage).toHaveBeenCalledWith(auditAction(AuditEvent.VIEW_REPORT_LIST_ATTEMPT))
-    expect(req.session.searchOptions).toEqual({ searchTerm: 'mycase123' })
+    expect(req.session.searchOptions).toEqual({
+      searchTerm: 'mycase123',
+      pending: false,
+      completed: false,
+      errored: false,
+      overdue: false,
+    })
   })
 
   describe('pagination', () => {
@@ -155,14 +161,22 @@ describe('getReports', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/reports',
         expect.objectContaining({
-          previous: 0,
-          next: 2,
           from: 1,
           to: 50,
           numberOfReports: 240,
+          nextLink: `/reports?page=2`,
+          previousLink: `/reports?page=0`,
+          next: 2,
+          previous: 0,
         }),
       )
-      expect(req.session.searchOptions).toEqual({ searchTerm: '' })
+      expect(req.session.searchOptions).toEqual({
+        searchTerm: '',
+        pending: false,
+        completed: false,
+        errored: false,
+        overdue: false,
+      })
     })
 
     test('when the current page is the fifth page', async () => {
@@ -174,14 +188,22 @@ describe('getReports', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/reports',
         expect.objectContaining({
-          previous: 4,
-          next: 0,
           from: 201,
           to: 240,
           numberOfReports: 240,
+          nextLink: `/reports?page=0`,
+          previousLink: `/reports?page=4`,
+          next: 0,
+          previous: 4,
         }),
       )
-      expect(req.session.searchOptions).toEqual({ searchTerm: '' })
+      expect(req.session.searchOptions).toEqual({
+        searchTerm: '',
+        pending: false,
+        completed: false,
+        errored: false,
+        overdue: false,
+      })
     })
 
     test('when the current page is the third page', async () => {
@@ -197,14 +219,22 @@ describe('getReports', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/reports',
         expect.objectContaining({
-          previous: 2,
-          next: 4,
           from: 101,
           to: 150,
           numberOfReports: 240,
+          nextLink: `/reports?page=4`,
+          previousLink: `/reports?page=2`,
+          next: 4,
+          previous: 2,
         }),
       )
-      expect(req.session.searchOptions).toEqual({ searchTerm: '' })
+      expect(req.session.searchOptions).toEqual({
+        searchTerm: '',
+        pending: false,
+        completed: false,
+        errored: false,
+        overdue: false,
+      })
     })
   })
 

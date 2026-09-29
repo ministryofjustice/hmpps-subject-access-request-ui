@@ -30,8 +30,9 @@ export default class AdminReportsController {
     const { pageLinks, previous, next, from, to } = reportService.getPaginationInformation(
       numberOfReports,
       currentPage,
-      searchOptions.searchTerm,
       RESULTS_PER_PAGE,
+      true,
+      searchOptions,
     )
 
     const reportList = AdminReportsController.getSarSummaryList(subjectAccessRequests)
@@ -39,13 +40,15 @@ export default class AdminReportsController {
     res.render('pages/admin/adminReports', {
       reportList,
       pageLinks,
-      previous,
-      next,
       from,
       to,
       numberOfReports,
       searchOptions,
       countSummary,
+      nextLink: AdminReportsController.generatePaginationLink(next, searchOptions),
+      previousLink: AdminReportsController.generatePaginationLink(previous, searchOptions),
+      next,
+      previous,
     })
   }
 
@@ -59,5 +62,27 @@ export default class AdminReportsController {
       durationHumanReadable: subjectAccessRequest.durationHumanReadable,
       appInsightsEventsUrl: subjectAccessRequest.appInsightsEventsUrl,
     }))
+  }
+
+  static generatePaginationLink(pageIndex: number, searchOptions: SearchOptions) {
+    const params = new URLSearchParams()
+    params.append('page', String(pageIndex))
+
+    if (searchOptions.searchTerm) {
+      params.append('keyword', searchOptions.searchTerm)
+    }
+    if (searchOptions.completed) {
+      params.append('status', 'completed')
+    }
+    if (searchOptions.pending) {
+      params.append('status', 'pending')
+    }
+    if (searchOptions.errored) {
+      params.append('status', 'errored')
+    }
+    if (searchOptions.overdue) {
+      params.append('status', 'overdue')
+    }
+    return `/admin/reports?${params.toString()}`
   }
 }
