@@ -46,6 +46,7 @@ const newProduct: NewProduct = {
   name: 'my-prod-one',
   label: 'Product One',
   url: 'http://product-one',
+  teamSlackChannelId: 'C1234567890',
   category: 'PRISON',
   enabled: true,
   templateMigrated: true,
@@ -55,6 +56,7 @@ const updatedProduct: NewProduct = {
   name: 'my-prod-one',
   label: 'Product One',
   url: 'http://product-one',
+  teamSlackChannelId: 'C1234567890',
   category: 'PRISON',
   enabled: true,
   templateMigrated: true,
@@ -197,6 +199,7 @@ describe('saveNewProductConfig', () => {
     name: newProduct.name,
     label: newProduct.label,
     url: newProduct.url,
+    teamSlackChannelId: newProduct.teamSlackChannelId,
     category: 'PRISON',
     enabled: 'enabled',
     templateMigrated: 'templateMigrated',
@@ -211,6 +214,14 @@ describe('saveNewProductConfig', () => {
     [
       { ...productBody, enabled: '', templateMigrated: '' },
       { ...newProduct, enabled: false, templateMigrated: false },
+    ],
+    [
+      { ...productBody, teamSlackChannelId: '' },
+      { ...newProduct, teamSlackChannelId: null },
+    ],
+    [
+      { ...productBody, teamSlackChannelId: ['C1234567890'] },
+      { ...newProduct, teamSlackChannelId: null },
     ],
   ])('details successfully stored in session and redirects to confirm page', async (body, expectedNewProduct) => {
     req.body = body
@@ -298,6 +309,7 @@ describe('saveUpdatedProductConfig', () => {
     name: newProduct.name,
     label: newProduct.label,
     url: newProduct.url,
+    teamSlackChannelId: newProduct.teamSlackChannelId,
     category: 'PRISON',
     enabled: 'enabled',
     templateMigrated: 'templateMigrated',
@@ -312,6 +324,14 @@ describe('saveUpdatedProductConfig', () => {
     [
       { ...productBody, enabled: '', templateMigrated: '' },
       { ...updatedProduct, enabled: false, templateMigrated: false },
+    ],
+    [
+      { ...productBody, teamSlackChannelId: '' },
+      { ...updatedProduct, teamSlackChannelId: null },
+    ],
+    [
+      { ...productBody, teamSlackChannelId: ['C1234567890'] },
+      { ...updatedProduct, teamSlackChannelId: null },
     ],
   ])('details successfully stored in session and redirects to confirm page', async (body, expectedUpdatedProduct) => {
     req.body = body

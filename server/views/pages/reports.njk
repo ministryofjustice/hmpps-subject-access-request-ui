@@ -12,11 +12,11 @@
 }) }}
 
 {% if previous != 0 %}
-  {% set previousButton = { text: 'Previous', href: '/reports?page=' + previous + '&keyword=' + searchTerm } %}
+  {% set previousButton = { text: 'Previous', href: previousLink } %}
 {% endif %}
 
 {% if next != 0 %}
-  {% set nextButton = { text: 'Next', href: '/reports?page=' + next + '&keyword=' + searchTerm} %}
+  {% set nextButton = { text: 'Next', href: nextLink } %}
 {% endif %}
 
       {% set pagination %}

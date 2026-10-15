@@ -212,7 +212,13 @@ describe('report', () => {
     ]
 
     test('when the current page is the first page', () => {
-      const paginationInformation = reportService.getPaginationInformation('240', '1', '', 50)
+      const paginationInformation = reportService.getPaginationInformation('240', '1', 50, false, {
+        searchTerm: '',
+        pending: false,
+        completed: false,
+        errored: false,
+        overdue: false,
+      })
       expect(paginationInformation).toEqual({
         pageLinks,
         previous: 0,
@@ -223,7 +229,13 @@ describe('report', () => {
     })
 
     describe('when the current page is the last page', () => {
-      const paginationInformation = reportService.getPaginationInformation('240', '5', '', 50)
+      const paginationInformation = reportService.getPaginationInformation('240', '5', 50, false, {
+        searchTerm: '',
+        pending: false,
+        completed: false,
+        errored: false,
+        overdue: false,
+      })
       expect(paginationInformation).toEqual({
         pageLinks,
         previous: 4,
@@ -234,7 +246,13 @@ describe('report', () => {
     })
 
     describe('when the current page is a middle page', () => {
-      const paginationInformation = reportService.getPaginationInformation('240', '3', '', 50)
+      const paginationInformation = reportService.getPaginationInformation('240', '3', 50, false, {
+        searchTerm: '',
+        pending: false,
+        completed: false,
+        errored: false,
+        overdue: false,
+      })
       expect(paginationInformation).toEqual({
         pageLinks,
         previous: 2,

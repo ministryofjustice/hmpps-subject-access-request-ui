@@ -154,6 +154,7 @@ test.describe('Admin Confirm Create Product Configuration', () => {
     await expect(confirmPage.productConfigSummary).toContainText('service-one')
     await expect(confirmPage.productConfigSummary).toContainText('My Service One')
     await expect(confirmPage.productConfigSummary).toContainText('https://my-service-one')
+    await expect(confirmPage.productConfigSummary).toContainText('C1234567890')
     await expect(confirmPage.productConfigSummary).toContainText('PRISON')
     await expect(confirmPage.productConfigSummary).toContainText(enabledText)
     await expect(confirmPage.productConfigSummary).toContainText(migratedText)

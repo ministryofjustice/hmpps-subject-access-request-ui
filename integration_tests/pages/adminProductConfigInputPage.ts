@@ -8,6 +8,8 @@ export default abstract class AdminProductConfigInputPage extends AbstractPage {
 
   readonly urlTextbox: Locator
 
+  readonly teamSlackChannelIdTextbox: Locator
+
   readonly prisonCategoryRadio: Locator
 
   readonly probationCategoryRadio: Locator
@@ -27,6 +29,7 @@ export default abstract class AdminProductConfigInputPage extends AbstractPage {
     this.nameTextbox = this.page.getByLabel('Name')
     this.labelTextbox = this.page.getByLabel('Label')
     this.urlTextbox = this.page.getByLabel('Url')
+    this.teamSlackChannelIdTextbox = this.page.getByLabel('Team Slack channel ID (optional)')
     this.prisonCategoryRadio = this.page.getByRole('radio', { name: 'Prison' })
     this.probationCategoryRadio = this.page.getByRole('radio', { name: 'Probation' })
     this.enabledCheckbox = this.page.getByRole('checkbox', { name: 'Enabled' })
@@ -49,6 +52,11 @@ export default abstract class AdminProductConfigInputPage extends AbstractPage {
   inputUrl = async (value: string) => {
     await this.urlTextbox.clear()
     await this.urlTextbox.fill(value)
+  }
+
+  inputTeamSlackChannelId = async (value: string) => {
+    await this.teamSlackChannelIdTextbox.clear()
+    await this.teamSlackChannelIdTextbox.fill(value)
   }
 
   back = () => this.backLink.click()

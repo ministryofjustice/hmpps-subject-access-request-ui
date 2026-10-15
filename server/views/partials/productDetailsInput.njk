@@ -89,6 +89,20 @@
   errorMessage: urlErrorMessage
 }) }}
 
+{{ govukInput({
+  label: {
+    text: "Team Slack channel ID (optional)",
+    classes: "govuk-label--s"
+  },
+  id: "teamSlackChannelId",
+  name: "teamSlackChannelId",
+  classes: "govuk-input--width-30",
+  hint: {
+    text: "The Slack channel ID for the owning team, for example C1234567890."
+  },
+  value: productDetails.teamSlackChannelId
+}) }}
+
 {{ govukRadios({
   name: "category",
   fieldset: {

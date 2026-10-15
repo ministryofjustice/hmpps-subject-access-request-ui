@@ -121,8 +121,9 @@ const restartSubjectAccessRequest = async (req: Request, sarId: string) => {
 const getPaginationInformation = (
   numberOfReports: string,
   currentPage: string,
-  searchTerm: string,
   resultsPerPage: number,
+  isAdmin: boolean,
+  searchOptions: SearchOptions,
 ) => {
   const numberOfReportsInt = Number.parseInt(numberOfReports, 10)
   const currentPageInt = Number.parseInt(currentPage, 10) || 1
@@ -135,7 +136,13 @@ const getPaginationInformation = (
   const from = (currentPageInt - 1) * resultsPerPage + 1
   const to = Math.min(currentPageInt * resultsPerPage, numberOfReportsInt)
 
-  const pageLinks = getPageLinks({ visiblePageLinks, numberOfPages, currentPage: currentPageInt, searchTerm })
+  const pageLinks = getPageLinks({
+    visiblePageLinks,
+    numberOfPages,
+    currentPage: currentPageInt,
+    isAdmin,
+    searchOptions,
+  })
 
   return { pageLinks, previous, next, from, to }
 }

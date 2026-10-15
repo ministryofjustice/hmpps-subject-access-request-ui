@@ -21,14 +21,19 @@ export default class ReportsController {
     req.session.subjectAccessRequests = subjectAccessRequests
     const searchOptions = {
       searchTerm: String(req.query.keyword || ''),
+      pending: Boolean(req.query.pending),
+      completed: Boolean(req.query.completed),
+      errored: Boolean(req.query.errored),
+      overdue: Boolean(req.query.overdue),
     }
     req.session.searchOptions = searchOptions
 
     const { pageLinks, previous, next, from, to } = reportService.getPaginationInformation(
       numberOfReports,
       currentPage,
-      searchOptions.searchTerm,
       RESULTS_PER_PAGE,
+      false,
+      searchOptions,
     )
 
     const reportList = ReportsController.getCondensedSarList(subjectAccessRequests)
@@ -36,12 +41,14 @@ export default class ReportsController {
     res.render('pages/reports', {
       reportList,
       pageLinks,
-      previous,
-      next,
       from,
       to,
       numberOfReports,
       searchTerm: searchOptions.searchTerm,
+      nextLink: ReportsController.generatePaginationLink(next, searchOptions),
+      previousLink: ReportsController.generatePaginationLink(previous, searchOptions),
+      next,
+      previous,
     })
   }
 
@@ -54,5 +61,27 @@ export default class ReportsController {
       status: subjectAccessRequest.status.toString(),
       lastDownloaded: subjectAccessRequest.lastDownloaded || '',
     }))
+  }
+
+  static generatePaginationLink(pageIndex: number, searchOptions: SearchOptions) {
+    const params = new URLSearchParams()
+    params.append('page', String(pageIndex))
+
+    if (searchOptions.searchTerm) {
+      params.append('keyword', searchOptions.searchTerm)
+    }
+    if (searchOptions.completed) {
+      params.append('status', 'completed')
+    }
+    if (searchOptions.pending) {
+      params.append('status', 'pending')
+    }
+    if (searchOptions.errored) {
+      params.append('status', 'errored')
+    }
+    if (searchOptions.overdue) {
+      params.append('status', 'overdue')
+    }
+    return `/reports?${params.toString()}`
   }
 }
