@@ -68,6 +68,7 @@ export default {
       overdueCount: 4,
       pendingCount: 2,
     },
+    firstReportOverrides: { status?: string; durationHumanReadable?: string; requestDateTime?: string } = {},
   ): SuperAgentRequest =>
     stubFor({
       request: {
@@ -77,7 +78,12 @@ export default {
       response: {
         status: httpStatus,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: body,
+        jsonBody: {
+          ...body,
+          requests: body.requests.map((report, index) =>
+            index === 0 ? { ...report, ...firstReportOverrides } : report,
+          ),
+        },
       },
     }),
 

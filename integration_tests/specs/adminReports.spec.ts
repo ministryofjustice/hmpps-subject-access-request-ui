@@ -181,6 +181,42 @@ test.describe('Admin Reports', () => {
     await expect(reportsPage.searchButton).toBeVisible()
   })
 
+  test('Preserves the request date and time when no timezone offset is provided', async ({ page }) => {
+    await sarAdminApi.stubGetSubjectAccessRequestAdminSummary(200, undefined, {
+      requestDateTime: '2024-07-15T13:52:40.14177',
+    })
+    await login(page, { roles: [ADMIN_ROLE] })
+    await page.goto('/admin/reports')
+    const reportsPage = await verifyOnPage(page, AdminReportsPage)
+
+    await expect(reportsPage.requestDateCell()).toHaveText('15/07/2024 13:52')
+  })
+
+  for (const status of ['Completed', 'Pending', 'Overdue', 'Errored']) {
+    test(`${status} reports ${status === 'Completed' ? 'hide duration' : 'display updated duration'} after refresh`, async ({
+      page,
+    }) => {
+      await sarAdminApi.stubGetSubjectAccessRequestAdminSummary(200, undefined, {
+        status,
+        durationHumanReadable: '2h 10m',
+      })
+      await login(page, { roles: [ADMIN_ROLE] })
+      await page.goto('/admin/reports')
+      const reportsPage = await verifyOnPage(page, AdminReportsPage)
+
+      await expect(reportsPage.reportsTableRow().locator('td').nth(3)).toHaveText(status)
+      await expect(reportsPage.durationCell()).toHaveText(status === 'Completed' ? '' : '2h 10m')
+
+      await sarAdminApi.stubGetSubjectAccessRequestAdminSummary(200, undefined, {
+        status,
+        durationHumanReadable: '2h 14m',
+      })
+      await page.reload()
+
+      await expect(reportsPage.durationCell()).toHaveText(status === 'Completed' ? '' : '2h 14m')
+    })
+  }
+
   test('Can search and filter reports', async ({ page }) => {
     await login(page, { roles: [ADMIN_ROLE] })
     await page.goto('/admin/reports')

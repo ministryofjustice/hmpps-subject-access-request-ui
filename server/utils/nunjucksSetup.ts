@@ -2,7 +2,7 @@
 import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
-import moment from 'moment'
+import { formatReportDateTime } from './dateHelpers'
 import { initialiseName } from './utils'
 import { ApplicationInfo } from '../applicationInfo'
 import config from '../config'
@@ -48,9 +48,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addGlobal('homeUrl', config.apis.hmppsAuth.externalUrl)
 
-  njkEnv.addFilter('formatDate', dateString =>
-    dateString ? moment(new Date(dateString)).format('DD/MM/YYYY HH:mm') : null,
-  )
+  njkEnv.addFilter('formatDate', dateString => (dateString ? formatReportDateTime(dateString) : null))
 
   njkEnv.addFilter('addBlankOption', (values, text = '') => [{ text, value: '' }].concat(values))
 

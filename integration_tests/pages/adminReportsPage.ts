@@ -43,6 +43,10 @@ export default class AdminReportsPage extends AbstractPage {
 
   reportsTableRow = (rowIndex: number = 0): Locator => this.reportsTable.locator('tbody tr').nth(rowIndex)
 
+  requestDateCell = (rowIndex: number = 0): Locator => this.reportsTableRow(rowIndex).locator('td').nth(0)
+
+  durationCell = (rowIndex: number = 0): Locator => this.reportsTableRow(rowIndex).locator('td').nth(4)
+
   followReportsDetailsLink = (rowIndex: number = 0) =>
     this.reportsTableRow(rowIndex).locator('a', { hasText: 'View details' }).click()
 

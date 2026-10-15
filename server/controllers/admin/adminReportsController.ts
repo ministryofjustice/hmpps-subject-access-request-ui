@@ -2,7 +2,7 @@ import type { Request, Response } from 'express'
 import type { AdminReport } from '../../@types/report'
 import type { AdminSubjectAccessRequest } from '../../@types/subjectAccessRequest'
 import { audit, AuditEvent } from '../../audit'
-import { formatDateTime } from '../../utils/dateHelpers'
+import { formatReportDateTime } from '../../utils/dateHelpers'
 import reportService from '../../services/report'
 
 export const RESULTS_PER_PAGE = 50
@@ -55,11 +55,12 @@ export default class AdminReportsController {
   static getSarSummaryList(subjectAccessRequests: AdminSubjectAccessRequest[]): AdminReport[] {
     return subjectAccessRequests.map(subjectAccessRequest => ({
       uuid: subjectAccessRequest.id.toString(),
-      dateOfRequest: formatDateTime(subjectAccessRequest.requestDateTime, 'short'),
+      dateOfRequest: formatReportDateTime(subjectAccessRequest.requestDateTime),
       sarCaseReference: subjectAccessRequest.sarCaseReferenceNumber,
       subjectId: subjectAccessRequest.nomisId || subjectAccessRequest.ndeliusCaseReferenceId,
       status: subjectAccessRequest.status.toString(),
-      durationHumanReadable: subjectAccessRequest.durationHumanReadable,
+      durationHumanReadable:
+        subjectAccessRequest.status === 'Completed' ? null : subjectAccessRequest.durationHumanReadable,
       appInsightsEventsUrl: subjectAccessRequest.appInsightsEventsUrl,
     }))
   }

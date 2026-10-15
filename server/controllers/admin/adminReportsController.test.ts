@@ -148,7 +148,7 @@ describe('getAdminSummary', () => {
               status: 'Pending',
               sarCaseReference: 'caseRef1',
               subjectId: 'A123456',
-              dateOfRequest: '12/03/2024, 13:52',
+              dateOfRequest: '12/03/2024 13:52',
               durationHumanReadable: '1d',
               appInsightsEventsUrl: 'appInsights',
             },
@@ -157,8 +157,8 @@ describe('getAdminSummary', () => {
               status: 'Completed',
               sarCaseReference: 'caseRef2',
               subjectId: 'X718253',
-              dateOfRequest: '12/03/2023, 13:52',
-              durationHumanReadable: '1d',
+              dateOfRequest: '12/03/2023 13:52',
+              durationHumanReadable: null,
               appInsightsEventsUrl: 'appInsights',
             },
             {
@@ -166,8 +166,8 @@ describe('getAdminSummary', () => {
               status: 'Completed',
               sarCaseReference: 'caseRef3',
               subjectId: 'A123456',
-              dateOfRequest: '12/03/2022, 13:52',
-              durationHumanReadable: '1d',
+              dateOfRequest: '12/03/2022 13:52',
+              durationHumanReadable: null,
               appInsightsEventsUrl: 'appInsights',
             },
           ],
@@ -283,6 +283,47 @@ describe('getAdminSummary', () => {
   })
 
   describe('getSarSummaryList', () => {
+    test('does not display a duration for completed reports', () => {
+      for (const durationHumanReadable of ['2h 10m', '2h 14m']) {
+        const response = AdminReportsController.getSarSummaryList([
+          { ...subjectAccessRequests[0], status: 'Completed', durationHumanReadable },
+        ])
+
+        expect(response[0]).toHaveProperty('durationHumanReadable', null)
+      }
+    })
+
+    test.each(['Pending', 'Overdue', 'Errored'])('displays duration for %s reports', status => {
+      for (const durationHumanReadable of ['2h 10m', '2h 14m']) {
+        const response = AdminReportsController.getSarSummaryList([
+          { ...subjectAccessRequests[0], status, durationHumanReadable },
+        ])
+
+        expect(response[0]).toHaveProperty('durationHumanReadable', durationHumanReadable)
+      }
+    })
+
+    test('preserves a missing duration for pending reports', () => {
+      const response = AdminReportsController.getSarSummaryList([
+        { ...subjectAccessRequests[0], durationHumanReadable: null },
+      ])
+
+      expect(response[0]).toHaveProperty('durationHumanReadable', null)
+    })
+
+    test.each([
+      ['2024-01-15T13:52:40.14177', '15/01/2024 13:52'],
+      ['2024-07-15T13:52:40.14177', '15/07/2024 13:52'],
+      ['2026-10-14T09:26:21.734394', '14/10/2026 09:26'],
+    ])(
+      'preserves the request date and time when no timezone offset is provided: %s',
+      (requestDateTime, dateOfRequest) => {
+        const response = AdminReportsController.getSarSummaryList([{ ...subjectAccessRequests[0], requestDateTime }])
+
+        expect(response[0].dateOfRequest).toBe(dateOfRequest)
+      },
+    )
+
     test('getSarSummaryList returns list of SARs with summary information for display', async () => {
       const condensedSarList = [
         {
@@ -290,7 +331,7 @@ describe('getAdminSummary', () => {
           status: 'Pending',
           sarCaseReference: 'caseRef1',
           subjectId: 'A123456',
-          dateOfRequest: '12/03/2024, 13:52',
+          dateOfRequest: '12/03/2024 13:52',
           durationHumanReadable: '1d',
           appInsightsEventsUrl: 'appInsights',
         },
@@ -299,8 +340,8 @@ describe('getAdminSummary', () => {
           status: 'Completed',
           sarCaseReference: 'caseRef2',
           subjectId: 'X718253',
-          dateOfRequest: '12/03/2023, 13:52',
-          durationHumanReadable: '1d',
+          dateOfRequest: '12/03/2023 13:52',
+          durationHumanReadable: null,
           appInsightsEventsUrl: 'appInsights',
         },
         {
@@ -308,8 +349,8 @@ describe('getAdminSummary', () => {
           status: 'Completed',
           sarCaseReference: 'caseRef3',
           subjectId: 'A123456',
-          dateOfRequest: '12/03/2022, 13:52',
-          durationHumanReadable: '1d',
+          dateOfRequest: '12/03/2022 13:52',
+          durationHumanReadable: null,
           appInsightsEventsUrl: 'appInsights',
         },
       ]
