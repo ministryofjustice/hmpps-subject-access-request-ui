@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 /**
  * Formats an ISO-8601 date string to standard gov.uk display format, e.g. 20 January 2023
  *
@@ -27,3 +29,5 @@ export const formatDateTime = (isoDate: string, style: 'short' | 'full' | 'long'
   if (!isoDate) return ''
   return new Date(isoDate).toLocaleString('en-gb', { dateStyle: style, timeStyle: style, timeZone: 'UTC' })
 }
+export const formatReportDateTime = (isoDate: string): string =>
+  isoDate ? moment(new Date(isoDate)).format('DD/MM/YYYY HH:mm') : ''
