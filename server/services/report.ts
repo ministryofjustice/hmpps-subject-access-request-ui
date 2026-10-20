@@ -6,7 +6,7 @@ import { AdminSubjectAccessRequest, RequestService, SubjectAccessRequest } from 
 import getUserToken from '../utils/userTokenHelper'
 import getPageLinks from '../utils/paginationHelper'
 import logger from '../../logger'
-import getSanitisedError from '../sanitisedError'
+import errorLogFields from '../utils/errorLogFields'
 import { formatDate, formatDateTime } from '../utils/dateHelpers'
 
 const getReport = (req: Request, res: Response, next: NextFunction, fileId: string) =>
@@ -113,7 +113,7 @@ const restartSubjectAccessRequest = async (req: Request, sarId: string) => {
     .set('Authorization', `Bearer ${token}`)
     .then(res => ({ success: res.status === 200 }))
     .catch(error => {
-      logger.error(getSanitisedError(error), 'Error restarting subject access request')
+      logger.error(errorLogFields(error), 'Error restarting subject access request')
       return { success: false, message: error.response.body.userMessage }
     })
 }
