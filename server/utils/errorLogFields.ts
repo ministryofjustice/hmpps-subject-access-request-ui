@@ -12,11 +12,22 @@ export default function errorLogFields(error: unknown): ErrorLogFields {
   if ('status' in error && typeof error.status === 'number' && Number.isFinite(error.status)) {
     fields.status = error.status
   }
-  if ('stack' in error && typeof error.stack === 'string') {
+  if (
+    'stack' in error &&
+    typeof error.stack === 'string' &&
+    'name' in error &&
+    typeof error.name === 'string' &&
+    'message' in error &&
+    typeof error.message === 'string'
+  ) {
+    const header = error.name && error.message ? `${error.name}: ${error.message}` : error.name || error.message
+    const prefix = `${header}\n`
+    if (!error.stack.startsWith(prefix)) return fields
+
     const frames = error.stack
       .slice(0, 65536)
+      .slice(prefix.length)
       .split('\n')
-      .slice(1)
       .filter(line => /^\s+at /.test(line))
       .slice(0, 20)
     if (frames.length) fields.stack = frames.join('\n')

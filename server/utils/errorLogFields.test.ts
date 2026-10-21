@@ -12,17 +12,43 @@ describe('errorLogFields', () => {
     ]
     const stack = ['Error: private', 'Authorization: Bearer private', ...frames].join('\n')
 
-    expect(errorLogFields({ stack })).toEqual({ stack: frames.join('\n') })
+    expect(errorLogFields({ name: 'Error', message: 'private', stack })).toEqual({ stack: frames.join('\n') })
   })
 
   it('limits stack output to 20 frames', () => {
     const stack = ['Error: private', ...Array(30).fill('    at handler (/app/server/errorHandler.ts:10:5)')].join('\n')
-    expect(errorLogFields({ stack }).stack?.split('\n')).toHaveLength(20)
+    expect(errorLogFields({ name: 'Error', message: 'private', stack }).stack?.split('\n')).toHaveLength(20)
   })
 
   it('caps stack input at 64 KiB', () => {
     const stack = `Error: ${'x'.repeat(65536)}\n    at handler (/app/server/errorHandler.ts:10:5)`
-    expect(errorLogFields({ stack })).toEqual({})
+    expect(errorLogFields({ name: 'Error', message: 'x'.repeat(65536), stack })).toEqual({})
+  })
+
+  it('removes the complete multiline message from a real Error before retaining frames', () => {
+    const secret = 'synthetic-private-token'
+    const error = new Error(`OAuth failure\n    at Authorization: Bearer ${secret}`)
+
+    const fields = errorLogFields(error)
+
+    expect(fields.stack).toContain('errorLogFields.test.ts:')
+    expect(fields.stack).not.toContain(secret)
+    expect(fields.stack).not.toContain('Authorization')
+    expect(fields.stack).not.toContain('OAuth failure')
+  })
+
+  it.each([
+    { stack: 'Error: private\n    at Authorization: Bearer private' },
+    { name: 'Error', message: 'changed', stack: 'Error: original\n    at handler (/app/server.js:1:1)' },
+    { name: 'Error', message: 'private', stack: 'Custom stack\n    at handler (/app/server.js:1:1)' },
+    { name: 'Error', message: 'private', stack: 'Error: private-extra\n    at handler (/app/server.js:1:1)' },
+  ])('omits the stack when the complete message boundary cannot be established', error => {
+    expect(errorLogFields({ ...error, status: 403 })).toEqual({ status: 403 })
+  })
+
+  it('handles a standard stack header with an empty message', () => {
+    const frame = '    at handler (/app/server.js:1:1)'
+    expect(errorLogFields({ name: 'Error', message: '', stack: `Error\n${frame}` })).toEqual({ stack: frame })
   })
 
   it('copies status without modifying the original error', () => {
