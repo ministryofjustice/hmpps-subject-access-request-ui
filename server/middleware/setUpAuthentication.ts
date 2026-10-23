@@ -6,6 +6,7 @@ import config from '../config'
 import auth from '../authentication/auth'
 import { HmppsUser } from '../interfaces/hmppsUser'
 import logger from '../../logger'
+import errorLogFields from '../utils/errorLogFields'
 
 const router = express.Router()
 
@@ -27,18 +28,18 @@ export default function setUpAuth(): Router {
     // eslint-disable-next-line consistent-return
     const authCallback: passport.AuthenticateCallback = (err, user, info) => {
       if (err) {
-        logger.error('oauth2 /sign-in/callback returned error', JSON.stringify(err), err)
+        logger.error(errorLogFields(err), 'OAuth2 sign-in callback failed')
         return res.redirect('/autherror')
       }
 
       if (!user) {
-        const { message } = info as { message: string }
+        const { message } = (info || {}) as { message?: string }
         if (info && message === 'Unable to verify authorization request state.') {
           // failure to due authorisation state not being there on return, so retry
           logger.info('Retrying auth callback as no state found')
           return res.redirect('/')
         }
-        logger.warn(`Auth failure due to ${JSON.stringify(info)}`)
+        logger.warn(errorLogFields(info), 'OAuth2 authentication failed')
         return res.redirect('/autherror')
       }
 
