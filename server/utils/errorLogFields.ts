@@ -3,6 +3,9 @@ interface ErrorLogFields {
   stack?: string
 }
 
+const MAX_STACK_LENGTH = 65536
+const MAX_STACK_FRAMES = 20
+
 export default function errorLogFields(error: unknown): ErrorLogFields {
   if (typeof error !== 'object' || error === null) {
     return {}
@@ -25,11 +28,11 @@ export default function errorLogFields(error: unknown): ErrorLogFields {
     if (!error.stack.startsWith(prefix)) return fields
 
     const frames = error.stack
-      .slice(0, 65536)
+      .slice(0, MAX_STACK_LENGTH)
       .slice(prefix.length)
       .split('\n')
       .filter(line => /^\s+at /.test(line))
-      .slice(0, 20)
+      .slice(0, MAX_STACK_FRAMES)
     if (frames.length) fields.stack = frames.join('\n')
   }
   return fields
