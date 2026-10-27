@@ -8,6 +8,7 @@ import sanitiseError from '../sanitisedError'
 import type { ApiConfig } from '../config'
 import type { UnsanitisedError } from '../sanitisedError'
 import { restClientMetricsMiddleware } from './restClientMetricsMiddleware'
+import errorLogFields from '../utils/errorLogFields'
 
 interface Request {
   path: string
@@ -61,8 +62,8 @@ export default class RestClient {
         .query(query)
         .agent(this.agent)
         .use(restClientMetricsMiddleware)
-        .retry(2, (err, res) => {
-          if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
+        .retry(2, (err, _) => {
+          if (err) logger.info(errorLogFields(err), `Retry handler found ${this.name} API error`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
         .auth(this.token, { type: 'bearer' })
@@ -73,7 +74,7 @@ export default class RestClient {
       return raw ? result : result.body
     } catch (error) {
       const sanitisedError = sanitiseError(error)
-      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
+      logger.warn(errorLogFields(error), `Error calling ${this.name}, verb: 'GET'`)
       throw sanitisedError
     }
   }
@@ -89,11 +90,11 @@ export default class RestClient {
         .send(data)
         .agent(this.agent)
         .use(restClientMetricsMiddleware)
-        .retry(2, (err, res) => {
+        .retry(2, (err, _) => {
           if (retry === false) {
             return false
           }
-          if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+          if (err) logger.info(errorLogFields(err), `Retry handler found ${this.name} API error`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
         .auth(this.token, { type: 'bearer' })
@@ -104,7 +105,7 @@ export default class RestClient {
       return raw ? result : result.body
     } catch (error) {
       const sanitisedError = sanitiseError(error)
-      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: '${method.toUpperCase()}'`)
+      logger.warn(errorLogFields(error), `Error calling ${this.name}, verb: '${method.toUpperCase()}'`)
       throw sanitisedError
     }
   }
@@ -135,8 +136,8 @@ export default class RestClient {
         .query(query)
         .agent(this.agent)
         .use(restClientMetricsMiddleware)
-        .retry(2, (err, res) => {
-          if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
+        .retry(2, (err, _) => {
+          if (err) logger.info(errorLogFields(err), `Retry handler found ${this.name} API error`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
         .auth(this.token, { type: 'bearer' })
@@ -147,7 +148,7 @@ export default class RestClient {
       return raw ? result : result.body
     } catch (error) {
       const sanitisedError = sanitiseError(error)
-      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'DELETE'`)
+      logger.warn(errorLogFields(error), `Error calling ${this.name}, verb: 'DELETE'`)
       throw sanitisedError
     }
   }
@@ -160,16 +161,16 @@ export default class RestClient {
         .agent(this.agent)
         .auth(this.token, { type: 'bearer' })
         .use(restClientMetricsMiddleware)
-        .retry(2, (err, res) => {
-          if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
+        .retry(2, (err, _) => {
+          if (err) logger.info(errorLogFields(err), `Retry handler found ${this.name} API error`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
         .timeout(this.timeoutConfig())
         .set(headers)
         .end((error, response) => {
           if (error) {
-            logger.warn(sanitiseError(error), `Error calling ${this.name}`)
-            reject(error)
+            logger.warn(errorLogFields(error), `Error calling ${this.name}`)
+            reject(sanitiseError(error))
           } else if (response) {
             const s = new Readable()
             // eslint-disable-next-line no-underscore-dangle
