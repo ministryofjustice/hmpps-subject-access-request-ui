@@ -4,7 +4,7 @@ import { auditService } from '@ministryofjustice/hmpps-audit-client'
 import SummaryController from './summaryController'
 import config from '../config'
 import { auditAction } from '../utils/testUtils'
-import { AuditEvent } from '../audit'
+import { AuditEvent, AuditSubjectType } from '../audit'
 
 let fakeApi: nock.Scope
 
@@ -61,6 +61,72 @@ describe('postReportDetails', () => {
       },
     },
   } as unknown as Response
+
+  describe('auditing', () => {
+    const req = {
+      session: {
+        userData: {
+          dateFrom: '01/01/2001',
+          dateTo: '25/12/2022',
+          caseReference: 'mockedCaseReference',
+          subjectId: 'A1111AA',
+        },
+        selectedList: [
+          { id: 'product-one', name: 'service-one', label: 'Service One', url: 'https://one.example.com' },
+          { id: 'product-two', name: 'service-two', label: 'Service Two', url: 'https://two.example.com' },
+        ],
+      },
+      user: { token: 'fakeUserToken', authSource: 'auth' },
+    } as unknown as Request
+
+    const expectedAuditMessage = (action: AuditEvent) => ({
+      action,
+      who: 'username',
+      subjectId: 'A1111AA',
+      subjectType: AuditSubjectType.SAR_SUBJECT_ID,
+      correlationId: expect.any(String),
+      service: config.apis.audit.serviceName,
+      details: JSON.stringify({
+        dateFrom: '01/01/2001',
+        dateTo: '25/12/2022',
+        sarCaseReferenceNumber: 'mockedCaseReference',
+        services: ['service-one', 'service-two'],
+        nomisId: 'A1111AA',
+        ndeliusId: null,
+        selectedProducts: [
+          { id: 'product-one', name: 'service-one', label: 'Service One' },
+          { id: 'product-two', name: 'service-two', label: 'Service Two' },
+        ],
+      }),
+    })
+
+    test('audits the full request when the request is attempted', async () => {
+      fakeApi.post('/api/subjectAccessRequest').reply(200)
+
+      await SummaryController.postReportDetailsAndReturnResponse(req, res)
+
+      expect(auditService.sendAuditMessage).toHaveBeenCalledTimes(1)
+      expect(auditService.sendAuditMessage).toHaveBeenCalledWith(
+        expectedAuditMessage(AuditEvent.REQUEST_REPORT_ATTEMPT),
+      )
+    })
+
+    test('audits the full request when the request fails', async () => {
+      fakeApi.post('/api/subjectAccessRequest').reply(400)
+
+      await expect(SummaryController.postReportDetailsAndReturnResponse(req, res)).rejects.toThrow('Bad Request')
+
+      expect(auditService.sendAuditMessage).toHaveBeenCalledTimes(2)
+      expect(auditService.sendAuditMessage).toHaveBeenNthCalledWith(
+        1,
+        expectedAuditMessage(AuditEvent.REQUEST_REPORT_ATTEMPT),
+      )
+      expect(auditService.sendAuditMessage).toHaveBeenNthCalledWith(
+        2,
+        expectedAuditMessage(AuditEvent.REQUEST_REPORT_FAILURE),
+      )
+    })
+  })
 
   test('post request made to SubjectAccessRequest endpoint renders confirmation page if successful', async () => {
     const req: Request = {
