@@ -22,7 +22,7 @@ The base template requires:
 * redis - session store and token caching
 * manage-users-api - for user management
 
-### Running the app for development
+### Running the app for development test
 
 To start the main services excluding the example typescript template app: 
 
