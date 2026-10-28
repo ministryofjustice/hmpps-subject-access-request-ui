@@ -56,7 +56,10 @@ export default class SummaryController {
       res.locals.user.username,
       userData.subjectId,
       AuditSubjectType.SAR_SUBJECT_ID,
-      commonProperties,
+      {
+        ...commonProperties,
+        selectedProducts: selectedList.map(({ id, name, label }) => ({ id, name, label })),
+      },
     )
     await sendMessage(AuditEvent.REQUEST_REPORT_ATTEMPT)
 
