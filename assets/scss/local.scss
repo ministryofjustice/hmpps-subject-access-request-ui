@@ -16,3 +16,18 @@
   @extend .govuk-table__cell;
   border-bottom: none;
 }
+.product-selection-table {
+  table-layout: fixed;
+
+  .product-selection-table__select {
+    width: 15%;
+  }
+
+  .product-selection-table__status {
+    width: 25%;
+  }
+}
+
+.backlog-products {
+  margin-bottom: govuk-spacing(9);
+}

@@ -98,6 +98,39 @@ describe('getProducts', () => {
     )
   })
 
+  test('separates backlog products from categorised products', async () => {
+    const backlogProduct = { ...productConfigurationList[0], name: 'x', label: 'Case Notes - OMIC' }
+    productConfigsService.getProductList = jest.fn().mockReturnValue([backlogProduct, productConfigurationList[2]])
+
+    const req: Request = {
+      user: requestUser,
+      // @ts-expect-error stubbing session
+      session: { productList: [] },
+      body: {},
+    }
+    await ProductSelectionController.getProducts(req, res)
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/productSelection',
+      expect.objectContaining({
+        backlogProducts: [backlogProduct],
+        categorisedProducts: [{ name: 'PROBATION', items: [productConfigurationList[2]] }],
+      }),
+    )
+  })
+
+  test('passes no backlog products when none match, so the Backlog section is not shown', async () => {
+    productConfigsService.getProductList = jest.fn().mockReturnValue(productConfigurationList)
+
+    const req: Request = {
+      user: requestUser,
+      // @ts-expect-error stubbing session
+      session: { productList: [] },
+      body: {},
+    }
+    await ProductSelectionController.getProducts(req, res)
+    expect(res.render).toHaveBeenCalledWith('pages/productSelection', expect.objectContaining({ backlogProducts: [] }))
+  })
+
   test('renders an error if no products found', async () => {
     productConfigsService.getProductList = jest.fn().mockReturnValue([])
 

@@ -3,7 +3,7 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "../components/multiselect.njk" import multiSelect %}
+{% from "../components/multiselect.njk" import multiSelect, backlogSelect %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "../components/suspendedProductsWarning.njk" import warning %}
 
@@ -46,6 +46,14 @@
       <div id="waste-hint" class="govuk-hint">
         Select products to collect data from.
       </div>
+
+      {% if backlogProducts | length > 0 %}
+        {{ backlogSelect({
+            items: backlogProducts,
+            itemGroupName: "selectedProducts",
+            selectedItems: selectedList
+        }) }}
+      {% endif %}
 
       {{ multiSelect({
           headers: ["Product Name", "Product Status"],
