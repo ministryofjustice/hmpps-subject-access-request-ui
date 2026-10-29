@@ -4,14 +4,17 @@ import { dataAccess } from '../data'
 import productConfigsService from '../services/productConfigurations'
 import ProductCategory from '../@types/productCategory'
 
+const BACKLOG_PRODUCT_NAME = 'case notes - omic'
+
 export default class ProductSelectionController {
   static async getProducts(req: Request, res: Response) {
     const productList = await productConfigsService.getProductList(req)
-    const categorisedProducts = ProductSelectionController.categoriseProducts(productList)
+    const { backlogProducts, categorisedProducts } = ProductSelectionController.splitProducts(productList)
 
     if (productList.length === 0) {
       res.render('pages/productSelection', {
         selectedProductsError: `No products found. A report cannot be generated.`,
+        backlogProducts,
         categorisedProducts,
         buttonText: 'Confirm',
       })
@@ -23,6 +26,7 @@ export default class ProductSelectionController {
     const hasAllAnswers = req.session.selectedList && req.session.selectedList.length !== 0
     if (hasAllAnswers) {
       res.render('pages/productSelection', {
+        backlogProducts,
         categorisedProducts,
         selectedList: selectedList.map(x => x.name),
         suspendedProductsList: productList.filter((p: Product) => p.suspended),
@@ -32,6 +36,7 @@ export default class ProductSelectionController {
     }
 
     res.render('pages/productSelection', {
+      backlogProducts,
       categorisedProducts,
       selectedList: selectedList.map(x => x.name),
       suspendedProductsList: productList.filter((p: Product) => p.suspended),
@@ -52,10 +57,11 @@ export default class ProductSelectionController {
       else if (req.body.selectedProducts) selectedList.push(req.body.selectedProducts)
 
       const selectedProductsError = ProductSelectionValidation.validateSelection(selectedList, productList)
-      const categorisedProducts = ProductSelectionController.categoriseProducts(productList)
+      const { backlogProducts, categorisedProducts } = ProductSelectionController.splitProducts(productList)
       if (selectedProductsError) {
         res.render('pages/productSelection', {
           selectedProductsError,
+          backlogProducts,
           categorisedProducts,
           buttonText: 'Confirm',
         })
@@ -63,6 +69,15 @@ export default class ProductSelectionController {
       }
       req.session.selectedList = productList.filter(x => selectedList.includes(x.name.toString()))
       res.redirect('/summary')
+    }
+  }
+
+  private static splitProducts(productList: Product[]) {
+    const isBacklog = (product: Product) =>
+      [product.name, product.label].some(value => value?.toLowerCase() === BACKLOG_PRODUCT_NAME)
+    return {
+      backlogProducts: productList.filter(isBacklog),
+      categorisedProducts: ProductSelectionController.categoriseProducts(productList.filter(p => !isBacklog(p))),
     }
   }
 

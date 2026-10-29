@@ -2,22 +2,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {%- from "moj/components/badge/macro.njk" import mojBadge -%}
 
-{% macro multiSelect(params) %}
-
-<table class="govuk-table" data-module="moj-multi-select" data-multi-select-checkbox="#select-all">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th class="govuk-table__header" scope="col" id="select-all">Select all<br/></th>
-      {% for item in params.headers %}
-      <th class="govuk-table__header" scope="col">{{item}}</th>
-       {% endfor %}
-    </tr>
-  </thead>
-  <tbody class="govuk-table__body">
-  {% for category in params.categorisedItems %}
-    <tr><td><h4>{{ category.name | lower | capitalizeFirst }}</h4></td></tr>
-
-    {% for item in category.items %}
+{% macro productRow(item, params) %}
     <tr class="govuk-table__row govuk-table__row--selected">        
 
     {% if not item.enabled %}
@@ -59,8 +44,48 @@
            <td class="govuk-table__cell">{{serviceStatusLabel}} </td>
         {% endif %}
     </tr>   
+{% endmacro %}
+
+{% macro multiSelect(params) %}
+
+<table class="govuk-table product-selection-table" data-module="moj-multi-select" data-multi-select-checkbox="#select-all">
+  <colgroup>
+    <col class="product-selection-table__select">
+    <col>
+    <col class="product-selection-table__status">
+  </colgroup>
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th class="govuk-table__header" scope="col" id="select-all">Select all<br/></th>
+      {% for item in params.headers %}
+      <th class="govuk-table__header" scope="col">{{item}}</th>
+       {% endfor %}
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+  {% for category in params.categorisedItems %}
+    <tr><td colspan="3"><h4>{{ category.name | lower | capitalizeFirst }}</h4></td></tr>
+
+    {% for item in category.items %}
+    {{ productRow(item, params) }}
      {% endfor %}
 
+  {% endfor %}
+  </tbody>
+</table>
+{% endmacro %}
+
+{% macro backlogSelect(params) %}
+<table class="govuk-table product-selection-table backlog-products">
+  <colgroup>
+    <col class="product-selection-table__select">
+    <col>
+    <col class="product-selection-table__status">
+  </colgroup>
+  <tbody class="govuk-table__body">
+    <tr><td colspan="3"><h4>Backlog</h4></td></tr>
+  {% for item in params.items %}
+    {{ productRow(item, params) }}
   {% endfor %}
   </tbody>
 </table>

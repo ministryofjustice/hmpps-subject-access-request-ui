@@ -8,6 +8,35 @@ import AuthErrorPage from '../pages/authErrorPage'
 import sarApi from '../mockApis/sarApi'
 import RequestReportProductsPage from '../pages/requestReportProductsPage'
 
+const backlogProduct = {
+  id: '50',
+  name: 'case-notes-omic',
+  url: 'http://case-notes-omic',
+  label: 'Case notes - OMIC',
+  teamSlackChannelId: null,
+  category: 'PRISON',
+  enabled: true,
+  templateMigrated: false,
+  suspended: false,
+  suspendedAt: null,
+}
+
+const productsWithBacklog = [
+  {
+    id: '1',
+    name: 'service-one',
+    url: 'http://service-one',
+    label: 'Service One',
+    teamSlackChannelId: null,
+    category: 'PRISON',
+    enabled: true,
+    templateMigrated: true,
+    suspended: false,
+    suspendedAt: null,
+  },
+  backlogProduct,
+]
+
 test.describe('Request Report - ProductSelection', () => {
   test.beforeEach(async () => {
     await sarApi.stubGetProducts()
@@ -85,6 +114,28 @@ test.describe('Request Report - ProductSelection', () => {
     await expect(productSelectionPage.productsTableCells.nth(11)).toContainText('Disabled')
   })
 
+  test('Does not display the Backlog section when there is no backlog product', async ({ page }) => {
+    const productSelectionPage = await requestReportProductSelection(page)
+
+    await expect(productSelectionPage.checkAllCheckBox).toBeVisible()
+    await expect(productSelectionPage.backlogSection).toHaveCount(0)
+  })
+
+  test('Displays the Backlog section with the backlog product above the other products', async ({ page }) => {
+    await resetStubs()
+    await sarApi.stubGetProducts(200, productsWithBacklog)
+
+    const productSelectionPage = await requestReportProductSelection(page)
+
+    await expect(productSelectionPage.backlogSection).toBeVisible()
+    await expect(productSelectionPage.backlogSection.locator('h4')).toHaveText('Backlog')
+    await expect(productSelectionPage.backlogSection).toContainText('Case notes - OMIC')
+    await expect(productSelectionPage.backlogSection).toContainText('Active')
+    await expect(productSelectionPage.serviceCheckbox('case-notes-omic')).toBeEnabled()
+    await expect(productSelectionPage.backlogSection.locator('input[type="checkbox"]')).toHaveCount(1)
+    await expect(page.locator('table:not(.backlog-products)')).not.toContainText('Case notes - OMIC')
+  })
+
   test('Does not allow none product selected', async ({ page }) => {
     const productSelectionPage = await requestReportProductSelection(page)
     await productSelectionPage.continue()
@@ -98,6 +149,32 @@ test.describe('Request Report - ProductSelection', () => {
     await productSelectionPage.selectAll()
 
     await expect(productSelectionPage.checkAllCheckBox).toBeChecked()
+  })
+
+  test('Select all does not select the backlog product', async ({ page }) => {
+    await resetStubs()
+    await sarApi.stubGetProducts(200, productsWithBacklog)
+
+    const productSelectionPage = await requestReportProductSelection(page)
+    await productSelectionPage.selectAll()
+
+    await expect(productSelectionPage.checkAllCheckBox).toBeChecked()
+    await expect(productSelectionPage.serviceCheckbox('service-one')).toBeChecked()
+    await expect(productSelectionPage.serviceCheckbox('case-notes-omic')).not.toBeChecked()
+  })
+
+  test('Backlog product can be selected independently and persists', async ({ page }) => {
+    await resetStubs()
+    await sarApi.stubGetProducts(200, productsWithBacklog)
+
+    const productSelectionPage = await requestReportProductSelection(page)
+    await productSelectionPage.selectService('case-notes-omic')
+    await expect(productSelectionPage.checkAllCheckBox).not.toBeChecked()
+    await productSelectionPage.continue()
+    await page.goto('/product-selection')
+
+    await expect(productSelectionPage.serviceCheckbox('case-notes-omic')).toBeChecked()
+    await expect(productSelectionPage.serviceCheckbox('service-one')).not.toBeChecked()
   })
 
   test('Uncheck all products when checkAll clicked twice', async ({ page }) => {
