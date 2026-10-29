@@ -18,6 +18,8 @@ export default class RequestReportProductsPage extends AbstractPage {
 
   readonly productsTableCells: Locator
 
+  readonly backlogSection: Locator
+
   constructor(page: Page) {
     super(page, 'Select Products')
     this.checkAllCheckBox = this.page.locator('#checkboxes-all')
@@ -28,6 +30,7 @@ export default class RequestReportProductsPage extends AbstractPage {
     this.suspendedProductsAlert = this.page.locator('.moj-alert__heading')
     this.suspendedProductsAlertList = this.page.locator('#suspended-services-alert-list')
     this.productsTableCells = this.page.locator('.govuk-table__cell')
+    this.backlogSection = this.page.locator('.backlog-products')
   }
 
   selectAll = () => this.checkAllCheckBox.click({ force: true })
