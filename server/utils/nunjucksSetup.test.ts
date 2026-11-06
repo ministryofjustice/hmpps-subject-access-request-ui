@@ -52,12 +52,15 @@ describe.each(['productConfigDetails', 'confirmCreateProductConfig', 'confirmUpd
       )
     })
 
-    it.each([undefined, null, '', ', ,'])('displays NONE without a Slack link for an absent ID (%s)', async channelId => {
-      const html = await render(channelId)
+    it.each([undefined, null, '', ', ,'])(
+      'displays NONE without a Slack link for an absent ID (%s)',
+      async channelId => {
+        const html = await render(channelId)
 
-      expect(html).toMatch(/Team Slack channel[\s\S]*?govuk-summary-list__value">\s*NONE\s*</)
-      expect(html).not.toContain('slack.com/archives/')
-    })
+        expect(html).toMatch(/Team Slack channel[\s\S]*?govuk-summary-list__value">\s*NONE\s*</)
+        expect(html).not.toContain('slack.com/archives/')
+      },
+    )
 
     it.each(['https://slack.example/archives', 'https://slack.example/archives/'])(
       'uses the configured base URL %s',
