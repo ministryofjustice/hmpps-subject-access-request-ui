@@ -47,6 +47,13 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
 
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addGlobal('homeUrl', config.apis.hmppsAuth.externalUrl)
+  njkEnv.addGlobal('slackChannelBaseUrl', `${config.slackChannelBaseUrl.replace(/\/+$/, '')}/`)
+  njkEnv.addFilter('slackChannelIds', (channelIds: string) =>
+    channelIds
+      .split(',')
+      .map(channelId => channelId.trim())
+      .filter(Boolean),
+  )
 
   njkEnv.addFilter('formatDate', dateString => (dateString ? formatReportDateTime(dateString) : null))
 

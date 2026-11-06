@@ -85,5 +85,6 @@ export default {
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
+  slackChannelBaseUrl: get('SLACK_CHANNEL_BASE_URL', 'https://moj.enterprise.slack.com/archives/'),
   templateRegistrationExcludedProducts: [],
 }
