@@ -1,0 +1,12 @@
+{% macro slackChannel(channelIdsStr) %}
+  {% if channelIdsStr %}
+    {% set channelIds = channelIdsStr | slackChannelIds %}
+    {% if channelIds | length %}
+      {% for id in channelIds %}{% if not loop.first %}, {% endif %}{% set channelUrl = slackChannelBaseUrl ~ (id | urlencode) %}<a class="govuk-link" href="{{ channelUrl }}" target="_blank" rel="noopener noreferrer">{{ id }}</a>{% endfor %}
+    {% else %}
+      NONE
+    {% endif %}
+  {% else %}
+    NONE
+  {% endif %}
+{% endmacro %}

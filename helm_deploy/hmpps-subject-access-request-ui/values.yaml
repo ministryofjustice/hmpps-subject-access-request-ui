@@ -37,6 +37,7 @@ generic-service:
     TOKEN_VERIFICATION_ENABLED: "true"
     AUDIT_SQS_REGION: "eu-west-2"
     AUDIT_SERVICE_NAME: "hmpps-subject-access-request"
+    SLACK_CHANNEL_BASE_URL: "https://moj.enterprise.slack.com/archives/"
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
