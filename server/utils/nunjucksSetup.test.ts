@@ -52,6 +52,16 @@ describe.each(['productConfigDetails', 'confirmCreateProductConfig', 'confirmUpd
       )
     })
 
+    it.each([
+      [', , C1234567890, , ', 'C1234567890'],
+      [', , C1234567890, , C0987654321, , ', 'C1234567890,C0987654321'],
+    ])('ignores blank entries mixed with valid channel IDs (%s)', async (channelIds, validChannelIds) => {
+      const html = await render(channelIds)
+      const expectedHtml = await render(validChannelIds)
+
+      expect(html).toBe(expectedHtml)
+    })
+
     it.each([undefined, null, '', ', ,'])(
       'displays NONE without a Slack link for an absent ID (%s)',
       async channelId => {
