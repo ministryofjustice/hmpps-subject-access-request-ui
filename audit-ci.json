@@ -3,39 +3,5 @@
   "package-manager": "auto",
   "registry": "https://registry.npmjs.org",
   "allowlist": [
-    "GHSA-3ppc-4f35-3m26|@eslint/eslintrc>minimatch>",
-    "GHSA-3ppc-4f35-3m26|@jest/expect>jest-snapshot>@jest/transform>babel-plugin-istanbul>test-exclude>minimatch>",
-    "GHSA-3ppc-4f35-3m26|@jest/globals>@jest/expect>jest-snapshot>@jest/transform>babel-plugin-istanbul>test-exclude>minimatch>",
-    "GHSA-3ppc-4f35-3m26|@jest/transform>babel-plugin-istanbul>test-exclude>minimatch>",
-    "GHSA-3ppc-4f35-3m26|@ministryofjustice/eslint-config-hmpps>@eslint/eslintrc>minimatch",
-    "GHSA-3ppc-4f35-3m26|babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>minimatch>",
-    "GHSA-3ppc-4f35-3m26|babel-plugin-istanbul>test-exclude>minimatch>",
-    "GHSA-3ppc-4f35-3m26|eslint-plugin-import>minimatch",
-    "GHSA-3ppc-4f35-3m26|eslint>@eslint/config-array>minimatch",
-    "GHSA-3ppc-4f35-3m26|jest-circus>jest-runtime>@jest/transform>babel-plugin-istanbul>test-exclude>minimatch>",
-    "GHSA-3ppc-4f35-3m26|jest-cli>@jest/core>@jest/transform>babel-plugin-istanbul>test-exclude>minimatch>",
-    "GHSA-3ppc-4f35-3m26|jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>minimatch>",
-    "GHSA-3ppc-4f35-3m26|jest-html-reporter>@jest/reporters>@jest/transform>babel-plugin-istanbul>test-exclude>minimatch",
-    "GHSA-3ppc-4f35-3m26|jest-resolve-dependencies>jest-snapshot>@jest/transform>babel-plugin-istanbul>test-exclude>minimatch",
-    "GHSA-3ppc-4f35-3m26|jest-runner>@jest/transform>babel-plugin-istanbul>test-exclude>minimatch>",
-    "GHSA-3ppc-4f35-3m26|jest-runtime>@jest/transform>babel-plugin-istanbul>test-exclude>minimatch>",
-    "GHSA-3ppc-4f35-3m26|jest-snapshot>@jest/transform>babel-plugin-istanbul>test-exclude>minimatch>",
-    "GHSA-3ppc-4f35-3m26|minimatch>",
-    "GHSA-3ppc-4f35-3m26|mocha>minimatch",
-    "GHSA-3ppc-4f35-3m26|ts-jest>jest>@jest/core>@jest/transform>babel-plugin-istanbul>test-exclude>minimatch",
-    {
-      "GHSA-vfj7-8cjw-p6xm": {
-        "active": true,
-        "expiry": "2027-04-22",
-        "notes": "braces (via chokidar@3 from nunjucks/nodemon): no patched version; nunjucks watch mode is not enabled"
-      }
-    },
-    {
-      "GHSA-hp3w-g68c-fv3c": {
-        "active": true,
-        "expiry": "2027-04-22",
-        "notes": "sprintf-js (dev only, via ts-jest > js-yaml@3 > argparse): no patched version; argparse CLI not used"
-      }
-    }
   ]
 }
