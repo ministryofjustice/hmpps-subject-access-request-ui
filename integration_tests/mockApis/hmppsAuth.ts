@@ -96,7 +96,22 @@ export default {
         headers: {
           'Content-Type': 'text/html',
         },
-        body: '<html><body><h1>Your account details</h1></body></html>',
+        body: '<html lang="en"><body><h1>Your account details</h1></body></html>',
+      },
+    }),
+
+  stubTermsPage: () =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/auth/terms.*',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'text/html',
+        },
+        body: '<html lang="en"><body><h1>Acceptable use statement</h1></body></html>',
       },
     }),
 

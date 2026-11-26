@@ -1,6 +1,7 @@
 import express from 'express'
 import passport from 'passport'
 import request from 'supertest'
+import config from '../config'
 import setUpAuth from './setUpAuthentication'
 import logger from '../../logger'
 
@@ -74,5 +75,21 @@ describe('authentication error logging', () => {
       .expect('Location', '/')
 
     expect(logWarn).not.toHaveBeenCalled()
+  })
+})
+
+describe('/terms', () => {
+  it('redirects to the auth terms page with client id and redirect uri', async () => {
+    jest
+      .mocked(passport.authenticate)
+      .mockImplementation(() => (_req: express.Request, _res: express.Response, next: express.NextFunction) => next())
+    const app = express()
+    app.use(setUpAuth())
+    const { externalUrl, authCodeClientId } = config.apis.hmppsAuth
+
+    await request(app)
+      .get('/terms')
+      .expect(302)
+      .expect('Location', `${externalUrl}/terms?client_id=${authCodeClientId}&redirect_uri=${config.domain}`)
   })
 })

@@ -272,19 +272,6 @@ describe('GET /details', () => {
   })
 })
 
-describe('GET /terms', () => {
-  it('should render terms and conditions page', () => {
-    return request(app)
-      .get('/terms')
-      .expect('Content-Type', /html/)
-      .expect(res => {
-        expect(res.text).toContain(
-          'Access to, and use of, this system is restricted to authorized Prison-NOMIS account users only.',
-        )
-      })
-  })
-})
-
 describe('GET /register-template/select-product', () => {
   it('should render register template product page', () => {
     return request(regTemplateUserApp)
