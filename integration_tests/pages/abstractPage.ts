@@ -17,12 +17,16 @@ export default class AbstractPage {
 
   readonly header: Locator
 
+  /** link to Acceptable use statement in footer */
+  readonly acceptableUseLink: Locator
+
   protected constructor(page: Page, title: string) {
     this.page = page
     this.phaseBanner = page.getByTestId('header-phase-banner')
     this.usersName = page.getByTestId('header-user-name')
     this.signoutLink = page.getByText('Sign out')
     this.manageUserDetails = page.getByTestId('manageDetails')
+    this.acceptableUseLink = page.getByRole('link', { name: 'Acceptable use statement' })
     this.header = page.locator('h1', { hasText: title })
   }
 

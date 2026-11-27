@@ -49,10 +49,6 @@ export default function routes(service: Services): Router {
 
   get('/download-report/report', ReportDownloadController.getReport)
 
-  get('/terms', (req, res, next) => {
-    res.render('pages/terms')
-  })
-
   get('/register-template/select-product', RegisterTemplateProductController.getProducts)
   post('/register-template/select-product', RegisterTemplateProductController.selectProduct)
 
